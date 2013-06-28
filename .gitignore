@@ -3,3 +3,17 @@
 
 # Example code in package build process
 *-Ex.R
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
