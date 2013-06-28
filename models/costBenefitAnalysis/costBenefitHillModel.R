@@ -1,0 +1,307 @@
+rkm <- function(Ydot,currY,deltaT,iter,startT=0){
+  # This function performs a fourth-order Runge-Kutta Method on the system 
+  # dY/dt = Ydot, and returns the next step after currY presuming timestep
+  # length deltaT, and iteration iter
+  tn   = deltaT*iter + startT
+  k1   = Ydot(tn,currY)
+  k2   = Ydot(tn + deltaT/2,currY + deltaT*k1/2)
+  k3   = Ydot(tn + deltaT/2,currY + deltaT*k2/2)
+  k4   = Ydot(tn + deltaT,currY + deltaT*k3)
+  newY <- currY + (deltaT/6)*(k1+2*k2+2*k3+k4)
+  return(newY)
+}
+
+#Variables
+mu0 <- 1/78       #Natural mortality rate USB per year
+mu1 <-1/53        #Natural mortality rate FB per year
+ro <- 0.018       #USB birth rate per year
+alpha <- 0.005    #FB arrival rate per year
+p <- 0.103        #Fraction of new infections which are acute (fast progressors)
+vF <- 1.5         #Progression rate of acute infection per year
+l0 <- 0.015       #Prevalence of LTBI in the USB population in 2000
+l1 <- 0.211       #Prevalence of LTBI in the FB population in 2000: 
+r0 <- 0.667       #Fraction of cases due to reactivation in the USB population
+r1 <- 0.780       #Fraction of cases due to reactivation in the FB population
+vL0 <- 0.0014     #Progression rate for reactivation (chronic LTBI) in the USB population per year
+vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB population per year
+q <- 0.708        #Fraction of infections progressing to infectious disease
+mud <- 0.115      #Mortality rate due to TB per year
+x <- 0.111        #Fraction of re-infected chronic LTBI moving to acute infection
+ARI0 <- 0.030/100 #Annual risk of infection for USB in 2000
+beta <- 10.39     #Effective contact rate per year
+e0 <- 0.965       #Fraction of preferred contacts with own population for USB
+e1 <-0.985        #Fraction of preferred contacts with own population for FB
+g <- 0.0047       #Fraction of FB arrivals with LTBI who are fast progressors
+                  #Cumulative fraction self-cure and treatment of active disease for both populations: 0.897
+phi0 <- 1.114#/1.25    #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (USB)
+phi1 <- 1.167#/1.25    #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (FB)
+                  #Cumulative fraction of treatment for acute infection for both populations: 0.461
+sigmaF0 <- 1.296  #Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
+sigmaF1 <- 1.301  #Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
+sigmaLBase <- 0.057   #Treatment rate for chronic LTBI per year
+fBase <- 0.187        #Fraction of FB arrivals with LTBI
+
+
+#2010 New Cases in Population i (millions)
+#source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
+newCases0 <- .008714  #US-born
+newCases1 <- .007554  #Foreign-born
+
+#Initial Values
+  
+deltaT   <- .8   #The length of each time step (years).
+finalYr  <- 100       #In years
+totT     <- floor(finalYr/deltaT)  #Time steps
+cutoffYr <- floor(8/deltaT)
+#TBcostRt <- Ct*deltaT
+#LTBIctRt <- Cl*deltaT
+
+#Matrix of compartment values
+S0 <- S1 <- F0 <- F1 <- L0 <- L1 <- I0 <- I1 <- J0 <- J1 <- N0 <- N1 <- rep(0,totT)
+cL0 <- cF0 <- cI0 <- cJ0 <- cL1 <- cF1 <- cI1 <- cJ1 <- cN0 <- cN1 <- rep(0,totT)
+Ct <- Cl <- Pt <- Pl <- rep(0,totT)
+LTBIEn <- rep(0,totT)
+P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1,Ct,Cl,Pt,Pl,LTBIEn)
+#C <- data.frame(cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1)
+IN0 <- IN1 <- INall <- rep(0,totT)
+
+#Total Population
+P$N0[1] <- 250
+P$N1[1] <- 31.4
+#Acute (Fast) LTBI, new cases
+P$F0[1] <- (1-r0)*(newCases0)/vF
+P$F1[1] <- (1-r1)*(newCases1)/vF
+#Chronic (Long) LTBI
+P$L0[1] <- r0*(newCases0)/vL0
+P$L1[1] <- r1*(newCases1)/vL1
+#Infectious TB
+P$I0[1] <- q*newCases0/(mu0 + mud + phi0)
+P$I1[1] <- q*newCases1/(mu1 + mud + phi1)
+#Non-Infectious TB
+P$J0[1] <- (1-q)*newCases0/(mu0 + mud + phi0)
+P$J1[1] <- (1-q)*newCases1/(mu1 + mud + phi1)
+#Susceptible
+P$S0[1] <- P$N0[1] - P$F0[1] - P$L0[1] - P$I0[1] - P$J0[1]
+P$S1[1] <- P$N1[1] - P$F1[1] - P$L1[1] - P$I1[1] - P$J1[1]
+#Cost Initial Values are all zero. 
+#Cost Parameter Values: 
+P$Ct[1] <- 6000  #in USD
+P$Pt[1] <- 0.9   #treatment proportion
+P$Cl[1] <- 500   #in USD
+P$Pl[1] <- 0.9   #LTBI treatment proportion
+discRt  <- 0.03  #Rate of time discounting
+
+P$LTBIEn[1] <- 0.263109
+
+#TODO: If only incidence data is needed, omit the dataSet parameter and just use P as a global. It will likely save memory. If all data is needed, this approach is probably good. 
+hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,dataSet=P){#,costDataSet=C){
+  #Differential Equation Functions
+  Ddt <- function(t,v) {
+    dLTBIEn <- f*alpha*(v$N0+v$N1)
+    c01     <- (1-e0)*((1-e1)*v$N1)/((1-e0)*v$N0 + (1-e1)*v$N1)
+    c00     <- 1 - c01
+    c10     <- (1-e1)*((1-e0)*v$N0)/((1-e0)*v$N0 + (1-e1)*v$N1)
+    c11     <- 1 - c10
+    lambda0 <- transmission*(beta*(c00*(v$I0/v$N0) + c01*(v$I1/v$N1)))
+    lambda1 <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))
+	  dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
+	  dF0     <- p*lambda0*v$S0 + x*p*lambda0*v$L0 - (mu0 + vF + sigmaF0)*v$F0
+	  dL0     <- (1-p)*lambda0*v$S0 - x*p*lambda0*v$L0 - (mu0 + vL0 + sigmaL)*v$L0
+	  dI0     <- q*(vF*v$F0 + vL0*v$L0) - (mu0 + mud + phi0)*v$I0
+	  dJ0     <- (1-q)*(vF*v$F0+vL0*v$L0) - (mu0 + mud + phi0)*v$J0
+	  dS1     <- (1-incLTBI)*dLTBIEn+(1-f)*alpha*(v$N0+v$N1) + sigmaF1*v$F1 + sigmaL*v$L1 + phi1*(v$I1 + v$J1) - lambda1*v$S1 - mu1*v$S1
+	  dF1     <- g*p*dLTBIEn*incLTBI + p*lambda1*v$S1 + x*p*lambda1*v$L1 - (mu1 + vF + sigmaF1)*v$F1
+	  dL1     <- (1-g*p)*dLTBIEn*incLTBI + (1-p)*lambda1*v$S1 - x*p*lambda1*v$L1 - (mu1 + vL1 +sigmaL)*v$L1
+	  dI1     <- q*(vF*v$F1 + vL1*v$L1) - (mu1 + mud + phi1)*v$I1
+	  dJ1     <- (1-q)*(vF*v$F1 + vL1*v$L1) - (mu1 + mud + phi1)*v$J1
+	  dN0     <- 0
+	  dN1     <- 0
+    dcL0    <- v$Cl * v$Pl * sigmaL  * 1e6 * v$L0
+    dcF0    <- v$Cl * v$Pl * sigmaF0 * 1e6 * v$F0
+    dcI0    <- v$Ct * v$Pt * phi0    * 1e6 * v$I0
+    dcJ0    <- v$Ct * v$Pt * phi0    * 1e6 * v$J0
+    dcL1    <- v$Cl * v$Pl * sigmaL  * 1e6 * v$L1
+    dcF1    <- v$Cl * v$Pl * sigmaF1 * 1e6 * v$F1
+    dcI1    <- v$Ct * v$Pt * phi1    * 1e6 * v$I1
+    dcJ1    <- v$Ct * v$Pt * phi1    * 1e6 * v$J1
+    dcN0    <- 0
+    dcN1    <- 0
+    dCt     <- 0#v$Ct * (-log(1+discRt))
+    dCl     <- 0#v$Cl * (-log(1+discRt))
+    dPt     <- 0
+    dPl     <- 0
+    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dCt,dCl,dPt,dPl,dLTBIEn*incLTBI) )
+  }
+  
+  for (i in initial:(final-1)) {
+  	dataSet[i+1,]    <- rkm(Ddt,dataSet[i,],deltaT,i)
+  	dataSet$N0[i+1]  <- sum(dataSet[i+1,1:5])
+  	dataSet$N1[i+1]  <- sum(dataSet[i+1,6:10])
+  	dataSet$cN0[i+1] <- sum(dataSet[i+1,13:16])
+  	dataSet$cN1[i+1] <- sum(dataSet[i+1,17:20])
+    dataSet$Ct[i+1]  <- dataSet$Ct[i]/((1+discRt)^deltaT)
+    dataSet$Cl[i+1]  <- dataSet$Cl[i]/((1+discRt)^deltaT)
+  }
+  #costDataSet$L0 <- dataSet$L0*LTBIctRt
+  #costDataSet$F0 <- dataSet$F0*LTBIctRt
+  #costDataSet$L1 <- dataSet$L1*LTBIctRt
+  #costDataSet$F1 <- dataSet$F1*LTBIctRt
+  #costDataSet$I0 <- dataSet$I0*TBcostRt
+  #costDataSet$J0 <- dataSet$J0*TBcostRt
+  #costDataSet$I1 <- dataSet$I1*TBcostRt
+  #costDataSet$J1 <- dataSet$J1*TBcostRt
+  return(dataSet)
+}
+
+generateIncidence <- function(dataSet) {
+    IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
+    IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
+    INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+	return(data.frame(IN0,IN1,INall))
+}
+
+P       <- hill(sigmaLBase,fBase,1,1,1,totT)
+baseInc <- generateIncidence(P)
+years   <- seq(2000+deltaT,2000+finalYr,deltaT)
+
+#plot incidence data
+#  xlab, ylab  --> labels for x-, y-axes
+#  log='y'     --> use logarithmic scale
+#  ylim=yrange --> ensure we show all data
+#  type="l"    --> draw line connecting data points
+#col="blue"  --> color of graph
+#lines() plots data in the same window as the first plot() command
+
+#Plot A: Where we eliminate incoming LTBI 100%, 70%, or 50%
+noImmLTBI      <- hill(sigmaLBase,fBase,1,0)
+noImmLTBIInc   <- generateIncidence(noImmLTBI)
+someImmLTBI    <- hill(sigmaLBase,fBase,1,0.25)
+someImmLTBIInc <- generateIncidence(someImmLTBI)
+halfImmLTBI    <- hill(sigmaLBase,fBase,1,0.5)
+halfImmLTBIInc <- generateIncidence(halfImmLTBI)
+
+#When Calculating range, we presume that FB always has higher incidence rate
+yrange <- range(c(0.5,baseInc$IN1,noImmLTBIInc$IN1,someImmLTBIInc$IN1,halfImmLTBIInc$IN1))
+dev.new()
+plot(years, baseInc$IN0, main="Plot A: Reduce incoming LTBI in 2008", log='y', xlab='year', ylab='incidence/million', ylim=yrange, type="l", col="blue")
+lines(years, baseInc$INall, type="l", col="red")
+lines(years, baseInc$IN1, type="l", col="green")
+lines(years, noImmLTBIInc$IN0, type="l", col="blue", lty=2)
+lines(years, noImmLTBIInc$INall, type="l", col="red", lty=2)
+lines(years, noImmLTBIInc$IN1, type="l", col="green", lty=2)
+lines(years, someImmLTBIInc$IN0, type="l", col="blue", lty=3)
+lines(years, someImmLTBIInc$INall, type="l", col="red", lty=3)
+lines(years, someImmLTBIInc$IN1, type="l", col="green", lty=3)
+lines(years, halfImmLTBIInc$IN0, type="l", col="blue", lty=4)
+lines(years, halfImmLTBIInc$INall, type="l", col="red", lty=4)
+lines(years, halfImmLTBIInc$IN1, type="l", col="green", lty=4)
+abline(h = 1, lty = 'dotted')
+legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'No Incoming LTBI post 2008', '75% reduction of Inc. LTBI post 2008', '50% reduction of Inc. LTBI post 2008'), col=c("blue", "green", "red", "black","black","black"), lty=c(1,1,1,2,3,4))
+
+#Cost Plot A:
+yrange <- range(c(P$cN1+P$cN0,noImmLTBI$cN1+noImmLTBI$cN0,someImmLTBI$cN0+someImmLTBI$cN1,halfImmLTBI$cN0+halfImmLTBI$cN1))
+dev.new()
+plot(years, P$cN1+P$cN0, main="Plot A: cost of various interventions", xlab='year', ylab='USD', ylim=yrange, type="l", col="blue")
+#lines(years, P$cN0, type="l", col="blue", lty=2)
+#lines(years, P$cN1, type="l", col="blue", lty=3)
+lines(years, noImmLTBI$cN0 + noImmLTBI$cN1, type="l", col="green", lty=1)
+#lines(years, noImmLTBI$cN0, type="l", col="green", lty=2)
+#lines(years, noImmLTBI$cN1, type="l", col="green", lty=3)
+lines(years, someImmLTBI$cN0 + someImmLTBI$cN1, type="l", col="red", lty=1)
+#lines(years, someImmLTBI$cN0, type="l", col="red", lty=2)
+#lines(years, someImmLTBI$cN1, type="l", col="red", lty=3)
+lines(years, halfImmLTBI$cN0 + halfImmLTBI$cN1, type="l", col="purple", lty=1)
+#lines(years, halfImmLTBI$cN0, type="l", col="purple", lty=2)
+#lines(years, halfImmLTBI$cN1, type="l", col="purple", lty=3)
+abline(h = 1, lty = 'dotted')
+legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
+
+yearsPostCutoff <- years[(cutoffYr+1):totT]
+maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[(cutoffYr+1):totT]
+savingsPerCase  <- maxDifference/(1e6*P$LTBIEn[(cutoffYr+1):totT])
+dev.new()
+plot(yearsPostCutoff, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
+
+
+##Plot A: Where Transmission is cut after 2008
+#noTrans    <- hill(sigmaLBase,fBase,0)
+#noTransInc <- generateIncidence(noTrans)
+#
+##When Calculating range, we presume that FB always has higher incidence rate
+#yrange <- range(c(0.5,baseInc$IN1,noTransInc$IN1))
+#dev.new()
+#plot(years, baseInc$IN0, main="Plot A: Cut Trans. in 2008", xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")
+#lines(years, baseInc$INall, type="l", col="red")
+#lines(years, baseInc$IN1, type="l", col="green")
+#lines(years, noTransInc$IN0, type="l", col="blue", lty=2)
+#lines(years, noTransInc$INall, type="l", col="red", lty=2)
+#lines(years, noTransInc$IN1, type="l", col="green", lty=2)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'With Transmission Cutoff in 2008'), col=c("blue", "green", "red", "black"), lty=c(1,1,1,2))
+#
+##Plot B: Where LTBI treatment x2 or x4
+#doubled    <-hill(sigmaLBase*2,fBase)
+#doubledInc <- generateIncidence(doubled)
+#quad       <- hill(sigmaLBase*4,fBase)
+#quadInc    <- generateIncidence(quad)
+#
+##When Calculating range, we presume that FB always has higher incidence rate after 2008
+#yrange <- range(c(0.5,baseInc$IN1,quadInc$IN1,doubledInc$IN1))
+#dev.new()
+#plot(years, baseInc$IN0, main="Plot B: Increase Chronic LTBI Treatment in 2008", xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")
+#lines(years, baseInc$INall, type="l", col="red")
+#lines(years, baseInc$IN1, type="l", col="green")
+#lines(years, doubledInc$IN0, type="l", col="blue", lty=2)
+#lines(years, doubledInc$INall, type="l", col="red", lty=2)
+#lines(years, doubledInc$IN1, type="l", col="green", lty=2)
+#lines(years, quadInc$IN0, type="l", col="blue", lty=3)
+#lines(years, quadInc$INall, type="l", col="red", lty=3)
+#lines(years, quadInc$IN1, type="l", col="green", lty=3)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'Chronic LTBI Treatment x2 in 2008', 'Chronic LTBI Treatment x4 in 2008'), col=c("blue", "green", "red", "black", "black"), lty=c(1,1,1,2,3))
+#
+##Plot C: Where FB arrivals cut in half, also LTBI treatment x2 or x4 after 2008
+#halfFB           <- hill(sigmaLBase,fBase/2)
+#halfFBInc        <- generateIncidence(halfFB)
+#halfFBdoubled    <- hill(sigmaLBase*2,fBase/2)
+#halfFBdoubledInc <- generateIncidence(halfFBdoubled)
+#halfFBquad       <- hill(sigmaLBase*4,fBase/2)
+#halfFBquadInc    <- generateIncidence(halfFBquad)
+#
+##When Calculating range, we presume that FB always has higher incidence rate
+#yrange <- range(c(0.5,baseInc$IN1,quadInc$IN1,doubledInc$IN1))
+#dev.new()
+#plot(years, halfFBInc $IN0, main="Plot C: Half FB Arrival Rate, increase LTBI Treatment", xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")
+#lines(years, halfFBInc $INall, type="l", col="red")
+#lines(years, halfFBInc $IN1, type="l", col="green")
+#lines(years, halfFBdoubledInc $IN0, type="l", col="blue", lty=2)
+#lines(years, halfFBdoubledInc $INall, type="l", col="red", lty=2)
+#lines(years, halfFBdoubledInc $IN1, type="l", col="green", lty=2)
+#lines(years, halfFBquadInc $IN0, type="l", col="blue", lty=3)
+#lines(years, halfFBquadInc $INall, type="l", col="red", lty=3)
+#lines(years, halfFBquadInc $IN1, type="l", col="green", lty=3)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'Chronic LTBI Treatment x2 in 2008', 'Chronic LTBI Treatment x4 in 2008'), col=c("blue", "green", "red", "black", "black"), lty=c(1,1,1,2,3))
+#
+##Plot D: Where FB arrivals divided by 4, also LTBI treatment x2 or x4 after 2008
+#quarterFB           <- hill(sigmaLBase,fBase/4)
+#quarterFBInc        <- generateIncidence(quarterFB)
+#quarterFBdoubled    <- hill(sigmaLBase*2,fBase/4)
+#quarterFBdoubledInc <- generateIncidence(quarterFBdoubled)
+#quarterFBquad       <- hill(sigmaLBase*4,fBase/4)
+#quarterFBquadInc    <- generateIncidence(quarterFBquad)
+#
+##When Calculating range, we presume that FB always has higher incidence rate
+#yrange <- range(c(0.5,baseInc$IN1,quadInc$IN1,doubledInc$IN1))
+#dev.new()
+#plot(years, quarterFBInc $IN0, main="Plot D: 1/4 FB Arrival Rate, increase LTBI Treatment", xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")
+#lines(years, quarterFBInc $INall, type="l", col="red")
+#lines(years, quarterFBInc $IN1, type="l", col="green")
+#lines(years, quarterFBdoubledInc $IN0, type="l", col="blue", lty=2)
+#lines(years, quarterFBdoubledInc $INall, type="l", col="red", lty=2)
+#lines(years, quarterFBdoubledInc $IN1, type="l", col="green", lty=2)
+#lines(years, quarterFBquadInc $IN0, type="l", col="blue", lty=3)
+#lines(years, quarterFBquadInc $INall, type="l", col="red", lty=3)
+#lines(years, quarterFBquadInc $IN1, type="l", col="green", lty=3)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'Chronic LTBI Treatment x2 in 2008', 'Chronic LTBI Treatment x4 in 2008'), col=c("blue", "green", "red", "black", "black"), lty=c(1,1,1,2,3))
