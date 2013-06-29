@@ -6,11 +6,8 @@
 //
 //
 using namespace std;
-#include<iostream>
+#include <iostream>
 #include "agentbased.h"
-breed [USBs USB]
-breed [FBs FB]
-
 
 double mu0;     //Natural mortality rate USB per year
 double mu1;     // Natural mortality rate FB per year
@@ -39,16 +36,15 @@ double sigmaF0; // Cumulative fraction of treatment for acute infection for both
 double sigmaF1; // Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
 double sigmaL;  // Treatment rate for chronic LTBI per year
          
-         // We handle susceptibles only by population
+                // We handle susceptibles only by population
 double S0pop;   // population of USB Susceptibles (S0)
 double S1pop;   // population of FB Susceptibles (S1)
-         // "Snapshot" variables which need to be global
+                // "Snapshot" variables which need to be global
 double deltaS0;
 double deltaS1;
 double totpop;
 double lambda0;
 double lambda1;
-         ]
 
 turtles-own [
              dstate        // state of TB disease (latentLTBI=0, acuteLTBI=1, infectiousATBI=2, non-infectiousATBI=3)
