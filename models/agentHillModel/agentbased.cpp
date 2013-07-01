@@ -14,14 +14,6 @@ using namespace std;
 
 int main()
 {
-
-    turtles-own [
-             int dstate        // state of TB disease (latentLTBI=0, acuteLTBI=1, infectiousATBI=2, non-infectiousATBI=3)
-             // Note: dstate = 0 by default
-             int nstate        // state of turtle in the next time step, may or may not be the same as dstate
-             ]
-
-
     
     ro  =0.018;
     alpha =0.005;
