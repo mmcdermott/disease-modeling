@@ -10,8 +10,7 @@
 #define ____agentbased__
 
 #include <iostream>
-double mu0;     //Natural mortality rate USB per year
-double mu1;     // Natural mortality rate FB per year
+
 double ro;      // USB birth rate per year
 double alpha;   // FB birth rate per year
 double p;       // Fraction of new infectionsn which are acute (fast progressors)

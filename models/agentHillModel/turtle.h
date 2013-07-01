@@ -11,4 +11,9 @@
 
 #include <iostream>
 
+
+double mu0;     //Natural mortality rate USB per year
+double mu1;     // Natural mortality rate FB per year
+
+
 #endif /* defined(____turtle__) */
