@@ -5,13 +5,19 @@
 //  Created by mhcuser on 6/28/13.
 //
 //
-using namespace std;
+
 #include <iostream>
+using namespace std;
 #include "agentbased.h"
+//#include <array>
 
 
 int main()
 {
+    int nturtles = 100;
+    int popConst;
+    
+    
     double mu0;     //Natural mortality rate USB per year
     double mu1;     // Natural mortality rate FB per year
     double ro;      // USB birth rate per year
@@ -48,14 +54,10 @@ int main()
     double totpop;
     double lambda0;
     double lambda1;
-
-    turtles-own [
-             int dstate        // state of TB disease (latentLTBI=0, acuteLTBI=1, infectiousATBI=2, non-infectiousATBI=3)
-             // Note: dstate = 0 by default
-             int nstate        // state of turtle in the next time step, may or may not be the same as dstate
-             ]
-
-
+    
+    list<
+    enum dstate [nturtles];    // state of TB disease (latentLTBI=0, acuteLTBI=1, infectiousATBI=2, non-infectiousATBI=3)
+    enum nstate [nturtles];     // state of turtle in the next time step, may or may not be the same as dstate
     mu0 =1 / 78;
     mu1 =1 / 53;
     ro =0.018;
@@ -81,8 +83,9 @@ int main()
     sigmaF0 =1.296;
     sigmaF1 =1.301;
 
-    sigmaL 0.057;
-    f 0.187;
+    sigmaL = 0.057;
+    f = 0.187;
+    
     if (popConst < 1)
         popConst = 1000;
         // parameter to relate population to actual number of turtles in model
