@@ -13,6 +13,8 @@
 #include "turtle.h"
 using namespace std;
 
+typedef list<double> turtleList;
+
 const double ro      = 0.018;     // USB birth rate per year
 const double alpha   = 0.005;     // FB birth rate per year
 const double p       = 0.103;     // Fraction of new infectionsn which are acute
@@ -46,44 +48,88 @@ double totpop;
 double lambda0;
 double lambda1;
 
-list<double> population; //TODO: Make this turtles, once the turtle class is defined. 
+//2010 New Cases in Population
+//source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
+const int newCases0 = 8714  //US-born
+const int newCases1 = 7554  //Foreign-born
 
-vector<int> N0;
-vector<int> L0;
-vector<int> F0; //TODO: deleted later
-vector<int> J0;
-vector<int> I0;
-vector<int> N1;
-vector<int> L1;
-vector<int> F1; //TODO: deleted later
-vector<int> I1;
-vector<int> J1;
-vector<double> cost;
+turtleList population; //TODO: Make this turtles, once the turtle class is defined. 
+
 
 const double popConst = 1000; //For now
 int finalYr = 100;
 double deltaT = .1;
 double totT = finalYr/deltaT;
 
+int N0[totT];
+N0.fill(0);
+int L0[totT];
+L0.fill(0);
+int F0[totT];
+F0.fill(0); //TODO: deleted later
+int J0[totT];
+J0.fill(0);
+int I0[totT];
+I0.fill(0);
+int N1[totT];
+N1.fill(0);
+int L1[totT];
+L1.fill(0);
+int F1[totT];
+F1.fill(0); //TODO: deleted later
+int I1[totT];
+I1.fill(0);
+int J1[totT];
+J1.fill(0);
+double[totT] cost;
+
 int main()
 {  
-	N0.push(250)
-	N1.push(31.4)
+	N0[0] = (250000000); //now in millions because agents
+	N1[0] = (31400000);
 	//Acute (Fast) LTBI, new cases
-	F0.push((1-r0)*(newCases0)/vF)
-	F1.push((1-r1)*(newCases1)/vF)
+	F0[0] = ((1-r0)*(newCases0)/vF);
+	F1[0] = ((1-r1)*(newCases1)/vF);
 	//Chronic (Long) LTBI
-	L0.push(r0*(newCases0)/vL0)
-	L1.push(r1*(newCases1)/vL1)
+	L0[0] = (r0*(newCases0)/vL0);
+	L1[0] = (r1*(newCases1)/vL1);
 	//Infectious TB
-	I0.push(q*newCases0/(mu0 + mud + phi0))
-	I1.push(q*newCases1/(mu1 + mud + phi1))
+	I0[0] = (q*newCases0/(mu0 + mud + phi0));
+	I1[0] = (q*newCases1/(mu1 + mud + phi1));
 	//Non-Infectious TB
-	J0.push((1-q)*newCases0/(mu0 + mud + phi0))
-	J1.push((1-q)*newCases1/(mu1 + mud + phi1))
+	J0[0] = ((1-q)*newCases0/(mu0 + mud + phi0));
+	J1[0] = ((1-q)*newCases1/(mu1 + mud + phi1));
 	//Susceptible
-	S0.push(N0[0] - F0[0] - L0[0] - I0[0] - J0[0])
-	S1.push(N1[0] - F1[0] - L1[0] - I1[0] - J1[0])
+	S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
+	S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
+	int turtlepopsize = 0;
+
+	for (int i = 0; i < totT; ++i)
+	{
+
+		//turtlepopsize = F0[i]+L0[i]+I0[i]+J0[i]+F1[i]+L1[i]+I1[i]+J1[i];
+		for (turtleList::iterator turtleIter = population.begin(); 
+			turtleIter != population.end(); ++turtleIter)
+		{
+			/* code */
+		}
+		S0[i+1] = S0[i] + (int) floor(ro * (N0[i]+N1[i]) * deltaT);                       // US birth (-> S0)
+		S0[i+1] -= (int) floor(mu0*S0[i]);
+		S1[i+1] = S1[i] + (int) floor((1 - f) * alpha * (N0[i]+N1[i]) * deltaT);         // susceptible arrival (-> S1)
+		S1[i+1] -= (int) floor(mu1*S1[i]);
+  		F1[i+1] = F1[i] + (int) floor(g * p * f * alpha * (N0[i]+N1[i]) * deltaT);       // acute LTBI arrival (-> F1)
+ 	 	L1[i+1] = L1[i] + (int) floor((1 - g * p) * f * alpha * (N0[i]+N1[i]) * deltaT); // latent LTBI arrival (-> L1)
+
+ 	 	let usinfec random-poisson (lambda0 * S0pop * deltaT)
+  let newf0 round (p * usinfec)
+  let newl0 round ((1 - p) * usinfec)
+  set deltaS0 deltaS0 - newf0 - newl0
+
+		N0[i+1] = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
+		N1[i+1] = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
+
+
+	}
     
     return 0;
 }
