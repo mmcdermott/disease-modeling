@@ -8,10 +8,11 @@
 #include <iostream>
 #include <math.h>
 #include <stdlib.h>
-#include <chrono>
-#include <random>
+#include <ctime>
+//#include <chrono>
+#include <tr1/random>
 #include <functional>
-#include <array>
+//#include <array>
 using namespace std;
 #include "turtle.h"
 
@@ -20,8 +21,8 @@ enum COB {
 	OTHER = 1
 };
 enum State {
-    ACUTE_LATENT = 0,
-    CHRONIC_LATENT = 1,
+	ACUTE_LATENT = 0,
+	CHRONIC_LATENT = 1,
 	INFECTIOUS_TB = 2,
 	NONINFECTIOUS_TB = 3,
 	SUSCEPTIBLE = 4
@@ -45,11 +46,18 @@ private:
 	int treatmentTimeLeft;
     int newCost;
 	double mu;  //natural mortality rate
+    int x; // time since infection
 
 public:
     turtle(COB c, State s);
     int updateState(double probVector[]);
     void display();
+    COB getCountry();
+    State getState();
+    DeathType getDeathType();
+    int getTreatmentTimeLeft();
+    int getNewCost();
+    int getTimeSinceInfection();
 };
 
 //Implementation
@@ -60,9 +68,11 @@ turtle::turtle(COB c, State s){
 	treatmentTimeLeft = 0;
 	newCost = 0;
 	deathType = STILL_ALIVE;
+	x = 0;
 	if(country == USA) mu = MU0;
 	else mu = MU1;
 }
+
 //Updates turtle state, treatmentTimeLeft, and newCost for each iteration
 int turtle::updateState(double probVector[]){
 	srand(time(NULL));
@@ -73,6 +83,7 @@ int turtle::updateState(double probVector[]){
 	for(i=0; i<6; i++)
 		probArray[i] = probVector[startingIndex + i];
 	r = (double)rand()/RAND_MAX; //random number from (0,1]
+	//printf("%f\n", r);
 	i = 0;
 	while(r > 0){
 		r -= probArray[i];
@@ -100,6 +111,26 @@ void turtle::display(){
 	cout << "Natural death rate: " << mu << "\n";
 	cout << "Natural death: " << deathTypeNames[deathType] << "\n\n";
 }
+
+COB turtle::getCountry() {
+	return country;
+}
+State turtle::getState() {
+	return state;
+}
+DeathType turtle::getDeathType() {
+	return deathType;
+}
+int turtle::getTreatmentTimeLeft() {
+	return treatmentTimeLeft;
+}
+int turtle::getNewCost() {
+	return newCost;
+}
+int turtle::getTimeSinceInfection() {
+	return x;
+}
+
 
 int main()
 {
