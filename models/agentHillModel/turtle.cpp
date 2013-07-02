@@ -13,24 +13,6 @@
 using namespace std;
 #include "turtle.h"
 
-enum COB {
-	USA = 0,
-	OTHER = 1
-};
-enum State {
-	ACUTE_LATENT = 0,
-	CHRONIC_LATENT = 1,
-	INFECTIOUS_TB = 2,
-	NONINFECTIOUS_TB = 3,
-	SUSCEPTIBLE = 4,
-	TB_DEATH = 5,
-	NATURAL_DEATH = 6
-};
-
-const char* countryNames[] = {"USA", "Other"};
-const char* stateNames[] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectious TB (I)",
-							"Non-Infectious TB (J)", "Susceptible (S)", "TB Death", "Natural Death"};
-
 //Declaration
 class turtle{
 private:
@@ -43,13 +25,14 @@ private:
 
 public:
     turtle(COB c, State s);
-    int updateState(double probVector[]);
+    int updateState();
     void display();
     COB getCountry();
     State getState();
     int getTreatmentTimeLeft();
     int getNewCost();
     int getTimeSinceInfection();
+	void infect(bool pulmonary_TB);
 };
 
 //Implementation
@@ -65,28 +48,49 @@ turtle::turtle(COB c, State s){
 }
 
 //Updates turtle state, treatmentTimeLeft, and newCost for each iteration
-int turtle::updateState(double probVector[]){
+int turtle::updateState(){
 	srand(time(NULL));
 	
 	//Initializations
 	double r; //random number from (0,1]
-	int startingIndex = country*24 + state*6;
-	double probArray[6];
 	int i, result = 0;  //result = next state
 	
-	//Find turtle-specific discrete probability distribution
-	for(i=0; i<6; i++)
-		probArray[i] = probVector[startingIndex + i];
-	
-	//Sample a random state "result"
-	r = (double)rand()/RAND_MAX; //random number from (0,1]
-		i = 0;
-	while(r > 0){
-		r -= probArray[i];
-		if(r < 0) result = i;
-		i++;
+	//Disease progression from latent to active TB
+	if(state == CHRONIC_LTBI){
+		r = (double)rand()/RAND_MAX; //random number from (0,1]
+		if(r < PROB_CHRONIC_PROGRESSION){
+			r = (double)rand()/RAND_MAX; //random number from (0,1]
+			if(r < PERCENT_INFECTIOUS_TB) result = INFECTIOUS_TB;
+			else result = NONINFECTIOUS_TB;
+		}			
 	}
-	cout << "\nresult = " << result << "\n\n";
+	else if(state == ACUTE_LTBI){
+		r = (double)rand()/RAND_MAX; //random number from (0,1]
+		if(r < PROB_ACUTE_PROGRESSION){
+			r = (double)rand()/RAND_MAX; //random number from (0,1]
+			if(r < PERCENT_INFECTIOUS_TB) result = INFECTIOUS_TB;
+			else result = NONINFECTIOUS_TB;
+		}
+	}
+	
+	//Calculate new costs of treatments
+	if(treatmentTimeLeft > 0){
+		if(state == ACUTE_LTBI || state == CHRONIC_LTBI)
+			newCost += LATENT_TREATMENT_COST / LATENT_TREATMENT_LENGTH;
+		if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB)
+			newCost += ACTIVE_TREATMENT_COST / ACTIVE_TREATMENT_LENGTH;
+		
+		treatmentTimeLeft--;
+	}
+	else { //probability of entering treatment (all turtles have latent or active TB)
+		r = (double)rand()/RAND_MAX; //random number from (0,1]
+		if(r < PROB_ACTIVE_TREATMENT){
+			if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB)
+				treatmentTimeLeft = ACTIVE_TREATMENT_LENGTH;
+			else if(r < PROB_LATENT_TREATMENT && (state == ACUTE_LTBI || state == CHRONIC_LTBI) )
+				treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
+		}
+	}
 	
 	//Natural Death Rate
 	r = (double)rand()/RAND_MAX; //random number from (0,1]
@@ -94,24 +98,7 @@ int turtle::updateState(double probVector[]){
 		result = NATURAL_DEATH;
 	}
 	
-	//Calculate new costs of treatments
-	if(treatmentTimeLeft > 0){
-		if(state == ACUTE_LATENT || state == CHRONIC_LATENT)
-			newCost += LATENT_TREATMENT_COST / LATENT_TREATMENT_LENGTH;
-		if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB)
-			newCost += ACTIVE_TREATMENT_COST / ACTIVE_TREATMENT_LENGTH;
-		
-		treatmentTimeLeft--;
-	}
-	else { //probability of entering treatment
-		r = (double)rand()/RAND_MAX; //random number from (0,1]
-		if(r < PROB_ACTIVE_TREATMENT){
-			if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB)
-				treatmentTimeLeft = ACTIVE_TREATMENT_LENGTH;
-			else if(r < PROB_LATENT_TREATMENT && (state == ACUTE_LATENT || state == CHRONIC_LATENT) )
-				treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
-		}
-	}
+	cout << "\nresult = " << result << "\n\n";
 	
 	state = static_cast<State>(result);
 	return result;
@@ -140,24 +127,20 @@ int turtle::getNewCost() {
 int turtle::getTimeSinceInfection() {
 	return x;
 }
+void infect(bool pulmonary_TB){
+	if(pulmonary_TB) state = INFECTIOUS_TB;
+	else state = NONINFECTIOUS_TB;
+}
 
 
 int main()
 {
-	turtle t = turtle(USA, CHRONIC_LATENT);
+	turtle t = turtle(USA, CHRONIC_LTBI);
 	t.display();
-	
-	//Initialize a simple probability vector to test
-	double probVector[48];
-	int i;
-	for(i=0;i<48;i++)
-		probVector[i] = 0.2;
-	for(i=0;i<48;i+=6)
-		probVector[i] = 0.0;
 		
-	t.updateState(probVector);
+	t.updateState();
 	t.display();
 	
-	t.updateState(probVector);
+	t.updateState();
 	t.display();
 }
