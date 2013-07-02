@@ -9,6 +9,10 @@
 #include <iostream>
 #include <vector>
 #include <list>
+//#include <array>
+//#include <random>
+#include <ctime>
+#include <math.h>
 #include "agentbased.h"
 #include "turtle.h"
 using namespace std;
@@ -44,14 +48,14 @@ const double sigmaF1 = 1.301;     // Cumulative fraction of treatment for acute 
 double sigmaL        = 0.057;     // Treatment rate for chronic LTBI per year
 double deltaS0;
 double deltaS1;
-double totpop;
+//double totpop;
 double lambda0;
 double lambda1;
 
 //2010 New Cases in Population
 //source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
-const int newCases0 = 8714  //US-born
-const int newCases1 = 7554  //Foreign-born
+const int newCases0 = 8714;  //US-born
+const int newCases1 = 7554;  //Foreign-born
 
 turtleList population; //TODO: Make this turtles, once the turtle class is defined. 
 
@@ -59,32 +63,36 @@ turtleList population; //TODO: Make this turtles, once the turtle class is defin
 const double popConst = 1000; //For now
 int finalYr = 100;
 double deltaT = .1;
-double totT = finalYr/deltaT;
+int totT = floor(finalYr/deltaT);
 
-int N0[totT];
-N0.fill(0);
-int L0[totT];
-L0.fill(0);
-int F0[totT];
-F0.fill(0); //TODO: deleted later
-int J0[totT];
-J0.fill(0);
-int I0[totT];
-I0.fill(0);
-int N1[totT];
-N1.fill(0);
-int L1[totT];
-L1.fill(0);
-int F1[totT];
-F1.fill(0); //TODO: deleted later
-int I1[totT];
-I1.fill(0);
-int J1[totT];
-J1.fill(0);
-double[totT] cost;
+
+
+//unsigned seed = time();
+//default_random_engine generator (seed);
 
 int main()
 {  
+	int N0[totT];
+	//N0.fill(0);
+	int L0[totT];
+	//L0.fill(0);
+	int F0[totT];
+	//F0.fill(0); //TODO: deleted later
+	int J0[totT];
+	//J0.fill(0);
+	int I0[totT];
+	//I0.fill(0);
+	int N1[totT];
+	//N1.fill(0);
+	int L1[totT];
+	//L1.fill(0);
+	int F1[totT];
+	//F1.fill(0); //TODO: deleted later
+	int I1[totT];
+	//I1.fill(0);
+	int J1[totT];
+	//J1.fill(0);
+	double[totT] cost;
 	N0[0] = (250000000); //now in millions because agents
 	N1[0] = (31400000);
 	//Acute (Fast) LTBI, new cases
@@ -119,12 +127,12 @@ int main()
 		S1[i+1] -= (int) floor(mu1*S1[i]);
   		F1[i+1] = F1[i] + (int) floor(g * p * f * alpha * (N0[i]+N1[i]) * deltaT);       // acute LTBI arrival (-> F1)
  	 	L1[i+1] = L1[i] + (int) floor((1 - g * p) * f * alpha * (N0[i]+N1[i]) * deltaT); // latent LTBI arrival (-> L1)
-
- 	 	let usinfec random-poisson (lambda0 * S0pop * deltaT)
-  let newf0 round (p * usinfec)
-  let newl0 round ((1 - p) * usinfec)
-  set deltaS0 deltaS0 - newf0 - newl0
-
+ 	 	/*
+ 	 	binomial_distribution<double> usinfec (S0[i], lambda0 * S0[i] * deltaT);
+  		int newf0 = floor(p * usinfec);
+  		int newl0 = floor((1 - p) * usinfec);
+ 		- newf0 - newl0;
+		*/
 		N0[i+1] = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
 		N1[i+1] = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
 
