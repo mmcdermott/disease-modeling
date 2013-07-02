@@ -38,9 +38,6 @@ const double phi1    = 1.167;     // Cumulative fraction self-cure and treatment
 const double sigmaF0 = 1.296;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
 const double sigmaF1 = 1.301;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
 
-                            // We handle susceptibles only by population
-double S0pop;               // population of USB Susceptibles (S0)
-double S1pop;               // population of FB Susceptibles (S1)
 
 double sigmaL        = 0.057;     // Treatment rate for chronic LTBI per year
 double deltaS0;
@@ -51,21 +48,42 @@ double lambda1;
 
 list<double> population; //TODO: Make this turtles, once the turtle class is defined. 
 
+vector<int> N0;
 vector<int> L0;
-vector<int> F0;
+vector<int> F0; //TODO: deleted later
 vector<int> J0;
 vector<int> I0;
+vector<int> N1;
 vector<int> L1;
-vector<int> F1;
+vector<int> F1; //TODO: deleted later
 vector<int> I1;
 vector<int> J1;
 vector<double> cost;
 
 const double popConst = 1000; //For now
+int finalYr = 100;
+double deltaT = .1;
+double totT = finalYr/deltaT;
 
 int main()
 {  
-
+	N0.push(250)
+	N1.push(31.4)
+	//Acute (Fast) LTBI, new cases
+	F0.push((1-r0)*(newCases0)/vF)
+	F1.push((1-r1)*(newCases1)/vF)
+	//Chronic (Long) LTBI
+	L0.push(r0*(newCases0)/vL0)
+	L1.push(r1*(newCases1)/vL1)
+	//Infectious TB
+	I0.push(q*newCases0/(mu0 + mud + phi0))
+	I1.push(q*newCases1/(mu1 + mud + phi1))
+	//Non-Infectious TB
+	J0.push((1-q)*newCases0/(mu0 + mud + phi0))
+	J1.push((1-q)*newCases1/(mu1 + mud + phi1))
+	//Susceptible
+	S0.push(N0[0] - F0[0] - L0[0] - I0[0] - J0[0])
+	S1.push(N1[0] - F1[0] - L1[0] - I1[0] - J1[0])
     
     return 0;
 }
