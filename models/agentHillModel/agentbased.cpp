@@ -46,12 +46,23 @@ double totpop;
 double lambda0;
 double lambda1;
 
+list<turtle> population;
+
+vector<int> L0;
+vector<int> F0;
+vector<int> J0;
+vector<int> I0;
+vector<int> L1;
+vector<int> F1;
+vector<int> I1;
+vector<int> J1;
+vector<double> cost;
+
+const double popConst = 1000; //For now
+
 int main()
-{
+{  
+
     
-    if (popConst < 1)
-        popConst = 1000;
-        // parameter to relate population to actual number of turtles in model
-        // the reason it's large is to ensure each compartment contains at least one initial person
     return 0;
 }
