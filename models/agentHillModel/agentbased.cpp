@@ -73,7 +73,7 @@ void createTurtles(State turtState, COB cob, int timeStep, int numTurtles)
 {
   for (int i = 0; i < numTurtles; ++i) 
   {
-    population.push_front(turtState);
+    population.push_front(cob, turtState);
   }
   updatePop(turtState, cob, timeStep, numTurtles);
 }
