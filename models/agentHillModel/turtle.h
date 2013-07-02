@@ -1,8 +1,8 @@
 //
-//  turtle.h
-//  
+// turtle.h
 //
-//  Created by mhcuser on 7/1/13.
+//
+// Created by mhcuser on 7/1/13.
 //
 //
 
@@ -12,8 +12,8 @@
 #include <iostream>
 
 
-double mu0;     //Natural mortality rate USB per year
-double mu1;     // Natural mortality rate FB per year
+const double MU0 = 1./78; //Natural mortality rate USB per year
+const double MU1 = 1./53; // Natural mortality rate FB per year
 
 
 #endif /* defined(____turtle__) */
