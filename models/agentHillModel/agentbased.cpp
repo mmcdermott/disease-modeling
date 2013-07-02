@@ -9,16 +9,17 @@
 #include <iostream>
 #include <vector>
 #include <list>
-//#include <array>
-//#include <random>
-#include <ctime>
+#include <random>
+#include <chrono>
 #include <math.h>
 #include "agentbased.h"
 #include "turtle.h"
 using namespace std;
 
-typedef list<double> turtleList;
+typedef list<double> turtleList; //TODO: Make this turtles, once the turtle class is defined. 
 
+const double mu0     = 1/78;     // Mortality rate due to TB per year
+const double mu1     = 1/53;     // Mortality rate due to TB per year
 const double ro      = 0.018;     // USB birth rate per year
 const double alpha   = 0.005;     // FB birth rate per year
 const double p       = 0.103;     // Fraction of new infectionsn which are acute
@@ -57,42 +58,79 @@ double lambda1;
 const int newCases0 = 8714;  //US-born
 const int newCases1 = 7554;  //Foreign-born
 
-turtleList population; //TODO: Make this turtles, once the turtle class is defined. 
+turtleList population;
 
 
 const double popConst = 1000; //For now
-int finalYr = 100;
-double deltaT = .1;
-int totT = floor(finalYr/deltaT);
+int          finalYr  = 100;
+double       deltaT   = .1;
+int          totT     = floor(finalYr/deltaT);
 
+unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+default_random_engine generator (seed);
 
+void createTurtles(State turtState, COB cob, int timeStep, int numTurtles)
+{
+  for (int i = 0; i < numTurtles; ++i) 
+  {
+    population.push_front(turtState);
+  }
+  updatePop(turtState, cob, timeStep, numTurtles);
+}
 
-//unsigned seed = time();
-//default_random_engine generator (seed);
+void updatePop(State turtState, COB cob, int timeStep, int numTurtles = 1)
+{
+  switch(cob) {
+    case USB:
+      switch(turtState) {
+        case CHRONIC_LTBI:
+          L0[timeStep] += numTurtles;
+          break;
+        case ACUTE_LTBI:
+          F0[timestep] += numTurtles;
+          break;
+        case INFECTIOUS_TB:
+          I0[timestep] += numTurtles;
+          break;
+        case NONINFECTIONS_TB:
+          J0[timestep] += numTurtles;
+          break;
+      }
+      break;
+    case FB:
+      switch(turtState) {
+        case CHRONIC_LTBI:
+          L1[timeStep] += numTurtles;
+          break;
+        case ACUTE_LTBI:
+          F1[timestep] += numTurtles;
+          break;
+        case INFECTIOUS_TB:
+          I1[timestep] += numTurtles;
+          break;
+        case NONINFECTIONS_TB:
+          J1[timestep] += numTurtles;
+          break;
+      }
+      break;
+  }
+}
 
 int main()
 {  
 	int N0[totT];
-	//N0.fill(0);
+  int S0[totT];
 	int L0[totT];
-	//L0.fill(0);
 	int F0[totT];
-	//F0.fill(0); //TODO: deleted later
 	int J0[totT];
-	//J0.fill(0);
 	int I0[totT];
-	//I0.fill(0);
 	int N1[totT];
-	//N1.fill(0);
+  int S1[totT];
 	int L1[totT];
-	//L1.fill(0);
 	int F1[totT];
-	//F1.fill(0); //TODO: deleted later
 	int I1[totT];
-	//I1.fill(0);
 	int J1[totT];
-	//J1.fill(0);
-	double[totT] cost;
+	double cost[totT];
 	N0[0] = (250000000); //now in millions because agents
 	N1[0] = (31400000);
 	//Acute (Fast) LTBI, new cases
@@ -121,18 +159,30 @@ int main()
 		{
 			/* code */
 		}
-		S0[i+1] = S0[i] + (int) floor(ro * (N0[i]+N1[i]) * deltaT);                       // US birth (-> S0)
+		S0[i+1]  = S0[i] + (int) floor(ro * (N0[i]+N1[i]) * deltaT);                      // US birth (-> S0)
 		S0[i+1] -= (int) floor(mu0*S0[i]);
-		S1[i+1] = S1[i] + (int) floor((1 - f) * alpha * (N0[i]+N1[i]) * deltaT);         // susceptible arrival (-> S1)
+		S1[i+1]  = S1[i] + (int) floor((1 - f) * alpha * (N0[i]+N1[i]) * deltaT);         // susceptible arrival (-> S1)
 		S1[i+1] -= (int) floor(mu1*S1[i]);
-  		F1[i+1] = F1[i] + (int) floor(g * p * f * alpha * (N0[i]+N1[i]) * deltaT);       // acute LTBI arrival (-> F1)
- 	 	L1[i+1] = L1[i] + (int) floor((1 - g * p) * f * alpha * (N0[i]+N1[i]) * deltaT); // latent LTBI arrival (-> L1)
- 	 	/*
- 	 	binomial_distribution<double> usinfec (S0[i], lambda0 * S0[i] * deltaT);
-  		int newf0 = floor(p * usinfec);
-  		int newl0 = floor((1 - p) * usinfec);
- 		- newf0 - newl0;
-		*/
+    F1[i+1]  = F1[i] + (int) floor(g * p * f * alpha * (N0[i]+N1[i]) * deltaT);       // acute LTBI arrival (-> F1)
+ 	 	L1[i+1]  = L1[i] + (int) floor((1 - g * p) * f * alpha * (N0[i]+N1[i]) * deltaT); // latent LTBI arrival (-> L1)
+ 	 	
+ 	 	binomial_distribution<int> usInfec(S0[i], lambda0 * deltaT);
+    int numUSInfections = usInfec(generator);
+    int newf0 = floor(p * numUSInfections);
+    int newl0 = numUSInfections - newf0;
+    S0[i+1] -= numUSInfections;
+    createTurtles(ACUTE_LTBI, USB, i, newf0);
+    createTurtles(CHRONIC_LTBI, USB, i, newl0);
+		
+ 	 	binomial_distribution<int> fbInfec(S1[i], lambda1 * deltaT);
+    int numFBInfections = fbInfec(generator);
+    int newf1 = floor(p * numFBInfections);
+    int newl1 = numFBInfections - newf1;
+    //TODO: add incoming FB LTBI cases
+    S1[i+1] -= numFBInfections;
+    createTurtles(ACUTE_LTBI, FB, i, newf1);
+    createTurtles(CHRONIC_LTBI, FB, i, newl1);
+		
 		N0[i+1] = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
 		N1[i+1] = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
 
