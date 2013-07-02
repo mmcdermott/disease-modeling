@@ -73,6 +73,9 @@ int turtle::updateState(){
 		}
 	}
 	
+	//Mortality rate for TB
+	//Self-cure rate
+	
 	//Calculate new costs of treatments
 	if(treatmentTimeLeft > 0){
 		if(state == ACUTE_LTBI || state == CHRONIC_LTBI)
@@ -81,6 +84,7 @@ int turtle::updateState(){
 			newCost += ACTIVE_TREATMENT_COST / ACTIVE_TREATMENT_LENGTH;
 		
 		treatmentTimeLeft--;
+		//Effect of treatment
 	}
 	else { //probability of entering treatment (all turtles have latent or active TB)
 		r = (double)rand()/RAND_MAX; //random number from (0,1]
@@ -127,7 +131,7 @@ int turtle::getNewCost() {
 int turtle::getTimeSinceInfection() {
 	return x;
 }
-void infect(bool pulmonary_TB){
+void turtle::infect(bool pulmonary_TB){
 	if(pulmonary_TB) state = INFECTIOUS_TB;
 	else state = NONINFECTIOUS_TB;
 }
