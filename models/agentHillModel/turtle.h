@@ -10,12 +10,14 @@
 #define ____turtle__
 
 #include <iostream>
+#include <math.h>
 
-const double DELTA_T = 1;  //1 month
+const double DELTA_T = 1./12;  //measured in years
 
-const double MU0 = 1./78; //Natural mortality rate USB per year
-const double MU1 = 1./53; // Natural mortality rate FB per year
-const double MUD = 0.115; // Mortality rate due to TB per year
+const double MU0 = 1./78; //Natural mortality rate USB per year, source: Hill Model
+const double MU1 = 1./53; // Natural mortality rate FB per year, source: Hill Model
+const double MUD = 0.115; // Mortality rate due to TB per year, source: Hill Model
+const double MU_TB = 1-pow(1-MUD, DELTA_T); //Mortality rate due to TB per timestep, calculated
 
 const double LATENT_TREATMENT_COST = 500;  //9 months of isoniazid
 const double ACTIVE_TREATMENT_COST = 6000; //9 month medications + hospitalizations
