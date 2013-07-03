@@ -12,7 +12,7 @@
 #include <iostream>
 #include "turtle.h"
 
-void createTurtles(State turtState, COB cob, int timeStep, int numTurtles);
-void updatePop(State turtState, COB cob, int timeStep, int numTurtles = 1);
+void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles);
+void updatePop(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles = 1);
 
 #endif /* defined(____agentbased__) */

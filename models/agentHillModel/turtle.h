@@ -36,18 +36,40 @@ const double PROB_CHRONIC_PROGRESSION = 0.005; //Probability of disease progress
 const double PERCENT_INFECTIOUS_TB = 0.8;  //Proportion of TB cases that are infectious
 const double PROB_SELF_CURE = 0.005; // Probability of someone with active TB self-curing
 
-enum COB {  //country of birth
-	USA = 0,
-	OTHER = 1
-};
-enum State {  //health state
-	ACUTE_LTBI = 0,
-	CHRONIC_LTBI = 1,
-	INFECTIOUS_TB = 2,
-	NONINFECTIOUS_TB = 3,
-	SUSCEPTIBLE = 4,
-	TB_DEATH = 5,
-	NATURAL_DEATH = 6
+
+//Declaration
+class turtle{
+public:
+  enum COB {  //country of birth
+    USA = 0,
+    OTHER = 1
+  };
+  enum State {  //health state
+    ACUTE_LTBI = 0,
+    CHRONIC_LTBI = 1,
+    INFECTIOUS_TB = 2,
+    NONINFECTIOUS_TB = 3,
+    SUSCEPTIBLE = 4,
+    TB_DEATH = 5,
+    NATURAL_DEATH = 6
+  };
+  turtle(COB c, State s);
+  int updateState();
+  void display();
+  COB getCountry();
+  State getState();
+  int getTreatmentTimeLeft();
+  int getNewCost();
+  int getTimeSinceInfection();
+  void infect(bool pulmonary_TB);
+
+private:
+  turtle::COB country;
+  turtle::State state;
+  int treatmentTimeLeft;
+  int newCost;
+  double mu;  //natural mortality rate
+  int x; // time since infection
 };
 
 const char* countryNames[] = {"USA", "Other"};

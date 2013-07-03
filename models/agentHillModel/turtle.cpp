@@ -13,36 +13,17 @@
 using namespace std;
 #include "turtle.h"
 
-//Declaration
-class turtle{
-private:
-    COB country;
-	State state;
-	int treatmentTimeLeft;
-    int newCost;
-	double mu;  //natural mortality rate
-    int x; // time since infection
-
-public:
-    turtle(COB c, State s);
-    int updateState();
-    void display();
-    COB getCountry();
-    State getState();
-    int getTreatmentTimeLeft();
-    int getNewCost();
-    int getTimeSinceInfection();
-	void infect(bool pulmonary_TB);
-};
-
 //Implementation
 //Constructor
-turtle::turtle(COB c, State s){
-	country = c;
-	state = s;
-	treatmentTimeLeft = 0;
-	newCost = 0;
-	x = 0;
+turtle::turtle(COB c, State s)
+  : country(c), state(s), treatmentTimeLeft(0), newCost(0), x(0)
+{
+  //Colon intitialization is faster/more memory efficient, so the below can be deleted. 
+	//country = c;
+	//state = s;
+	//treatmentTimeLeft = 0;
+	//newCost = 0;
+	//x = 0;
 	if(country == USA) mu = MU0;
 	else mu = MU1;
 }
@@ -134,10 +115,10 @@ void turtle::display(){
 	cout << "Natural death rate: " << mu << "\n\n";
 }
 
-COB turtle::getCountry() {
+turtle::COB turtle::getCountry() {
 	return country;
 }
-State turtle::getState() {
+turtle::State turtle::getState() {
 	return state;
 }
 int turtle::getTreatmentTimeLeft() {
@@ -157,7 +138,7 @@ void turtle::infect(bool pulmonary_TB){
 
 int main()
 {
-	turtle t = turtle(USA, CHRONIC_LTBI);
+	turtle t = turtle(turtle::USA, turtle::CHRONIC_LTBI);
 	t.display();
 		
 	t.updateState();
