@@ -11,7 +11,12 @@
 #include <random>
 #include <functional>
 using namespace std;
-#include "turtle.h"
+#include "turtle.hpp"
+
+
+const char* countryNames[2] = {"USA", "Other"};
+const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectious TB (I)",
+							"Non-Infectious TB (J)", "Susceptible (S)", "TB Death", "Natural Death"};
 
 //Implementation
 //Constructor
@@ -24,7 +29,8 @@ turtle::turtle(COB c, State s)
 	//treatmentTimeLeft = 0;
 	//newCost = 0;
 	//x = 0;
-	if(country == USA) mu = MU0;
+	if(country == USA) 
+    mu = MU0;
 	else mu = MU1;
 }
 
@@ -135,7 +141,7 @@ void turtle::infect(bool pulmonary_TB){
 	else state = NONINFECTIOUS_TB;
 }
 
-
+//Commented out to test compilation of agentbased.cpp
 int main()
 {
 	turtle t = turtle(turtle::USA, turtle::CHRONIC_LTBI);

@@ -12,7 +12,8 @@
 #include <random>
 #include <chrono>
 #include <math.h>
-#include "agentbased.h"
+#include "agentbased.hpp"
+//#include "turtle.hpp"
 using namespace std;
 
 typedef list<turtle> turtleList; //TODO: Make this turtles, once the turtle class is defined. 
@@ -84,15 +85,6 @@ int turtlepopsize = 0;
 unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 default_random_engine generator (seed);
 
-void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles)
-{
-  for (int i = 0; i < numTurtles; ++i) 
-  {
-    population.push_front(turtle::turtle(cob, turtState)); //TODO: Make the turtle constructer be called here
-  }
-  updatePop(turtState, cob, timeStep, numTurtles);
-}
-
 void updatePop(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles)
 {
   switch(cob) {
@@ -135,6 +127,16 @@ void updatePop(turtle::State turtState, turtle::COB cob, int timeStep, int numTu
       }
       break;
   }
+}
+
+void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles)
+{
+  for (int i = 0; i < numTurtles; ++i) 
+  {
+    turtle newTurtle = turtle(cob, turtState);
+    population.push_front(newTurtle); //TODO: Make the turtle constructer be called here
+  }
+  updatePop(turtState, cob, timeStep, numTurtles);
 }
 
 int main()

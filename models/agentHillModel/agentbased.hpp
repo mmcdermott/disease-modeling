@@ -1,5 +1,5 @@
 //
-//  agentbased.h
+//  agentbased.hpp
 //  
 //
 //  Created by mhcuser on 6/28/13.
@@ -10,7 +10,7 @@
 #define ____agentbased__
 
 #include <iostream>
-#include "turtle.h"
+#include "turtle.hpp"
 
 void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles);
 void updatePop(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles = 1);

@@ -1,5 +1,5 @@
 //
-// turtle.h
+// turtle.hpp
 //
 //
 // Created by mhcuser on 7/1/13.
@@ -72,8 +72,7 @@ private:
   int x; // time since infection
 };
 
-const char* countryNames[] = {"USA", "Other"};
-const char* stateNames[] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectious TB (I)",
-							"Non-Infectious TB (J)", "Susceptible (S)", "TB Death", "Natural Death"};
+extern const char* countryNames[2];
+extern const char* stateNames[7];
 
 #endif /* defined(____turtle__) */
