@@ -66,6 +66,39 @@ int          finalYr  = 100;
 double       deltaT   = .1;
 int          totT     = floor(finalYr/deltaT);
 
+int N0[totT];
+int S0[totT];
+int L0[totT];
+int F0[totT];
+int J0[totT];
+int I0[totT];
+int N1[totT];
+int S1[totT];
+int L1[totT];
+int F1[totT];
+int I1[totT];
+int J1[totT];
+double cost[totT];
+
+N0[0] = (250000000); //now in millions because agents
+N1[0] = (31400000);
+//Acute (Fast) LTBI, new cases
+F0[0] = ((1-r0)*(newCases0)/vF);
+F1[0] = ((1-r1)*(newCases1)/vF);
+//Chronic (Long) LTBI
+L0[0] = (r0*(newCases0)/vL0);
+L1[0] = (r1*(newCases1)/vL1);
+//Infectious TB
+I0[0] = (q*newCases0/(mu0 + mud + phi0));
+I1[0] = (q*newCases1/(mu1 + mud + phi1));
+//Non-Infectious TB
+J0[0] = ((1-q)*newCases0/(mu0 + mud + phi0));
+J1[0] = ((1-q)*newCases1/(mu1 + mud + phi1));
+//Susceptible
+S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
+S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
+int turtlepopsize = 0;
+
 unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 default_random_engine generator (seed);
 
@@ -81,7 +114,7 @@ void createTurtles(State turtState, COB cob, int timeStep, int numTurtles)
 void updatePop(State turtState, COB cob, int timeStep, int numTurtles = 1)
 {
   switch(cob) {
-    case USB:
+    case USA:
       switch(turtState) {
         case CHRONIC_LTBI:
           L0[timeStep] += numTurtles;
@@ -95,9 +128,12 @@ void updatePop(State turtState, COB cob, int timeStep, int numTurtles = 1)
         case NONINFECTIONS_TB:
           J0[timestep] += numTurtles;
           break;
+        case SUSCEPTIBLE:
+          S0[timestep] += numTurtles;
+          break;
       }
       break;
-    case FB:
+    case OTHER:
       switch(turtState) {
         case CHRONIC_LTBI:
           L1[timeStep] += numTurtles;
@@ -111,6 +147,9 @@ void updatePop(State turtState, COB cob, int timeStep, int numTurtles = 1)
         case NONINFECTIONS_TB:
           J1[timestep] += numTurtles;
           break;
+        case SUSCEPTIBLE:
+          S1[timestep] += numTurtles;
+          break;
       }
       break;
   }
@@ -118,38 +157,6 @@ void updatePop(State turtState, COB cob, int timeStep, int numTurtles = 1)
 
 int main()
 {  
-	int N0[totT];
-  int S0[totT];
-	int L0[totT];
-	int F0[totT];
-	int J0[totT];
-	int I0[totT];
-	int N1[totT];
-  int S1[totT];
-	int L1[totT];
-	int F1[totT];
-	int I1[totT];
-	int J1[totT];
-	double cost[totT];
-	N0[0] = (250000000); //now in millions because agents
-	N1[0] = (31400000);
-	//Acute (Fast) LTBI, new cases
-	F0[0] = ((1-r0)*(newCases0)/vF);
-	F1[0] = ((1-r1)*(newCases1)/vF);
-	//Chronic (Long) LTBI
-	L0[0] = (r0*(newCases0)/vL0);
-	L1[0] = (r1*(newCases1)/vL1);
-	//Infectious TB
-	I0[0] = (q*newCases0/(mu0 + mud + phi0));
-	I1[0] = (q*newCases1/(mu1 + mud + phi1));
-	//Non-Infectious TB
-	J0[0] = ((1-q)*newCases0/(mu0 + mud + phi0));
-	J1[0] = ((1-q)*newCases1/(mu1 + mud + phi1));
-	//Susceptible
-	S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
-	S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
-	int turtlepopsize = 0;
-
 	for (int i = 0; i < totT; ++i)
 	{
 
