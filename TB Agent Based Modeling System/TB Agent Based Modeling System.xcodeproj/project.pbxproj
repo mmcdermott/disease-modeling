@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		95D6162917847515009D576D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95D6162817847515009D576D /* main.cpp */; };
-		95D6162B17847515009D576D /* TB_Agent_Based_Modeling_System.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 95D6162A17847515009D576D /* TB_Agent_Based_Modeling_System.1 */; };
+		95D6164E17847532009D576D /* agentbased.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95D6163517847532009D576D /* agentbased.cpp */; };
+		95D6164F17847532009D576D /* turtle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95D6163717847532009D576D /* turtle.cpp */; };
+		95D6165017847532009D576D /* myPerson.java in Sources */ = {isa = PBXBuildFile; fileRef = 95D6164217847532009D576D /* myPerson.java */; };
+		95D6165117847532009D576D /* mySampler.java in Sources */ = {isa = PBXBuildFile; fileRef = 95D6164317847532009D576D /* mySampler.java */; };
+		95D6165217847532009D576D /* mySIR.java in Sources */ = {isa = PBXBuildFile; fileRef = 95D6164417847532009D576D /* mySIR.java */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,7 +21,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				95D6162B17847515009D576D /* TB_Agent_Based_Modeling_System.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -26,8 +28,28 @@
 
 /* Begin PBXFileReference section */
 		95D6162517847515009D576D /* TB Agent Based Modeling System */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "TB Agent Based Modeling System"; sourceTree = BUILT_PRODUCTS_DIR; };
-		95D6162817847515009D576D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		95D6162A17847515009D576D /* TB_Agent_Based_Modeling_System.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = TB_Agent_Based_Modeling_System.1; sourceTree = "<group>"; };
+		95D6163217847532009D576D /* .costBenefitHillModel.R (matt-X230T's conflicted copy 2013-06-26).swp */ = {isa = PBXFileReference; lastKnownFileType = file; path = ".costBenefitHillModel.R (matt-X230T's conflicted copy 2013-06-26).swp"; sourceTree = "<group>"; };
+		95D6163317847532009D576D /* .RData */ = {isa = PBXFileReference; lastKnownFileType = file; path = .RData; sourceTree = "<group>"; };
+		95D6163517847532009D576D /* agentbased.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agentbased.cpp; sourceTree = "<group>"; };
+		95D6163617847532009D576D /* agentbased.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = agentbased.hpp; sourceTree = "<group>"; };
+		95D6163717847532009D576D /* turtle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = turtle.cpp; sourceTree = "<group>"; };
+		95D6163817847532009D576D /* turtle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = turtle.hpp; sourceTree = "<group>"; };
+		95D6163A17847532009D576D /* lsodaHillModel.R */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = lsodaHillModel.R; sourceTree = "<group>"; };
+		95D6163B17847532009D576D /* quadHillModel.R */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = quadHillModel.R; sourceTree = "<group>"; };
+		95D6163D17847532009D576D /* costBenefitHillModel.R */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = costBenefitHillModel.R; sourceTree = "<group>"; };
+		95D6163E17847532009D576D /* Rplots.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Rplots.pdf; sourceTree = "<group>"; };
+		95D6163F17847532009D576D /* Rplots1.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Rplots1.pdf; sourceTree = "<group>"; };
+		95D6164017847532009D576D /* Rplots2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Rplots2.pdf; sourceTree = "<group>"; };
+		95D6164217847532009D576D /* myPerson.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = myPerson.java; sourceTree = "<group>"; };
+		95D6164317847532009D576D /* mySampler.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = mySampler.java; sourceTree = "<group>"; };
+		95D6164417847532009D576D /* mySIR.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = mySIR.java; sourceTree = "<group>"; };
+		95D6164517847532009D576D /* plotCSV.R */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = plotCSV.R; sourceTree = "<group>"; };
+		95D6164617847532009D576D /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		95D6164717847532009D576D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		95D6164917847532009D576D /* .RData */ = {isa = PBXFileReference; lastKnownFileType = file; path = .RData; sourceTree = "<group>"; };
+		95D6164A17847532009D576D /* simpleSIR.nlogo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = simpleSIR.nlogo; sourceTree = "<group>"; };
+		95D6164B17847532009D576D /* SIR.R */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; path = SIR.R; sourceTree = "<group>"; };
+		95D6164D17847532009D576D /* sirVSeir.nb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sirVSeir.nb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +66,10 @@
 		95D6161C17847515009D576D = {
 			isa = PBXGroup;
 			children = (
+				95D6163117847532009D576D /* models */,
+				95D6164717847532009D576D /* README.md */,
+				95D6164817847532009D576D /* sample */,
+				95D6164C17847532009D576D /* theory */,
 				95D6162717847515009D576D /* TB Agent Based Modeling System */,
 				95D6162617847515009D576D /* Products */,
 			);
@@ -60,10 +86,85 @@
 		95D6162717847515009D576D /* TB Agent Based Modeling System */ = {
 			isa = PBXGroup;
 			children = (
-				95D6162817847515009D576D /* main.cpp */,
-				95D6162A17847515009D576D /* TB_Agent_Based_Modeling_System.1 */,
 			);
 			path = "TB Agent Based Modeling System";
+			sourceTree = "<group>";
+		};
+		95D6163117847532009D576D /* models */ = {
+			isa = PBXGroup;
+			children = (
+				95D6163217847532009D576D /* .costBenefitHillModel.R (matt-X230T's conflicted copy 2013-06-26).swp */,
+				95D6163317847532009D576D /* .RData */,
+				95D6163417847532009D576D /* agentHillModel */,
+				95D6163917847532009D576D /* basicHillModel */,
+				95D6163C17847532009D576D /* costBenefitAnalysis */,
+				95D6164117847532009D576D /* javaSIR */,
+			);
+			name = models;
+			path = ../models;
+			sourceTree = "<group>";
+		};
+		95D6163417847532009D576D /* agentHillModel */ = {
+			isa = PBXGroup;
+			children = (
+				95D6163517847532009D576D /* agentbased.cpp */,
+				95D6163617847532009D576D /* agentbased.hpp */,
+				95D6163717847532009D576D /* turtle.cpp */,
+				95D6163817847532009D576D /* turtle.hpp */,
+			);
+			path = agentHillModel;
+			sourceTree = "<group>";
+		};
+		95D6163917847532009D576D /* basicHillModel */ = {
+			isa = PBXGroup;
+			children = (
+				95D6163A17847532009D576D /* lsodaHillModel.R */,
+				95D6163B17847532009D576D /* quadHillModel.R */,
+			);
+			path = basicHillModel;
+			sourceTree = "<group>";
+		};
+		95D6163C17847532009D576D /* costBenefitAnalysis */ = {
+			isa = PBXGroup;
+			children = (
+				95D6163D17847532009D576D /* costBenefitHillModel.R */,
+				95D6163E17847532009D576D /* Rplots.pdf */,
+				95D6163F17847532009D576D /* Rplots1.pdf */,
+				95D6164017847532009D576D /* Rplots2.pdf */,
+			);
+			path = costBenefitAnalysis;
+			sourceTree = "<group>";
+		};
+		95D6164117847532009D576D /* javaSIR */ = {
+			isa = PBXGroup;
+			children = (
+				95D6164217847532009D576D /* myPerson.java */,
+				95D6164317847532009D576D /* mySampler.java */,
+				95D6164417847532009D576D /* mySIR.java */,
+				95D6164517847532009D576D /* plotCSV.R */,
+				95D6164617847532009D576D /* README.txt */,
+			);
+			path = javaSIR;
+			sourceTree = "<group>";
+		};
+		95D6164817847532009D576D /* sample */ = {
+			isa = PBXGroup;
+			children = (
+				95D6164917847532009D576D /* .RData */,
+				95D6164A17847532009D576D /* simpleSIR.nlogo */,
+				95D6164B17847532009D576D /* SIR.R */,
+			);
+			name = sample;
+			path = ../sample;
+			sourceTree = "<group>";
+		};
+		95D6164C17847532009D576D /* theory */ = {
+			isa = PBXGroup;
+			children = (
+				95D6164D17847532009D576D /* sirVSeir.nb */,
+			);
+			name = theory;
+			path = ../theory;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,7 +218,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95D6162917847515009D576D /* main.cpp in Sources */,
+				95D6164E17847532009D576D /* agentbased.cpp in Sources */,
+				95D6164F17847532009D576D /* turtle.cpp in Sources */,
+				95D6165017847532009D576D /* myPerson.java in Sources */,
+				95D6165117847532009D576D /* mySampler.java in Sources */,
+				95D6165217847532009D576D /* mySIR.java in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
