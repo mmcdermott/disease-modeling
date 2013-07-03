@@ -27,7 +27,8 @@ const double ACTIVE_TREATMENT_LENGTH = 9;  //9 months
 
 const double PROB_ACTIVE_TREATMENT = .1;   //probability of someone with active TB starting treatment every timestep
 const double PROB_LATENT_TREATMENT = .005; //probability of someone with latent TB starting treatment every timestep
-const double PROB_TREATMENT_SUCCESS = 1; // probability that treatment is successful
+const double PROB_ACTIVE_TREATMENT_SUCCESS = 1; // probability that treatment of active TB is successful
+const double PROB_LTBI_TREATMENT_SUCCESS = 1; // probability that treatment of latent TB is successful
 
 const double PROB_ACUTE_PROGRESSION = 0.005; //Probability of disease progression from acute latent to active TB every timestep
 const double PROB_CHRONIC_PROGRESSION = 0.005; //Probability of disease progression from chronic latent to active TB every timestep

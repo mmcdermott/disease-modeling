@@ -74,11 +74,11 @@ int turtle::updateState(){
 	}
 	
 	//Mortality rate for TB
-        if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB) {
-		r = (double)rand()/RAND_MAX; //random number from (0,1]
-                if(r < MUD)
-                    result = TB_DEATH;
-        }
+    if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
+	r = (double)rand()/RAND_MAX; //random number from (0,1]
+        if(r < MU_TB) result = TB_DEATH;
+    }
+	
 	//Self-cure rate
         // CAUTION: NOT SURE IF THIS WILL RESULT IN INCORRECT PROBS
         if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB) {
@@ -96,11 +96,13 @@ int turtle::updateState(){
 		
 		treatmentTimeLeft--;
 		//Effect of treatment
-                if(treatmentTimeLeft == 0) {
-                    r = (double)rand()/RAND_MAX; //random number from (0,1]
-                    if(r < PROB_TREATMENT_SUCCESS)
-                        result = SUSCEPTIBLE;
-                }
+        if(treatmentTimeLeft == 0){
+			r = (double)rand()/RAND_MAX; //random number from (0,1]
+			if(r < PROB_LTBI_TREATMENT_SUCCESS && (state == ACUTE_LTBI || state == CHRONIC_LTBI) )
+				result = SUSCEPTIBLE;  //individual is cured of LTBI				
+			else if(r < PROB_ACTIVE_TREATMENT_SUCCESS && (state == INFECTIOUS_TB || state == NONINFECTIOUS_TB) )
+				result = SUSCEPTIBLE;  //individual is cured of active TB
+		}
 	}
 	else { //probability of entering treatment (all turtles have latent or active TB)
 		r = (double)rand()/RAND_MAX; //random number from (0,1]
