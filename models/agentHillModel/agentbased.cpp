@@ -13,7 +13,6 @@
 #include <chrono>
 #include <math.h>
 #include "agentbased.h"
-//#include "turtle.h"
 using namespace std;
 
 typedef list<double> turtleList; //TODO: Make this turtles, once the turtle class is defined. 
@@ -185,7 +184,9 @@ int main()
     int numFBInfections = fbInfec(generator);
     int newf1 = floor(p * numFBInfections);
     int newl1 = numFBInfections - newf1;
-    //TODO: add incoming FB LTBI cases
+    int LTBIArrivals = floor(f * alpha * N0[i] + N1[i]);
+    newf1 += floor(g * p * LTBIArrivals);
+    newl1 += LTBIArrivals - floor(g * p * LTBIArrivals);
     S1[i+1] -= numFBInfections;
     createTurtles(ACUTE_LTBI, OTHER, i, newf1);
     createTurtles(CHRONIC_LTBI, OTHER, i, newl1);
