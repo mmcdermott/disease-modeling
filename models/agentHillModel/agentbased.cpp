@@ -133,8 +133,7 @@ void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int n
 {
   for (int i = 0; i < numTurtles; ++i) 
   {
-    turtle newTurtle = turtle(cob, turtState);
-    population.push_front(newTurtle); //TODO: Make the turtle constructer be called here
+    population.push_front(turtle(cob, turtState)); //TODO: Make the turtle constructer be called here
   }
   updatePop(turtState, cob, timeStep, numTurtles);
 }
