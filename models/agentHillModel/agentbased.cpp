@@ -64,7 +64,7 @@ turtleList population;
 const double popConst = 1000; //For now
 const int    finalYr  = 100;
 const double deltaT   = .1;
-const int    totT     = floor(finalYr/deltaT);
+const int    totT     = (int) (finalYr/deltaT);
 
 int N0[totT];
 int S0[totT];
@@ -138,7 +138,7 @@ void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int n
   updatePop(turtState, cob, timeStep, numTurtles);
 }
 
-int main()
+extern int main()
 {  
   N0[0] = 250000000; //now in millions because agents
   N1[0] = 31400000;
