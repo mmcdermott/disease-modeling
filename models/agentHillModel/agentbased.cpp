@@ -14,7 +14,7 @@
 #include "turtle.hpp"
 using namespace std;
 
-const bool debug = false;
+const bool debug = true;
 
 typedef list<turtle> turtleList; //TODO: Make this turtles, once the turtle class is defined. 
 
@@ -115,6 +115,9 @@ void updatePop(turtle::State turtState, turtle::COB cob, int timeStep,
         case turtle::SUSCEPTIBLE:
           S0[timeStep] += numTurtles;
           break;
+	case turtle::TB_DEATH:
+	case turtle::NATURAL_DEATH:
+	  break;
       }
       break;
     case turtle::OTHER:
@@ -134,6 +137,9 @@ void updatePop(turtle::State turtState, turtle::COB cob, int timeStep,
         case turtle::SUSCEPTIBLE:
           S1[timeStep] += numTurtles;
           break;
+	case turtle::TB_DEATH:
+	case turtle::NATURAL_DEATH:
+	  break;
       }
       break;
   }
@@ -186,8 +192,8 @@ int main()
     double c10 = (1-e1)*((1-e0)*N0[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]); 
     double c11 = 1-c10;
     //Generating lambda0 and lambda1 based on previous time step
-    double lambda0 = beta * (c00*(I0[i-1]/N0[i-1]) + c01*(I1[i-1]/N1[i-1]));
-    double lambda1 = beta * (c10*(I0[i-1]/N0[i-1]) + c11*(I1[i-1]/N1[i-1]));
+    double lambda0 = beta * (c00*I0[i-1]/N0[i-1] + c01*I1[i-1]/N1[i-1]);
+    double lambda1 = beta * (c10*I0[i-1]/N0[i-1] + c11*I1[i-1]/N1[i-1]);
 
     double probOfReinfectionUSB = lambda0 * deltaT;
     double probOfReinfectionFB  = lambda1 * deltaT;
