@@ -62,6 +62,8 @@ public:
   int getNewCost();
   int getTimeSinceInfection();
   void infect(bool pulmonary_TB);
+  //TODO: Make these two below private and add getters for them. We shouldn't
+  //have/need access to set them. 
   turtle::COB country;
   turtle::State state;
 
