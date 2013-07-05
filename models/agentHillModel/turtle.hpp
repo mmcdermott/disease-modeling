@@ -62,10 +62,10 @@ public:
   int getNewCost();
   int getTimeSinceInfection();
   void infect(bool pulmonary_TB);
-
-private:
   turtle::COB country;
   turtle::State state;
+
+private:
   int treatmentTimeLeft;
   int newCost;
   double mu;  //natural mortality rate

@@ -7,12 +7,10 @@
 //
 
 #include <iostream>
-#include <vector>
 #include <list>
 #include <random>
 #include <chrono>
 #include <math.h>
-//#include "agentbased.hpp"
 #include "turtle.hpp"
 using namespace std;
 
@@ -49,7 +47,6 @@ const double sigmaF1 = 1.301;     // Cumulative fraction of treatment for acute 
 double sigmaL        = 0.057;     // Treatment rate for chronic LTBI per year
 double deltaS0;
 double deltaS1;
-//double totpop;
 double lambda0;
 double lambda1;
 
@@ -85,7 +82,14 @@ int turtlepopsize = 0;
 unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 default_random_engine generator (seed);
 
-void updatePop(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles)
+/* 
+ * void updatePop(...)
+ *
+ * This functions updates the population lists given the number of turtles of 
+ * the given states. It returns nothing, as it is a state updating function.
+ */
+void updatePop(turtle::State turtState, turtle::COB cob, int timeStep, 
+               int numTurtles = 1)
 {
   switch(cob) {
     case turtle::USA:
@@ -133,12 +137,12 @@ void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int n
 {
   for (int i = 0; i < numTurtles; ++i) 
   {
-    population.push_front(turtle(cob, turtState)); //TODO: Make the turtle constructer be called here
+    population.push_front(turtle(cob, turtState)); 
   }
   updatePop(turtState, cob, timeStep, numTurtles);
 }
 
-extern int main()
+int main()
 {  
   N0[0] = 250000000; //now in millions because agents
   N1[0] = 31400000;
@@ -159,21 +163,33 @@ extern int main()
   S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
 	for (int i = 0; i < totT; ++i)
 	{
-            // debug line showing speed of iteration
-            cout << "iteration " << i << endl;
-
-		//turtlepopsize = F0[i]+L0[i]+I0[i]+J0[i]+F1[i]+L1[i]+I1[i]+J1[i];
+    // debug line showing speed of iteration
+    cout << "iteration " << i << endl;
+    double probOfReinfectionUSB = lambda0 * deltaT;
+    double probOfReinfectionFB  = lambda1 * deltaT;
 		for (turtleList::iterator turtleIter = population.begin(); 
 			turtleIter != population.end(); ++turtleIter)
 		{
 		  turtle t = *turtleIter;
+      //update the turtle's state
+      t.updateState();
+      //Check for exogenous re-infection TODO: abstract this to a function
+      double infParam = (double)rand()/(double)RAND_MAX;
+      if ((t.country == turtle::USA) && (infParam <= probOfReinfectionUSB))
+        t.infect(false); //TODO: Decide if J vs I really belongs in this fn
+      else if ((t.country == turtle::OTHER) && (infParam <= probOfReinfectionFB))
+        t.infect(false); //TODO: See above 
 		}
-		S0[i+1]  = S0[i] + (int) floor(ro * (N0[i]+N1[i]) * deltaT);                      // US birth (-> S0)
+    // US birth (-> S0)
+		S0[i+1]  = S0[i] + (int) floor(ro * (N0[i]+N1[i]) * deltaT);                      
 		S0[i+1] -= (int) floor(mu0*S0[i]);
-		S1[i+1]  = S1[i] + (int) floor((1 - f) * alpha * (N0[i]+N1[i]) * deltaT);         // susceptible arrival (-> S1)
+    // susceptible arrival (-> S1)
+		S1[i+1]  = S1[i] + (int) floor((1 - f) * alpha * (N0[i]+N1[i]) * deltaT);         
 		S1[i+1] -= (int) floor(mu1*S1[i]);
-    F1[i+1]  = F1[i] + (int) floor(g * p * f * alpha * (N0[i]+N1[i]) * deltaT);       // acute LTBI arrival (-> F1)
- 	 	L1[i+1]  = L1[i] + (int) floor((1 - g * p) * f * alpha * (N0[i]+N1[i]) * deltaT); // latent LTBI arrival (-> L1)
+    // acute LTBI arrival (-> F1)
+    F1[i+1]  = F1[i] + (int) floor(g * p * f * alpha * (N0[i]+N1[i]) * deltaT);       
+    // latent LTBI arrival (-> L1)
+ 	 	L1[i+1]  = L1[i] + (int) floor((1- g*p)*f*alpha*(N0[i]+N1[i]) * deltaT); 
  	 	
     //Creating Binomial Distributions for generating new infections from S0/S1
  	 	binomial_distribution<int> usInfec(S0[i], lambda0 * deltaT);
@@ -202,8 +218,6 @@ extern int main()
     //Resetting the populations
 		N0[i+1] = S0[i+1] + F0[i+1] + L0[i+1] + I0[i+1] + J0[i+1];
 		N1[i+1] = S1[i+1] + F1[i+1] + L1[i+1] + I1[i+1] + J1[i+1];
-
-
 	}
   return 0;
 }
