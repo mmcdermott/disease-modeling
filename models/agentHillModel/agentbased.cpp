@@ -12,8 +12,8 @@
 #include <random>
 #include <chrono>
 #include <math.h>
-#include "agentbased.hpp"
-//#include "turtle.hpp"
+//#include "agentbased.hpp"
+#include "turtle.hpp"
 using namespace std;
 
 typedef list<turtle> turtleList; //TODO: Make this turtles, once the turtle class is defined. 
