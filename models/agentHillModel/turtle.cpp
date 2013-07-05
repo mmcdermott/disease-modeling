@@ -140,9 +140,9 @@ void turtle::infect(bool pulmonary_TB){
 	if(pulmonary_TB) state = INFECTIOUS_TB;
 	else state = NONINFECTIOUS_TB;
 }
-
+/*
 //Commented out to test compilation of agentbased.cpp
-int main()
+extern int main()
 {
 	turtle t = turtle(turtle::USA, turtle::CHRONIC_LTBI);
 	t.display();
@@ -152,4 +152,4 @@ int main()
 	
 	t.updateState();
 	t.display();
-}
+}*/
