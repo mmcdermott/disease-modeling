@@ -106,9 +106,7 @@ turtle::State turtle::updateState(){
 	if(r < mu){
 		result = NATURAL_DEATH;
 	}
-	
-	cout << "\nresult = " << result << "\n\n";
-	
+	//cout << "\nresult = " << result << "\n\n";
 	return result;
 }
 

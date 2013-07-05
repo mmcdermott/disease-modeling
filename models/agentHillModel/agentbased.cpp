@@ -14,6 +14,8 @@
 #include "turtle.hpp"
 using namespace std;
 
+const bool debug = false;
+
 typedef list<turtle> turtleList; //TODO: Make this turtles, once the turtle class is defined. 
 
 const double ro      = 0.018;     // USB birth rate per year
@@ -44,29 +46,28 @@ double sigmaL        = 0.057;     // Treatment rate for chronic LTBI per year
 double lambda0;
 double lambda1;
 
-//2010 New Cases in Population
-//source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
-const int newCases0 = 8714;                                 //US-born
-const int newCases1 = 7554;                                 //Foreign-born
-//Initial Populations--source: Hill Model.
-const int initUSP   = 250000000;                            
-const int initFBP   = 31400000;                             
-const int initF0    = ((1-r0)*(newCases0)/vF);              
-const int initF1    = ((1-r1)*(newCases1)/vF);              
-const int initL0    = (r0*(newCases0)/vL0);                 
-const int initL1    = (r1*(newCases1)/vL1);                 
-const int initI0    = (q*newCases0/(MU0 + MUD + phi0));     
-const int initI1    = (q*newCases1/(MU0 + MUD + phi1));     
-const int initJ0    = ((1-q)*newCases0/(MU0 + MUD + phi0)); 
-const int initJ1    = ((1-q)*newCases1/(MU1 + MUD + phi1)); 
-
-turtleList population;
-
-
 const double popConst = 1000; //For now
 const int    finalYr  = 100;
 const double deltaT   = .1;
 const int    totT     = (int) (finalYr/deltaT);
+
+//2010 New Cases in Population
+//source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
+const int newCases0 = 8714; //US-born
+const int newCases1 = 7554; //Foreign-born
+//Initial Populations--source: Hill Model.
+const int initUSP   = (1./popConst)*250000000;                            
+const int initFBP   = (1./popConst)*31400000;                             
+const int initF0    = (1./popConst)*((1-r0)*(newCases0)/vF);              
+const int initF1    = (1./popConst)*((1-r1)*(newCases1)/vF);              
+const int initL0    = (1./popConst)*(r0*(newCases0)/vL0);                 
+const int initL1    = (1./popConst)*(r1*(newCases1)/vL1);                 
+const int initI0    = (1./popConst)*(q*newCases0/(MU0 + MUD + phi0));     
+const int initI1    = (1./popConst)*(q*newCases1/(MU0 + MUD + phi1));     
+const int initJ0    = (1./popConst)*((1-q)*newCases0/(MU0 + MUD + phi0)); 
+const int initJ1    = (1./popConst)*((1-q)*newCases1/(MU1 + MUD + phi1)); 
+
+turtleList population;
 
 int N0[totT];
 int S0[totT];
@@ -174,10 +175,11 @@ int main()
   //Susceptible
   S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
   S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
+  if (debug) {
+    cout << "Number of Iterations: " << totT << endl;
+  }
 	for (int i = 1; i < totT; ++i)
 	{
-    cout << "iteration " << i << endl;
-
     //Generating Preferred contact rate based on previous time step
     double c00 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
     double c01 = 1-c00;
@@ -189,9 +191,20 @@ int main()
 
     double probOfReinfectionUSB = lambda0 * deltaT;
     double probOfReinfectionFB  = lambda1 * deltaT;
+
+    //Debugging Info:
+    if (debug)
+    {
+      cout << "iteration " << i << endl;
+      cout << "number of Turtles " << population.size() << endl;
+      cout << "Population Size " << N0[i-1] + N1[i-1] << endl;
+    }
+
 		for (turtleList::iterator turtleIter = population.begin(); 
 			turtleIter != population.end(); ++turtleIter)
 		{
+      //TODO: Make updatePop respect dead states and appropriately subtract from total Pop
+      // then reorganize so this calls updatePop as soon as possible. 
 		  turtle t = *turtleIter;
       //Update the turtle's state
       t.updateState();
@@ -224,11 +237,11 @@ int main()
     // this time step.
     //
     // US birth and death (-> S0)
-		S0[i]  = S0[i-1] + (int) floor(ro * (N0[i-1]+N1[i-1]) * deltaT);                      
-		S0[i] -= (int) floor(MU0*S0[i-1]);
+		S0[i]  = S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*deltaT);                      
+		S0[i] -= (int) floor(MU0*S0[i-1])*deltaT;
     // susceptible arrival (-> S1)
 		S1[i]  = S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * deltaT);         
-		S1[i] -= (int) floor(MU1*S1[i-1]);
+		S1[i] -= (int) floor(MU1*S1[i-1])*deltaT;
  	 	
     //Creating Binomial Distributions for generating new infections from S0/S1
  	 	binomial_distribution<int> usInfec(S0[i-1], lambda0 * deltaT);
@@ -242,7 +255,7 @@ int main()
     int numFBInfections = fbInfec(generator);
     int newf1           = floor(p * numFBInfections);
     int newl1           = numFBInfections - newf1;
-    int LTBIArrivals    = floor(f * alpha * N0[i-1] + N1[i-1]);
+    int LTBIArrivals    = floor(f * alpha * (N0[i-1] + N1[i-1]));
     int AcuteArrivals   = floor(g * p * LTBIArrivals);
     newf1              += AcuteArrivals;
     newl1              += LTBIArrivals - AcuteArrivals;
@@ -253,7 +266,12 @@ int main()
     createTurtles(turtle::CHRONIC_LTBI, turtle::USA,   i, newl0);
     createTurtles(turtle::ACUTE_LTBI,   turtle::OTHER, i, newf1);
     createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, i, newl1);
-		
+
+    if (debug) {
+      cout << "numUsInfections: " << numUSInfections << endl;
+      cout << "numFBInfections: " << numFBInfections << endl;
+      cout << "LTBIArrivals: " << LTBIArrivals << endl;
+    }
     //Resetting the populations
 		N0[i] = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
 		N1[i] = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
