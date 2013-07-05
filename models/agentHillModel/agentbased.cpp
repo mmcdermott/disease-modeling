@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include <list>
 #include <random>
 #include <chrono>
@@ -14,7 +15,7 @@
 #include "turtle.hpp"
 using namespace std;
 
-const bool debug = true;
+const bool debug = false;
 
 typedef list<turtle> turtleList; //TODO: Make this turtles, once the turtle class is defined. 
 
@@ -154,6 +155,19 @@ void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int n
   updatePop(turtState, cob, timeStep, numTurtles);
 }
 
+/** Export sizes of N,S,L,F,I,J to file fname (csv file) */
+void exportData(string fname) {
+  ofstream output;
+  output.open(fname);
+  output << "\"N0\",\"S0\",\"L0\",\"F0\",\"I0\",\"J0\",";
+  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"J1\"" << endl;
+  for (int i=0; i < totT; ++i) {
+    output << N0[i] << "," << S0[i] << "," << L0[i] << "," << F0[i] << "," << I0[i] << "," << J0[i] << ",";
+    output << N1[i] << "," << S1[i] << "," << L1[i] << "," << F1[i] << "," << I1[i] << "," << J1[i] << endl;
+  }
+  output.close();
+}
+
 int main()
 {  
   N0[0] = initUSP;
@@ -282,5 +296,7 @@ int main()
 		N0[i] = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
 		N1[i] = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
 	}
+  // write data to file
+  //exportData("modelData.csv");
   return 0;
 }
