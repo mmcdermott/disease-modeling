@@ -159,6 +159,8 @@ extern int main()
   S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
 	for (int i = 0; i < totT; ++i)
 	{
+            // debug line showing speed of iteration
+            cout << "iteration " << i << endl;
 
 		//turtlepopsize = F0[i]+L0[i]+I0[i]+J0[i]+F1[i]+L1[i]+I1[i]+J1[i];
 		for (turtleList::iterator turtleIter = population.begin(); 

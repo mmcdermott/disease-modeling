@@ -142,6 +142,7 @@ void turtle::infect(bool pulmonary_TB){
 }
 
 //Commented out to test compilation of agentbased.cpp
+/*
 int main()
 {
 	turtle t = turtle(turtle::USA, turtle::CHRONIC_LTBI);
@@ -153,3 +154,4 @@ int main()
 	t.updateState();
 	t.display();
 }
+*/
