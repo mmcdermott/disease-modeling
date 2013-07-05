@@ -54,7 +54,7 @@ public:
     NATURAL_DEATH = 6
   };
   turtle(COB c, State s);
-  int updateState();
+  State updateState();
   void display();
   COB getCountry();
   State getState();
@@ -62,12 +62,10 @@ public:
   int getNewCost();
   int getTimeSinceInfection();
   void infect(bool pulmonary_TB);
-  //TODO: Make these two below private and add getters for them. We shouldn't
-  //have/need access to set them. 
-  turtle::COB country;
-  turtle::State state;
 
 private:
+  COB country;
+  State state;
   int treatmentTimeLeft;
   int newCost;
   double mu;  //natural mortality rate

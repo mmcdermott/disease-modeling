@@ -195,16 +195,29 @@ int main()
 		  turtle t = *turtleIter;
       //Update the turtle's state
       t.updateState();
-      //TODO: Handle deaths and recovery
-      //Check for exogenous re-infection TODO: abstract this to a function
-      double infParam = (double)rand()/(double)RAND_MAX;
-      if ((t.country == turtle::USA) && (infParam <= probOfReinfectionUSB))
-        t.infect(false); //TODO: Decide if J vs I really belongs in this fn
-      else if ((t.country == turtle::OTHER) && (infParam <= probOfReinfectionFB))
-        t.infect(false); //TODO: See above 
+      if ((t.getState() == turtle::TB_DEATH) || (t.getState() == turtle::NATURAL_DEATH))
+      {
+        turtleList::iterator newIter = population.erase(turtleIter);
+        turtleIter = --newIter;
+      } else {
+        //Check for exogenous re-infection TODO: abstract this to a function
+        double infParam = (double)rand()/(double)RAND_MAX;
+        if ((t.getCountry() == turtle::USA) && (infParam <= probOfReinfectionUSB))
+        {
+          t.infect(false); //TODO: Decide if J vs I really belongs in this fn
+        } else if ((t.getCountry() == turtle::OTHER) 
+                   && (infParam <= probOfReinfectionFB)) {
+          t.infect(false); //TODO: See above 
+        }
 
-      //Update our population lists
-      updatePop(t.state, t.country, i);
+        //Update our population lists
+        updatePop(t.getState(), t.getCountry(), i);
+
+        if (t.getState() == turtle::SUSCEPTIBLE) {
+          turtleList::iterator newIter = population.erase(turtleIter);
+          turtleIter = --newIter;
+        }
+      }
 		}
     // Agent independent Population Changes during this time step: 
     // Note that these did not affect infection likelihood during

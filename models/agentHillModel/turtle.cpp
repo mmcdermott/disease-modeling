@@ -35,12 +35,12 @@ turtle::turtle(COB c, State s)
 }
 
 //Updates turtle state, treatmentTimeLeft, and newCost for each iteration
-int turtle::updateState(){
+turtle::State turtle::updateState(){
 	srand(time(NULL));
 	
 	//Initializations
 	double r; //random number from (0,1]
-	int result = state;  //result = next state
+  turtle::State result = state;  //result = next state
 	
 	//Disease progression from latent to active TB
 	if(state == CHRONIC_LTBI){
@@ -109,7 +109,6 @@ int turtle::updateState(){
 	
 	cout << "\nresult = " << result << "\n\n";
 	
-	state = static_cast<State>(result);
 	return result;
 }
 
