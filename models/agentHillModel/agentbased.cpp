@@ -133,8 +133,7 @@ void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int n
 {
   for (int i = 0; i < numTurtles; ++i) 
   {
-    turtle newTurtle = turtle(cob, turtState);
-    population.push_front(newTurtle); //TODO: Make the turtle constructer be called here
+    population.push_front(turtle(cob, turtState)); //TODO: Make the turtle constructer be called here
   }
   updatePop(turtState, cob, timeStep, numTurtles);
 }
@@ -160,6 +159,8 @@ extern int main()
   S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
 	for (int i = 0; i < totT; ++i)
 	{
+            // debug line showing speed of iteration
+            cout << "iteration " << i << endl;
 
 		//turtlepopsize = F0[i]+L0[i]+I0[i]+J0[i]+F1[i]+L1[i]+I1[i]+J1[i];
 		for (turtleList::iterator turtleIter = population.begin(); 
