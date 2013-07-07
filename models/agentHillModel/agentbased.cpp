@@ -47,6 +47,7 @@ double sigmaL        = 0.057;     // Treatment rate for chronic LTBI per year
 double lambda0;
 double lambda1;
 
+const double discRate = 1.03;
 const double popConst = 1000; //For now
 const int    finalYr  = 100;
 const double deltaT   = .1;
@@ -116,8 +117,10 @@ void updatePop(turtle::State turtState, turtle::COB cob, int timeStep,
         case turtle::SUSCEPTIBLE:
           S0[timeStep] += numTurtles;
           break;
-	case turtle::TB_DEATH:
-	case turtle::NATURAL_DEATH:
+        case turtle::TB_DEATH:
+          break;
+        case turtle::NATURAL_DEATH:
+          break;
 	  break;
       }
       break;
@@ -138,8 +141,10 @@ void updatePop(turtle::State turtState, turtle::COB cob, int timeStep,
         case turtle::SUSCEPTIBLE:
           S1[timeStep] += numTurtles;
           break;
-	case turtle::TB_DEATH:
-	case turtle::NATURAL_DEATH:
+        case turtle::TB_DEATH:
+          break;
+        case turtle::NATURAL_DEATH:
+          break;
 	  break;
       }
       break;
@@ -160,10 +165,11 @@ void exportData(string fname) {
   ofstream output;
   output.open(fname);
   output << "\"N0\",\"S0\",\"L0\",\"F0\",\"I0\",\"J0\",";
-  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"J1\"" << endl;
+  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"J1\",\"cost\"" << endl;
   for (int i=0; i < totT; ++i) {
     output << N0[i] << "," << S0[i] << "," << L0[i] << "," << F0[i] << "," << I0[i] << "," << J0[i] << ",";
-    output << N1[i] << "," << S1[i] << "," << L1[i] << "," << F1[i] << "," << I1[i] << "," << J1[i] << endl;
+    output << N1[i] << "," << S1[i] << "," << L1[i] << "," << F1[i] << "," << I1[i] << "," << J1[i] << ",";
+    output << cost[i] << endl;
   }
   output.close();
 }
@@ -228,6 +234,7 @@ int main()
 		  turtle t = *turtleIter;
       //Update the turtle's state
       t.updateState();
+      cost[i] += (t.getNewCost()/(pow(discRate,(i*deltaT))));
       if ((t.getState() == turtle::TB_DEATH) || (t.getState() == turtle::NATURAL_DEATH))
       {
         turtleList::iterator newIter = population.erase(turtleIter);
@@ -237,10 +244,10 @@ int main()
         double infParam = (double)rand()/(double)RAND_MAX;
         if ((t.getCountry() == turtle::USA) && (infParam <= probOfReinfectionUSB))
         {
-          t.infect(false); //TODO: Decide if J vs I really belongs in this fn
+          t.infect(true); //TODO: Decide if J vs I really belongs in this fn
         } else if ((t.getCountry() == turtle::OTHER) 
                    && (infParam <= probOfReinfectionFB)) {
-          t.infect(false); //TODO: See above 
+          t.infect(true); //TODO: See above 
         }
 
         //Update our population lists
@@ -251,17 +258,17 @@ int main()
           turtleIter = --newIter;
         }
       }
-		}
+    }
     // Agent independent Population Changes during this time step: 
     // Note that these did not affect infection likelihood during
     // this time step.
     //
     // US birth and death (-> S0)
-		S0[i]  = S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*deltaT);                      
-		S0[i] -= (int) floor(MU0*S0[i-1])*deltaT;
+    S0[i]  = S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*deltaT);                      
+    S0[i] -= (int) floor(MU0*S0[i-1])*deltaT;
     // susceptible arrival (-> S1)
-		S1[i]  = S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * deltaT);         
-		S1[i] -= (int) floor(MU1*S1[i-1])*deltaT;
+    S1[i]  = S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * deltaT);         
+    S1[i] -= (int) floor(MU1*S1[i-1])*deltaT;
  	 	
     //Creating Binomial Distributions for generating new infections from S0/S1
  	 	binomial_distribution<int> usInfec(S0[i-1], lambda0 * deltaT);
@@ -297,6 +304,6 @@ int main()
 		N1[i] = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
 	}
   // write data to file
-  //exportData("modelData.csv");
+  exportData("modelData.csv");
   return 0;
 }
