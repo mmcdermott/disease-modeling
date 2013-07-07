@@ -34,7 +34,7 @@ if (!exists('dataSet')) {
   X11.options(type='nbcairo')
 }
 
-yrs <- seq(initialYr, finalYr - deltaT, deltaT)
+yrs <- seq(initialYr, finalYr, deltaT)
 print(length(yrs))
 inc <- generateIncidence(dataSet)
 print(length(inc$IN0))

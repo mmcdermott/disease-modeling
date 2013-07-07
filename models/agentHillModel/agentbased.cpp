@@ -50,8 +50,7 @@ double lambda1;
 const double discRate = 1.03;
 const double popConst = 1000; //For now
 const int    finalYr  = 100;
-const double deltaT   = .1;
-const int    totT     = (int) (finalYr/deltaT);
+const int    totT     = (int) (finalYr/DELTA_T);
 
 //2010 New Cases in Population
 //source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
@@ -204,7 +203,7 @@ int main()
   if (debug) {
     cout << "Number of Iterations: " << totT << endl;
   }
-	for (int i = 1; i < totT; ++i)
+	for (int i = 1; i <= totT; ++i)
 	{
     //Generating Preferred contact rate based on previous time step
     double c00 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
@@ -215,8 +214,8 @@ int main()
     double lambda0 = beta * (c00*I0[i-1]/N0[i-1] + c01*I1[i-1]/N1[i-1]);
     double lambda1 = beta * (c10*I0[i-1]/N0[i-1] + c11*I1[i-1]/N1[i-1]);
 
-    double probOfReinfectionUSB = lambda0 * deltaT;
-    double probOfReinfectionFB  = lambda1 * deltaT;
+    double probOfReinfectionUSB = lambda0 * DELTA_T;
+    double probOfReinfectionFB  = lambda1 * DELTA_T;
 
     //Debugging Info:
     if (debug)
@@ -229,12 +228,10 @@ int main()
 		for (turtleList::iterator turtleIter = population.begin(); 
 			turtleIter != population.end(); ++turtleIter)
 		{
-      //TODO: Make updatePop respect dead states and appropriately subtract from total Pop
-      // then reorganize so this calls updatePop as soon as possible. 
 		  turtle t = *turtleIter;
       //Update the turtle's state
       t.updateState();
-      cost[i] += (t.getNewCost()/(pow(discRate,(i*deltaT))));
+      cost[i] += (t.getNewCost()/(pow(discRate,(i*DELTA_T))));
       if ((t.getState() == turtle::TB_DEATH) || (t.getState() == turtle::NATURAL_DEATH))
       {
         turtleList::iterator newIter = population.erase(turtleIter);
@@ -244,10 +241,10 @@ int main()
         double infParam = (double)rand()/(double)RAND_MAX;
         if ((t.getCountry() == turtle::USA) && (infParam <= probOfReinfectionUSB))
         {
-          t.infect(true); //TODO: Decide if J vs I really belongs in this fn
+          t.infect(); 
         } else if ((t.getCountry() == turtle::OTHER) 
                    && (infParam <= probOfReinfectionFB)) {
-          t.infect(true); //TODO: See above 
+          t.infect();  
         }
 
         //Update our population lists
@@ -264,15 +261,15 @@ int main()
     // this time step.
     //
     // US birth and death (-> S0)
-    S0[i]  = S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*deltaT);                      
-    S0[i] -= (int) floor(MU0*S0[i-1])*deltaT;
+    S0[i]  = S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);                      
+    S0[i] -= (int) floor(MU0*S0[i-1])*DELTA_T;
     // susceptible arrival (-> S1)
-    S1[i]  = S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * deltaT);         
-    S1[i] -= (int) floor(MU1*S1[i-1])*deltaT;
+    S1[i]  = S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T);         
+    S1[i] -= (int) floor(MU1*S1[i-1])*DELTA_T;
  	 	
     //Creating Binomial Distributions for generating new infections from S0/S1
- 	 	binomial_distribution<int> usInfec(S0[i-1], lambda0 * deltaT);
- 	 	binomial_distribution<int> fbInfec(S1[i-1], lambda1 * deltaT);
+ 	 	binomial_distribution<int> usInfec(S0[i-1], lambda0 * DELTA_T);
+ 	 	binomial_distribution<int> fbInfec(S1[i-1], lambda1 * DELTA_T);
 
     int numUSInfections = usInfec(generator);
     int newf0           = floor(p * numUSInfections);
@@ -300,8 +297,9 @@ int main()
       cout << "LTBIArrivals: " << LTBIArrivals << endl;
     }
     //Resetting the populations
-		N0[i] = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
-		N1[i] = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
+		N0[i]    = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
+		N1[i]    = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
+    cost[i] += cost[i-1];
 	}
   // write data to file
   exportData("modelData.csv");

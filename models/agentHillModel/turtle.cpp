@@ -139,8 +139,9 @@ int turtle::getTimeSinceInfection() {
   return x;
 }
 
-void turtle::infect(bool pulmonary_TB){
-  if (pulmonary_TB) 
+void turtle::infect(){
+  double r = (double)rand()/RAND_MAX;
+  if (r < PERCENT_INFECTIOUS_TB) 
     state = INFECTIOUS_TB;
   else 
     state = NONINFECTIOUS_TB;
