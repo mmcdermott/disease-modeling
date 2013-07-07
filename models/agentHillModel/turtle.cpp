@@ -32,7 +32,7 @@ turtle::turtle(COB c, State s)
 
 //Updates turtle state, treatmentTimeLeft, and newCost for each iteration
 turtle::State turtle::updateState(){
-  srand(time(NULL));
+  //srand(time(NULL));
   
   //Initializations
   double r; //random number from (0,1];
