@@ -30,10 +30,10 @@ const double PROB_LATENT_TREATMENT         = .005; //probability of someone with
 const double PROB_ACTIVE_TREATMENT_SUCCESS = 1;    // probability that treatment of active TB is successful
 const double PROB_LTBI_TREATMENT_SUCCESS   = 1;    // probability that treatment of latent TB is successful
 
-const double PROB_ACUTE_PROGRESSION   = 0.005; //Probability of disease progression from acute latent to active TB every timestep
-const double PROB_CHRONIC_PROGRESSION = 0.005; //Probability of disease progression from chronic latent to active TB every timestep
+const double PROB_ACUTE_PROGRESSION   = (1.5*DELTA_T); //Probability of disease progression from acute latent to active TB every timestep
+const double PROB_CHRONIC_PROGRESSION = (0.0012*DELTA_T); //Probability of disease progression from chronic latent to active TB every timestep
 
-const double PERCENT_INFECTIOUS_TB = 0.8;   //Proportion of TB cases that are infectious
+const double PERCENT_INFECTIOUS_TB = 0.708;   //Proportion of TB cases that are infectious
 const double PROB_SELF_CURE        = 0.005; // Probability of someone with active TB self-curing
 
 
