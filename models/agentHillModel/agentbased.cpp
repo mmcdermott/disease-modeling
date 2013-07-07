@@ -24,14 +24,14 @@ const double alpha   = 0.005;     // FB birth rate per year
 const double p       = 0.103;     // Fraction of new infectionsn which are acute
                                   //  (fast progressors)
 const double vF      = 1.5;       // Progression of acute infection per year
-const double l0      = 0.015;     // Prevalence of LTBI in USB in 2000
-const double l1      = 0.211;     // Prevalence of LTBI in FB  in 2000
+//const double l0      = 0.015;     // Prevalence of LTBI in USB in 2000
+//const double l1      = 0.211;     // Prevalence of LTBI in FB  in 2000
 const double r0      = 0.667;     // Fraction of cases due to reactivation in the USB population
 const double r1      = 0.780;     // Fraction of cases due to reactivation in the FB population
 const double vL0     = 0.0014;    // Progression rate for reactivation (chronic LTBI) in the USB population per year
 const double vL1     = 0.0010;    // Progression rate for reactivation (chronic LTBI) in the FB population per year
 const double q       = 0.708;     // Fraction of infections progressing to infectious disease
-const double x       = 0.111;     // Fraction of re-infected chronic LTBI moving to acute infection
+//const double x       = 0.111;     // Fraction of re-infected chronic LTBI moving to acute infection
 const double f       = 0.187;     // Fraction of FB arrivals with LTBI
 const double ARI0    = 0.030/100; // Annual risk of infection for USB in 2000
 const double beta    = 10.39;     // Effective contact rate per year
@@ -40,15 +40,15 @@ const double e1      = 0.985;     // Fraction of preferred contacts with own pop
 const double g       = 0.0047;    // Fraction of FB arrivals with LTBI who are fast progressors
 const double phi0    = 1.114;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (USB)
 const double phi1    = 1.167;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (FB)
-const double sigmaF0 = 1.296;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
-const double sigmaF1 = 1.301;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
+//const double sigmaF0 = 1.296;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
+//const double sigmaF1 = 1.301;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
 
 double sigmaL        = 0.057;     // Treatment rate for chronic LTBI per year
 double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 1000; //For now
+const double popConst = 10; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
@@ -203,7 +203,7 @@ int main()
   if (debug) {
     cout << "Number of Iterations: " << totT << endl;
   }
-	for (int i = 1; i <= totT; ++i)
+	for (int i = 1; i < totT; ++i)
 	{
     //Generating Preferred contact rate based on previous time step
     double c00 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);

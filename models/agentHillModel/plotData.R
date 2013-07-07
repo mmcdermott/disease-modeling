@@ -14,6 +14,7 @@ args <- commandArgs(trailingOnly = T)
 if (length(args) > 1) {
   importData <- as.logical(args[1])
   deltaT     <- as.numeric(args[2])
+  print(deltaT)
   if (importData) {
     dataSet <- read.csv('modelData.csv')
   }
@@ -25,6 +26,8 @@ if (length(args) > 1) {
     initialYr <- 2000
     finalYr   <- 2100
   }
+  print(initialYr)
+  print(finalYr)
 } 
 if (!exists('dataSet')) {
   print('No Data to Plot! Either list the import file as a cmd argument, or define it in the calling script')
@@ -34,7 +37,7 @@ if (!exists('dataSet')) {
   X11.options(type='nbcairo')
 }
 
-yrs <- seq(initialYr, finalYr, deltaT)
+yrs <- seq(initialYr, finalYr - deltaT, deltaT)
 print(length(yrs))
 inc <- generateIncidence(dataSet)
 print(length(inc$IN0))

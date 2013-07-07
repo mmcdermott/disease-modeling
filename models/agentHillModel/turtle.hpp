@@ -12,7 +12,7 @@
 #include <iostream>
 #include <math.h>
 
-const double DELTA_T = .05;  //measured in years
+const double DELTA_T = .01;  //measured in years
 
 const double MU0   = 1./78;                 //Natural mortality rate USB per year, source: Hill Model
 const double MU1   = 1./53;                 // Natural mortality rate FB per year, source: Hill Model
