@@ -17,15 +17,15 @@ using namespace std;
 
 const bool debug = false;
 
-typedef list<turtle> turtleList; //TODO: Make this turtles, once the turtle class is defined. 
+typedef list<turtle> turtleList;
 
+//TODO: Move many of these constants to turtle.hpp
 const double ro      = 0.018;     // USB birth rate per year
 const double alpha   = 0.005;     // FB birth rate per year
 const double p       = 0.103;     // Fraction of new infectionsn which are acute
                                   //  (fast progressors)
+                                  //TODO: Move vF to the turtle.hpp file. Its used in PROB_ACUTE_PROGRESSION
 const double vF      = 1.5;       // Progression of acute infection per year
-//const double l0      = 0.015;     // Prevalence of LTBI in USB in 2000
-//const double l1      = 0.211;     // Prevalence of LTBI in FB  in 2000
 const double r0      = 0.667;     // Fraction of cases due to reactivation in the USB population
 const double r1      = 0.780;     // Fraction of cases due to reactivation in the FB population
 const double vL0     = 0.0014;    // Progression rate for reactivation (chronic LTBI) in the USB population per year
@@ -40,6 +40,8 @@ const double e1      = 0.985;     // Fraction of preferred contacts with own pop
 const double g       = 0.0047;    // Fraction of FB arrivals with LTBI who are fast progressors
 const double phi0    = 1.114;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (USB)
 const double phi1    = 1.167;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (FB)
+//const double l0      = 0.015;     // Prevalence of LTBI in USB in 2000
+//const double l1      = 0.211;     // Prevalence of LTBI in FB  in 2000
 //const double sigmaF0 = 1.296;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
 //const double sigmaF1 = 1.301;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
 
