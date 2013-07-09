@@ -178,24 +178,24 @@ int main()
   N0[0] = initUSP;
   N1[0] = initFBP;
   //Acute (Fast) LTBI, new cases
-  F0[0] = initF0;
+  //F0[0] = initF0;
   createTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
-  F1[0] = initF1;
+  //F1[0] = initF1;
   createTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
   //Chronic (Long) LTBI
-  L0[0] = initL0;
+  //L0[0] = initL0;
   createTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
-  L1[0] = initL1;
+  //L1[0] = initL1;
   createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
   //Infectious TB
-  I0[0] = initI0;
+  //I0[0] = initI0;
   createTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0);
-  I1[0] = initI1;
+  //I1[0] = initI1;
   createTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1);
   //Non-Infectious TB
-  J0[0] = initJ0;
+  //J0[0] = initJ0;
   createTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0);
-  J1[0] = initJ1;
+  //J1[0] = initJ1;
   createTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1);
   //Susceptible
   S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
