@@ -26,6 +26,7 @@ turtle::turtle(COB c, State s)
   : country(c), state(s), treatmentTimeLeft(0), newCost(0), x(0)
 {
 	if(country == USA) 
+	//TODO: Add DELTA_T to definition of mu's
     mu = MU0;
 	else mu = MU1;
 }
@@ -43,39 +44,27 @@ turtle::State turtle::updateState(){
   if (state == CHRONIC_LTBI){
     r = (double)rand()/RAND_MAX;
     if (r < PROB_CHRONIC_PROGRESSION){
-      r = (double)rand()/RAND_MAX; //random number from (0,1]
-      if (r < PERCENT_INFECTIOUS_TB) 
+      if (r < PERCENT_INFECTIOUS_TB*PROB_CHRONIC_PROGRESSION) 
         result = INFECTIOUS_TB;
       else 
         result = NONINFECTIOUS_TB;
     }			
-  }
-  else if (state == ACUTE_LTBI){
+  } else if (state == ACUTE_LTBI){
     r = (double)rand()/RAND_MAX;
     if (r < PROB_ACUTE_PROGRESSION){
-      r = (double)rand()/RAND_MAX; //random number from (0,1]
-  		if (r < PERCENT_INFECTIOUS_TB) 
+	  if (r < PERCENT_INFECTIOUS_TB*PROB_ACUTE_PROGRESSION) 
         result = INFECTIOUS_TB;
-  		else 
-        result = NONINFECTIOUS_TB;
+	  else 
+		result = NONINFECTIOUS_TB;
   	}
-  }
-  
-  //TODO: First, we can move this if up and make it an else if
-  if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
-    //Mortality rate for TB
+  } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
     r = (double)rand()/RAND_MAX; //random number from (0,1]
-    if(r < MU_TB*DELTA_T) result = TB_DEATH;
+    if(r < MU_TB*DELTA_T)
+	  result = TB_DEATH;  //Mortality rate for TB
+	else if(r < MU_TB*DELTA_T + PROB_ACTIVE_SELF_CURE)  //Note: look over this
+      result = SUSCEPTIBLE;  //Self-cure rate
   }
-  
-  //Self-cure rate
-  // CAUTION: NOT SURE IF THIS WILL RESULT IN INCORRECT PROBS
-  // TODO: This can be moved into the previous if statement. This is using an incorrect probability method, as we should not be giving preference to TB_Death over TB Curing. It alters the total probability of events. 
-  if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB) {
-    r = (double)rand()/RAND_MAX; //random number from (0,1]
-    if(r < PROB_ACTIVE_SELF_CURE)
-      result = SUSCEPTIBLE;
-  }
+
   //TODO: This can be moved into another if statement earlier as well. Again, this causes preference to be awarded. 
   else if(state == ACUTE_LTBI || state == CHRONIC_LTBI) {
     r = (double)rand()/RAND_MAX; //random number from (0,1]

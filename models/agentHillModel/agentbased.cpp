@@ -35,8 +35,6 @@ const double vL1     = 0.0010;    // Progression rate for reactivation (chronic 
 const double q       = 0.708;     // Fraction of infections progressing to infectious disease
 const double x       = 0.111;     // Fraction of re-infected chronic LTBI moving to acute infection
 const double f       = 0.187;     // Fraction of FB arrivals with LTBI
-//TODO: This parameter does not appear to be used. 
-const double ARI0    = 0.030/100; // Annual risk of infection for USB in 2000
 const double beta    = 10.39;     // Effective contact rate per year
 const double e0      = 0.965;     // Fraction of preferred contacts with own population for USB
 const double e1      = 0.985;     // Fraction of preferred contacts with own population for FB
@@ -44,10 +42,6 @@ const double g       = 0.0047;    // Fraction of FB arrivals with LTBI who are f
 //TODO: Move to turtle.hpp
 const double phi0    = 1.114;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (USB)
 const double phi1    = 1.167;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (FB)
-//const double l0      = 0.015;     // Prevalence of LTBI in USB in 2000
-//const double l1      = 0.211;     // Prevalence of LTBI in FB  in 2000
-//const double sigmaF0 = 1.296;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
-//const double sigmaF1 = 1.301;     // Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
 
 //TODO: This isn't used. Move to turtle.hpp
 double sigmaL        = 0.057;     // Treatment rate for chronic LTBI per year
@@ -91,8 +85,6 @@ int F1[totT];
 int I1[totT];
 int J1[totT];
 double cost[totT];
-
-int turtlepopsize = 0;
 
 unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 default_random_engine generator (seed);
@@ -201,8 +193,7 @@ int main()
   if (debug) {
     cout << "Number of Iterations: " << totT << endl;
   }
-	for (int i = 1; i < totT; ++i)
-	{
+  for (int i = 1; i < totT; ++i){
     //Generating Preferred contact rate based on previous time step
     double c01 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
     double c00 = 1-c01;
@@ -262,11 +253,11 @@ int main()
     // US birth and death (-> S0)
     // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S0[i]
     // TODO: Is all this casting necessary? Maybe it happens automatically?
-    S0[i]  = S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);                      
+    S0[i] += S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);                      
     S0[i] -= (int) floor(MU0*S0[i-1])*DELTA_T;
     // susceptible arrival (-> S1)
     // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S1[i]
-    S1[i]  = S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T);         
+    S1[i] += S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T);         
     S1[i] -= (int) floor(MU1*S1[i-1])*DELTA_T;
  	 	
     //Creating Binomial Distributions for generating new infections from S0/S1
