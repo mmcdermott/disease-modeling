@@ -30,11 +30,14 @@ const double PROB_LATENT_TREATMENT         = 0;//.005; //probability of someone 
 const double PROB_ACTIVE_TREATMENT_SUCCESS = 1;    // probability that treatment of active TB is successful
 const double PROB_LTBI_TREATMENT_SUCCESS   = 1;    // probability that treatment of latent TB is successful
 
+//TODO: These share parameters from agentbased.cpp. Also, PROB_CHRONIC_PROGRESSION should be split for FB and USB turtles. 
 const double PROB_ACUTE_PROGRESSION   = (1.5*DELTA_T); //Probability of disease progression from acute latent to active TB every timestep
 const double PROB_CHRONIC_PROGRESSION = (0.0012*DELTA_T); //Probability of disease progression from chronic latent to active TB every timestep
 
-const double PERCENT_INFECTIOUS_TB = 0.708;   //Proportion of TB cases that are infectious
+const double PERCENT_INFECTIOUS_TB = 0.708;   //Proportion of TB cases that are infectious 
+//TODO: Where do these come from?
 const double PROB_ACTIVE_SELF_CURE        = (1.1405*DELTA_T);//0.005; // Probability of someone with active TB self-curing
+//TODO: This appears to be from sigmaL?
 const double PROB_LATENT_SELF_CURE      = (0.057 * DELTA_T); // Probability of someone with latent TB self-curing
 
 
