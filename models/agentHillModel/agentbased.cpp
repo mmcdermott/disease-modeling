@@ -212,6 +212,7 @@ int main()
     double lambda0 = beta * (c00*I0[i-1]/N0[i-1] + c01*I1[i-1]/N1[i-1]);
     double lambda1 = beta * (c10*I0[i-1]/N0[i-1] + c11*I1[i-1]/N1[i-1]);
 
+    //TODO: Maybe use some kind of exponential, or reed frost, or something?
     double probOfReinfectionUSB = x * p * lambda0 * DELTA_T;
     double probOfReinfectionFB  = x * p * lambda1 * DELTA_T;
 
