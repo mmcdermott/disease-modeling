@@ -280,7 +280,7 @@ int main()
     int newf1           = floor(p * numFBInfections);
     int newl1           = numFBInfections - newf1;
     int LTBIArrivals    = floor(f * alpha * (N0[i-1] + N1[i-1]) * DELTA_T);
-    int AcuteArrivals   = floor(g * p * LTBIArrivals * DELTA_T);
+    int AcuteArrivals   = floor(g * p * LTBIArrivals);
     newf1              += AcuteArrivals;
     newl1              += LTBIArrivals - AcuteArrivals;
     S1[i]              -= numFBInfections;
