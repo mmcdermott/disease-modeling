@@ -63,14 +63,19 @@ turtle::State turtle::updateState(){
   //Mortality rate for TB
   if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
     r = (double)rand()/RAND_MAX; //random number from (0,1]
-    if(r < MU_TB) result = TB_DEATH;
+    if(r < MU_TB*DELTA_T) result = TB_DEATH;
   }
   
   //Self-cure rate
   // CAUTION: NOT SURE IF THIS WILL RESULT IN INCORRECT PROBS
   if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB) {
     r = (double)rand()/RAND_MAX; //random number from (0,1]
-    if(r < PROB_SELF_CURE)
+    if(r < PROB_ACTIVE_SELF_CURE)
+      result = SUSCEPTIBLE;
+  }
+  else if(state == ACUTE_LTBI || state == CHRONIC_LTBI) {
+    r = (double)rand()/RAND_MAX; //random number from (0,1]
+    if(r < PROB_LATENT_SELF_CURE)
       result = SUSCEPTIBLE;
   }
   
@@ -103,7 +108,7 @@ turtle::State turtle::updateState(){
   
   //Natural Death Rate
   r = (double)rand()/RAND_MAX; //random number from (0,1]
-  if(r < mu){
+  if(r < mu * DELTA_T){
     result = NATURAL_DEATH;
   }
   //cout << "\nresult = " << result << "\n\n";
