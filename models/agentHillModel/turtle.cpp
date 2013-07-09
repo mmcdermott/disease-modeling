@@ -104,6 +104,7 @@ turtle::State turtle::updateState(){
   else { //probability of entering treatment (all turtles have latent or active TB)
     //TODO: This has some chance of having dead turtles enter treatment, which is fine as we delete them if they die anyways. But its something to keep in mind. As this isn't in an else if, I think this is accurate probabilistically. However, wherever we use r above, if we add another variable, like randRange or something, which tells the current range in which we know r sits, and then we subtract the bottom of that range from r, so r is uniformly random between 0 and randRange, we can still use the same r we used before for this. This only makes sense if generating a uniform random is very expensive. If its not as expensive as the extra variable, then skip it. 
     r = (double)rand()/RAND_MAX; //random number from (0,1]
+    //TODO: reorganize this. 
     if(r < PROB_ACTIVE_TREATMENT){
       if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB)
         treatmentTimeLeft = ACTIVE_TREATMENT_LENGTH;
