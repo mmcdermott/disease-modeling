@@ -31,7 +31,7 @@ const double r1      = 0.780;     // Fraction of cases due to reactivation in th
 const double vL0     = 0.0014;    // Progression rate for reactivation (chronic LTBI) in the USB population per year
 const double vL1     = 0.0010;    // Progression rate for reactivation (chronic LTBI) in the FB population per year
 const double q       = 0.708;     // Fraction of infections progressing to infectious disease
-//const double x       = 0.111;     // Fraction of re-infected chronic LTBI moving to acute infection
+const double x       = 0.111;     // Fraction of re-infected chronic LTBI moving to acute infection
 const double f       = 0.187;     // Fraction of FB arrivals with LTBI
 const double ARI0    = 0.030/100; // Annual risk of infection for USB in 2000
 const double beta    = 10.39;     // Effective contact rate per year
@@ -214,8 +214,8 @@ int main()
     double lambda0 = beta * (c00*I0[i-1]/N0[i-1] + c01*I1[i-1]/N1[i-1]);
     double lambda1 = beta * (c10*I0[i-1]/N0[i-1] + c11*I1[i-1]/N1[i-1]);
 
-    double probOfReinfectionUSB = lambda0 * DELTA_T;
-    double probOfReinfectionFB  = lambda1 * DELTA_T;
+    double probOfReinfectionUSB = x * p * lambda0 * DELTA_T;
+    double probOfReinfectionFB  = x * p * lambda1 * DELTA_T;
 
     //Debugging Info:
     if (debug)
