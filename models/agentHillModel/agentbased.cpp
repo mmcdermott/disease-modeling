@@ -260,9 +260,12 @@ int main()
     // this time step.
     //
     // US birth and death (-> S0)
+    // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S0[i]
+    // TODO: Is all this casting necessary? Maybe it happens automatically?
     S0[i]  = S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);                      
     S0[i] -= (int) floor(MU0*S0[i-1])*DELTA_T;
     // susceptible arrival (-> S1)
+    // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S1[i]
     S1[i]  = S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T);         
     S1[i] -= (int) floor(MU1*S1[i-1])*DELTA_T;
  	 	

@@ -86,6 +86,7 @@ turtle::State turtle::updateState(){
   //Calculate new costs of treatments
   if(treatmentTimeLeft > 0){
   	if(state == ACUTE_LTBI || state == CHRONIC_LTBI)
+      //TODO: Is this a double or an int? Maybe its int division, and thus always 0
   		newCost += LATENT_TREATMENT_COST / LATENT_TREATMENT_LENGTH;
   	if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB)
   		newCost += ACTIVE_TREATMENT_COST / ACTIVE_TREATMENT_LENGTH;
