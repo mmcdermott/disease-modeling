@@ -206,8 +206,8 @@ int main()
 	for (int i = 1; i < totT; ++i)
 	{
     //Generating Preferred contact rate based on previous time step
-    double c00 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
-    double c01 = 1-c00;
+    double c01 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
+    double c00 = 1-c01;
     double c10 = (1-e1)*((1-e0)*N0[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]); 
     double c11 = 1-c10;
     //Generating lambda0 and lambda1 based on previous time step
