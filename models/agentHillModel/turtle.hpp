@@ -59,7 +59,7 @@ public:
     NATURAL_DEATH = 6
   };
   turtle(COB c, State s);
-  State updateState();
+  void updateState();
   void display();
   COB getCountry();
   State getState();
