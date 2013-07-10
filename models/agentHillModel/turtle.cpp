@@ -34,8 +34,6 @@ turtle::turtle(COB c, State s)
 //Updates turtle state, treatmentTimeLeft, and newCost for each iteration
 void turtle::updateState(){
   //srand(time(NULL)); TODO: Should this be seeded somewhere?
-  //TODO: I think we can make through with just one random number throughout this whole function. Specifically, like, we pick one random number if state == CHRONIC_LATENT. Then, if its less than prob_chronic_progression, we can use it again by appriorately scaling PERCENT_INFECTIOUS_TB as r is still a random number between 0 and PROB_CHRONIC_PROGRESSION
-  
   //Initializations
   double r  = (double)rand()/RAND_MAX, //random numbers from (0,1]
          rT = (double)rand()/RAND_MAX;
@@ -103,7 +101,7 @@ void turtle::updateState(){
     //TB deaths and self-cures
     if(r < pfill + MU_TB*DELTA_T)
 	  result = TB_DEATH;  //Mortality rate for TB
-	else if(r < MU_TB*DELTA_T + PROB_ACTIVE_SELF_CURE)  //Note: look over this
+	else if(r < pfill + MU_TB*DELTA_T + PROB_ACTIVE_SELF_CURE)
       result = SUSCEPTIBLE;  //Self-cure rate
   }
   
