@@ -198,7 +198,7 @@ int main()
 		for (turtleList::iterator turtleIter = population.begin(); 
 			turtleIter != population.end(); ++turtleIter)
 		{
-		  turtle t = *turtleIter;
+		  turtle &t = *turtleIter;
       //Update the turtle's state
       //cout<<"t.getState() "<<t.getState();
       //cout<<"t.getNewCost "<<t.getNewCost();
