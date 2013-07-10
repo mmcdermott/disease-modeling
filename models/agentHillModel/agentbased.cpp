@@ -39,10 +39,10 @@ const int initF0    = (1./popConst)*((1-r0)*(newCases0)/vF);
 const int initF1    = (1./popConst)*((1-r1)*(newCases1)/vF);              
 const int initL0    = (1./popConst)*(r0*(newCases0)/vL0);                 
 const int initL1    = (1./popConst)*(r1*(newCases1)/vL1);                 
-const int initI0    = (1./popConst)*(q*newCases0/(MU0 + MUD + phi0));     
-const int initI1    = (1./popConst)*(q*newCases1/(MU0 + MUD + phi1));     
-const int initJ0    = (1./popConst)*((1-q)*newCases0/(MU0 + MUD + phi0)); 
-const int initJ1    = (1./popConst)*((1-q)*newCases1/(MU1 + MUD + phi1)); 
+const int initI0    = (1./popConst)*(PERCENT_INFECTIOUS_TB*newCases0/(MU0 + MUD + phi0));     
+const int initI1    = (1./popConst)*(PERCENT_INFECTIOUS_TB*newCases1/(MU0 + MUD + phi1));     
+const int initJ0    = (1./popConst)*((1-PERCENT_INFECTIOUS_TB)*newCases0/(MU0 + MUD + phi0)); 
+const int initJ1    = (1./popConst)*((1-PERCENT_INFECTIOUS_TB)*newCases1/(MU1 + MUD + phi1)); 
 
 turtleList population;
 
@@ -142,11 +142,17 @@ void exportData(string fname) {
   output.close();
 }
 
+
 int main()
 {  
+  for (int j = 0; j < totT; ++j)
+  {
+    cost[j] = 0;
+  }
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
   default_random_engine generator (seed);
-  
+  srand(time(NULL));
+
   N0[0] = initUSP;
   N1[0] = initFBP;
   //Acute (Fast) LTBI, new cases
@@ -194,7 +200,15 @@ int main()
 		{
 		  turtle t = *turtleIter;
       //Update the turtle's state
+      //cout<<"t.getState() "<<t.getState();
+      //cout<<"t.getNewCost "<<t.getNewCost();
       t.updateState();
+      if (t.getState() == 5)
+      {
+        cout<<"    t.getState() "<<t.getState()<<endl;
+      }
+      
+      //cout<<" |||| "<<t.getNewCost()<<endl;
       cost[i] += (t.getNewCost()/(pow(discRate,(i*DELTA_T))));
       if ((t.getState() == turtle::TB_DEATH) || (t.getState() == turtle::NATURAL_DEATH))
       {

@@ -24,10 +24,10 @@ const double ACTIVE_TREATMENT_COST = 6000; //9 month medications + hospitalizati
 const double LATENT_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
 const double ACTIVE_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
 
-const double PROB_ACTIVE_TREATMENT         = .1;   //probability of someone with active TB starting treatment every timestep
-const double PROB_LATENT_TREATMENT         = .005; //probability of someone with latent TB starting treatment every timestep
-const double PROB_ACTIVE_TREATMENT_SUCCESS = 1;    // probability that treatment of active TB is successful
-const double PROB_LTBI_TREATMENT_SUCCESS   = 1;    // probability that treatment of latent TB is successful
+const double PROB_ACTIVE_TREATMENT         = 1;//.01;   //probability of someone with active TB starting treatment every timestep
+const double PROB_LATENT_TREATMENT         = 1;//.005; //probability of someone with latent TB starting treatment every timestep
+const double PROB_ACTIVE_TREATMENT_SUCCESS = .8;    // probability that treatment of active TB is successful
+const double PROB_LTBI_TREATMENT_SUCCESS   = .8;    // probability that treatment of latent TB is successful
 
 //Hill model constants
 const double ro      = 0.018;     // USB birth rate per year
@@ -79,7 +79,8 @@ public:
   COB getCountry();
   State getState();
   int getTreatmentTimeLeft();
-  int getNewCost();
+  double getNewCost();
+  double resetCost();
   int getTimeSinceInfection();
   void infect();
 
@@ -87,7 +88,7 @@ private:
   COB country;
   State state;
   int treatmentTimeLeft;
-  int newCost;
+  double newCost;
   double mu;  //natural mortality rate
   int x; // time since infection
 };

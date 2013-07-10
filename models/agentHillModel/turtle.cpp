@@ -35,14 +35,19 @@ turtle::turtle(COB c, State s)
 void turtle::updateState(){
   //srand(time(NULL)); TODO: Should this be seeded somewhere?
   //Initializations
+  //cout << "pfill " << pfill << endl;
+  //cout << "mu*DELTA_T " << mu*DELTA_T << endl;
+  //newCost = 7;
+  //cout << "PROB_ACTIVE_SELF_CURE " << PROB_ACTIVE_SELF_CURE << endl;
+  //cout << "r " << r << endl;
   double r  = (double)rand()/RAND_MAX, //random numbers from (0,1]
          rT = (double)rand()/RAND_MAX;
   double pfill = 0;  //sum of all probability states previously considered
   turtle::State result = state; //result = next state, default is that the state doesn't change
-  
-  if(r < mu*DELTA_T)  //Natural death rate
+  //cout << "hello there average nose colin: ttl: " << treatmentTimeLeft << endl;  
+  if (r < mu*DELTA_T) {  //Natural death rate
     result = NATURAL_DEATH;
-  else if(state == ACUTE_LTBI || state == CHRONIC_LTBI){
+  } else if(state == ACUTE_LTBI || state == CHRONIC_LTBI){
     pfill += mu*DELTA_T;  //Natural death rate probability accounted for
     
     //Treatment costs and effects (use rT as random number)
@@ -54,7 +59,7 @@ void turtle::updateState(){
         state = SUSCEPTIBLE;
         return;
       }
-    }else{  //probability of entering treatment
+    } else {  //probability of entering treatment
       if(rT < PROB_LATENT_TREATMENT)
         treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
     }
@@ -64,26 +69,26 @@ void turtle::updateState(){
       result = SUSCEPTIBLE;
     else if(state == CHRONIC_LTBI){
       pfill += PROB_LATENT_SELF_CURE;  //Latent self-cure probability accounted for
-	  if(r < pfill + PROB_CHRONIC_PROGRESSION){  //Disease progression from Chronic Latent to Active TB
+	    if(r < pfill + PROB_CHRONIC_PROGRESSION){  //Disease progression from Chronic Latent to Active TB
         if(r < pfill + PERCENT_INFECTIOUS_TB*PROB_CHRONIC_PROGRESSION) 
           result = INFECTIOUS_TB;
         else
           result = NONINFECTIOUS_TB;
       }
-    }else if(state == ACUTE_LTBI){
+    } else if(state == ACUTE_LTBI){
       pfill += PROB_LATENT_SELF_CURE;  //Latent self-cure probability accounted for
       if(r < pfill + PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
         if(r < pfill + PERCENT_INFECTIOUS_TB*PROB_ACUTE_PROGRESSION) 
           result = INFECTIOUS_TB;
-	    else
+	      else
           result = NONINFECTIOUS_TB;
       }
   	}
-  }else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
-	pfill += mu*DELTA_T;  //Natural death rate probability accounted for
+  } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
+	  pfill += mu*DELTA_T;  //Natural death rate probability accounted for
     
     //Treatment costs and effects (use rT as random number)
-    if(treatmentTimeLeft > 0){  //Turtle is currently receiving treatment
+    if (treatmentTimeLeft > 0){  //Turtle is currently receiving treatment
       newCost += ACTIVE_TREATMENT_COST / ACTIVE_TREATMENT_LENGTH;  //Add new costs of treatments
       treatmentTimeLeft--;
       //Effect of treatment
@@ -91,17 +96,16 @@ void turtle::updateState(){
           state = SUSCEPTIBLE;  //individual is cured of Active TB
           return;
       }
+    } else if (rT < PROB_ACTIVE_TREATMENT){  //probability of entering treatment
+      treatmentTimeLeft = ACTIVE_TREATMENT_LENGTH;
     }
-    else{  //probability of entering treatment
-      if(rT < PROB_ACTIVE_TREATMENT)
-        treatmentTimeLeft = ACTIVE_TREATMENT_LENGTH;
-    }
-    
+
     //TB deaths and self-cures
-    if(r < pfill + MUD*DELTA_T)
-	  result = TB_DEATH;  //Mortality rate for TB
-	else if(r < pfill + MUD*DELTA_T + PROB_ACTIVE_SELF_CURE)
+    if(r < pfill + MUD*DELTA_T) {
+	    result = TB_DEATH;  //Mortality rate for TB
+	  } else if(r < pfill + MUD*DELTA_T + PROB_ACTIVE_SELF_CURE) {
       result = SUSCEPTIBLE;  //Self-cure rate
+    }
   }
   
   state = result;
@@ -127,8 +131,14 @@ int turtle::getTreatmentTimeLeft() {
   return treatmentTimeLeft;
 }
 
-int turtle::getNewCost() {
+double turtle::getNewCost() {
   return newCost;
+}
+
+double turtle::resetCost() {
+  double oldCost = newCost;
+  newCost = 0;
+  return oldCost;
 }
 
 int turtle::getTimeSinceInfection() {
@@ -142,16 +152,32 @@ void turtle::infect(){
   else 
     state = NONINFECTIOUS_TB;
 }
-
+/*
 //Commented out to test compilation of agentbased.cpp
 int main()
 {
-    turtle t = turtle(turtle::USA, turtle::CHRONIC_LTBI);
-    
+    srand(time(NULL));
+    turtle t = turtle(turtle::USA, turtle::ACUTE_LTBI);
+    turtle t2 = turtle(turtle::USA, turtle::NATURAL_DEATH);
+    turtle t3 = turtle(turtle::USA, turtle::ACUTE_LTBI);
+    turtle t4 = turtle(turtle::USA, turtle::ACUTE_LTBI);
+    turtle t5 = turtle(turtle::USA, turtle::INFECTIOUS_TB);
+
     int i;
-    for(i=1; i<50; i++){
-		t.display();
-		t.updateState();
+    for(i=1; i<5; i++){
+		  cout << "\nnew day " << i << "\n";
+      turtle tb = turtle(turtle::OTHER, turtle::ACUTE_LTBI);
+      t.display();
+		  t.updateState();
+      t2.display();
+      t2.updateState();
+      t3.display();
+      t3.updateState();
+      t4.display();
+      t4.updateState();
+      t5.display();
+      t5.updateState();
+      tb.display();
 	}
-}
+}*/
 

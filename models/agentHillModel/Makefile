@@ -20,5 +20,8 @@ all: $(TARGETS)
 agentModel: turtle.o agentbased.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+turtle: turtle.o
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 clean:
 	$(RM) $(TARGETS) *.o a.out *\~
