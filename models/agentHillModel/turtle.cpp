@@ -54,8 +54,7 @@ void turtle::updateState(){
         state = SUSCEPTIBLE;
         return;
       }
-    }
-    else{  //probability of entering treatment
+    }else{  //probability of entering treatment
       if(rT < PROB_LATENT_TREATMENT)
         treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
     }

@@ -29,36 +29,33 @@ const double PROB_LATENT_TREATMENT         = .005; //probability of someone with
 const double PROB_ACTIVE_TREATMENT_SUCCESS = 1;    // probability that treatment of active TB is successful
 const double PROB_LTBI_TREATMENT_SUCCESS   = 1;    // probability that treatment of latent TB is successful
 
+//Hill model constants
 const double ro      = 0.018;     // USB birth rate per year
 const double alpha   = 0.005;     // FB birth rate per year
-const double p       = 0.103;     // Fraction of new infectionsn which are acute
-                                  //  (fast progressors)
-//TODO: Move vF to the turtle.hpp file. Its used in PROB_ACUTE_PROGRESSION
-const double vF      = 1.5;       // Progression of acute infection per year
+const double p       = 0.103;     // Fraction of new infectionsn which are acute(fast progressors)
 const double r0      = 0.667;     // Fraction of cases due to reactivation in the USB population
 const double r1      = 0.780;     // Fraction of cases due to reactivation in the FB population
-//TODO: Move vL0, vL1 to turtle.hpp file. Its used in PROB_CHRONIC_PROGRESSION, which appears to be an average. 
-const double vL0     = 0.0014;    // Progression rate for reactivation (chronic LTBI) in the USB population per year
-const double vL1     = 0.0010;    // Progression rate for reactivation (chronic LTBI) in the FB population per year
-
 const double x       = 0.111;     // Fraction of re-infected chronic LTBI moving to acute infection
 const double f       = 0.187;     // Fraction of FB arrivals with LTBI
 const double beta    = 10.39;     // Effective contact rate per year
 const double e0      = 0.965;     // Fraction of preferred contacts with own population for USB
 const double e1      = 0.985;     // Fraction of preferred contacts with own population for FB
 const double g       = 0.0047;    // Fraction of FB arrivals with LTBI who are fast progressors
-const double phi0    = 1.114;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (USB)
-const double phi1    = 1.167;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (FB)
 
-//TODO: These share parameters from agentbased.cpp. Also, PROB_CHRONIC_PROGRESSION should be split for FB and USB turtles. 
-const double PROB_ACUTE_PROGRESSION   = (1.5*DELTA_T); //Probability of disease progression from acute latent to active TB every timestep
-const double PROB_CHRONIC_PROGRESSION = (0.0012*DELTA_T); //Probability of disease progression from chronic latent to active TB every timestep
+const double vF = 1.5; // Progression of acute infection per year
+const double PROB_ACUTE_PROGRESSION   = (vF*DELTA_T); //Probability of disease progression from acute latent to active TB every timestep
+
+const double vL0 = 0.0014;    // Progression rate for reactivation (chronic LTBI) in the USB population per year
+const double vL1 = 0.0010;    // Progression rate for reactivation (chronic LTBI) in the FB population per year
+const double PROB_CHRONIC_PROGRESSION = ((vL0 + vL1)/2.)*DELTA_T; //Probability of disease progression from chronic latent to active TB every timestep
 
 const double PERCENT_INFECTIOUS_TB = 0.708;   //Proportion of TB cases that are infectious, source: Hill model (q)
-//TODO: Where do these come from?
-const double PROB_ACTIVE_SELF_CURE = (1.1405*DELTA_T);//0.005; // Probability of someone with active TB self-curing
-//TODO: This appears to be from sigmaL?
-const double PROB_LATENT_SELF_CURE = (0.057 * DELTA_T); // Probability of someone with latent TB self-curing
+
+const double phi0 = 1.114;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (USB)
+const double phi1 = 1.167;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (FB)
+const double PROB_ACTIVE_SELF_CURE = ((phi0 + phi1)/2.)*DELTA_T; // Probability of active TB self-curing per time step
+const double sigmaL = 0.057;  // Treatment rate for chronic LTBI per year
+const double PROB_LATENT_SELF_CURE = (sigmaL * DELTA_T); // Probability of latent TB self-curing per time step
 
 //Declaration
 class turtle{

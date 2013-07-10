@@ -19,8 +19,6 @@ const bool debug = false;
 
 typedef list<turtle> turtleList;
 
-//TODO: This isn't used. Move to turtle.hpp
-double sigmaL        = 0.057;     // Treatment rate for chronic LTBI per year
 double lambda0;
 double lambda1;
 
