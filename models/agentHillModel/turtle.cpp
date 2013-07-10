@@ -21,7 +21,7 @@ const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectio
 //Implementation
 //Constructor
 //TODO: Add age stratification, such that we can eliminate the unnatural death
-//rate specificty (mu0 mu1)
+//rate specificity (mu0 mu1)
 turtle::turtle(COB c, State s)
   : country(c), state(s), treatmentTimeLeft(0), newCost(0), x(0)
 {
@@ -99,9 +99,9 @@ void turtle::updateState(){
     }
     
     //TB deaths and self-cures
-    if(r < pfill + MU_TB*DELTA_T)
+    if(r < pfill + MUD*DELTA_T)
 	  result = TB_DEATH;  //Mortality rate for TB
-	else if(r < pfill + MU_TB*DELTA_T + PROB_ACTIVE_SELF_CURE)
+	else if(r < pfill + MUD*DELTA_T + PROB_ACTIVE_SELF_CURE)
       result = SUSCEPTIBLE;  //Self-cure rate
   }
   
