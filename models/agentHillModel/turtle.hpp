@@ -82,11 +82,13 @@ public:
   double getNewCost();
   double getresetNewCost();
   int getTimeSinceInfection();
+  State getPreDeathState();
   void infect();
 
 private:
   COB country;
   State state;
+  State preDeathState;
   int treatmentTimeLeft;
   double newCost;
   double mu;  //natural mortality rate

@@ -175,7 +175,7 @@ int main()
     cout << "Number of Iterations: " << totT << endl;
   }
   for (int i = 1; i < totT; ++i){
-    cout<<"\n new round"<<endl;
+    //cout<<"\n new round"<<endl;
     //Generating Preferred contact rate based on previous time step
     double c01 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
     double c00 = 1-c01;
@@ -206,25 +206,16 @@ int main()
       //cout<<"t.getresetNewCost "<<t.getresetNewCost();
 
       t.updateState();
-      if (t.getTreatmentTimeLeft() < 75 && t.getTreatmentTimeLeft() != 0)
-      {
-        cout<<"t.getState() "<<t.getState()<<" || "<<t.getTreatmentTimeLeft()<<" || "<<popConst*(t.getNewCost()/(pow(discRate,(i*DELTA_T))))<<endl;
-        /*if (t.getState() < 2)
-        {
-          totcost +=500*popConst;
-        }
-        else if (t.getState() == 2 || t.getState() == 3)
-        {
-          totcost +=6000*popConst;
-        }*/
-      }
       
       //cout<<" |||| "<<t.getresetNewCost()<<endl;
       cost[i] += popConst*(t.getresetNewCost()/(pow(discRate,(i*DELTA_T))));
       if ((t.getState() == turtle::TB_DEATH) || (t.getState() == turtle::NATURAL_DEATH))
       {
+        //population.erase(turtleIter);
+        //turtleIter--;
+        updatePop(t.getPreDeathState(), t.getCountry(), -1); //subtracts from the pop from whuch the turtle died
         turtleList::iterator newIter = population.erase(turtleIter);
-        turtleIter = --newIter;
+        turtleIter = --newIter;//TODO: store previous state in case of dead turtle for sake of updating pops
       } else {
         //Check for exogenous re-infection TODO: abstract this to a function
         double infParam = (double)rand()/(double)RAND_MAX;
