@@ -52,7 +52,7 @@ void turtle::updateState(){
     
     //Treatment costs and effects (use rT as random number)
     if(treatmentTimeLeft > 0){  //Turtle is currently receiving treatment
-      newCost += LATENT_TREATMENT_COST / LATENT_TREATMENT_LENGTH;  //Add new costs of treatments
+      newCost = LATENT_TREATMENT_COST / LATENT_TREATMENT_LENGTH;  //TODO: should this be +=?? doesn't make sense to me.//Add new costs of treatments
       treatmentTimeLeft--;
       //Effect of treatment
       if(treatmentTimeLeft == 0 && (rT < PROB_LTBI_TREATMENT_SUCCESS) ){
@@ -89,7 +89,7 @@ void turtle::updateState(){
     
     //Treatment costs and effects (use rT as random number)
     if (treatmentTimeLeft > 0){  //Turtle is currently receiving treatment
-      newCost += ACTIVE_TREATMENT_COST / ACTIVE_TREATMENT_LENGTH;  //Add new costs of treatments
+      newCost = ACTIVE_TREATMENT_COST / ACTIVE_TREATMENT_LENGTH;  //Add new costs of treatments
       treatmentTimeLeft--;
       //Effect of treatment
       if(treatmentTimeLeft == 0 && (rT < PROB_ACTIVE_TREATMENT_SUCCESS) ){
@@ -135,7 +135,7 @@ double turtle::getNewCost() {
   return newCost;
 }
 
-double turtle::resetCost() {
+double turtle::getresetNewCost() {
   double oldCost = newCost;
   newCost = 0;
   return oldCost;

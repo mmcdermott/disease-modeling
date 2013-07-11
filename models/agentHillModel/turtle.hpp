@@ -24,8 +24,8 @@ const double ACTIVE_TREATMENT_COST = 6000; //9 month medications + hospitalizati
 const double LATENT_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
 const double ACTIVE_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
 
-const double PROB_ACTIVE_TREATMENT         = 1;//.01;   //probability of someone with active TB starting treatment every timestep
-const double PROB_LATENT_TREATMENT         = 1;//.005; //probability of someone with latent TB starting treatment every timestep
+const double PROB_ACTIVE_TREATMENT         = .01;//.01;   //probability of someone with active TB starting treatment every timestep
+const double PROB_LATENT_TREATMENT         = .005;//.005; //probability of someone with latent TB starting treatment every timestep
 const double PROB_ACTIVE_TREATMENT_SUCCESS = .8;    // probability that treatment of active TB is successful
 const double PROB_LTBI_TREATMENT_SUCCESS   = .8;    // probability that treatment of latent TB is successful
 
@@ -80,7 +80,7 @@ public:
   State getState();
   int getTreatmentTimeLeft();
   double getNewCost();
-  double resetCost();
+  double getresetNewCost();
   int getTimeSinceInfection();
   void infect();
 

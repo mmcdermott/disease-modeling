@@ -5,7 +5,7 @@
 //  Created by mhcuser on 6/28/13.
 //
 //
-
+//TODO: cost is not currently proportional to the popConst
 #include <iostream>
 #include <fstream>
 #include <list>
@@ -23,7 +23,7 @@ double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 1000; //For now
+const double popConst = 100; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
@@ -145,6 +145,7 @@ void exportData(string fname) {
 
 int main()
 {  
+  double totcost = 0;
   for (int j = 0; j < totT; ++j)
   {
     cost[j] = 0;
@@ -174,6 +175,7 @@ int main()
     cout << "Number of Iterations: " << totT << endl;
   }
   for (int i = 1; i < totT; ++i){
+    cout<<"\n new round"<<endl;
     //Generating Preferred contact rate based on previous time step
     double c01 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
     double c00 = 1-c01;
@@ -201,15 +203,24 @@ int main()
 		  turtle &t = *turtleIter;
       //Update the turtle's state
       //cout<<"t.getState() "<<t.getState();
-      //cout<<"t.getNewCost "<<t.getNewCost();
+      //cout<<"t.getresetNewCost "<<t.getresetNewCost();
+
       t.updateState();
-      if (t.getState() == 5)
+      if (t.getTreatmentTimeLeft() < 75 && t.getTreatmentTimeLeft() != 0)
       {
-        cout<<"    t.getState() "<<t.getState()<<endl;
+        cout<<"t.getState() "<<t.getState()<<" || "<<t.getTreatmentTimeLeft()<<" || "<<popConst*(t.getNewCost()/(pow(discRate,(i*DELTA_T))))<<endl;
+        /*if (t.getState() < 2)
+        {
+          totcost +=500*popConst;
+        }
+        else if (t.getState() == 2 || t.getState() == 3)
+        {
+          totcost +=6000*popConst;
+        }*/
       }
       
-      //cout<<" |||| "<<t.getNewCost()<<endl;
-      cost[i] += (t.getNewCost()/(pow(discRate,(i*DELTA_T))));
+      //cout<<" |||| "<<t.getresetNewCost()<<endl;
+      cost[i] += popConst*(t.getresetNewCost()/(pow(discRate,(i*DELTA_T))));
       if ((t.getState() == turtle::TB_DEATH) || (t.getState() == turtle::NATURAL_DEATH))
       {
         turtleList::iterator newIter = population.erase(turtleIter);
@@ -241,7 +252,7 @@ int main()
     // US birth and death (-> S0)
     // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S0[i]
     // TODO: Is all this casting necessary? Maybe it happens automatically?
-    S0[i] += S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);                      
+    S0[i] += S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);
     S0[i] -= (int) floor(MU0*S0[i-1])*DELTA_T;
     // susceptible arrival (-> S1)
     // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S1[i]
@@ -284,5 +295,6 @@ int main()
 	}
   // write data to file
   exportData("modelData.csv");
+  cout<<totcost<<endl;
   return 0;
 }
