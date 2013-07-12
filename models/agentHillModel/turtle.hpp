@@ -14,9 +14,12 @@
 
 const double DELTA_T = .01;  //measured in years
 
-const double MU0   = 1./78;                 //Natural mortality rate USB per year, source: Hill Model
-const double MU1   = 1./53;                 //Natural mortality rate FB per year, source: Hill Model
-const double MUD   = 0.115;                 //Mortality rate due to TB per year, source: Hill Model
+const double mu0   = 1./78;                 //Natural mortality rate USB per year, source: Hill Model
+const double mu1   = 1./53;                 //Natural mortality rate FB per year, source: Hill Model
+const double mud   = 0.115;                 //Mortality rate due to TB per year, source: Hill Model
+const double MU0   = 1 - exp(-mu0 * DELTA_T);                 //Natural mortality rate USB per year, source: Hill Model
+const double MU1   = 1 - exp(-mu1 * DELTA_T);                 //Natural mortality rate FB per year, source: Hill Model
+const double MUD   = 1 - exp(-mud*DELTA_T);                 //Mortality rate due to TB per year, source: Hill Model
 
 //Hill model constants
 const double ro      = 0.018;     // USB birth rate per year
