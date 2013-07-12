@@ -18,17 +18,6 @@ const double MU0   = 1./78;                 //Natural mortality rate USB per yea
 const double MU1   = 1./53;                 //Natural mortality rate FB per year, source: Hill Model
 const double MUD   = 0.115;                 //Mortality rate due to TB per year, source: Hill Model
 
-const double LATENT_TREATMENT_COST = 500;  //9 months of isoniazid
-const double ACTIVE_TREATMENT_COST = 6000; //9 month medications + hospitalizations
-
-const double LATENT_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
-const double ACTIVE_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
-
-const double PROB_ACTIVE_TREATMENT         = .01;//.01;   //probability of someone with active TB starting treatment every timestep
-const double PROB_LATENT_TREATMENT         = .005;//.005; //probability of someone with latent TB starting treatment every timestep
-const double PROB_ACTIVE_TREATMENT_SUCCESS = .8;    // probability that treatment of active TB is successful
-const double PROB_LTBI_TREATMENT_SUCCESS   = .8;    // probability that treatment of latent TB is successful
-
 //Hill model constants
 const double ro      = 0.018;     // USB birth rate per year
 const double alpha   = 0.005;     // FB birth rate per year
@@ -42,7 +31,7 @@ const double e0      = 0.965;     // Fraction of preferred contacts with own pop
 const double e1      = 0.985;     // Fraction of preferred contacts with own population for FB
 const double g       = 0.0047;    // Fraction of FB arrivals with LTBI who are fast progressors
 
-const double vF = 1.5; // Progression of acute infection per year
+const double vF = 10;//1.5; // Progression of acute infection per year
 const double PROB_ACUTE_PROGRESSION   = (vF*DELTA_T); //Probability of disease progression from acute latent to active TB every timestep
 
 const double vL0 = 0.0014;    // Progression rate for reactivation (chronic LTBI) in the USB population per year
@@ -53,9 +42,23 @@ const double PERCENT_INFECTIOUS_TB = 0.708;   //Proportion of TB cases that are 
 
 const double phi0 = 1.114;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (USB)
 const double phi1 = 1.167;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (FB)
-const double PROB_ACTIVE_SELF_CURE = ((phi0 + phi1)/2.)*DELTA_T; // Probability of active TB self-curing per time step
 const double sigmaL = 0.057;  // Treatment rate for chronic LTBI per year
-const double PROB_LATENT_SELF_CURE = (sigmaL * DELTA_T); // Probability of latent TB self-curing per time step
+const double sigmaF0 = 1.296; // Treatment for acute LTBI
+const double sigmaF1 = 1.301;
+const double PROB_ACTIVE_SELF_CURE = ((phi0 + phi1)/2.)*.1*DELTA_T; // Probability of active TB self-curing per time step
+const double PROB_LATENT_SELF_CURE = 0;//(sigmaL * DELTA_T); // Probability of latent TB self-curing per time step
+
+const double LATENT_TREATMENT_COST = 500;  //9 months of isoniazid
+const double ACTIVE_TREATMENT_COST = 6000; //9 month medications + hospitalizations
+
+const double LATENT_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
+const double ACTIVE_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
+
+const double PROB_ACTIVE_TREATMENT         = ((phi0 + phi1)/2.)*.9*DELTA_T;//.01;   //probability of someone with active TB starting treatment every timestep
+const double PROB_CHRONIC_LATENT_TREATMENT = (sigmaL * DELTA_T); //probability of someone with latent TB starting treatment every timestep
+const double PROB_ACUTE_LATENT_TREATMENT   = ((sigmaF0 + sigmaF1)/2.)*DELTA_T;//
+const double PROB_ACTIVE_TREATMENT_SUCCESS = 1;    // probability that treatment of active TB is successful
+const double PROB_LTBI_TREATMENT_SUCCESS   = 1;    // probability that treatment of latent TB is successful
 
 //Declaration
 class turtle{
@@ -82,13 +85,11 @@ public:
   double getNewCost();
   double getresetNewCost();
   int getTimeSinceInfection();
-  State getPreDeathState();
   void infect();
 
 private:
   COB country;
   State state;
-  State preDeathState;
   int treatmentTimeLeft;
   double newCost;
   double mu;  //natural mortality rate

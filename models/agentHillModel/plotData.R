@@ -50,9 +50,9 @@ print(length(inc$IN0))
 #lines() plots data in the same window as the first plot() command
 
 #Plot:
-yrange <- range(c(0.5,inc$IN1,inc$IN0,inc$INall))
+yrange <- range(c(0.5,inc$IN1,inc$INall))
 dev.new()
-plot( yrs, inc$IN0,   type='l', col='blue', main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange)#,log='y')
+plot( yrs, inc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue',log = 'y')
 lines(yrs, inc$INall, type='l', col='red')
 lines(yrs, inc$IN1,   type='l', col='green')
 abline(h = 1, lty = 'dotted')

@@ -46,7 +46,6 @@ void turtle::updateState(){
   turtle::State result = state; //result = next state, default is that the state doesn't change
   //cout << "hello there average nose colin: ttl: " << treatmentTimeLeft << endl;  
   if (r < mu*DELTA_T) {  //Natural death rate
-    preDeathState = state;
     result = NATURAL_DEATH;
   } else if(state == ACUTE_LTBI || state == CHRONIC_LTBI){
     pfill += mu*DELTA_T;  //Natural death rate probability accounted for
@@ -61,7 +60,9 @@ void turtle::updateState(){
         return;
       }
     } else {  //probability of entering treatment
-      if(rT < PROB_LATENT_TREATMENT)
+      if (state == ACUTE_LTBI && rT < PROB_ACUTE_LATENT_TREATMENT){
+        treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
+      } else if (rT < PROB_CHRONIC_LATENT_TREATMENT)
         treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
     }
     
@@ -103,7 +104,6 @@ void turtle::updateState(){
 
     //TB deaths and self-cures
     if(r < pfill + MUD*DELTA_T) {
-      preDeathState = state;
 	    result = TB_DEATH;  //Mortality rate for TB
 	  } else if(r < pfill + MUD*DELTA_T + PROB_ACTIVE_SELF_CURE) {
       result = SUSCEPTIBLE;  //Self-cure rate
@@ -145,10 +145,6 @@ double turtle::getresetNewCost() {
 
 int turtle::getTimeSinceInfection() {
   return x;
-}
-
-turtle::State turtle::getPreDeathState(){
-  return preDeathState;
 }
 
 void turtle::infect(){

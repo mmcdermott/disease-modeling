@@ -145,7 +145,6 @@ void exportData(string fname) {
 
 int main()
 {  
-  double totcost = 0;
   for (int j = 0; j < totT; ++j)
   {
     cost[j] = 0;
@@ -213,7 +212,6 @@ int main()
       {
         //population.erase(turtleIter);
         //turtleIter--;
-        updatePop(t.getPreDeathState(), t.getCountry(), -1); //subtracts from the pop from whuch the turtle died
         turtleList::iterator newIter = population.erase(turtleIter);
         turtleIter = --newIter;//TODO: store previous state in case of dead turtle for sake of updating pops
       } else {
@@ -286,6 +284,5 @@ int main()
 	}
   // write data to file
   exportData("modelData.csv");
-  cout<<totcost<<endl;
   return 0;
 }
