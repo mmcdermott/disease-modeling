@@ -4,23 +4,23 @@ vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB po
 popConst <- 1000
 
 generateIncidence <- function(dataSet) {
-    IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
-    IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
-    INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
-	return(data.frame(IN0,IN1,INall))
+  IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
+  IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
+  INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+  frame <- data.frame(IN0,IN1,INall)
+  write.table(frame, file="incData.csv", sep=",")
+  return(frame)
 }
 
 args <- commandArgs(trailingOnly = T)
-if (length(args) > 1) {
-  importData <- as.logical(args[1])
-  deltaT     <- as.numeric(args[2])
+print(args)
+if (length(args) > 0) {
+  dataSet <- read.csv('modelData.csv')
+  deltaT  <- as.numeric(args[1])
   print(deltaT)
-  if (importData) {
-    dataSet <- read.csv('modelData.csv')
-  }
   if (length(args) > 2) {
-    initialYr <- as.integer(args[3])
-    finalYr   <- as.integer(args[4])
+    initialYr <- as.integer(args[2])
+    finalYr   <- as.integer(args[3])
   } else {
     # Defaults:
     initialYr <- 2000
@@ -28,11 +28,16 @@ if (length(args) > 1) {
   }
   print(initialYr)
   print(finalYr)
-} 
-if (!exists('dataSet')) {
+} else if (!exists('noImport')) {
+  dataSet   <- read.csv('modelData.csv')
+  deltaT    <- .01
+  initialYr <- 2000
+  finalYr   <- 2100
+} else if (!exists('dataSet')) {
   print('No Data to Plot! Either list the import file as a cmd argument, or define it in the calling script')
   stop()
-} else if (Sys.info()['sysname'] == "Linux") {
+} 
+if (Sys.info()['sysname'] == "Linux") {
   #Making it plot on linux
   X11.options(type='nbcairo')
 }
