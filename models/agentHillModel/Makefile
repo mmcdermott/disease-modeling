@@ -1,5 +1,6 @@
 # C++ compiler to use
 UNAME_S := $(shell uname -s)
+agentTarget := agentModel
 ifeq ($(UNAME_S),Linux)
     CXX=g++
     # flags passed to compiler
@@ -12,7 +13,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 # programs being compiled
-TARGETS=agentModel
+TARGETS = $(agentTarget)
 
 # various targets and how to compile them
 all: $(TARGETS)
@@ -22,6 +23,14 @@ agentModel: turtle.o agentbased.o
 
 turtle: turtle.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
+
+plots: $(agentTarget)
+	./$(agentTarget) && R < plotData.R --save --args true ${DELTA_T}
+
+standard_run: clean clean_plots plots
+
+clean_plots:
+	rm Rplots*
 
 clean:
 	$(RM) $(TARGETS) *.o a.out *\~
