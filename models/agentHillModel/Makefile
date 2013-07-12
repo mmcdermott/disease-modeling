@@ -25,12 +25,12 @@ turtle: turtle.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 plots: $(agentTarget)
-	./$(agentTarget) && R < plotData.R --save --args true ${DELTA_T}
+	./$(agentTarget) && R < plotData.R --save --args ${DELTA_T}
 
-standard_run: clean clean_plots plots
+standard_run: clean plots
 
 clean_plots:
-	rm Rplots*
+	rm Rplots*.*
 
 clean:
 	$(RM) $(TARGETS) *.o a.out *\~
