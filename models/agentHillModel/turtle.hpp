@@ -19,7 +19,7 @@ const double mu1   = 1./53;                   //Natural mortality rate FB per ye
 const double mud   = 0.115;                   //Mortality rate due to TB per year, source: Hill Model
 const double MU0   = 1 - exp(-mu0 * DELTA_T); //Natural mortality prob USB, source: Hill Model
 const double MU1   = 1 - exp(-mu1 * DELTA_T); //Natural mortality prob FB, source: Hill Model
-const double MUD   = 1 - exp(-mud*DELTA_T);   //TB Mortality prob, source: Hill Model
+const double MUD   = 1 - exp(-mud * DELTA_T);   //TB Mortality prob, source: Hill Model
 
 //Hill model constants
 const double ro      = 0.018;     // USB birth rate per year
@@ -34,18 +34,18 @@ const double e0      = 0.965;     // Fraction of preferred contacts with own pop
 const double e1      = 0.985;     // Fraction of preferred contacts with own population for FB
 const double g       = 0.0047;    // Fraction of FB arrivals with LTBI who are fast progressors
 
-const double vF = 10;//1.5; // Progression of acute infection per year
+const double vF = 1.5; // Progression of acute infection per year
 const double PROB_ACUTE_PROGRESSION   = 1 - exp(-vF*DELTA_T); //Probability of disease progression from acute latent to active TB every timestep
 
 const double vL0 = 0.0014;    // Progression rate for reactivation (chronic LTBI) in the USB population per year
 const double vL1 = 0.0010;    // Progression rate for reactivation (chronic LTBI) in the FB population per year
-const double PROB_CHRONIC_PROGRESSION = 1-exp(-((vL0 + vL1)/2.)*DELTA_T); //Probability of disease progression from chronic latent to active TB every timestep
+const double PROB_CHRONIC_PROGRESSION = 1 - exp(-((vL0 + vL1)/2.)*DELTA_T); //Probability of disease progression from chronic latent to active TB every timestep
 
 const double PERCENT_INFECTIOUS_TB = 0.708;   //Proportion of TB cases that are infectious, source: Hill model (q)
 
-const double phi0 = 1.114;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (USB)
-const double phi1 = 1.167;     // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (FB)
-const double sigmaL = 0.057;  // Treatment rate for chronic LTBI per year
+const double phi0    = 1.114; // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (USB)
+const double phi1    = 1.167; // Cumulative fraction self-cure and treatment of active disease for both populations per year RATES (FB)
+const double sigmaL  = 0.057; // Treatment rate for chronic LTBI per year
 const double sigmaF0 = 1.296; // Treatment for acute LTBI
 const double sigmaF1 = 1.301;
 const double PROB_ACTIVE_SELF_CURE = 1 - exp(-((phi0 + phi1)/2.)*.1*DELTA_T); // Probability of active TB self-curing per time step
@@ -79,10 +79,10 @@ public:
     TB_DEATH = 5,
     NATURAL_DEATH = 6
   };
-  turtle(COB c, State s);
+  turtle(const COB &c, const State &s);
   void updateState();
   void display();
-  void handleTreatment(const double &probSuccess, const double &treatCost);
+  bool handleTreatment(const double &probSuccess, const double &treatCost);
   bool dead();
   COB getCountry();
   State getState();

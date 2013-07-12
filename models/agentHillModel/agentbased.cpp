@@ -66,7 +66,7 @@ double cost[totT];
  * This functions updates the population lists given the number of turtles of 
  * the given states. It returns nothing, as it is a state updating function.
  */
-void updatePop(turtle::State turtState, turtle::COB cob, int timeStep, 
+void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeStep, 
                int numTurtles = 1)
 {
   switch(cob) {
@@ -119,7 +119,7 @@ void updatePop(turtle::State turtState, turtle::COB cob, int timeStep,
   }
 }
 
-void createTurtles(turtle::State turtState, turtle::COB cob, int timeStep, int numTurtles)
+void createTurtles(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int numTurtles)
 {
   for (int i = 0; i < numTurtles; ++i) 
   {
@@ -144,11 +144,9 @@ void exportData(string fname) {
 
 
 int main()
-{  
-  for (int j = 0; j < totT; ++j)
-  {
-    cost[j] = 0;
-  }
+{
+  cout << MU0*DELTA_T << " || " << MU0 << endl;
+  cout << MU1*DELTA_T << " || " << MU1 << endl;
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
   default_random_engine generator (seed);
   srand(time(NULL));
@@ -200,18 +198,14 @@ int main()
 			turtleIter != population.end(); ++turtleIter)
 		{
 		  turtle &t = *turtleIter;
-      //Update the turtle's state
-      //cout<<"t.getState() "<<t.getState();
-      //cout<<"t.getresetNewCost "<<t.getresetNewCost();
 
+      //Update the turtle's state
       t.updateState();
       
       //cout<<" |||| "<<t.getresetNewCost()<<endl;
       cost[i] += popConst*(t.getresetNewCost()/(pow(discRate,(i*DELTA_T))));
-      if ((t.getState() == turtle::TB_DEATH) || (t.getState() == turtle::NATURAL_DEATH))
+      if (t.dead())
       {
-        //population.erase(turtleIter);
-        //turtleIter--;
         turtleList::iterator newIter = population.erase(turtleIter);
         turtleIter = --newIter;//TODO: store previous state in case of dead turtle for sake of updating pops
       } else {

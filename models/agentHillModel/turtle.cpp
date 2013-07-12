@@ -22,7 +22,7 @@ const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectio
 //Constructor
 //TODO: Add age stratification, such that we can eliminate the unnatural death
 //rate specificity (mu0 mu1)
-turtle::turtle(COB c, State s)
+turtle::turtle(const COB &c, const State &s)
   : country(c), state(s), treatmentTimeLeft(0), newCost(0), x(0)
 {
 	if(country == USA) 
@@ -31,20 +31,22 @@ turtle::turtle(COB c, State s)
 	else mu = MU1;
 }
 
-void turtle::handleTreatment(const double &probSuccess, const double &treatCost){
+bool turtle::handleTreatment(const double &probSuccess, const double &treatCost){
   newCost = treatCost;
   treatmentTimeLeft--;
   //Effect of treatment
   if (treatmentTimeLeft == 0 && (double)rand()/RAND_MAX < probSuccess) {
     state = SUSCEPTIBLE;
-    return;
+    return true;
   }
+  return false;
 }
 
 bool turtle::dead() {
   return (state == NATURAL_DEATH || state == TB_DEATH);
 }
-/*
+
+
 //Updates turtle state, treatmentTimeLeft, and newCost for each iteration
 void turtle::updateState(){
   //Initializations
@@ -64,7 +66,16 @@ void turtle::updateState(){
   //Disease progression and self-cure
   if (state == CHRONIC_LTBI) {
     if (treatmentTimeLeft > 0) {
-      handleTreatment(PROB_LTBI_TREATMENT_SUCCESS, LATENT_TREATMENT_COST/LATENT_TREATMENT_LENGTH);
+      newCost = LATENT_TREATMENT_COST/LATENT_TREATMENT_LENGTH;
+      treatmentTimeLeft--;
+      //Effect of treatment
+      if (treatmentTimeLeft == 0 && (double)rand()/RAND_MAX < PROB_LTBI_TREATMENT_SUCCESS) {
+        state = SUSCEPTIBLE;
+        return;
+      }
+      // if (handleTreatment(PROB_LTBI_TREATMENT_SUCCESS, LATENT_TREATMENT_COST/LATENT_TREATMENT_LENGTH)) {
+      //   return;
+      // }
     } else if (r < PROB_CHRONIC_LATENT_TREATMENT) {
       treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
       return;
@@ -82,7 +93,17 @@ void turtle::updateState(){
     }
   } else if(state == ACUTE_LTBI){
     if (treatmentTimeLeft > 0) {
-      handleTreatment(PROB_LTBI_TREATMENT_SUCCESS, LATENT_TREATMENT_COST/LATENT_TREATMENT_LENGTH);
+      newCost = LATENT_TREATMENT_COST/LATENT_TREATMENT_LENGTH;
+      treatmentTimeLeft--;
+      //Effect of treatment
+      if (treatmentTimeLeft == 0 && (double)rand()/RAND_MAX < PROB_LTBI_TREATMENT_SUCCESS) {
+        state = SUSCEPTIBLE;
+        return;
+      }
+
+      // if (handleTreatment(PROB_LTBI_TREATMENT_SUCCESS, LATENT_TREATMENT_COST/LATENT_TREATMENT_LENGTH)) {
+      //   return;
+      // }
     } else if (r < PROB_ACUTE_LATENT_TREATMENT) {
       treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
       return;
@@ -100,7 +121,17 @@ void turtle::updateState(){
     }
   } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
     if (treatmentTimeLeft > 0) {
-      handleTreatment(PROB_ACTIVE_TREATMENT_SUCCESS, ACTIVE_TREATMENT_COST/ACTIVE_TREATMENT_LENGTH);
+      newCost = ACTIVE_TREATMENT_COST/ACTIVE_TREATMENT_LENGTH;
+      treatmentTimeLeft--;
+      //Effect of treatment
+      if (treatmentTimeLeft == 0 && (double)rand()/RAND_MAX < PROB_ACTIVE_TREATMENT_SUCCESS) {
+        state = SUSCEPTIBLE;
+        return;
+      }
+
+      // if (handleTreatment(PROB_ACTIVE_TREATMENT_SUCCESS, ACTIVE_TREATMENT_COST/ACTIVE_TREATMENT_LENGTH)) {
+      //   return;
+      // }
     } else if (r < PROB_ACTIVE_TREATMENT) {
       treatmentTimeLeft = LATENT_TREATMENT_LENGTH;
       return;
@@ -116,9 +147,9 @@ void turtle::updateState(){
     }
     return;
   }
-}*/
+}
 
-
+/*
 void turtle::updateState(){
   //srand(time(NULL)); TODO: Should this be seeded somewhere?
   //Initializations
@@ -198,7 +229,7 @@ void turtle::updateState(){
   }
   
   state = result;
-}
+}*/
 
 void turtle::display(){
   cout << "Country of Birth: " << countryNames[country] << "\n";
