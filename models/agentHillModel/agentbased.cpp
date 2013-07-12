@@ -39,10 +39,10 @@ const int initF0    = (1./popConst)*((1-r0)*(newCases0)/vF);
 const int initF1    = (1./popConst)*((1-r1)*(newCases1)/vF);              
 const int initL0    = (1./popConst)*(r0*(newCases0)/vL0);                 
 const int initL1    = (1./popConst)*(r1*(newCases1)/vL1);                 
-const int initI0    = (1./popConst)*(PERCENT_INFECTIOUS_TB*newCases0/(MU0 + MUD + phi0));     
-const int initI1    = (1./popConst)*(PERCENT_INFECTIOUS_TB*newCases1/(MU0 + MUD + phi1));     
-const int initJ0    = (1./popConst)*((1-PERCENT_INFECTIOUS_TB)*newCases0/(MU0 + MUD + phi0)); 
-const int initJ1    = (1./popConst)*((1-PERCENT_INFECTIOUS_TB)*newCases1/(MU1 + MUD + phi1)); 
+const int initI0    = (1./popConst)*(PERCENT_INFECTIOUS_TB*newCases0/(mu0 + mud + phi0));     
+const int initI1    = (1./popConst)*(PERCENT_INFECTIOUS_TB*newCases1/(mu0 + mud + phi1));     
+const int initJ0    = (1./popConst)*((1-PERCENT_INFECTIOUS_TB)*newCases0/(mu0 + mud + phi0)); 
+const int initJ1    = (1./popConst)*((1-PERCENT_INFECTIOUS_TB)*newCases1/(mu1 + mud + phi1)); 
 
 turtleList population;
 
@@ -242,11 +242,11 @@ int main()
     // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S0[i]
     // TODO: Is all this casting necessary? Maybe it happens automatically?
     S0[i] += S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);
-    S0[i] -= (int) floor(MU0*S0[i-1])*DELTA_T;
+    S0[i] -= (int) floor(mu0*S0[i-1])*DELTA_T;
     // susceptible arrival (-> S1)
     // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S1[i]
     S1[i] += S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T);         
-    S1[i] -= (int) floor(MU1*S1[i-1])*DELTA_T;
+    S1[i] -= (int) floor(mu1*S1[i-1])*DELTA_T;
  	 	
     //Creating Binomial Distributions for generating new infections from S0/S1
  	 	binomial_distribution<int> usInfec(S0[i-1], lambda0 * DELTA_T);
