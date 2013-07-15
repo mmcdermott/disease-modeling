@@ -1,6 +1,8 @@
 disease-modeling
 ================
 
+<script type='text/javascript'>alert('hello');</script>
+
 A repository for the disease modeling code the Mathematical Modeling group at the Mt. Holyoke 2013 REU. All our finished products can be found in the 'deliverables' folder. This folder currently contains:
 
 #### Delivarables:
