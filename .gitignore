@@ -21,3 +21,8 @@
 
 # OSX files
 .DS_Store
+
+# Specific Files
+agentModel
+incData.csv
+modelData.csv
