@@ -1,6 +1,5 @@
-//
 //  turtle.cpp
-//  
+
 #include <iostream>
 #include <math.h>
 #include <stdlib.h>

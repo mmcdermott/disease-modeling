@@ -1,11 +1,5 @@
-//
 //  agentbased.cpp
-//  
-//
-//  Created by mhcuser on 6/28/13.
-//
-//
-//TODO: cost is not currently proportional to the popConst
+
 #include <iostream>
 #include <fstream>
 #include <list>
