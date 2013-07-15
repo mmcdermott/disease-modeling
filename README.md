@@ -3,7 +3,7 @@ disease-modeling
 
 A repository for the disease modeling code the Mathematical Modeling group at the Mt. Holyoke 2013 REU. All our finished products can be found in the 'deliverables' folder. This folder currently contains:
 
-#### Delivarables:
+#### Deliverables:
 1. agentBased/
     * hillModel_basic.nlogo
 
