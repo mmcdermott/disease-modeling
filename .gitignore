@@ -26,3 +26,6 @@
 agentModel
 incData.csv
 modelData.csv
+
+# .swp files
+*.swp
