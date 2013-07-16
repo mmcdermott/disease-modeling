@@ -43,7 +43,6 @@ const double sigmaL  = 0.057; // Treatment rate for chronic LTBI per year
 const double sigmaF0 = 1.296; // Treatment for acute LTBI
 const double sigmaF1 = 1.301;
 const double PROB_ACTIVE_SELF_CURE = 1 - exp(-((phi0 + phi1)/2.)*.1*DELTA_T); // Probability of active TB self-curing per time step
-const double PROB_LATENT_SELF_CURE = 0;//(sigmaL * DELTA_T); // Probability of latent TB self-curing per time step
 
 const double LATENT_TREATMENT_COST = 500;  //9 months of isoniazid
 const double ACTIVE_TREATMENT_COST = 6000; //9 month medications + hospitalizations
@@ -75,7 +74,7 @@ public:
     TB_DEATH = 5,
     NATURAL_DEATH = 6
   };
-  turtle(const COB &c, const State &s, const int &initTreat);
+  turtle(const COB &c, const State &s, const int initTreat);
   void updateState();
   void display();
   bool handleTreatment(const double &probSuccess, const double &treatCost);

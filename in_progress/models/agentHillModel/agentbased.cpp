@@ -116,22 +116,35 @@ void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeS
 /** Create initial population of turtles, including those who start in treatment. */
 void createInitialTurtles(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int numTurtles)
 {
-  double percentInTreatment;
+  double probTreatment;
   double treatment_length;
-  if(turtState == turtle::ACUTE_LTBI || turtState == turtle::CHRONIC_LTBI) {
-    percentInTreatment = PERCENT_INITIAL_LATENT_TREATMENT;
+  if (turtState == turtle::ACUTE_LTBI) {
+    probTreatment = PROB_ACUTE_LATENT_TREATMENT;
+    treatment_length = LATENT_TREATMENT_LENGTH;
+  } else if (turtState == turtle::CHRONIC_LTBI) {
+    probTreatment = PROB_CHRONIC_LATENT_TREATMENT;//PERCENT_INITIAL_LATENT_TREATMENT;
     treatment_length = LATENT_TREATMENT_LENGTH;
   } else {
-    percentInTreatment = PERCENT_INITIAL_ACTIVE_TREATMENT;
+    probTreatment = PROB_ACTIVE_TREATMENT;//PERCENT_INITIAL_ACTIVE_TREATMENT;
     treatment_length = ACTIVE_TREATMENT_LENGTH;
   }
 
   int initTreat = 0;
-  for (int i = 0; i < numTurtles; ++i) 
-  {
+  //int turtPerTS = floor((1.*numTurtles)/treatment_length);
+  //for (int i = 0; i < treatment_length; ++i) {
+  //  for (int i = 0; i < turtPerTS; ++i) {
+  //    double r = (double)rand()/(double)RAND_MAX;
+  //    if(r < probTreatment) {
+  //      initTreat = i;
+  //    }
+  //    population.push_front(turtle(cob, turtState, initTreat)); 
+  //  }
+  //}
+  for (int i = 0; i < numTurtles; ++i) {
     double r = (double)rand()/(double)RAND_MAX;
-    if(r < percentInTreatment)
-        initTreat = floor(r/percentInTreatment * treatment_length);
+    if(r < probTreatment) {
+      initTreat = floor((r/probTreatment) * treatment_length);
+    }
     population.push_front(turtle(cob, turtState, initTreat)); 
   }
   updatePop(turtState, cob, timeStep, numTurtles);
@@ -163,8 +176,6 @@ void exportData(string fname) {
 
 int main()
 {
-  cout << MU0*DELTA_T << " || " << MU0 << endl;
-  cout << MU1*DELTA_T << " || " << MU1 << endl;
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
   default_random_engine generator (seed);
   srand(time(NULL));
@@ -172,17 +183,17 @@ int main()
   N0[0] = initUSP;
   N1[0] = initFBP;
   //Acute (Fast) LTBI, new cases
-  createInitialTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
-  createInitialTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
+  createTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
+  createTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
   //Chronic (Long) LTBI
-  createInitialTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
-  createInitialTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
+  createTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
+  createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
   //Infectious TB
-  createInitialTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0);
-  createInitialTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1);
+  createTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0);
+  createTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1);
   //Non-Infectious TB
-  createInitialTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0);
-  createInitialTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1);
+  createTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0);
+  createTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1);
   //Susceptible
   S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
   S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);

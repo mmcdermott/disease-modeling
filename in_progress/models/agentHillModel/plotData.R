@@ -60,5 +60,13 @@ dev.new()
 plot( yrs, inc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue',log = 'y')
 lines(yrs, inc$INall, type='l', col='red')
 lines(yrs, inc$IN1,   type='l', col='green')
+
+#Deterministic Data:
+detInc <- read.csv('data.csv')
+detYrs <- seq(initialYr, finalYr - 0.8, 0.8)
+lines(detYrs, detInc$IN0,   type='l', col='#025167')
+lines(detYrs, detInc$IN1,   type='l', col='#739D00')
+lines(detYrs, detInc$INall, type='l', col='#A60000')
+
 abline(h = 1, lty = 'dotted')
 legend('topright', legend=c('USB incidence','FB incidence','Total incidence'), col=c('blue', 'green', 'red'), lty=c(1,1,1))
