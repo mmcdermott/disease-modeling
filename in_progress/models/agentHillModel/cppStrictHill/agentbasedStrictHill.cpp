@@ -138,8 +138,6 @@ void exportData(string fname) {
 
 int main()
 {
-  cout << MU0*DELTA_T << " || " << MU0 << endl;
-  cout << MU1*DELTA_T << " || " << MU1 << endl;
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
   default_random_engine generator (seed);
   srand(time(NULL));

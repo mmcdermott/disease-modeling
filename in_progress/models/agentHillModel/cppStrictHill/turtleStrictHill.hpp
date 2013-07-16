@@ -50,17 +50,17 @@ const double PROB_ACUTE_LATENT_CURE_1   = 1 - exp(-sigmaF1 * DELTA_T); // Probab
 class turtle{
 public:
   enum COB {  // Country of birth
-    USA = 0,
+    USA   = 0,
     OTHER = 1
   };
   enum State {  // Health state
-    ACUTE_LTBI = 0,
-    CHRONIC_LTBI = 1,
-    INFECTIOUS_TB = 2,
+    ACUTE_LTBI       = 0,
+    CHRONIC_LTBI     = 1,
+    INFECTIOUS_TB    = 2,
     NONINFECTIOUS_TB = 3,
-    SUSCEPTIBLE = 4,
-    TB_DEATH = 5,
-    NATURAL_DEATH = 6
+    SUSCEPTIBLE      = 4,
+    TB_DEATH         = 5,
+    NATURAL_DEATH    = 6
   };
   turtle(const COB &c, const State &s);
   bool dead();
@@ -68,7 +68,6 @@ public:
   void display();
   COB getCountry();
   State getState();
-  int getTimeSinceInfection();
   void infect();
 
 private:

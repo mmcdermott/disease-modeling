@@ -129,10 +129,6 @@ turtle::State turtle::getState() {
   return state;
 }
 
-int turtle::getTimeSinceInfection() {
-  return x;
-}
-
 void turtle::infect(){
   double r = (double)rand()/RAND_MAX;
   if (r < q) 
