@@ -17,7 +17,7 @@ const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectio
 //Constructor
 //TODO: Add age stratification, such that we can eliminate the unnatural death
 //rate specificity (mu0 mu1)
-turtle::turtle(const COB &c, const State &s, const int &initTreat)
+turtle::turtle(const COB &c, const State &s, const int initTreat = 0)
   : country(c), state(s), treatmentTimeLeft(initTreat), newCost(0), x(0)
 {
 	if(country == USA) 
