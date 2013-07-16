@@ -19,6 +19,10 @@ turtle::turtle(const COB &c, const State &s)
   : country(c), state(s)
 {}
 
+bool turtle::dead() {
+  return (state == NATURAL_DEATH || state == TB_DEATH);
+}
+
 //Updates turtle state
 void turtle::updateState(){
   //Initializations
@@ -40,6 +44,9 @@ void turtle::updateState(){
           state = NONINFECTIOUS_TB;
         }
         return;
+      } else if (r - PROB_CHRONIC_PROGRESSION_0 < PROB_CHRONIC_LATENT_CURE) {
+        state = SUSCEPTIBLE;
+        return;
       }
     } else if(state == ACUTE_LTBI){
       if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
@@ -48,6 +55,9 @@ void turtle::updateState(){
         } else {
           state = NONINFECTIOUS_TB;
         }
+        return;
+      } else if (r - PROB_ACUTE_PROGRESSION < PROB_ACUTE_LATENT_CURE_0) {
+        state = SUSCEPTIBLE;
         return;
       }
     } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
@@ -77,6 +87,9 @@ void turtle::updateState(){
           state = NONINFECTIOUS_TB;
         }
         return;
+      } else if (r - PROB_CHRONIC_PROGRESSION_1 < PROB_CHRONIC_LATENT_CURE) {
+        state = SUSCEPTIBLE;
+        return;
       }
     } else if(state == ACUTE_LTBI){
       if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
@@ -85,6 +98,9 @@ void turtle::updateState(){
         } else {
           state = NONINFECTIOUS_TB;
         }
+        return;
+      } else if (r - PROB_ACUTE_PROGRESSION < PROB_ACUTE_LATENT_CURE_1) {
+        state = SUSCEPTIBLE;
         return;
       }
     } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
@@ -131,7 +147,7 @@ int main()
     srand(time(NULL));
     turtle t = turtle(turtle::USA, turtle::ACUTE_LTBI);
     turtle t2 = turtle(turtle::USA, turtle::NATURAL_DEATH);
-    turtle t3 = turtle(turtle::USA, turtle::ACUTE_LTBI);
+    turtle t3 = turtle(turtle::USA, turtle::CHRONIC_LTBI);
     turtle t4 = turtle(turtle::USA, turtle::ACUTE_LTBI);
     turtle t5 = turtle(turtle::USA, turtle::INFECTIOUS_TB);
     

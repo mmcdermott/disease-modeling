@@ -42,7 +42,9 @@ const double PROB_CHRONIC_PROGRESSION_1 = 1 - exp(-vL1*DELTA_T);      // Probabi
 const double PROB_ACUTE_PROGRESSION     = 1 - exp(-vF*DELTA_T);       // Probability of disease progression from acute latent to active TB every timestep
 const double PROB_ACTIVE_CURE_0         = 1 - exp(-phi0*DELTA_T);     // Probability of active TB cure per time step (USB)
 const double PROB_ACTIVE_CURE_1         = 1 - exp(-phi1*DELTA_T);     // Probability of active TB cure per time step (FB)
-const double PROB_LATENT_CURE           = 1 - exp(-sigmaL * DELTA_T); // Probability of latent TB cure per time step
+const double PROB_CHRONIC_LATENT_CURE   = 1 - exp(-sigmaL * DELTA_T); // Probability of chronic latent TB cure per time step
+const double PROB_ACUTE_LATENT_CURE_0   = 1 - exp(-sigmaF0 * DELTA_T); // Probability of acute latent TB cure per time step (USB)
+const double PROB_ACUTE_LATENT_CURE_1   = 1 - exp(-sigmaF1 * DELTA_T); // Probability of acute latent TB cure per time step (FB)
 
 //Declaration
 class turtle{
@@ -61,6 +63,7 @@ public:
     NATURAL_DEATH = 6
   };
   turtle(const COB &c, const State &s);
+  bool dead();
   void updateState();
   void display();
   COB getCountry();
