@@ -6,6 +6,9 @@
 #include <random>
 #include <chrono>
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sstream>
 #include "turtleStrictHill.hpp"
 using namespace std;
 
@@ -17,7 +20,7 @@ double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 10; //For now
+const double popConst = 1; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
@@ -136,7 +139,7 @@ void exportData(string fname) {
   output.close();
 }
 
-int main()
+int run(string rfname)
 {
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
   default_random_engine generator (seed);
@@ -175,7 +178,6 @@ int main()
     //TODO: Maybe use some kind of exponential, or reed frost, or something?
     double probOfReinfectionUSB = x * p * lambda0 * DELTA_T;
     double probOfReinfectionFB  = x * p * lambda1 * DELTA_T;
-
     //Debugging Info:
     if (debug)
     {
@@ -262,6 +264,40 @@ int main()
     cost[i] += cost[i-1];
   }
   // write data to file
-  exportData("modelData.csv");
+  //exportData("modelData.csv");
+  exportData(rfname);
+  return 0;
+}
+
+int main(int argc, char const *argv[])
+{
+  int numruns = 54; //number of runs performed
+  int runnumber = atoi(argv[1]); // takes in the number of the run happening
+  int adjustedi;
+  string filename;
+
+  for (int i = 1 ; i <= numruns; ++i) {
+    stringstream sstm;
+    filename = "";
+    adjustedi = i + (numruns*(runnumber-1));
+    sstm << "modelDataRun" << adjustedi << ".csv";
+    filename = sstm.str();
+    run(filename);
+    population.clear();
+    for (int j = 0; j < totT; ++j) {
+      N0[j] = 0;
+      S0[j] = 0;
+      L0[j] = 0;
+      F0[j] = 0;
+      J0[j] = 0;
+      I0[j] = 0;
+      N1[j] = 0;
+      S1[j] = 0;
+      L1[j] = 0;
+      F1[j] = 0;
+      I1[j] = 0;
+      J1[j] = 0;
+    }
+  }
   return 0;
 }
