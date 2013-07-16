@@ -124,7 +124,7 @@ void turtle::infect(){
   else 
     state = NONINFECTIOUS_TB;
 }
-
+/*
 //Commented out to test compilation of agentbasedStrictHill.cpp
 int main()
 {
@@ -134,22 +134,30 @@ int main()
     turtle t3 = turtle(turtle::USA, turtle::ACUTE_LTBI);
     turtle t4 = turtle(turtle::USA, turtle::ACUTE_LTBI);
     turtle t5 = turtle(turtle::USA, turtle::INFECTIOUS_TB);
+    
+    cout << "\n--------------\nStarting values\n--------------" << endl;
 
+    t.display();
+    t2.display();
+    t3.display();
+    t4.display();
+    t5.display();
+        
     int i;
-    for(i=1; i<5; i++){
-		  cout << "\nnew day " << i << "\n";
-      turtle tb = turtle(turtle::OTHER, turtle::ACUTE_LTBI);
-      t.display();
+    for(i=1; i<500; i++){
       t.updateState();
-      t2.display();
       t2.updateState();
-      t3.display();
       t3.updateState();
-      t4.display();
       t4.updateState();
-      t5.display();
       t5.updateState();
-      tb.display();
 	}
+    
+    cout << "\n------------\nEnding values\n------------" << endl;
+    
+    t.display();
+    t2.display();
+    t3.display();
+    t4.display();
+    t5.display();
 }
-
+*/

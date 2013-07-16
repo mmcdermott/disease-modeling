@@ -136,7 +136,6 @@ void exportData(string fname) {
   output.close();
 }
 
-
 int main()
 {
   cout << MU0*DELTA_T << " || " << MU0 << endl;
@@ -166,7 +165,6 @@ int main()
     cout << "Number of Iterations: " << totT << endl;
   }
   for (int i = 1; i < totT; ++i){
-    //cout<<"\n new round"<<endl;
     //Generating Preferred contact rate based on previous time step
     double c01 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
     double c00 = 1-c01;
@@ -225,20 +223,17 @@ int main()
     // Agent independent Population Changes during this time step: 
     // Note that these did not affect infection likelihood during
     // this time step.
-    //
+
     // US birth and death (-> S0)
-    // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S0[i]
-    // TODO: Is all this casting necessary? Maybe it happens automatically?
     S0[i] += S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);
     S0[i] -= (int) floor(mu0*S0[i-1])*DELTA_T;
     // susceptible arrival (-> S1)
-    // TODO: BUG! This should be +=. This causes us to ignore all turltes who get cured back to S1[i]
     S1[i] += S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T);         
     S1[i] -= (int) floor(mu1*S1[i-1])*DELTA_T;
  	 	
     //Creating Binomial Distributions for generating new infections from S0/S1
- 	 	binomial_distribution<int> usInfec(S0[i-1], lambda0 * DELTA_T);
- 	 	binomial_distribution<int> fbInfec(S1[i-1], lambda1 * DELTA_T);
+    binomial_distribution<int> usInfec(S0[i-1], lambda0 * DELTA_T);
+ 	binomial_distribution<int> fbInfec(S1[i-1], lambda1 * DELTA_T);
 
     int numUSInfections = usInfec(generator);
     int newf0           = floor(p * numUSInfections);
@@ -266,10 +261,10 @@ int main()
       cout << "LTBIArrivals: " << LTBIArrivals << endl;
     }
     //Resetting the populations
-		N0[i]    = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
-		N1[i]    = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
+    N0[i]    = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
+    N1[i]    = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
     cost[i] += cost[i-1];
-	}
+  }
   // write data to file
   exportData("modelData.csv");
   return 0;
