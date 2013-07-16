@@ -17,7 +17,7 @@ double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 100; //For now
+const double popConst = 10; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
