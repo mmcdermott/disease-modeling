@@ -43,9 +43,7 @@ if (Sys.info()['sysname'] == "Linux") {
 }
 
 yrs <- seq(initialYr, finalYr - deltaT, deltaT)
-print(length(yrs))
 inc <- generateIncidence(dataSet)
-print(length(inc$IN0))
 #plot incidence data
 #  xlab, ylab  --> labels for x-, y-axes
 #  log='y'     --> use logarithmic scale
@@ -62,8 +60,9 @@ lines(yrs, inc$INall, type='l', col='red')
 lines(yrs, inc$IN1,   type='l', col='green')
 
 #Deterministic Data:
-detInc <- read.csv('data.csv')
-detYrs <- seq(initialYr, finalYr - 0.8, 0.8)
+detInc    <- read.csv('detHillData.csv')
+detDeltaT <- (100/length(detInc$IN0))
+detYrs    <- seq(initialYr, finalYr - detDeltaT, detDeltaT)
 lines(detYrs, detInc$IN0,   type='l', col='#025167')
 lines(detYrs, detInc$IN1,   type='l', col='#739D00')
 lines(detYrs, detInc$INall, type='l', col='#A60000')
@@ -71,8 +70,8 @@ lines(detYrs, detInc$INall, type='l', col='#A60000')
 abline(h = 1, lty = 'dotted')
 legend('topright', legend=c('USB incidence','FB incidence','Total incidence'), col=c('blue', 'green', 'red'), lty=c(1,1,1))
 
-detData <- read.csv('detHillData.csv')
-detData <- detData[1:2000,]
-lines(yrs, detData$IN0)
-lines(yrs, detData$IN1)
-lines(yrs, detData$INall)
+#detData <- read.csv('detHillData.csv')
+#detData <- detData[1:2000,]
+#lines(yrs, detData$IN0)
+#lines(yrs, detData$IN1)
+#lines(yrs, detData$INall)
