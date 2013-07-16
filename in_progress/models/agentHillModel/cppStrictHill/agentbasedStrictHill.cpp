@@ -17,7 +17,7 @@ double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 100; //For now
+const double popConst = 10; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
@@ -33,10 +33,10 @@ const int initF0    = (1./popConst)*((1-r0)*(newCases0)/vF);
 const int initF1    = (1./popConst)*((1-r1)*(newCases1)/vF);              
 const int initL0    = (1./popConst)*(r0*(newCases0)/vL0);                 
 const int initL1    = (1./popConst)*(r1*(newCases1)/vL1);                 
-const int initI0    = (1./popConst)*(PERCENT_INFECTIOUS_TB*newCases0/(mu0 + mud + phi0));     
-const int initI1    = (1./popConst)*(PERCENT_INFECTIOUS_TB*newCases1/(mu0 + mud + phi1));     
-const int initJ0    = (1./popConst)*((1-PERCENT_INFECTIOUS_TB)*newCases0/(mu0 + mud + phi0)); 
-const int initJ1    = (1./popConst)*((1-PERCENT_INFECTIOUS_TB)*newCases1/(mu1 + mud + phi1)); 
+const int initI0    = (1./popConst)*(q*newCases0/(mu0 + mud + phi0));     
+const int initI1    = (1./popConst)*(q*newCases1/(mu0 + mud + phi1));     
+const int initJ0    = (1./popConst)*((1-q)*newCases0/(mu0 + mud + phi0)); 
+const int initJ1    = (1./popConst)*((1-q)*newCases1/(mu1 + mud + phi1)); 
 
 turtleList population;
 
@@ -194,8 +194,6 @@ int main()
       //Update the turtle's state
       t.updateState();
       
-      //cout<<" |||| "<<t.getresetNewCost()<<endl;
-      cost[i] += popConst*(t.getresetNewCost()/(pow(discRate,(i*DELTA_T))));
       if (t.dead())
       {
         turtleList::iterator newIter = population.erase(turtleIter);
