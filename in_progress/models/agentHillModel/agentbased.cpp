@@ -113,11 +113,35 @@ void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeS
   }
 }
 
+/** Create initial population of turtles, including those who start in treatment. */
+void createInitialTurtles(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int numTurtles)
+{
+  double percentInTreatment;
+  double treatment_length;
+  if(turtState == turtle::ACUTE_LTBI || turtState == turtle::CHRONIC_LTBI) {
+    percentInTreatment = PERCENT_INITIAL_LATENT_TREATMENT;
+    treatment_length = LATENT_TREATMENT_LENGTH;
+  } else {
+    percentInTreatment = PERCENT_INITIAL_ACTIVE_TREATMENT;
+    treatment_length = ACTIVE_TREATMENT_LENGTH;
+  }
+
+  int initTreat = 0;
+  for (int i = 0; i < numTurtles; ++i) 
+  {
+    double r = (double)rand()/(double)RAND_MAX;
+    if(r < percentInTreatment)
+        initTreat = floor(r/percentInTreatment * treatment_length);
+    population.push_front(turtle(cob, turtState, initTreat)); 
+  }
+  updatePop(turtState, cob, timeStep, numTurtles);
+}
+
 void createTurtles(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int numTurtles)
 {
   for (int i = 0; i < numTurtles; ++i) 
   {
-    population.push_front(turtle(cob, turtState)); 
+    population.push_front(turtle(cob, turtState, 0)); 
   }
   updatePop(turtState, cob, timeStep, numTurtles);
 }
@@ -148,17 +172,17 @@ int main()
   N0[0] = initUSP;
   N1[0] = initFBP;
   //Acute (Fast) LTBI, new cases
-  createTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
-  createTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
+  createInitialTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
+  createInitialTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
   //Chronic (Long) LTBI
-  createTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
-  createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
+  createInitialTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
+  createInitialTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
   //Infectious TB
-  createTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0);
-  createTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1);
+  createInitialTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0);
+  createInitialTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1);
   //Non-Infectious TB
-  createTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0);
-  createTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1);
+  createInitialTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0);
+  createInitialTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1);
   //Susceptible
   S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
   S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);

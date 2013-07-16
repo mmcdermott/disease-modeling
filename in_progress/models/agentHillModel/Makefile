@@ -30,7 +30,7 @@ plots: $(agentTarget)
 standard_run: clean clean_plots plots
 
 clean_plots:
-	rm Rplots*.* && rm incData.csv
+	$(RM) Rplots*.* && $(RM) incData.csv
 
 clean:
 	$(RM) $(TARGETS) *.o a.out *\~

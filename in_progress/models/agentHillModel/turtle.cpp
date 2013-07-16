@@ -17,8 +17,8 @@ const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectio
 //Constructor
 //TODO: Add age stratification, such that we can eliminate the unnatural death
 //rate specificity (mu0 mu1)
-turtle::turtle(const COB &c, const State &s)
-  : country(c), state(s), treatmentTimeLeft(0), newCost(0), x(0)
+turtle::turtle(const COB &c, const State &s, const int &initTreat)
+  : country(c), state(s), treatmentTimeLeft(initTreat), newCost(0), x(0)
 {
 	if(country == USA) 
     mu = MU0;
@@ -167,16 +167,16 @@ void turtle::infect(){
 int main()
 {
     srand(time(NULL));
-    turtle t = turtle(turtle::USA, turtle::ACUTE_LTBI);
-    turtle t2 = turtle(turtle::USA, turtle::NATURAL_DEATH);
-    turtle t3 = turtle(turtle::USA, turtle::ACUTE_LTBI);
-    turtle t4 = turtle(turtle::USA, turtle::ACUTE_LTBI);
-    turtle t5 = turtle(turtle::USA, turtle::INFECTIOUS_TB);
+    turtle t = turtle(turtle::USA, turtle::ACUTE_LTBI, 0);
+    turtle t2 = turtle(turtle::USA, turtle::NATURAL_DEATH, 0);
+    turtle t3 = turtle(turtle::USA, turtle::ACUTE_LTBI, 0);
+    turtle t4 = turtle(turtle::USA, turtle::ACUTE_LTBI, 0);
+    turtle t5 = turtle(turtle::USA, turtle::INFECTIOUS_TB, 0);
 
     int i;
     for(i=1; i<5; i++){
 		  cout << "\nnew day " << i << "\n";
-      turtle tb = turtle(turtle::OTHER, turtle::ACUTE_LTBI);
+      turtle tb = turtle(turtle::OTHER, turtle::ACUTE_LTBI, 0);
       t.display();
 		  t.updateState();
       t2.display();

@@ -30,7 +30,7 @@ if (length(args) > 0) {
   print(finalYr)
 } else if (!exists('noImport')) {
   dataSet   <- read.csv('modelData.csv')
-  deltaT    <- .01
+  deltaT    <- .05
   initialYr <- 2000
   finalYr   <- 2100
 } else if (!exists('dataSet')) {

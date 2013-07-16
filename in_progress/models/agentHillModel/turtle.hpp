@@ -51,6 +51,8 @@ const double ACTIVE_TREATMENT_COST = 6000; //9 month medications + hospitalizati
 const double LATENT_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
 const double ACTIVE_TREATMENT_LENGTH = (0.75/DELTA_T);  //9 months, in time steps
 
+const double PERCENT_INITIAL_LATENT_TREATMENT = 0;  // proportion of initial latent TB population who start in treatment
+const double PERCENT_INITIAL_ACTIVE_TREATMENT = 0.90;  // proportion of initial active TB population who start in treatment
 const double PROB_ACTIVE_TREATMENT         = 1 - exp(-((phi0 + phi1)/2.)*.9*DELTA_T);//.01;   //probability of someone with active TB starting treatment every timestep
 const double PROB_CHRONIC_LATENT_TREATMENT = 1 - exp(-sigmaL * DELTA_T); //probability of someone with latent TB starting treatment every timestep
 const double PROB_ACUTE_LATENT_TREATMENT   = 1 - exp(-((sigmaF0 + sigmaF1)/2.)*DELTA_T);//
@@ -73,7 +75,7 @@ public:
     TB_DEATH = 5,
     NATURAL_DEATH = 6
   };
-  turtle(const COB &c, const State &s);
+  turtle(const COB &c, const State &s, const int &initTreat);
   void updateState();
   void display();
   bool handleTreatment(const double &probSuccess, const double &treatCost);
