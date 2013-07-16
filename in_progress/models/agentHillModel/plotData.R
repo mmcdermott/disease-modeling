@@ -62,3 +62,9 @@ lines(yrs, inc$INall, type='l', col='red')
 lines(yrs, inc$IN1,   type='l', col='green')
 abline(h = 1, lty = 'dotted')
 legend('topright', legend=c('USB incidence','FB incidence','Total incidence'), col=c('blue', 'green', 'red'), lty=c(1,1,1))
+
+detData <- read.csv('detHillData.csv')
+detData <- detData[1:2000,]
+lines(yrs, detData$IN0)
+lines(yrs, detData$IN1)
+lines(yrs, detData$INall)
