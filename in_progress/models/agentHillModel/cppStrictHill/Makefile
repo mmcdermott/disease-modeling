@@ -27,10 +27,11 @@ turtleStrictHill: turtleStrictHill.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 plots: $(agentTarget)
-	time ./$(agentTarget) && R < plotData.R --save --args ${DELTA_T}
+	time ./$(agentTarget) 1 1 && R < plotData.R --save --args ${DELTA_T} && ${OPEN} Rplots.pdf
 
-standard_run: clean clean_plots plots
-	${OPEN} Rplots.pdf
+test_run: clean clean_plots plots
+
+experiment_setup: clean clean_plots agentModelStrictHill
 
 clean_plots:
 	$(RM) Rplots*.* && $(RM) incData.csv
