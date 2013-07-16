@@ -12,10 +12,11 @@ generateIncidence <- function(dataSet) {
   return(frame)
 }
 
+
+
 args <- commandArgs(trailingOnly = T)
-print(args)
 if (length(args) > 0) {
-  dataSet <- read.csv('modelData.csv')
+  firstDataSet <- read.csv('modelDataRun1.csv')
   deltaT  <- as.numeric(args[1])
   print(deltaT)
   if (length(args) > 2) {
@@ -26,10 +27,8 @@ if (length(args) > 0) {
     initialYr <- 2000
     finalYr   <- 2100
   }
-  print(initialYr)
-  print(finalYr)
 } else if (!exists('noImport')) {
-  dataSet   <- read.csv('modelData.csv')
+  firstDataSet   <- read.csv('modelDataRun1.csv')
   deltaT    <- .05
   initialYr <- 2000
   finalYr   <- 2100
@@ -43,7 +42,7 @@ if (Sys.info()['sysname'] == "Linux") {
 }
 
 yrs <- seq(initialYr, finalYr - deltaT, deltaT)
-inc <- generateIncidence(dataSet)
+firstInc <- generateIncidence(firstDataSet)
 #plot incidence data
 #  xlab, ylab  --> labels for x-, y-axes
 #  log='y'     --> use logarithmic scale
@@ -53,11 +52,27 @@ inc <- generateIncidence(dataSet)
 #lines() plots data in the same window as the first plot() command
 
 #Plot:
-yrange <- range(c(0.5,inc$IN1,inc$INall))
+yrange <- range(c(0.5,firstInc$IN1,firstInc$INall))
 dev.new()
-plot( yrs, inc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue',log = 'y')
-lines(yrs, inc$INall, type='l', col='red')
-lines(yrs, inc$IN1,   type='l', col='green')
+plot( yrs, firstInc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue',log = 'y')
+lines(yrs, firstInc$INall, type='l', col='red')
+lines(yrs, firstInc$IN1,   type='l', col='green')
+
+filename <- "modelDataRun"
+runNumber <- 2
+extension <- ".csv"
+fileNameFull <- "modelDataRun2.csv"
+while (file.exists(fileNameFull)) {
+	dataSet <- read.csv(fileNameFull)
+	inc <- generateIncidence(dataSet)
+	lines(yrs, inc$IN0, type='l', col='blue')
+	lines(yrs, inc$INall, type='l', col='red')
+	lines(yrs, inc$IN1, type='l', col='green')
+	
+	runNumber <- runNumber + 1
+	fileNameFull <- paste(filename, as.character(runNumber), extension,sep="")
+    print(fileNameFull)
+}
 
 #Deterministic Data:
 detInc    <- read.csv('detHillData.csv')
