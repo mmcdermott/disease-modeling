@@ -15,6 +15,8 @@ typedef list<turtle> turtleList;
 
 double lambda0;
 double lambda1;
+int numI0inTreatment = 0; // number of USB with active infectious TB (I0) who are currently in treatment
+int numI1inTreatment = 0; // number of FB with active infectious TB (I1) who are currently in treatment
 
 const double discRate = 1.03;
 const double popConst = 100; //For now
@@ -119,13 +121,13 @@ void createInitialTurtles(const turtle::State &turtState, const turtle::COB &cob
   double probTreatment;
   double treatment_length;
   if (turtState == turtle::ACUTE_LTBI) {
-    probTreatment = PROB_ACUTE_LATENT_TREATMENT;
+    probTreatment = PERCENT_INITIAL_LATENT_TREATMENT;//PROB_ACUTE_LATENT_TREATMENT;
     treatment_length = LATENT_TREATMENT_LENGTH;
   } else if (turtState == turtle::CHRONIC_LTBI) {
-    probTreatment = PROB_CHRONIC_LATENT_TREATMENT;//PERCENT_INITIAL_LATENT_TREATMENT;
+    probTreatment = PERCENT_INITIAL_LATENT_TREATMENT;//PROB_CHRONIC_LATENT_TREATMENT;
     treatment_length = LATENT_TREATMENT_LENGTH;
   } else {
-    probTreatment = PROB_ACTIVE_TREATMENT;//PERCENT_INITIAL_ACTIVE_TREATMENT;
+    probTreatment = PERCENT_INITIAL_ACTIVE_TREATMENT;//PROB_ACTIVE_TREATMENT;
     treatment_length = ACTIVE_TREATMENT_LENGTH;
   }
 
@@ -183,17 +185,17 @@ int main()
   N0[0] = initUSP;
   N1[0] = initFBP;
   //Acute (Fast) LTBI, new cases
-  createTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
-  createTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
+  createInitialTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
+  createInitialTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
   //Chronic (Long) LTBI
-  createTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
-  createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
+  createInitialTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
+  createInitialTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
   //Infectious TB
-  createTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0);
-  createTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1);
+  createInitialTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0);
+  createInitialTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1);
   //Non-Infectious TB
-  createTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0);
-  createTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1);
+  createInitialTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0);
+  createInitialTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1);
   //Susceptible
   S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
   S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
@@ -201,6 +203,23 @@ int main()
     cout << "Number of Iterations: " << totT << endl;
   }
   for (int i = 1; i < totT; ++i){
+    // find number of active TB cases in treatment
+    numI0inTreatment = 0;
+    numI1inTreatment = 0;
+    for (turtleList::iterator turtleIter = population.begin();
+        turtleIter != population.end(); ++turtleIter) {
+      turtle &t = *turtleIter;
+      if(t.getState() == turtle::INFECTIOUS_TB && t.getTreatmentTimeLeft() > 0) {
+          if(t.getCountry() == turtle::USA)
+              numI0inTreatment++;
+          else
+              numI1inTreatment++;
+      }
+    }
+    // assume those in treatment are not infectious and thus do not contribute
+    // to the force of infection
+    int numInfI0 = I0[i-1] - numI0inTreatment;
+    int numInfI1 = I1[i-1] - numI1inTreatment;
     //cout<<"\n new round"<<endl;
     //Generating Preferred contact rate based on previous time step
     double c01 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
@@ -208,8 +227,8 @@ int main()
     double c10 = (1-e1)*((1-e0)*N0[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]); 
     double c11 = 1-c10;
     //Generating lambda0 and lambda1 based on previous time step
-    double lambda0 = beta * (c00*I0[i-1]/N0[i-1] + c01*I1[i-1]/N1[i-1]);
-    double lambda1 = beta * (c10*I0[i-1]/N0[i-1] + c11*I1[i-1]/N1[i-1]);
+    double lambda0 = beta * (c00*numInfI0/N0[i-1] + c01*numInfI1/N1[i-1]);
+    double lambda1 = beta * (c10*numInfI0/N0[i-1] + c11*numInfI1/N1[i-1]);
 
     //TODO: Maybe use some kind of exponential, or reed frost, or something?
     double probOfReinfectionUSB = x * p * lambda0 * DELTA_T;
