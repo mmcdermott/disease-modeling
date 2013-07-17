@@ -55,10 +55,11 @@ const double COST_PER_ACTIVE_CURE_NOHOSPITAL  = ACTIVE_TREATMENT_COST_NOHOSPITAL
 const double COST_PER_ACTIVE_CURE_HOSPITAL    = ACTIVE_TREATMENT_COST_HOSPITAL / PROB_ACTIVE_TREATMENT_SUCCESS;
 
 //Latent Treatment constants (needs work)
-const double PERCENT_INITIAL_LATENT_TREATMENT = 0.045;          // proportion of initial latent TB population who start in treatment
 const double PROB_LTBI_TREATMENT_SUCCESS      = 0.6;            // probability that treatment of latent TB is successful
 const double LATENT_TREATMENT_COST            = 500;            // 9 months of isoniazid
-const double LATENT_TREATMENT_LENGTH          = (0.75/DELTA_T); // 9 months, in time steps
+const double COST_PER_LATENT_CURE             = LATENT_TREATMENT_COST / PROB_LTBI_TREATMENT_SUCCESS;
+//const double PERCENT_INITIAL_LATENT_TREATMENT = 0.045;          // proportion of initial latent TB population who start in treatment
+//const double LATENT_TREATMENT_LENGTH          = (0.75/DELTA_T); // 9 months, in time steps
 
 //Declaration
 class turtle{
@@ -89,6 +90,7 @@ private:
   COB country;
   State state;
   double cost;
+  //int treatmentTimeLeft;  //LTBI treatment time remaining, in time steps
 };
 
 extern const char* countryNames[2];

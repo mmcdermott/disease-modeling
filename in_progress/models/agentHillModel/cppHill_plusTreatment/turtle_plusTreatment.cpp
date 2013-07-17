@@ -16,7 +16,7 @@ const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectio
 //Implementation
 //Constructor
 turtle::turtle(const COB &c, const State &s)
-  : country(c), state(s), cost(0)
+  : country(c), state(s), cost(0) //, treatmentTimeLeft(0)
 {}
 
 bool turtle::dead() {
@@ -46,6 +46,7 @@ void turtle::updateState(){
         return;
       } else if (r - PROB_CHRONIC_PROGRESSION_0 < PROB_CHRONIC_LATENT_CURE) {
         state = SUSCEPTIBLE;
+        cost += COST_PER_LATENT_CURE;
         return;
       }
     } else if(state == ACUTE_LTBI){
@@ -58,6 +59,7 @@ void turtle::updateState(){
         return;
       } else if (r - PROB_ACUTE_PROGRESSION < PROB_ACUTE_LATENT_CURE_0) {
         state = SUSCEPTIBLE;
+        cost += COST_PER_LATENT_CURE;
         return;
       }
     } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
@@ -93,6 +95,7 @@ void turtle::updateState(){
         return;
       } else if (r - PROB_CHRONIC_PROGRESSION_1 < PROB_CHRONIC_LATENT_CURE) {
         state = SUSCEPTIBLE;
+        cost += COST_PER_LATENT_CURE;
         return;
       }
     } else if(state == ACUTE_LTBI){
@@ -105,6 +108,7 @@ void turtle::updateState(){
         return;
       } else if (r - PROB_ACUTE_PROGRESSION < PROB_ACUTE_LATENT_CURE_1) {
         state = SUSCEPTIBLE;
+        cost += COST_PER_LATENT_CURE;
         return;
       }
     } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
