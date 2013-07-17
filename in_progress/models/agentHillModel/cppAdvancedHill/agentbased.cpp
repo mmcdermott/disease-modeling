@@ -129,7 +129,6 @@ void createInitialTurtles(const turtle::State &turtState, const turtle::COB &cob
     treatment_length = ACTIVE_TREATMENT_LENGTH;
   }
 
-  int initTreat = 0;
   //int turtPerTS = floor((1.*numTurtles)/treatment_length);
   //for (int i = 0; i < treatment_length; ++i) {
   //  for (int i = 0; i < turtPerTS; ++i) {
@@ -141,6 +140,7 @@ void createInitialTurtles(const turtle::State &turtState, const turtle::COB &cob
   //  }
   //}
   for (int i = 0; i < numTurtles; ++i) {
+    int initTreat = 0;
     double r = (double)rand()/(double)RAND_MAX;
     if(r < probTreatment) {
       initTreat = floor((r/probTreatment) * treatment_length);
