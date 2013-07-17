@@ -26,7 +26,7 @@ nearly 2000 runs of the model with each agent representing 1 true individual,
 and a time constant of 0.05
     * Upcoming: 
         + agentBased.cpp
-            An agent based implementation of the Hill Model [1] in c++, analyzing TB on the population level while assessing intervention cost effectiveness.
+            A more nuanced version of agent based implementation of the Hill Model [1] in c++, analyzing TB on the population level while assessing intervention cost effectiveness.
 2. costBenefitAnalysis/
     * costBenefitAnalysis.R
         An R script to estimate the cost effectiveness of various intervention
