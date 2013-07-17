@@ -16,7 +16,7 @@ generateIncidence <- function(dataSet) {
 
 args <- commandArgs(trailingOnly = T)
 if (length(args) > 0) {
-  firstDataSet <- read.csv('modelDataRun1.csv')
+  firstDataSet <- read.csv('data/modelDataRun1.csv')
   deltaT  <- as.numeric(args[1])
   print(deltaT)
   if (length(args) > 2) {
@@ -28,7 +28,7 @@ if (length(args) > 0) {
     finalYr   <- 2100
   }
 } else if (!exists('noImport')) {
-  firstDataSet   <- read.csv('modelDataRun1.csv')
+  firstDataSet   <- read.csv('data/modelDataRun1.csv')
   deltaT    <- .05
   initialYr <- 2000
   finalYr   <- 2100
@@ -58,10 +58,10 @@ plot( yrs, firstInc$IN0,   main='Incidence over Time', xlab='year', ylab='incide
 lines(yrs, firstInc$INall, type='l', col='red')
 lines(yrs, firstInc$IN1,   type='l', col='green')
 
-filename <- "modelDataRun"
+filename <- "data/modelDataRun"
 runNumber <- 2
 extension <- ".csv"
-fileNameFull <- "modelDataRun2.csv"
+fileNameFull <- "data/modelDataRun2.csv"
 while (file.exists(fileNameFull)) {
 	dataSet <- read.csv(fileNameFull)
 	inc <- generateIncidence(dataSet)
@@ -78,9 +78,9 @@ while (file.exists(fileNameFull)) {
 detInc    <- read.csv('detHillData.csv')
 detDeltaT <- (100/length(detInc$IN0))
 detYrs    <- seq(initialYr, finalYr - detDeltaT, detDeltaT)
-lines(detYrs, detInc$IN0,   type='l', col='#025167')
-lines(detYrs, detInc$IN1,   type='l', col='#739D00')
-lines(detYrs, detInc$INall, type='l', col='#A60000')
+lines(detYrs, detInc$IN0,   type='l', col='#052A6E')
+lines(detYrs, detInc$IN1,   type='l', col='#A6D400')
+lines(detYrs, detInc$INall, type='l', col='#00782D')
 
 abline(h = 1, lty = 'dotted')
 legend('topright', legend=c('USB incidence','FB incidence','Total incidence'), col=c('blue', 'green', 'red'), lty=c(1,1,1))
