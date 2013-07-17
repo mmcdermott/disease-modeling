@@ -146,6 +146,13 @@ void createInitialTurtles(const turtle::State &turtState, const turtle::COB &cob
     double r = (double)rand()/(double)RAND_MAX;
     if(r < probTreatment) {
       initTreat = floor((r/probTreatment) * treatment_length);
+      // keep track of infectious turtles in treatment
+      if(turtState == turtle::INFECTIOUS_TB) {
+          if(cob == turtle::USA)
+              numI0inTreatment++;
+          else
+              numI1inTreatment++;
+      }
     }
     population.push_front(turtle(cob, turtState, initTreat)); 
   }
@@ -203,19 +210,6 @@ int main()
     cout << "Number of Iterations: " << totT << endl;
   }
   for (int i = 1; i < totT; ++i){
-    // find number of active TB cases in treatment
-    numI0inTreatment = 0;
-    numI1inTreatment = 0;
-    for (turtleList::iterator turtleIter = population.begin();
-        turtleIter != population.end(); ++turtleIter) {
-      turtle &t = *turtleIter;
-      if(t.getState() == turtle::INFECTIOUS_TB && t.getTreatmentTimeLeft() > 0) {
-          if(t.getCountry() == turtle::USA)
-              numI0inTreatment++;
-          else
-              numI1inTreatment++;
-      }
-    }
     // assume those in treatment are not infectious and thus do not contribute
     // to the force of infection
     int numInfI0 = I0[i-1] - numI0inTreatment;
@@ -242,6 +236,8 @@ int main()
       cout << "Population Size " << N0[i-1] + N1[i-1] << endl;
     }
 
+    numI0inTreatment = 0;
+    numI1inTreatment = 0;
 		for (turtleList::iterator turtleIter = population.begin(); 
 			turtleIter != population.end(); ++turtleIter)
 		{
@@ -273,6 +269,14 @@ int main()
         if (t.getState() == turtle::SUSCEPTIBLE) {
           turtleList::iterator newIter = population.erase(turtleIter);
           turtleIter = --newIter;
+        }
+
+        //Keep track of infectious turtles in treatment
+        if (t.getState() == turtle::INFECTIOUS_TB && t.getTreatmentTimeLeft() > 0) {
+            if(t.getCountry() == turtle::USA)
+                numI0inTreatment++;
+            else
+                numI1inTreatment++;
         }
       }
     }
