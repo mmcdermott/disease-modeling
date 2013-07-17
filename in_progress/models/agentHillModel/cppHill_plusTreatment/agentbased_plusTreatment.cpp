@@ -282,8 +282,8 @@ int run(string rfname)
 
 int main(int argc, char const *argv[])
 {
-  int numruns = 54; //number of runs performed
-  int runnumber = atoi(argv[1]); // takes in the number of the run happening
+  int numruns = 1;//54; //number of runs performed
+  int runnumber = ((argc > 1) ? atoi(argv[1]) : 1); // takes in the number of the run happening
   int adjustedi;
   string filename;
 
