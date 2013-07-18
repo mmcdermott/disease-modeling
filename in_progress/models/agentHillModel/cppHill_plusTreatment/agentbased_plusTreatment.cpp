@@ -59,6 +59,12 @@ double activeCost[totT];  //cost of active TB treatments
 double latentCost[totT];  //cost of latent TB treatments
 double totalCost[totT];   //total cost of all TB treatments
 
+int numNaturalDeaths[totT];          //number of natural deaths
+int numTBDeaths[totT];               //number of TB deaths
+int numAcuteProgressions[totT];      //number of active TB progressions from acute LTBI
+int numChronicProgressions[totT];    //number of active TB progressions from chronic LTBI
+//int numExogeneousReinfections[totT]; //number of exogeneous reinfections
+
 /* 
  * void updatePop(...)
  *
@@ -132,11 +138,15 @@ void exportData(string fname) {
   ofstream output;
   output.open(fname);
   output << "\"N0\",\"S0\",\"L0\",\"F0\",\"I0\",\"J0\",";
-  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"J1\",\"cost\"" << endl;
+  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"J1\",";
+  output << "\"latCost\",\"actCost\",\"totCost\",";
+  output << "\"numNatDeath\",\"numTBDeath\",\"numAcuteProg\",\"numChronProg\"" << endl;
+  
   for (int i=0; i < totT; ++i) {
     output << N0[i] << "," << S0[i] << "," << L0[i] << "," << F0[i] << "," << I0[i] << "," << J0[i] << ",";
     output << N1[i] << "," << S1[i] << "," << L1[i] << "," << F1[i] << "," << I1[i] << "," << J1[i] << ",";
-    output << totalCost[i] << endl;
+    output << activeCost[i] << "," << latentCost[i] << "," << totalCost[i] << ",";
+    output << numNaturalDeaths[i] << "," << numTBDeaths[i] << "," << numAcuteProgressions[i] << "," << numChronicProgressions[i] << endl;
   }
   output.close();
 }
@@ -147,6 +157,7 @@ int run(string rfname)
   default_random_engine generator (seed);
   srand(time(NULL));
   double newCost = 0;
+  turtle::State prevState, nextState;
 
   N0[0] = initUSP;
   N1[0] = initFBP;
@@ -193,9 +204,25 @@ int run(string rfname)
          turtleIter != population.end(); ++turtleIter){
       turtle &t = *turtleIter;
 
+      prevState = t.getState();
       //Update the turtle's state
       t.updateState();
-      
+      nextState = t.getState();
+      if(nextState != prevState) {
+        // Natural deaths, TB deaths, Progressions
+        if(nextState == turtle::NATURAL_DEATH) {
+          numNaturalDeaths[i]++;
+        } else if (nextState == turtle::TB_DEATH) {
+          numTBDeaths[i]++;
+        } else if ((prevState == turtle::ACUTE_LTBI) &&
+                  ((nextState == turtle::INFECTIOUS_TB) || (nextState == turtle::NONINFECTIOUS_TB))) {
+          numAcuteProgressions[i]++;
+        } else if ((prevState == turtle::CHRONIC_LTBI) &&
+                  ((nextState == turtle::INFECTIOUS_TB) || (nextState == turtle::NONINFECTIOUS_TB))) {
+          numChronicProgressions[i]++;
+        }
+      }
+
       //Update cost arrays
       newCost  = t.getCost();  //returns and resets turtle cost
       if(newCost >= ACTIVE_TREATMENT_COST_NOHOSPITAL)
@@ -308,6 +335,13 @@ int main(int argc, char const *argv[])
       F1[j] = 0;
       I1[j] = 0;
       J1[j] = 0;
+      activeCost[j] = 0;
+      latentCost[j] = 0;
+      totalCost[j] = 0;
+      numNaturalDeaths[j] = 0;
+      numTBDeaths[j] = 0;
+      numAcuteProgressions[j] = 0;
+      numChronicProgressions[j] = 0;
     }
   }
   return 0;
