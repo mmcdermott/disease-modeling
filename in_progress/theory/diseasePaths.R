@@ -37,7 +37,10 @@ f3 <- function(i) { return (1 + 35/6*i + 2*i^2 + 1/6*i^3) }
 f4 <- function(i) { return (1 + 175/12*i + 155/24*i^2 + 11/12*i^3 + 1/24*i^4) }
 f5 <- function(i) { return (1 + 2387/60*i + 485/24*i^2 + 89/24*i^3 + 7/24*i^4 + 1/120*i^5) }
 f6 <- function(i) { return (1 + 7007/60*i + 2884/45*i^2 + 655/48*i^3 + 203/144*i^4 + 17/240*i^5 + 1/720*i^6) }
-f7 <- function(i) { return(1 + 152009/420*i + 3745/18*i^2 + 35047/720*i^3 + 427/72*i^4 + 143/360*i^5 + 1/72*i^6 + 1/5040*i^7) }
+f7 <- function(i) { return (1 + 152009/420*i + 3745/18*i^2 + 35047/720*i^3 + 427/72*i^4 + 143/360*i^5 + 1/72*i^6 + 1/5040*i^7) }
+
+catalan <- function(n) { return(choose(2*n,n)/(n+1)) }
+s1 <- function(i) { cumsum(catalan(i)) }
 
 # Some of these have nice factorizations ... but there's no real pattern
 #f2 <- function(i) { return (1/2*i*(i+5)+1) }
@@ -48,8 +51,10 @@ f7 <- function(i) { return(1 + 152009/420*i + 3745/18*i^2 + 35047/720*i^3 + 427/
 #Output
 cat('\n\nRows-1 are # of susceptibles\nColumns-1 are # of infecteds\n\n')
 #write.csv(numPaths,'dPaths.csv')
-print(numPaths)
-#print(numPaths[,2])
+#print(numPaths)
+print(numPaths[,2])
+print(s1(0:(N-1)))
+
 
 # Verifying that the polynomial expansions are correct
 #f1(0:(N-1))
