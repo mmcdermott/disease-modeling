@@ -20,7 +20,7 @@ double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 1; //For now
+const double popConst = 100; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
@@ -280,7 +280,7 @@ int main(int argc, char const *argv[])
     stringstream sstm;
     filename = "";
     adjustedi = i + (numruns*(runnumber-1));
-    sstm << "modelDataRun" << adjustedi << ".csv";
+    sstm << "data/modelDataRun" << adjustedi << ".csv";
     filename = sstm.str();
     run(filename);
     population.clear();

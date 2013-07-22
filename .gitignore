@@ -24,6 +24,7 @@
 
 # Specific Files
 agentModel
+agentModelStrictHill
 incData.csv
 modelData.csv
 

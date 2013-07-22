@@ -70,6 +70,11 @@ while (file.exists(fileNameFull)) {
 	lines(yrs, inc$IN1, type='l', col='green')
 	
 	runNumber <- runNumber + 1
+        if (runNumber == 734) {
+		runNumber <- 757
+	} else if (runNumber == 1047) {
+		runNumber <- 1081
+	}
 	fileNameFull <- paste(filename, as.character(runNumber), extension,sep="")
     print(fileNameFull)
 }
