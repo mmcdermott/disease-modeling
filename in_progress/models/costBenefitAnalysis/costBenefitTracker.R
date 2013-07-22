@@ -121,14 +121,14 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
     c00     <- 1 - c01
     c10     <- (1-e1)*((1-e0)*v$N0)/((1-e0)*v$N0 + (1-e1)*v$N1)
     c11     <- 1 - c10
-    dnatdeath0   <- mu0 * v$N0
-    dnatdeath1   <- mu1 * v$N1
-    dtbdeath0    <- mud * (v$I0 + v$J0)
-    dtbdeath1    <- mud * (v$I1 + v$J1)
+    dnatdeath0   <- mu0 * v$N0          #Natural deaths each time step (USB)
+    dnatdeath1   <- mu1 * v$N1          #Natural deaths each time step (FB)
+    dtbdeath0    <- mud * (v$I0 + v$J0) #TB deaths each time step (USB)
+    dtbdeath1    <- mud * (v$I1 + v$J1) #TB deaths each time step (FB)
     dprogAcute0  <- vF*v$F0
-    dactivation0 <- vL0*v$L0
+    dprogChron0  <- vL0*v$L0
     dprogAcute1  <- vF*v$F1
-    dactivation1 <- vL1*v$L1    
+    dprogChron1  <- vL1*v$L1    
     lambda0      <- transmission*(beta*(c00*(v$I0/v$N0) + c01*(v$I1/v$N1)))
     lambda1      <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))
     dexogenous0	 <- x*p*lambda0*v$L0
@@ -136,30 +136,30 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
     dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
     dF0     <- p*lambda0*v$S0 + dexogenous0 - (mu0 + vF + sigmaF0)*v$F0
     dL0     <- (1-p)*lambda0*v$S0 - dexogenous0 - (mu0 + vL0 + sigmaL)*v$L0
-    dI0     <- q*(dprogAcute0 + dactivation0) - (mu0 + mud + phi0)*v$I0
-    dJ0     <- (1-q)*(dprogAcute0 + dactivation0) - (mu0 + mud + phi0)*v$J0
+    dI0     <- q*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*v$I0
+    dJ0     <- (1-q)*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*v$J0
     dS1     <- (1-incLTBI)*dLTBIEn+(1-f)*alpha*(v$N0+v$N1) + sigmaF1*v$F1 + sigmaL*v$L1 + phi1*(v$I1 + v$J1) - lambda1*v$S1 - mu1*v$S1
     dF1     <- g*p*dLTBIEn*incLTBI + p*lambda1*v$S1 + dexogenous1 - (mu1 + vF + sigmaF1)*v$F1
     dL1     <- (1-g*p)*dLTBIEn*incLTBI + (1-p)*lambda1*v$S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*v$L1
-    dI1     <- q*(dprogAcute1 + dactivation1) - (mu1 + mud + phi1)*v$I1
-    dJ1     <- (1-q)*(dprogAcute1 + dactivation1) - (mu1 + mud + phi1)*v$J1
+    dI1     <- q*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$I1
+    dJ1     <- (1-q)*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$J1
     dN0     <- 0
     dN1     <- 0
     dcL0    <- v$Cl * sigmaL  * 1e6 * v$L0
     dcF0    <- v$Cl * sigmaF0 * 1e6 * v$F0
-    dcI0    <- v$Ct * q*(dprogAcute0 + dactivation0) * 1e6
-    dcJ0    <- v$Ct * (1-q)*(dprogAcute0 + dactivation0) * 1e6
+    dcI0    <- v$Ct * q*(dprogAcute0 + dprogChron0) * 1e6
+    dcJ0    <- v$Ct * (1-q)*(dprogAcute0 + dprogChron0) * 1e6
     dcL1    <- v$Cl * sigmaL  * 1e6 * v$L1
     dcF1    <- v$Cl * sigmaF1 * 1e6 * v$F1
-    dcI1    <- v$Ct * q*(dprogAcute1 + dactivation1) * 1e6
-    dcJ1    <- v$Ct * (1-q)*(dprogAcute1 + dactivation1) * 1e6
+    dcI1    <- v$Ct * q*(dprogAcute1 + dprogChron1) * 1e6
+    dcJ1    <- v$Ct * (1-q)*(dprogAcute1 + dprogChron1) * 1e6
     dcN0    <- 0
     dcN1    <- 0
     dCt     <- v$Ct * (-log(1+discRt))
     dCl     <- v$Cl * (-log(1+discRt))
     dPt     <- 0
     dPl     <- 0
-    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dCt,dCl,dPt,dPl,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dprogAcute0,dactivation0,dprogAcute1,dactivation1,dexogenous0,dexogenous1) )
+    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dCt,dCl,dPt,dPl,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dexogenous0,dexogenous1) )
   }
   
   for (i in initial:(final-1)) {
@@ -193,7 +193,7 @@ years   <- seq(2000+deltaT,2000+finalYr,deltaT)
 #  col="blue"  --> color of graph
 #lines() plots data in the same window as the first plot() command
 
-#Plot A: Where we eliminate incoming LTBI 100%, 70%, or 50%
+#Plot A: Where we eliminate incoming LTBI 100%, 75%, or 50%
 noImmLTBI      <- hill(sigmaLBase,fBase,1,0)
 noImmLTBIInc   <- generateIncidence(noImmLTBI)
 someImmLTBI    <- hill(sigmaLBase,fBase,1,0.25)
@@ -242,6 +242,7 @@ maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[(cutoffYr+1):to
 savingsPerCase  <- maxDifference/(1e6*P$LTBIEn[(cutoffYr+1):totT])
 dev.new()
 plot(yearsPostCutoff, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
+
 
 
 ##Plot A: Where Transmission is cut after 2008
