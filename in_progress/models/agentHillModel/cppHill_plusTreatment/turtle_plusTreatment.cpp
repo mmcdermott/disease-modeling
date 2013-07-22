@@ -17,7 +17,16 @@ const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectio
 //Constructor
 turtle::turtle(const COB &c, const State &s)
   : country(c), state(s), cost(0) //, treatmentTimeLeft(0)
-{}
+{
+  if (state == INFECTIOUS_TB || state == NONINFECTIOUS_TB) {
+    double r = (double)rand()/RAND_MAX;
+    if (r < PROB_HOSPITAL) {
+      cost = ACTIVE_TREATMENT_COST_HOSPITAL;
+    } else {
+      cost = ACTIVE_TREATMENT_COST_NOHOSPITAL;
+    }
+  }
+}
 
 bool turtle::dead() {
   return (state == NATURAL_DEATH || state == TB_DEATH);
@@ -38,6 +47,11 @@ void turtle::updateState(){
     //Disease progression and self-cure
     if (state == CHRONIC_LTBI) {
       if (r < PROB_CHRONIC_PROGRESSION_0) {  //Disease progression from Chronic Latent to Active TB (USB)
+        if(r < PROB_HOSPITAL*PROB_CHRONIC_PROGRESSION_0) {
+          cost += COST_PER_ACTIVE_CURE_HOSPITAL;
+        } else {
+          cost += COST_PER_ACTIVE_CURE_NOHOSPITAL;
+        }
         if (r < q*PROB_CHRONIC_PROGRESSION_0) {
           state = INFECTIOUS_TB;
         } else {
@@ -51,6 +65,11 @@ void turtle::updateState(){
       }
     } else if(state == ACUTE_LTBI){
       if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
+        if(r < PROB_HOSPITAL*PROB_ACUTE_PROGRESSION) {
+          cost += COST_PER_ACTIVE_CURE_HOSPITAL;
+        } else {
+          cost += COST_PER_ACTIVE_CURE_NOHOSPITAL;
+        }
         if(r < q*PROB_ACUTE_PROGRESSION) {
           state = INFECTIOUS_TB;
         } else {
@@ -69,10 +88,6 @@ void turtle::updateState(){
         state = TB_DEATH;  //Mortality rate for TB
       } else if (r - MUD < PROB_ACTIVE_CURE_0) {
         state = SUSCEPTIBLE;  //Self-cure rate
-        if(r - MUD < PROB_HOSPITAL*PROB_ACTIVE_CURE_0)
-          cost += COST_PER_ACTIVE_CURE_HOSPITAL;
-        else
-          cost += COST_PER_ACTIVE_CURE_NOHOSPITAL;
       }
       return;
     }
@@ -118,10 +133,6 @@ void turtle::updateState(){
         state = TB_DEATH;  //Mortality rate for TB
       } else if (r - MUD < PROB_ACTIVE_CURE_1) {
         state = SUSCEPTIBLE;  //Self-cure rate
-        if(r - MUD < PROB_HOSPITAL*PROB_ACTIVE_CURE_1)
-          cost += COST_PER_ACTIVE_CURE_HOSPITAL;
-        else
-          cost += COST_PER_ACTIVE_CURE_NOHOSPITAL;
       }
       return;
     }
