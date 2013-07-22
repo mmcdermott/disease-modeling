@@ -32,14 +32,12 @@ beta  <- 10.39     #Effective contact rate per year
 e0    <- 0.965     #Fraction of preferred contacts with own population for USB
 e1    <-0.985      #Fraction of preferred contacts with own population for FB
 g     <- 0.0047    #Fraction of FB arrivals with LTBI who are fast progressors
-                   #Cumulative fraction self-cure and treatment of active disease for both populations: 0.897
-phi0 <- 1.114#/1.25    #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (USB)
-phi1 <- 1.167#/1.25    #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (FB)
-                  #Cumulative fraction of treatment for acute infection for both populations: 0.461
-sigmaF0 <- 1.296  #Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
-sigmaF1 <- 1.301  #Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
-sigmaLBase <- 0.057   #Treatment rate for chronic LTBI per year
-fBase <- 0.187        #Fraction of FB arrivals with LTBI
+phi0  <- 1.114     #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (USB)
+phi1  <- 1.167     #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (FB)
+sigmaF0 <- 1.296   #Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
+sigmaF1 <- 1.301   #Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
+sigmaLBase <- 0.057 #Treatment rate for chronic LTBI per year
+fBase <- 0.187      #Fraction of FB arrivals with LTBI
 
 
 #2010 New Cases in Population i (millions)
@@ -48,22 +46,22 @@ newCases0 <- .008714  #US-born
 newCases1 <- .007554  #Foreign-born
 
 #Initial Values
-  
 deltaT   <- .8    #The length of each time step (years).
 finalYr  <- 100   #In years
 totT     <- floor(finalYr/deltaT)  #Time steps
 cutoffYr <- floor(8/deltaT)
-#TBcostRt <- Ct*deltaT
-#LTBIctRt <- Cl*deltaT
 
 #Matrix of compartment values
-S0 <- S1 <- F0 <- F1 <- L0 <- L1 <- I0 <- I1 <- J0 <- J1 <- N0 <- N1 <- rep(0,totT)
-cL0 <- cF0 <- cI0 <- cJ0 <- cL1 <- cF1 <- cI1 <- cJ1 <- cN0 <- cN1 <- rep(0,totT)
-Ct <- Cl <- rep(0,totT)
-LTBIEn <- rep(0,totT)
-natdeath0 <- natdeath1 <- tbdeath0 <- tbdeath1 <- progAcute0 <- activation0 <- progAcute1 <- activation1 <- exogenous0 <- exogenous1 <- rep(0,totT)
+S0 <- S1 <- F0 <- F1 <- L0 <- L1 <- I0 <- I1 <- J0 <- J1 <- N0 <- N1 <- rep(0,totT)  #compartment values
+cL0 <- cF0 <- cI0 <- cJ0 <- cL1 <- cF1 <- cI1 <- cJ1 <- cN0 <- cN1 <- rep(0,totT)    #costs associated with each compartment
+Ct <- Cl <- rep(0,totT)  #total costs for active and latent treatment
+LTBIEn <- rep(0,totT)    #FB arrivals with LTBI entering the USA
+natdeath0 <- natdeath1 <- rep(0,totT)                               #natural deaths
+tbdeath0 <- tbdeath1 <- tbdeathD0 <- tbdeathD1 <- rep(0,totT)       #TB deaths, TB deaths with discounting
+progAcute0 <- progChron0 <- progAcute1 <- progChron1 <- rep(0,totT) #Progression from Acute, Chronic LTBI to Active TB
+exogenous0 <- exogenous1 <- rep(0,totT)                             #Exogenous re-Infections
 
-P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1,Ct,Cl,LTBIEn,natdeath0,natdeath1,tbdeath0,tbdeath1,progAcute0,activation0,progAcute1,activation1,exogenous0,exogenous1)
+P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1,Ct,Cl,LTBIEn,natdeath0,natdeath1,tbdeath0,tbdeath1,tbdeathD0,tbdeathD1,progAcute0,progChron0,progAcute1,progChron1,exogenous0,exogenous1)
 #C <- data.frame(cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1)
 IN0 <- IN1 <- INall <- rep(0,totT)
 
@@ -106,9 +104,9 @@ P$natdeath1[1]   <- 0
 P$tbdeath0[1]    <- 0
 P$tbdeath1[1]    <- 0
 P$progAcute0[1]  <- 0
-P$activation0[1] <- 0
+P$progChron0[1]  <- 0
 P$progAcute1[1]  <- 0
-P$activation1[1] <- 0
+P$progChron1[1]  <- 0
 P$exogenous0[1]  <- 0
 P$exogenous1[1]  <- 0
 
@@ -133,20 +131,25 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
     lambda1      <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))  #Forces of Infection (FB)
     dexogenous0	 <- x*p*lambda0*v$L0    #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
     dexogenous1  <- x*p*lambda1*v$L1    #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
+    
     #Difference Equations (USB)
     dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
     dF0     <- p*lambda0*v$S0 + dexogenous0 - (mu0 + vF + sigmaF0)*v$F0
     dL0     <- (1-p)*lambda0*v$S0 - dexogenous0 - (mu0 + vL0 + sigmaL)*v$L0
     dI0     <- q*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*v$I0
     dJ0     <- (1-q)*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*v$J0
+    
     #Difference Equations (FB)
     dS1     <- (1-incLTBI)*dLTBIEn+(1-f)*alpha*(v$N0+v$N1) + sigmaF1*v$F1 + sigmaL*v$L1 + phi1*(v$I1 + v$J1) - lambda1*v$S1 - mu1*v$S1
     dF1     <- g*p*dLTBIEn*incLTBI + p*lambda1*v$S1 + dexogenous1 - (mu1 + vF + sigmaF1)*v$F1
     dL1     <- (1-g*p)*dLTBIEn*incLTBI + (1-p)*lambda1*v$S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*v$L1
     dI1     <- q*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$I1
     dJ1     <- (1-q)*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$J1
+    
     dN0     <- 0
     dN1     <- 0
+    
+    #Cost calculations
     dcL0    <- v$Cl * sigmaL  * 1e6 * v$L0                    #cost for Chronic LTBI cures      (USB)
     dcF0    <- v$Cl * sigmaF0 * 1e6 * v$F0                    #cost for Acute LTBI cures        (USB)
     dcI0    <- v$Ct * q*(dprogAcute0 + dprogChron0) * 1e6     #cost for Infectious TB cures     (USB)
@@ -159,6 +162,7 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
     dcN1    <- 0  #Total cost for all treatments (FB)
     dCt     <- v$Ct * (-log(1+discRt)) #Discount cost for LTBI treatment each time step
     dCl     <- v$Cl * (-log(1+discRt)) #Discount cost for Active TB treatment each time step
+    
     return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dCt,dCl,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dexogenous0,dexogenous1) )
   }
   
@@ -168,8 +172,6 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
   	dataSet$N1[i+1]  <- sum(dataSet[i+1,6:10])
   	dataSet$cN0[i+1] <- sum(dataSet[i+1,13:16])
   	dataSet$cN1[i+1] <- sum(dataSet[i+1,17:20])
-    #dataSet$Ct[i+1]  <- dataSet$Ct[i]/((1+discRt)^deltaT)
-    #dataSet$Cl[i+1]  <- dataSet$Cl[i]/((1+discRt)^deltaT)
   }
   return(dataSet)
 }
