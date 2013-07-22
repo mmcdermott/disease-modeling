@@ -59,11 +59,11 @@ cutoffYr <- floor(8/deltaT)
 #Matrix of compartment values
 S0 <- S1 <- F0 <- F1 <- L0 <- L1 <- I0 <- I1 <- J0 <- J1 <- N0 <- N1 <- rep(0,totT)
 cL0 <- cF0 <- cI0 <- cJ0 <- cL1 <- cF1 <- cI1 <- cJ1 <- cN0 <- cN1 <- rep(0,totT)
-Ct <- Cl <- Pt <- Pl <- rep(0,totT)
+Ct <- Cl <- rep(0,totT)
 LTBIEn <- rep(0,totT)
 natdeath0 <- natdeath1 <- tbdeath0 <- tbdeath1 <- progAcute0 <- activation0 <- progAcute1 <- activation1 <- exogenous0 <- exogenous1 <- rep(0,totT)
 
-P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1,Ct,Cl,Pt,Pl,LTBIEn,natdeath0,natdeath1,tbdeath0,tbdeath1,progAcute0,activation0,progAcute1,activation1,exogenous0,exogenous1)
+P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1,Ct,Cl,LTBIEn,natdeath0,natdeath1,tbdeath0,tbdeath1,progAcute0,activation0,progAcute1,activation1,exogenous0,exogenous1)
 #C <- data.frame(cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1)
 IN0 <- IN1 <- INall <- rep(0,totT)
 
@@ -155,13 +155,11 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
     dcF1    <- v$Cl * sigmaF1 * 1e6 * v$F1                    #cost for Acute LTBI cures        (FB)
     dcI1    <- v$Ct * q*(dprogAcute1 + dprogChron1) * 1e6     #cost for Infectious TB cures     (FB)
     dcJ1    <- v$Ct * (1-q)*(dprogAcute1 + dprogChron1) * 1e6 #cost for Non-Infectious TB cures (FB)
-    dcN0    <- 0
-    dcN1    <- 0
+    dcN0    <- 0  #Total cost for all treatments (USB)
+    dcN1    <- 0  #Total cost for all treatments (FB)
     dCt     <- v$Ct * (-log(1+discRt)) #Discount cost for LTBI treatment each time step
     dCl     <- v$Cl * (-log(1+discRt)) #Discount cost for Active TB treatment each time step
-    dPt     <- 0
-    dPl     <- 0
-    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dCt,dCl,dPt,dPl,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dexogenous0,dexogenous1) )
+    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dCt,dCl,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dexogenous0,dexogenous1) )
   }
   
   for (i in initial:(final-1)) {
