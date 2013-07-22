@@ -133,18 +133,18 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
     lambda1      <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))
     dexogenous0	 <- x*p*lambda0*v$L0
     dexogenous1  <- x*p*lambda1*v$L1
-	dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
-	dF0     <- p*lambda0*v$S0 + dexogenous0 - (mu0 + vF + sigmaF0)*v$F0
-	dL0     <- (1-p)*lambda0*v$S0 - dexogenous0 - (mu0 + vL0 + sigmaL)*v$L0
-	dI0     <- q*(dprogAcute0 + dactivation0) - (mu0 + mud + phi0)*v$I0
-	dJ0     <- (1-q)*(dprogAcute0 + dactivation0) - (mu0 + mud + phi0)*v$J0
-	dS1     <- (1-incLTBI)*dLTBIEn+(1-f)*alpha*(v$N0+v$N1) + sigmaF1*v$F1 + sigmaL*v$L1 + phi1*(v$I1 + v$J1) - lambda1*v$S1 - mu1*v$S1
-	dF1     <- g*p*dLTBIEn*incLTBI + p*lambda1*v$S1 + dexogenous1 - (mu1 + vF + sigmaF1)*v$F1
-	dL1     <- (1-g*p)*dLTBIEn*incLTBI + (1-p)*lambda1*v$S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*v$L1
-	dI1     <- q*(dprogAcute1 + dactivation1) - (mu1 + mud + phi1)*v$I1
-	dJ1     <- (1-q)*(dprogAcute1 + dactivation1) - (mu1 + mud + phi1)*v$J1
-	dN0     <- 0
-	dN1     <- 0
+    dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
+    dF0     <- p*lambda0*v$S0 + dexogenous0 - (mu0 + vF + sigmaF0)*v$F0
+    dL0     <- (1-p)*lambda0*v$S0 - dexogenous0 - (mu0 + vL0 + sigmaL)*v$L0
+    dI0     <- q*(dprogAcute0 + dactivation0) - (mu0 + mud + phi0)*v$I0
+    dJ0     <- (1-q)*(dprogAcute0 + dactivation0) - (mu0 + mud + phi0)*v$J0
+    dS1     <- (1-incLTBI)*dLTBIEn+(1-f)*alpha*(v$N0+v$N1) + sigmaF1*v$F1 + sigmaL*v$L1 + phi1*(v$I1 + v$J1) - lambda1*v$S1 - mu1*v$S1
+    dF1     <- g*p*dLTBIEn*incLTBI + p*lambda1*v$S1 + dexogenous1 - (mu1 + vF + sigmaF1)*v$F1
+    dL1     <- (1-g*p)*dLTBIEn*incLTBI + (1-p)*lambda1*v$S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*v$L1
+    dI1     <- q*(dprogAcute1 + dactivation1) - (mu1 + mud + phi1)*v$I1
+    dJ1     <- (1-q)*(dprogAcute1 + dactivation1) - (mu1 + mud + phi1)*v$J1
+    dN0     <- 0
+    dN1     <- 0
     dcL0    <- v$Cl * sigmaL  * 1e6 * v$L0
     dcF0    <- v$Cl * sigmaF0 * 1e6 * v$F0
     dcI0    <- v$Ct * q*(dprogAcute0 + dactivation0) * 1e6
@@ -155,8 +155,8 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
     dcJ1    <- v$Ct * (1-q)*(dprogAcute1 + dactivation1) * 1e6
     dcN0    <- 0
     dcN1    <- 0
-    dCt     <- 0#v$Ct * (-log(1+discRt))
-    dCl     <- 0#v$Cl * (-log(1+discRt))
+    dCt     <- v$Ct * (-log(1+discRt))
+    dCl     <- v$Cl * (-log(1+discRt))
     dPt     <- 0
     dPl     <- 0
     return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dCt,dCl,dPt,dPl,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dprogAcute0,dactivation0,dprogAcute1,dactivation1,dexogenous0,dexogenous1) )
@@ -168,17 +168,9 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
   	dataSet$N1[i+1]  <- sum(dataSet[i+1,6:10])
   	dataSet$cN0[i+1] <- sum(dataSet[i+1,13:16])
   	dataSet$cN1[i+1] <- sum(dataSet[i+1,17:20])
-    dataSet$Ct[i+1]  <- dataSet$Ct[i]/((1+discRt)^deltaT)
-    dataSet$Cl[i+1]  <- dataSet$Cl[i]/((1+discRt)^deltaT)
+    #dataSet$Ct[i+1]  <- dataSet$Ct[i]/((1+discRt)^deltaT)
+    #dataSet$Cl[i+1]  <- dataSet$Cl[i]/((1+discRt)^deltaT)
   }
-  #costDataSet$L0 <- dataSet$L0*LTBIctRt
-  #costDataSet$F0 <- dataSet$F0*LTBIctRt
-  #costDataSet$L1 <- dataSet$L1*LTBIctRt
-  #costDataSet$F1 <- dataSet$F1*LTBIctRt
-  #costDataSet$I0 <- dataSet$I0*TBcostRt
-  #costDataSet$J0 <- dataSet$J0*TBcostRt
-  #costDataSet$I1 <- dataSet$I1*TBcostRt
-  #costDataSet$J1 <- dataSet$J1*TBcostRt
   return(dataSet)
 }
 
