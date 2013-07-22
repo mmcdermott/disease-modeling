@@ -112,32 +112,34 @@ P$activation1[1] <- 0
 P$exogenous0[1]  <- 0
 P$exogenous1[1]  <- 0
 
-#TODO: If only incidence data is needed, omit the dataSet parameter and just use P as a global. It will likely save memory. If all data is needed, this approach is probably good. 
 hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,dataSet=P){#,costDataSet=C){
   #Differential Equation Functions
   Ddt <- function(t,v) {
-    dLTBIEn <- f*alpha*(v$N0+v$N1)
-    c01     <- (1-e0)*((1-e1)*v$N1)/((1-e0)*v$N0 + (1-e1)*v$N1)
-    c00     <- 1 - c01
-    c10     <- (1-e1)*((1-e0)*v$N0)/((1-e0)*v$N0 + (1-e1)*v$N1)
-    c11     <- 1 - c10
-    dnatdeath0   <- mu0 * v$N0          #Natural deaths each time step (USB)
-    dnatdeath1   <- mu1 * v$N1          #Natural deaths each time step (FB)
-    dtbdeath0    <- mud * (v$I0 + v$J0) #TB deaths each time step (USB)
-    dtbdeath1    <- mud * (v$I1 + v$J1) #TB deaths each time step (FB)
-    dprogAcute0  <- vF*v$F0
-    dprogChron0  <- vL0*v$L0
-    dprogAcute1  <- vF*v$F1
-    dprogChron1  <- vL1*v$L1    
-    lambda0      <- transmission*(beta*(c00*(v$I0/v$N0) + c01*(v$I1/v$N1)))
-    lambda1      <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))
-    dexogenous0	 <- x*p*lambda0*v$L0
-    dexogenous1  <- x*p*lambda1*v$L1
+    #parameter values initialized for each time step
+    c01     <- (1-e0)*((1-e1)*v$N1)/((1-e0)*v$N0 + (1-e1)*v$N1)  #proportion of contacts made with FB individuals  (USB)
+    c00     <- 1 - c01                                           #proportion of contacts made with USB individuals (USB)
+    c10     <- (1-e1)*((1-e0)*v$N0)/((1-e0)*v$N0 + (1-e1)*v$N1)  #proportion of contacts made with USB individuals (FB)
+    c11     <- 1 - c10                                           #proportion of contacts made with FB individuals  (FB)
+    dLTBIEn      <- f*alpha*(v$N0+v$N1) #FB arrivals with LTBI entering
+    dnatdeath0   <- mu0 * v$N0          #Natural deaths (USB)
+    dnatdeath1   <- mu1 * v$N1          #Natural deaths (FB)
+    dtbdeath0    <- mud * (v$I0 + v$J0) #TB deaths (USB)
+    dtbdeath1    <- mud * (v$I1 + v$J1) #TB deaths (FB)
+    dprogAcute0  <- vF*v$F0             #Acute LTBI progressions to Active TB disease (USB)
+    dprogAcute1  <- vF*v$F1             #Acute LTBI progressions to Active TB disease (FB)
+    dprogChron0  <- vL0*v$L0            #Chronic LTBI progressions to Active TB disease (USB)
+    dprogChron1  <- vL1*v$L1            #Chronic LTBI progressions to Active TB disease (FB)
+    lambda0      <- transmission*(beta*(c00*(v$I0/v$N0) + c01*(v$I1/v$N1)))  #Forces of Infection (USB)
+    lambda1      <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))  #Forces of Infection (FB)
+    dexogenous0	 <- x*p*lambda0*v$L0    #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
+    dexogenous1  <- x*p*lambda1*v$L1    #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
+    #Difference Equations (USB)
     dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
     dF0     <- p*lambda0*v$S0 + dexogenous0 - (mu0 + vF + sigmaF0)*v$F0
     dL0     <- (1-p)*lambda0*v$S0 - dexogenous0 - (mu0 + vL0 + sigmaL)*v$L0
     dI0     <- q*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*v$I0
     dJ0     <- (1-q)*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*v$J0
+    #Difference Equations (FB)
     dS1     <- (1-incLTBI)*dLTBIEn+(1-f)*alpha*(v$N0+v$N1) + sigmaF1*v$F1 + sigmaL*v$L1 + phi1*(v$I1 + v$J1) - lambda1*v$S1 - mu1*v$S1
     dF1     <- g*p*dLTBIEn*incLTBI + p*lambda1*v$S1 + dexogenous1 - (mu1 + vF + sigmaF1)*v$F1
     dL1     <- (1-g*p)*dLTBIEn*incLTBI + (1-p)*lambda1*v$S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*v$L1
@@ -145,18 +147,18 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffYr,final=totT,d
     dJ1     <- (1-q)*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$J1
     dN0     <- 0
     dN1     <- 0
-    dcL0    <- v$Cl * sigmaL  * 1e6 * v$L0
-    dcF0    <- v$Cl * sigmaF0 * 1e6 * v$F0
-    dcI0    <- v$Ct * q*(dprogAcute0 + dprogChron0) * 1e6
-    dcJ0    <- v$Ct * (1-q)*(dprogAcute0 + dprogChron0) * 1e6
-    dcL1    <- v$Cl * sigmaL  * 1e6 * v$L1
-    dcF1    <- v$Cl * sigmaF1 * 1e6 * v$F1
-    dcI1    <- v$Ct * q*(dprogAcute1 + dprogChron1) * 1e6
-    dcJ1    <- v$Ct * (1-q)*(dprogAcute1 + dprogChron1) * 1e6
+    dcL0    <- v$Cl * sigmaL  * 1e6 * v$L0                    #cost for Chronic LTBI cures      (USB)
+    dcF0    <- v$Cl * sigmaF0 * 1e6 * v$F0                    #cost for Acute LTBI cures        (USB)
+    dcI0    <- v$Ct * q*(dprogAcute0 + dprogChron0) * 1e6     #cost for Infectious TB cures     (USB)
+    dcJ0    <- v$Ct * (1-q)*(dprogAcute0 + dprogChron0) * 1e6 #cost for Non-Infectious TB cures (USB)
+    dcL1    <- v$Cl * sigmaL  * 1e6 * v$L1                    #cost for Chronic LTBI cures      (FB)
+    dcF1    <- v$Cl * sigmaF1 * 1e6 * v$F1                    #cost for Acute LTBI cures        (FB)
+    dcI1    <- v$Ct * q*(dprogAcute1 + dprogChron1) * 1e6     #cost for Infectious TB cures     (FB)
+    dcJ1    <- v$Ct * (1-q)*(dprogAcute1 + dprogChron1) * 1e6 #cost for Non-Infectious TB cures (FB)
     dcN0    <- 0
     dcN1    <- 0
-    dCt     <- v$Ct * (-log(1+discRt))
-    dCl     <- v$Cl * (-log(1+discRt))
+    dCt     <- v$Ct * (-log(1+discRt)) #Discount cost for LTBI treatment each time step
+    dCl     <- v$Cl * (-log(1+discRt)) #Discount cost for Active TB treatment each time step
     dPt     <- 0
     dPl     <- 0
     return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dCt,dCl,dPt,dPl,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dexogenous0,dexogenous1) )
