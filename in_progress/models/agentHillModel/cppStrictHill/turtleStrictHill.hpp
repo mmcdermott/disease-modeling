@@ -1,12 +1,15 @@
 // turtleStrictHill.hpp
 
+// get round to work
+//check exogenous reinfection
+
 #ifndef ____turtle__
 #define ____turtle__
 
 #include <iostream>
 #include <math.h>
 
-const double DELTA_T = .05;  // measured in years
+const double DELTA_T = .01;  // measured in years
 
 //Hill model constants
 const double mu0     = 1./78;     // Natural mortality rate USB per year
@@ -68,7 +71,7 @@ public:
   void display();
   COB getCountry();
   State getState();
-  void infect();
+  void reinfect();
 
 private:
   COB country;

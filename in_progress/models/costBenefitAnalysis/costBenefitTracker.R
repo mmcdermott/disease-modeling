@@ -122,6 +122,7 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,da
     c10     <- (1-e1)*((1-e0)*v$N0)/((1-e0)*v$N0 + (1-e1)*v$N1)  #proportion of contacts made with USB individuals (FB)
     c11     <- 1 - c10                                           #proportion of contacts made with FB individuals  (FB)
     dLTBIEn      <- f*alpha*(v$N0+v$N1) #FB arrivals with LTBI entering
+    #dLTBIEnD     <- discV * dLTBIEn     #FB arrivals with LTBI entering with discounting
     dnatdeath0   <- mu0 * v$N0          #Natural deaths (USB)
     dnatdeath1   <- mu1 * v$N1          #Natural deaths (FB)
     dtbdeath0    <- mud * (v$I0 + v$J0) #TB deaths (USB)
@@ -168,7 +169,7 @@ hill <- function(sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,da
     dcN0    <- 0  #Total cost for all treatments (USB)
     dcN1    <- 0  #Total cost for all treatments (FB)
     
-    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,dexogenous1) )
+    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,dexogenous1) )
   }
   
   for (i in initial:(final-1)) {
