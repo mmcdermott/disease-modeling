@@ -211,9 +211,9 @@ C100 <- C
 C75  <- C
 C50  <- C
 
-C100$LTBIEn <- 1000
-C75$LTBIEn  <- 800
-C50$LTBIEn  <- 700
+C100["LTBIEn"] <- 1000
+C75["LTBIEn"]  <- 800
+C50["LTBIEn"]  <- 700
 
 #Plot A: Where we eliminate incoming LTBI 100%, 75%, or 50%
 noImmLTBI      <- hill(C100,sigmaLBase,fBase,1,0)
