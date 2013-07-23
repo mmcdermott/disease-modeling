@@ -65,7 +65,7 @@ interventionCost <- rep(0,totT)                                     #Cumulative 
 
 # ALSO TOOK OUT Ct,Cl FROM VECTOR BELOW
 P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1,LTBIEn,natdeath0,natdeath1,tbdeath0,tbdeath1,tbdeathD0,tbdeathD1,progAcute0,progChron0,progAcute1,progChron1,progTotalD0, progTotalD1, exogenous0,exogenous1, interventionCost)
-C <- data.frame(newCases,totPop,LTBIEn)
+C <- c(newCases=0,totPop=0,LTBIEn=0) #Intervention cost array (cost of new cases, total population, and LTBI cases entering, each time step)
 IN0 <- IN1 <- INall <- rep(0,totT)
 
 #Total Population
@@ -114,12 +114,7 @@ P$progChron1[1]  <- 0
 P$exogenous0[1]  <- 0
 P$exogenous1[1]  <- 0
 
-#Intervention cost dataset
-C$newCases <- 0    #Intervention cost per new Active TB case per time step
-C$totPop   <- 0    #Intervention cost per capita per time step
-C$LTBIEn   <- 0    #Intervention cost per FB LTBI arrival per time step
-
-hill <- function(costDataSet=C,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,dataSet=P){
+hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,dataSet=P){
   #Differential Equation Functions
   Ddt <- function(t,v) {
     discV = 1/(1.03^t)  #amount costs, health states are discounted each time step
@@ -148,7 +143,7 @@ hill <- function(costDataSet=C,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT
     lambda1      <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))  #Forces of Infection (FB)
     dexogenous0	 <- x*p*lambda0*v$L0    #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
     dexogenous1  <- x*p*lambda1*v$L1    #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
-    dInterventionCost <- discV * (costDataSet$newCases*(dprogTotal0+dprogTotal1) + costDataSet$totalPop*(v$N0+v$N1) + costDataSet$LTBIEn*fbase*alpha*(v$N0+v$N1) )
+    dInterventionCost <- discV * (intervenCost["newCases"]*(dprogTotal0+dprogTotal1) + intervenCost["totPop"]*(v$N0+v$N1) + intervenCost["LTBIEn"]*fBase*alpha*(v$N0+v$N1) )
     
     #Difference Equations (USB)
     dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
@@ -179,7 +174,7 @@ hill <- function(costDataSet=C,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT
     dcN0    <- 0  #Total cost for all treatments (USB)
     dcN1    <- 0  #Total cost for all treatments (FB)
     
-    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,dexogenous1, dInterventionCost) )
+    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,dexogenous1,dInterventionCost) )
   }
   
   for (i in initial:(final-1)) {
@@ -215,7 +210,8 @@ years   <- seq(2000+deltaT,2000+finalYr,deltaT)
 C100 <- C
 C75  <- C
 C50  <- C
-C100$LTBIEn <- 1000 
+
+C100$LTBIEn <- 1000
 C75$LTBIEn  <- 800
 C50$LTBIEn  <- 700
 
@@ -227,23 +223,23 @@ someImmLTBIInc <- generateIncidence(someImmLTBI)
 halfImmLTBI    <- hill(C50,sigmaLBase,fBase,1,0.5)
 halfImmLTBIInc <- generateIncidence(halfImmLTBI)
 
-# #When Calculating range, we presume that FB always has higher incidence rate
-# yrange <- range(c(0.5,baseInc$IN1,noImmLTBIInc$IN1,someImmLTBIInc$IN1,halfImmLTBIInc$IN1))
-# dev.new()
-# plot(years, baseInc$IN0, main="Plot A: Reduce incoming LTBI in 2008", log='y', xlab='year', ylab='incidence/million', ylim=yrange, type="l", col="blue")
-# lines(years, baseInc$INall, type="l", col="red")
-# lines(years, baseInc$IN1, type="l", col="green")
-# lines(years, noImmLTBIInc$IN0, type="l", col="blue", lty=2)
-# lines(years, noImmLTBIInc$INall, type="l", col="red", lty=2)
-# lines(years, noImmLTBIInc$IN1, type="l", col="green", lty=2)
-# lines(years, someImmLTBIInc$IN0, type="l", col="blue", lty=3)
-# lines(years, someImmLTBIInc$INall, type="l", col="red", lty=3)
-# lines(years, someImmLTBIInc$IN1, type="l", col="green", lty=3)
-# lines(years, halfImmLTBIInc$IN0, type="l", col="blue", lty=4)
-# lines(years, halfImmLTBIInc$INall, type="l", col="red", lty=4)
-# lines(years, halfImmLTBIInc$IN1, type="l", col="green", lty=4)
-# abline(h = 1, lty = 'dotted')
-# legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'No Incoming LTBI post 2008', '75% reduction of Inc. LTBI post 2008', '50% reduction of Inc. LTBI post 2008'), col=c("blue", "green", "red", "black","black","black"), lty=c(1,1,1,2,3,4))
+#When Calculating range, we presume that FB always has higher incidence rate
+yrange <- range(c(0.5,baseInc$IN1,noImmLTBIInc$IN1,someImmLTBIInc$IN1,halfImmLTBIInc$IN1))
+dev.new()
+plot(years, baseInc$IN0, main="Plot A: Reduce incoming LTBI in 2008", log='y', xlab='year', ylab='incidence/million', ylim=yrange, type="l", col="blue")
+lines(years, baseInc$INall, type="l", col="red")
+lines(years, baseInc$IN1, type="l", col="green")
+lines(years, noImmLTBIInc$IN0, type="l", col="blue", lty=2)
+lines(years, noImmLTBIInc$INall, type="l", col="red", lty=2)
+lines(years, noImmLTBIInc$IN1, type="l", col="green", lty=2)
+lines(years, someImmLTBIInc$IN0, type="l", col="blue", lty=3)
+lines(years, someImmLTBIInc$INall, type="l", col="red", lty=3)
+lines(years, someImmLTBIInc$IN1, type="l", col="green", lty=3)
+lines(years, halfImmLTBIInc$IN0, type="l", col="blue", lty=4)
+lines(years, halfImmLTBIInc$INall, type="l", col="red", lty=4)
+lines(years, halfImmLTBIInc$IN1, type="l", col="green", lty=4)
+abline(h = 1, lty = 'dotted')
+legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'No Incoming LTBI post 2008', '75% reduction of Inc. LTBI post 2008', '50% reduction of Inc. LTBI post 2008'), col=c("blue", "green", "red", "black","black","black"), lty=c(1,1,1,2,3,4))
 
 # #Cost Plot A:
 # yrange <- range(c(P$cN1+P$cN0,noImmLTBI$cN1+noImmLTBI$cN0,someImmLTBI$cN0+someImmLTBI$cN1,halfImmLTBI$cN0+halfImmLTBI$cN1))
