@@ -243,23 +243,15 @@ lines(years, halfImmLTBIInc$IN1, type="l", col="green", lty=4)
 abline(h = 1, lty = 'dotted')
 legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'No Incoming LTBI post 2008', '75% reduction of Inc. LTBI post 2008', '50% reduction of Inc. LTBI post 2008'), col=c("blue", "green", "red", "black","black","black"), lty=c(1,1,1,2,3,4))
 
-# #Cost Plot A:
-# yrange <- range(c(P$cN1+P$cN0,noImmLTBI$cN1+noImmLTBI$cN0,someImmLTBI$cN0+someImmLTBI$cN1,halfImmLTBI$cN0+halfImmLTBI$cN1))
-# dev.new()
-# plot(years, P$cN1+P$cN0, main="Plot A: cost of various interventions", xlab='year', ylab='USD', ylim=yrange, type="l", col="blue")
-# #lines(years, P$cN0, type="l", col="blue", lty=2)
-# #lines(years, P$cN1, type="l", col="blue", lty=3)
-# lines(years, noImmLTBI$cN0 + noImmLTBI$cN1, type="l", col="green", lty=1)
-# #lines(years, noImmLTBI$cN0, type="l", col="green", lty=2)
-# #lines(years, noImmLTBI$cN1, type="l", col="green", lty=3)
-# lines(years, someImmLTBI$cN0 + someImmLTBI$cN1, type="l", col="red", lty=1)
-# #lines(years, someImmLTBI$cN0, type="l", col="red", lty=2)
-# #lines(years, someImmLTBI$cN1, type="l", col="red", lty=3)
-# lines(years, halfImmLTBI$cN0 + halfImmLTBI$cN1, type="l", col="purple", lty=1)
-# #lines(years, halfImmLTBI$cN0, type="l", col="purple", lty=2)
-# #lines(years, halfImmLTBI$cN1, type="l", col="purple", lty=3)
-# abline(h = 1, lty = 'dotted')
-# legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
+#Cost Plot A:
+yrange <- range(c(P$cN1+P$cN0,noImmLTBI$cN1+noImmLTBI$cN0,someImmLTBI$cN0+someImmLTBI$cN1,halfImmLTBI$cN0+halfImmLTBI$cN1))
+dev.new()
+plot(years, P$cN1+P$cN0, main="Plot A: cost of various interventions", xlab='year', ylab='USD', ylim=yrange, type="l", col="blue")
+lines(years, noImmLTBI$cN0 + noImmLTBI$cN1, type="l", col="green", lty=1)
+lines(years, someImmLTBI$cN0 + someImmLTBI$cN1, type="l", col="red", lty=1)
+lines(years, halfImmLTBI$cN0 + halfImmLTBI$cN1, type="l", col="purple", lty=1)
+abline(h = 1, lty = 'dotted')
+legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
 
 yearsPostCutoff <- years[(cutoffT+1):totT]
 maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[(cutoffT+1):totT]
