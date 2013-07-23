@@ -6,7 +6,7 @@ finalYr   = 2100
 cutoffYr  = 2008
 cutoffT   = (cutoffYr-initialYr)/DELTA_T + 1
 years     = seq(initialYr,finalYr - DELTA_T, DELTA_T)
-yearsPC   = seq(cutOffYr,finalYr - DELTA_T,DELTA_T)
+yearsPC   = seq(cutoffYr,finalYr - DELTA_T,DELTA_T)
 totT      = length(years)
 if (Sys.info()['sysname'] == "Linux") {
   #Making it plot on linux
@@ -178,11 +178,11 @@ cpcaPlot  <-
   geom_line(aes(y=cpca))
 
 cpcaPlotD <- 
-  ggplot(cpcaData,aes(x=year)) + 
+  ggplot(cpcaDataD,aes(x=year)) + 
   labs(x="Years", y="USD") +
   scale_x_continuous(breaks=c(initialYr,cutoffYr,seq(initialYr,finalYr,25))) +
-  #scale_y_log10() + 
-  ggtitle("Cost per Raw TB Case Averted due to Intervention A") +
+  scale_y_log10() + 
+  ggtitle("Cost per Discounted TB Case Averted due to Intervention A") +
   geom_line(aes(y=cpca))
 
 #TB Deaths:
@@ -230,3 +230,13 @@ deathsAvertedPlotD <-
   scale_fill_manual(values=c(TBdeathsAvertedC)) + 
   scale_color_manual(values=c(intC,noIntC,TBdeathsAvertedC)) + 
   guides(fill=F, alpha=F)
+
+incPlot
+savingsPlot
+costsPlot
+casesAvertedPlot
+casesAvertedPlotD
+cpcaPlot
+cpcaPlotD
+deathsAvertedPlot
+deathsAvertedPlotD
