@@ -1,242 +1,328 @@
-library(ggplot2)
-#TODO: Make this read from the files somehow
-DELTA_T   = 0.8
-initialYr = 2000
-finalYr   = 2100
-cutoffYr  = 2008
-cutoffT   = (cutoffYr-initialYr)/DELTA_T + 1
-years     = seq(initialYr,finalYr - DELTA_T, DELTA_T)
-yearsPC   = seq(cutoffYr,finalYr - DELTA_T,DELTA_T)
-totT      = length(years)
+generateNewData = F
+baseFile = 'baseData.csv'
+intFilePrefix = 'intervention'
+intFileSuffix = '.csv'
+
+#Linux Config: 
 if (Sys.info()['sysname'] == "Linux") {
   #Making it plot on linux
   X11.options(type='nbcairo')
 }
-vF <- 1.5         #Progression rate of acute infection per year
-vL0 <- 0.0014     #Progression rate for reactivation (chronic LTBI) in the USB population per year
-vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB population per year
-generateIncidence <- function(dataSet) {
-  IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
-  IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
-  INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
-  return(data.frame(IN0,IN1,INall))
+
+#Hill Constants
+source('hillConstants.R')
+
+#DE Solving Parameters + runge-kutta solver: 
+source('deSolConstants.R')
+
+#Initializations:
+# Compartments:
+S0<-S1<-F0<-F1<-L0<-L1<-I0<-I1<-J0<-J1<-N0<-N1<-rep(0,totT)
+# Compartment Costs:
+cL0<-cF0<-cI0<-cJ0<-cL1<-cF1<-cI1<-cJ1<-cN0<-cN1<-rep(0,totT)
+# Tracking Data:
+LTBIEn       <- rep(0,totT)                #LTBI arrivals
+LTBIEnD      <- rep(0,totT)                #Discounted LTBI arrivals
+curedLTBIEn  <- rep(0,totT)                #Cured LTBI arrivals
+curedLTBIEnD <- rep(0,totT)                #Discounted Cured LTBI arrivals
+natdeath0    <- natdeath1   <- rep(0,totT) #Natural Deaths
+tbdeath0     <- tbdeath1    <- rep(0,totT) #TB Deaths
+tbdeathD0    <- tbdeathD1   <- rep(0,totT) #Discounted TB Deaths
+progAcute0   <- progAcute1  <- rep(0,totT) #Acute LTBI Progressions
+progChron0   <- progChron1  <- rep(0,totT) #Chronic LTBI Progressions
+progTotalD0  <- progTotalD1 <- rep(0,totT) #Discounted Progressions
+exogenous0   <- exogenous1  <- rep(0,totT) #Exogenous re-Infections
+interventionCost <- rep(0,totT)            #Cumulative intervention cost
+
+#Intervention per time step cost array 
+# cost of new cases, total population, and LTBI cases entering
+C <- c(newCases=0,totPop=0,LTBIEn=0) 
+P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,
+                cJ1,cN0,cN1,LTBIEn,LTBIEnD,curedLTBIEn,curedLTBIEnD,natdeath0,
+                natdeath1,tbdeath0,tbdeath1,tbdeathD0,tbdeathD1,progAcute0,
+                progChron0,progAcute1,progChron1,progTotalD0,progTotalD1, 
+                exogenous0,exogenous1,interventionCost)
+
+#Total Population
+P$N0[1] <- 250
+P$N1[1] <- 31.4
+#Acute (Fast) LTBI, new cases
+P$F0[1] <- (1-r0)*(newCases0)/vF
+P$F1[1] <- (1-r1)*(newCases1)/vF
+#Chronic (Long) LTBI
+P$L0[1] <- r0*(newCases0)/vL0
+P$L1[1] <- r1*(newCases1)/vL1
+#Infectious TB
+P$I0[1] <- q*newCases0/(mu0 + mud + phi0)
+P$I1[1] <- q*newCases1/(mu1 + mud + phi1)
+#Non-Infectious TB
+P$J0[1] <- (1-q)*newCases0/(mu0 + mud + phi0)
+P$J1[1] <- (1-q)*newCases1/(mu1 + mud + phi1)
+#Susceptible
+P$S0[1] <- P$N0[1] - P$F0[1] - P$L0[1] - P$I0[1] - P$J0[1]
+P$S1[1] <- P$N1[1] - P$F1[1] - P$L1[1] - P$I1[1] - P$J1[1]
+
+#Treatment Effectiveness Data:
+probHosp      <- .49 #Probability of hospitalization for active TB treatment
+efficacyLTBI  <- .9  #LTBI treatement efficacy
+adherenceLTBI <- .64 #LTBI treatment adherence
+probLTBItreatsuccess <- efficacyLTBI*adherenceLTBI 
+
+#Cost Parameter Values: 
+costtb   <- 2985   #TB treatment cost w/o hopsitalization <- Dylan supp. p.11-12
+costhosp <- 25495  #TB treatment cost w/ hospitalization  <- Dylan supp. p.10
+costLTBI <- 403.45 #LTBI treatment cost
+Ct       <- costtb*(1-probHosp) + costhosp*probHosp #Cost of active TB treatment
+Cl       <- costLTBI/probLTBItreatsuccess           #Cost of LTBI treatment
+
+#Rate of time and health state discounting
+discRt   <- 0.03  
+
+#Compartment value dataset
+P$LTBIEn[1]      <- 0.263109
+P$natdeath0[1]   <- 0
+P$natdeath1[1]   <- 0
+P$tbdeath0[1]    <- 0
+P$tbdeath1[1]    <- 0
+P$progAcute0[1]  <- 0
+P$progChron0[1]  <- 0
+P$progAcute1[1]  <- 0
+P$progChron1[1]  <- 0
+P$exogenous0[1]  <- 0
+P$exogenous1[1]  <- 0
+
+hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,dataSet=P){
+  #Differential Equation Functions
+  Ddt <- function(t,v) {
+    discV = 1/(1.03^t)  #amount costs, health states are discounted each time step
+    #parameter values initialized for each time step
+    c01     <- (1-e0)*((1-e1)*v$N1)/((1-e0)*v$N0 + (1-e1)*v$N1)  #proportion of contacts made with FB individuals  (USB)
+    c00     <- 1 - c01                                           #proportion of contacts made with USB individuals (USB)
+    c10     <- (1-e1)*((1-e0)*v$N0)/((1-e0)*v$N0 + (1-e1)*v$N1)  #proportion of contacts made with USB individuals (FB)
+    c11     <- 1 - c10                                           #proportion of contacts made with FB individuals  (FB)
+    dLTBIEn      <- f*alpha*(v$N0+v$N1)       #FB arrivals with LTBI entering
+    dnatdeath0   <- mu0 * v$N0                #Natural deaths (USB)
+    dnatdeath1   <- mu1 * v$N1                #Natural deaths (FB)
+    dtbdeath0    <- mud * (v$I0 + v$J0)       #TB deaths (USB)
+    dtbdeath1    <- mud * (v$I1 + v$J1)       #TB deaths (FB)
+    dtbdeathD0   <- discV * dtbdeath0         #TB deaths with discounting (USB)
+    dtbdeathD1   <- discV * dtbdeath1         #TB deaths with discounting (FB)
+    dprogAcute0  <- vF*v$F0                   #Acute LTBI progressions to Active TB disease (USB)
+    dprogAcute1  <- vF*v$F1                   #Acute LTBI progressions to Active TB disease (FB)
+    dprogChron0  <- vL0*v$L0                  #Chronic LTBI progressions to Active TB disease (USB)
+    dprogChron1  <- vL1*v$L1                  #Chronic LTBI progressions to Active TB disease (FB)
+    dprogTotal0  <- dprogAcute0 + dprogChron0 #Progression to Active TB (USB)
+    dprogTotal1  <- dprogAcute1 + dprogChron1 #Progression to Active TB (FB)
+    dprogTotalD0 <- discV * dprogTotal0       #Progression to Active TB with discounting (USB)
+    dprogTotalD1 <- discV * dprogTotal1       #Progression to Active TB with discounting (FB)
+    lambda0      <- transmission*(beta*(c00*(v$I0/v$N0) + c01*(v$I1/v$N1)))  #Forces of Infection (USB)
+    lambda1      <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))  #Forces of Infection (FB)
+    dexogenous0	 <- x*p*lambda0*v$L0    #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
+    dexogenous1  <- x*p*lambda1*v$L1    #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
+    dInterventionCost <- discV * (intervenCost["newCases"]*1e6*(dprogTotal0+dprogTotal1) + intervenCost["totPop"]*1e6*(v$N0+v$N1) + intervenCost["LTBIEn"]*1e6*dLTBIEn*(1-incLTBI))
+    
+    #Difference Equations (USB)
+    dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
+    dF0     <- p*lambda0*v$S0 + dexogenous0 - (mu0 + vF + sigmaF0)*v$F0
+    dL0     <- (1-p)*lambda0*v$S0 - dexogenous0 - (mu0 + vL0 + sigmaL)*v$L0
+    dI0     <- q*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*v$I0
+    dJ0     <- (1-q)*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*v$J0
+    
+    #Difference Equations (FB)
+    dS1     <- (1-incLTBI)*dLTBIEn+(1-f)*alpha*(v$N0+v$N1) + sigmaF1*v$F1 + sigmaL*v$L1 + phi1*(v$I1 + v$J1) - lambda1*v$S1 - mu1*v$S1
+    dF1     <- g*p*dLTBIEn*incLTBI + p*lambda1*v$S1 + dexogenous1 - (mu1 + vF + sigmaF1)*v$F1
+    dL1     <- (1-g*p)*dLTBIEn*incLTBI + (1-p)*lambda1*v$S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*v$L1
+    dI1     <- q*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$I1
+    dJ1     <- (1-q)*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$J1
+    
+    dN0     <- 0
+    dN1     <- 0
+    
+    #Cost calculations
+    dcL0    <- discV * Cl * sigmaL  * 1e6 * v$L0                    #cost for Chronic LTBI cures      (USB)
+    dcF0    <- discV * Cl * sigmaF0 * 1e6 * v$F0                    #cost for Acute LTBI cures        (USB)
+    dcI0    <- discV * Ct * q*(dprogAcute0 + dprogChron0) * 1e6     #cost for Infectious TB cures     (USB)
+    dcJ0    <- discV * Ct * (1-q)*(dprogAcute0 + dprogChron0) * 1e6 #cost for Non-Infectious TB cures (USB)
+    dcL1    <- discV * Cl * sigmaL  * 1e6 * v$L1                    #cost for Chronic LTBI cures      (FB)
+    dcF1    <- discV * Cl * sigmaF1 * 1e6 * v$F1                    #cost for Acute LTBI cures        (FB)
+    dcI1    <- discV * Ct * q*(dprogAcute1 + dprogChron1) * 1e6     #cost for Infectious TB cures     (FB)
+    dcJ1    <- discV * Ct * (1-q)*(dprogAcute1 + dprogChron1) * 1e6 #cost for Non-Infectious TB cures (FB)
+    dcN0    <- 0  #Total cost for all treatments (USB)
+    dcN1    <- 0  #Total cost for all treatments (FB)
+    
+    return(c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,
+             dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,(dLTBIEn*incLTBI),
+             (dLTBIEn*incLTBI*discV),dLTBIEn*(1-incLTBI),
+             (dLTBIEn*(1-incLTBI)*discV),dnatdeath0,dnatdeath1,dtbdeath0,
+             dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,
+             dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,
+             dexogenous1, dInterventionCost) )
+  }
+  
+  for (i in initial:(final-1)) {
+  	dataSet[i+1,]    <- rkm(Ddt,dataSet[i,],deltaT,i)
+  	dataSet$N0[i+1]  <- sum(dataSet[i+1,1:5])
+  	dataSet$N1[i+1]  <- sum(dataSet[i+1,6:10])
+  	dataSet$cN0[i+1] <- sum(dataSet[i+1,13:16])
+  	dataSet$cN1[i+1] <- sum(dataSet[i+1,17:20])
+  }
+  return(dataSet)
 }
 
-#Data Labels
-USB             <- rep("USB",             totT)
-FB              <- rep("FB",              totT)
-all             <- rep("All",             totT)
-noInt           <- rep("No Intervention", totT)
-int             <- rep("Intervention",    totT)
-savings         <- rep("Savings",         totT)
-costs           <- rep("Cost",            totT)
-averted         <- rep("Cases Averted",   totT)
-TBdeathsAverted <- rep("TB Deaths Averted",   totT)
+generateIncidence <- function(dataSet) {
+    IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
+    IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
+    INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+	return(data.frame(IN0,IN1,INall))
+}
 
-#Aesthetics
-USBC             <- 'blue'
-FBC              <- 'green'
-allC             <- 'red'
-noIntC           <- 'black'
-intC             <- 'blue'
-savingsC         <- '#24913C'
-costsC           <- '#9F0013'
-avertedC         <- '#24913C'
-TBdeathsAvertedC <- '#24913C'
+#Base Data: 
+if (generateNewData) {
+  P <- hill(C,sigmaLBase,fBase,1,1,1,totT)
+  write.csv(P,baseFile)
+  years   <- seq(initialYr+deltaT,finalYr,deltaT)
+} else {
+  P     <- read.csv(baseFile)
+  years <- P$X
+  P$X   <- NULL
+}
+baseInc <- generateIncidence(P)
 
-baseData         <- read.csv('baseData.csv')
-interventionData <- read.csv('interventionData.csv')
+#Intervention Data:
+# Curing Incoming LTBI:
+#  Costs:
+C100 <- C
+C75  <- C
+C50  <- C
 
-baseInc          <- generateIncidence(baseData)
-interventionInc  <- generateIncidence(interventionData)
+C100["LTBIEn"] <- 1000
+C75["LTBIEn"]  <- 800
+C50["LTBIEn"]  <- 700
 
-#Incidence Reports: Comparing Baseline Incidence against Intervention Incidence
-incData <- data.frame(year = years, 
-                      baseUSB = baseInc$IN0,   intUSB = interventionInc$IN0, 
-                      baseFB  = baseInc$IN1,    intFB = interventionInc$IN1, 
-                      baseAll = baseInc$INall, intAll = interventionInc$INall)
-incPlot <- ggplot(incData, aes(x=year)) + 
-           scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
-                         labels=c("Elimination (1)",2,5,10,25,50,100,200),
-                         limits=c(0.5,250)) + 
-           labs(x="Years", y="Incidence/million", color="Population", 
-                linetype="Intervention Status") + 
-           ggtitle("Incidence Levels for Intervention A") + 
-           geom_line(aes(y=baseUSB, color=USB, linetype=noInt))  + 
-           geom_line(aes(y=intUSB,  color=USB, linetype=int))    + 
-           geom_line(aes(y=baseFB,  color=FB,  linetype=noInt))  + 
-           geom_line(aes(y=intFB,   color=FB,  linetype=int))    + 
-           geom_line(aes(y=baseAll, color=all, linetype=noInt))  + 
-           geom_line(aes(y=intAll,  color=all, linetype=int))
+#Plot A: Where we eliminate incoming LTBI 100%, 75%, or 50%
+noImmLTBI      <- hill(C100,sigmaLBase,fBase,1,0)
+noImmLTBIInc   <- generateIncidence(noImmLTBI)
+someImmLTBI    <- hill(C75,sigmaLBase,fBase,1,0.25)
+someImmLTBIInc <- generateIncidence(someImmLTBI)
+halfImmLTBI    <- hill(C50,sigmaLBase,fBase,1,0.5)
+halfImmLTBIInc <- generateIncidence(halfImmLTBI)
 
-#Total Costs Excluding Sticker Price: Comparing costs of various interventions
-#US Health Care System (HCS) TB costs due to base system
-baseCost  <- (baseData$cN0 + baseData$cN1)/1e9
-#US HCS TB costs due to intervenvtion
-interCost <- (interventionData$cN0 + interventionData$cN1)/1e9
-#US HCS TB savings due to intervention
-totSaved  <- baseCost - interCost                        
+#When Calculating range, we presume that FB always has higher incidence rate
+yrange <- range(c(0.5,baseInc$IN1,noImmLTBIInc$IN1,someImmLTBIInc$IN1,halfImmLTBIInc$IN1))
+dev.new()
+plot(years, baseInc$IN0, main="Plot A: Reduce incoming LTBI in 2008", log='y', xlab='year', ylab='incidence/million', ylim=yrange, type="l", col="blue")
+lines(years, baseInc$INall, type="l", col="red")
+lines(years, baseInc$IN1, type="l", col="green")
+lines(years, noImmLTBIInc$IN0, type="l", col="blue", lty=2)
+lines(years, noImmLTBIInc$INall, type="l", col="red", lty=2)
+lines(years, noImmLTBIInc$IN1, type="l", col="green", lty=2)
+lines(years, someImmLTBIInc$IN0, type="l", col="blue", lty=3)
+lines(years, someImmLTBIInc$INall, type="l", col="red", lty=3)
+lines(years, someImmLTBIInc$IN1, type="l", col="green", lty=3)
+lines(years, halfImmLTBIInc$IN0, type="l", col="blue", lty=4)
+lines(years, halfImmLTBIInc$INall, type="l", col="red", lty=4)
+lines(years, halfImmLTBIInc$IN1, type="l", col="green", lty=4)
+abline(h = 1, lty = 'dotted')
+legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'No Incoming LTBI post 2008', '75% reduction of Inc. LTBI post 2008', '50% reduction of Inc. LTBI post 2008'), col=c("blue", "green", "red", "black","black","black"), lty=c(1,1,1,2,3,4))
 
-savingsData <- data.frame(year=years, baseCost=baseCost, interCost=interCost,
-                          totSaved=totSaved)
-yrange      <- round(seq(min(savingsData$baseCost),max(savingsData$baseCost),by=0.5),1)
-savingsPlot <- ggplot(savingsData,aes(x=year)) + 
-               labs(x="Years", y="Billions of USD", color="Intervention Status") +
-               scale_y_continuous(breaks=yrange) + 
-               ggtitle("Total Saved by US Health Care System given
-                        Intervention A, ignoring intervention cost") +
-               geom_ribbon(aes(ymin=interCost,ymax=baseCost,fill=savings, alpha=0.2)) + 
-               geom_line(aes(y=baseCost, color=noInt)) +
-               geom_line(aes(y=interCost, color=int)) + 
-               geom_line(aes(y=totSaved, color=savings)) +
-               scale_fill_manual(values=c(savingsC)) + 
-               scale_color_manual(values=c(intC,noIntC,savingsC)) + 
-               guides(fill=F, alpha=F)
+#Cost Plot A:
+yrange <- range(c(P$cN1+P$cN0,noImmLTBI$cN1+noImmLTBI$cN0,someImmLTBI$cN0+someImmLTBI$cN1,halfImmLTBI$cN0+halfImmLTBI$cN1))
+dev.new()
+plot(years, P$cN1+P$cN0, main="Plot A: cost of various interventions", xlab='year', ylab='USD', ylim=yrange, type="l", col="blue")
+lines(years, noImmLTBI$cN0 + noImmLTBI$cN1, type="l", col="green", lty=1)
+lines(years, someImmLTBI$cN0 + someImmLTBI$cN1, type="l", col="red", lty=1)
+lines(years, halfImmLTBI$cN0 + halfImmLTBI$cN1, type="l", col="purple", lty=1)
+legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
 
-#Total Costs Including Sticker Price: Comparing costs of various interventions
-#Implementation cost of intervention
-costInter <- (interventionData$interventionCost)/1e9
-#Total US HCS cost due to intervention
-interTot  <- interCost + costInter
-#Total additional spent by US HCS due to intervention
-totSpent  <- interTot - baseCost
+yearsPostCutoff <- years[cutoffT:totT]
+maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[cutoffT:totT]
+savingsPerCase  <- maxDifference/(1e6*P$LTBIEn[cutoffT:totT])
+dev.new()
+plot(yearsPostCutoff, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
 
-costData <- data.frame(year=years, baseCost=baseCost, interCost=interTot,
-                       totSpent=totSpent)
-yrange      <- round(seq(min(costData$interCost),max(costData$interCost)+0.5,by=0.5),1)
-costsPlot <- ggplot(costData,aes(x=year)) + 
-               labs(x="Years", y="Billions of USD", color="Intervention Status") +
-               scale_y_continuous(breaks=yrange) + 
-               ggtitle("Total Spent by US Health Care System given
-                        Intervention A, given presumed intervention cost") +
-               geom_ribbon(aes(ymin=baseCost,ymax=interCost,fill=costs, alpha=1)) + 
-               geom_line(aes(y=baseCost, color=noInt)) +
-               geom_line(aes(y=interCost, color=int)) + 
-               geom_line(aes(y=totSpent, color=costs)) +
-               scale_fill_manual(values=c(costsC)) + 
-               scale_color_manual(values=c(costsC,intC,noIntC)) + 
-               guides(fill=F, alpha=F)
+savingsPerCaseD <- maxDifference/(1e6*noImmLTBI$curedLTBIEnD[cutoffT:totT])
+dev.new()
+plot(yearsPostCutoff, savingsPerCaseD, main="Savings Per Discounted Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
 
-#Total Cases Averted
-baseCases         <- 1e6*(baseData$progAcute0 + baseData$progAcute1 + 
-                          baseData$progChron0 + baseData$progChron1)
-baseCasesD        <- 1e6*(baseData$progTotalD0 + baseData$progTotalD1)
-intCases          <- 1e6*(interventionData$progAcute0 + interventionData$progAcute1 + 
-                          interventionData$progChron0 + interventionData$progChron1)
-intCasesD         <- 1e6*(interventionData$progTotalD0 + interventionData$progTotalD1)
-casesAverted      <- baseCases - intCases
-casesAvertedD     <- baseCasesD - intCasesD
-
-casesAvertedData  <- data.frame(year=years,baseCases=baseCases,
-                                intCases=intCases,
-                                casesAverted=casesAverted)
-casesAvertedDataD <- data.frame(year=years,baseCases=baseCasesD,
-                                intCases=intCasesD,
-                                casesAverted=casesAvertedD)
-
-yrange            <- round(seq(min(casesAvertedData$baseCases),
-                               max(casesAvertedData$baseCases),by=1e5),1)
-casesAvertedPlot  <- 
-  ggplot(casesAvertedData,aes(x=year)) + 
-  labs(x="Years", y="Cases of TB", color="Intervention Status") +
-  scale_y_continuous(breaks=yrange) + 
-  ggtitle("Total Cases of TB Averted given Intervention A") +
-  geom_ribbon(aes(ymin=intCases,ymax=baseCases,fill=averted, alpha=0.2)) + 
-  geom_line(aes(y=baseCases,    color=noInt)) +
-  geom_line(aes(y=intCases,     color=int)) + 
-  geom_line(aes(y=casesAverted, color=averted)) +
-  scale_fill_manual(values=c(avertedC)) + 
-  scale_color_manual(values=c(avertedC,intC,noIntC)) + 
-  guides(fill=F, alpha=F)
-
-yrange            <- round(seq(min(casesAvertedDataD$baseCases),
-                               max(casesAvertedDataD$baseCases),by=1e5),1)
-casesAvertedPlotD <- 
-  ggplot(casesAvertedDataD,aes(x=year)) + 
-  labs(x="Years", y="Discounted Cases of TB", 
-       color="Intervention Status") +
-  scale_y_continuous(breaks=yrange) + 
-  ggtitle("Discounted Cases of TB Averted given Intervention A") +
-  geom_ribbon(aes(ymin=intCases,ymax=baseCases,fill=averted, alpha=0.2)) + 
-  geom_line(aes(y=baseCases, color=noInt)) +
-  geom_line(aes(y=intCases, color=int)) + 
-  geom_line(aes(y=casesAverted, color=averted)) +
-  scale_fill_manual(values=c(avertedC)) + 
-  scale_color_manual(values=c(avertedC,intC,noIntC)) + 
-  guides(fill=F, alpha=F)
-
-#Cost per cases averted graph:
-cpcaData  <- data.frame(year=yearsPC,cpca=1e9*totSpent[cutoffT:totT]/casesAverted[cutoffT:totT])
-cpcaDataD <- data.frame(year=yearsPC,cpca=1e9*totSpent[cutoffT:totT]/casesAvertedD[cutoffT:totT])
-
-cpcaPlot  <- 
-  ggplot(cpcaData,aes(x=year)) + 
-  labs(x="Years", y="USD") +
-  scale_x_continuous(breaks=c(initialYr,cutoffYr,seq(initialYr,finalYr,25))) +
-  scale_y_log10() + 
-  ggtitle("Cost per Raw TB Case Averted due to Intervention A") +
-  geom_line(aes(y=cpca))
-
-cpcaPlotD <- 
-  ggplot(cpcaDataD,aes(x=year)) + 
-  labs(x="Years", y="USD") +
-  scale_x_continuous(breaks=c(initialYr,cutoffYr,seq(initialYr,finalYr,25))) +
-  scale_y_log10() + 
-  ggtitle("Cost per Discounted TB Case Averted due to Intervention A") +
-  geom_line(aes(y=cpca))
-
-#TB Deaths:
-baseDeaths         <- 1e6*(baseData$tbdeath0 + baseData$tbdeath1)
-baseDeathsD        <- 1e6*(baseData$tbdeathD0 + baseData$tbdeathD1)
-intDeaths          <- 1e6*(interventionData$tbdeath0 + interventionData$tbdeath1)
-intDeathsD         <- 1e6*(interventionData$tbdeathD0 + interventionData$tbdeathD1)
-deathsAverted      <- baseDeaths - intDeaths
-deathsAvertedD     <- baseDeathsD - intDeathsD
-
-deathsAvertedData  <- data.frame(year=years,baseDeaths=baseDeaths,
-                                intDeaths=intDeaths,
-                                deathsAverted =deathsAverted)
-deathsAvertedDataD <- data.frame(year=years,baseDeaths=baseDeathsD,
-                                intDeaths=intDeathsD,
-                                deathsAverted=deathsAvertedD)
-
-yrange             <- round(seq(min(deathsAvertedData$baseDeaths),
-                               max(deathsAvertedData$baseDeaths),by=5e3),1)
-deathsAvertedPlot  <- 
-  ggplot(deathsAvertedData,aes(x=year)) + 
-  labs(x="Years", y="TB Deaths", color="Intervention Status") +
-  scale_y_continuous(breaks=yrange) + 
-  ggtitle("Total TB Lives Saved Given Intervention A") +
-  geom_ribbon(aes(ymin=intDeaths,ymax=baseDeaths,fill=averted, alpha=0.2)) + 
-  geom_line(aes(y=baseDeaths,    color=noInt)) +
-  geom_line(aes(y=intDeaths,     color=int)) + 
-  geom_line(aes(y=deathsAverted, color=TBdeathsAverted)) +
-  scale_fill_manual(values=c(TBdeathsAvertedC)) + 
-  scale_color_manual(values=c(intC,noIntC,TBdeathsAvertedC)) + 
-  guides(fill=F, alpha=F)
-
-yrange             <- round(seq(min(deathsAvertedDataD$baseDeaths),
-                               max(deathsAvertedDataD$baseDeaths),by=5e3),1)
-deathsAvertedPlotD <- 
-  ggplot(deathsAvertedDataD,aes(x=year)) + 
-  labs(x="Years", y="Discounted TB Deaths", 
-       color="Intervention Status") +
-  scale_y_continuous(breaks=yrange) + 
-  ggtitle("Discounted TB Lives Saved Given Intervention A") +
-  geom_ribbon(aes(ymin=intDeaths,ymax=baseDeaths,fill=averted, alpha=0.2)) + 
-  geom_line(aes(y=baseDeaths, color=noInt)) +
-  geom_line(aes(y=intDeaths, color=int)) + 
-  geom_line(aes(y=deathsAverted, color=TBdeathsAverted)) +
-  scale_fill_manual(values=c(TBdeathsAvertedC)) + 
-  scale_color_manual(values=c(intC,noIntC,TBdeathsAvertedC)) + 
-  guides(fill=F, alpha=F)
-
-incPlot
-savingsPlot
-costsPlot
-casesAvertedPlot
-casesAvertedPlotD
-cpcaPlot
-cpcaPlotD
-deathsAvertedPlot
-deathsAvertedPlotD
+##Plot A: Where Transmission is cut after 2008
+#noTrans    <- hill(sigmaLBase,fBase,0)
+#noTransInc <- generateIncidence(noTrans)
+#
+##When Calculating range, we presume that FB always has higher incidence rate
+#yrange <- range(c(0.5,baseInc$IN1,noTransInc$IN1))
+#dev.new()
+#plot(years, baseInc$IN0, main="Plot A: Cut Trans. in 2008", xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")
+#lines(years, baseInc$INall, type="l", col="red")
+#lines(years, baseInc$IN1, type="l", col="green")
+#lines(years, noTransInc$IN0, type="l", col="blue", lty=2)
+#lines(years, noTransInc$INall, type="l", col="red", lty=2)
+#lines(years, noTransInc$IN1, type="l", col="green", lty=2)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'With Transmission Cutoff in 2008'), col=c("blue", "green", "red", "black"), lty=c(1,1,1,2))
+#
+##Plot B: Where LTBI treatment x2 or x4
+#doubled    <-hill(sigmaLBase*2,fBase)
+#doubledInc <- generateIncidence(doubled)
+#quad       <- hill(sigmaLBase*4,fBase)
+#quadInc    <- generateIncidence(quad)
+#
+##When Calculating range, we presume that FB always has higher incidence rate after 2008
+#yrange <- range(c(0.5,baseInc$IN1,quadInc$IN1,doubledInc$IN1))
+#dev.new()
+#plot(years, baseInc$IN0, main="Plot B: Increase Chronic LTBI Treatment in 2008", xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")
+#lines(years, baseInc$INall, type="l", col="red")
+#lines(years, baseInc$IN1, type="l", col="green")
+#lines(years, doubledInc$IN0, type="l", col="blue", lty=2)
+#lines(years, doubledInc$INall, type="l", col="red", lty=2)
+#lines(years, doubledInc$IN1, type="l", col="green", lty=2)
+#lines(years, quadInc$IN0, type="l", col="blue", lty=3)
+#lines(years, quadInc$INall, type="l", col="red", lty=3)
+#lines(years, quadInc$IN1, type="l", col="green", lty=3)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'Chronic LTBI Treatment x2 in 2008', 'Chronic LTBI Treatment x4 in 2008'), col=c("blue", "green", "red", "black", "black"), lty=c(1,1,1,2,3))
+#
+##Plot C: Where FB arrivals cut in half, also LTBI treatment x2 or x4 after 2008
+#halfFB           <- hill(sigmaLBase,fBase/2)
+#halfFBInc        <- generateIncidence(halfFB)
+#halfFBdoubled    <- hill(sigmaLBase*2,fBase/2)
+#halfFBdoubledInc <- generateIncidence(halfFBdoubled)
+#halfFBquad       <- hill(sigmaLBase*4,fBase/2)
+#halfFBquadInc    <- generateIncidence(halfFBquad)
+#
+##When Calculating range, we presume that FB always has higher incidence rate
+#yrange <- range(c(0.5,baseInc$IN1,quadInc$IN1,doubledInc$IN1))
+#dev.new()
+#plot(years, halfFBInc $IN0, main="Plot C: Half FB Arrival Rate, increase LTBI Treatment", xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")
+#lines(years, halfFBInc $INall, type="l", col="red")
+#lines(years, halfFBInc $IN1, type="l", col="green")
+#lines(years, halfFBdoubledInc $IN0, type="l", col="blue", lty=2)
+#lines(years, halfFBdoubledInc $INall, type="l", col="red", lty=2)
+#lines(years, halfFBdoubledInc $IN1, type="l", col="green", lty=2)
+#lines(years, halfFBquadInc $IN0, type="l", col="blue", lty=3)
+#lines(years, halfFBquadInc $INall, type="l", col="red", lty=3)
+#lines(years, halfFBquadInc $IN1, type="l", col="green", lty=3)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'Chronic LTBI Treatment x2 in 2008', 'Chronic LTBI Treatment x4 in 2008'), col=c("blue", "green", "red", "black", "black"), lty=c(1,1,1,2,3))
+#
+##Plot D: Where FB arrivals divided by 4, also LTBI treatment x2 or x4 after 2008
+#quarterFB           <- hill(sigmaLBase,fBase/4)
+#quarterFBInc        <- generateIncidence(quarterFB)
+#quarterFBdoubled    <- hill(sigmaLBase*2,fBase/4)
+#quarterFBdoubledInc <- generateIncidence(quarterFBdoubled)
+#quarterFBquad       <- hill(sigmaLBase*4,fBase/4)
+#quarterFBquadInc    <- generateIncidence(quarterFBquad)
+#
+##When Calculating range, we presume that FB always has higher incidence rate
+#yrange <- range(c(0.5,baseInc$IN1,quadInc$IN1,doubledInc$IN1))
+#dev.new()
+#plot(years, quarterFBInc $IN0, main="Plot D: 1/4 FB Arrival Rate, increase LTBI Treatment", xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")
+#lines(years, quarterFBInc $INall, type="l", col="red")
+#lines(years, quarterFBInc $IN1, type="l", col="green")
+#lines(years, quarterFBdoubledInc $IN0, type="l", col="blue", lty=2)
+#lines(years, quarterFBdoubledInc $INall, type="l", col="red", lty=2)
+#lines(years, quarterFBdoubledInc $IN1, type="l", col="green", lty=2)
+#lines(years, quarterFBquadInc $IN0, type="l", col="blue", lty=3)
+#lines(years, quarterFBquadInc $INall, type="l", col="red", lty=3)
+#lines(years, quarterFBquadInc $IN1, type="l", col="green", lty=3)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'Chronic LTBI Treatment x2 in 2008', 'Chronic LTBI Treatment x4 in 2008'), col=c("blue", "green", "red", "black", "black"), lty=c(1,1,1,2,3))
