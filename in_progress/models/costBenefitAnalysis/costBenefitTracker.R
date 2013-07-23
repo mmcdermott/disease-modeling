@@ -127,7 +127,6 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
     c10     <- (1-e1)*((1-e0)*v$N0)/((1-e0)*v$N0 + (1-e1)*v$N1)  #proportion of contacts made with USB individuals (FB)
     c11     <- 1 - c10                                           #proportion of contacts made with FB individuals  (FB)
     dLTBIEn      <- f*alpha*(v$N0+v$N1)       #FB arrivals with LTBI entering
-    #dLTBIEnD     <- discV * dLTBIEn           #FB arrivals with LTBI entering with discounting
     dnatdeath0   <- mu0 * v$N0                #Natural deaths (USB)
     dnatdeath1   <- mu1 * v$N1                #Natural deaths (FB)
     dtbdeath0    <- mud * (v$I0 + v$J0)       #TB deaths (USB)
@@ -146,7 +145,7 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
     lambda1      <- transmission*(beta*(c10*(v$I0/v$N0) + c11*(v$I1/v$N1)))  #Forces of Infection (FB)
     dexogenous0	 <- x*p*lambda0*v$L0    #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
     dexogenous1  <- x*p*lambda1*v$L1    #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
-    dInterventionCost <- discV * (intervenCost["newCases"]*(dprogTotal0+dprogTotal1) + intervenCost["totPop"]*(v$N0+v$N1) + intervenCost["LTBIEn"]*fBase*alpha*(v$N0+v$N1) )
+    dInterventionCost <- discV * (intervenCost["newCases"]*1e6*(dprogTotal0+dprogTotal1) + intervenCost["totPop"]*1e6*(v$N0+v$N1) + intervenCost["LTBIEn"]*1e6*dLTBIEn*(1-incLTBI))
     
     #Difference Equations (USB)
     dS0     <- ro*(v$N0+v$N1) + sigmaF0*v$F0 + sigmaL*v$L0 + phi0*(v$I0+v$J0) - lambda0*v$S0 - mu0*v$S0
