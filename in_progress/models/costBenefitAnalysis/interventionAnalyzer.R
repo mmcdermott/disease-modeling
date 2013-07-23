@@ -25,6 +25,7 @@ noInt   <- rep("No Intervention", totT)
 int     <- rep("Intervention",    totT)
 savings <- rep("Savings",         totT)
 cost    <- rep("Cost",            totT)
+averted <- rep("Cases Averted",   totT)
 
 #Aesthetics
 USBC     <- 'blue'
@@ -34,6 +35,7 @@ noIntC   <- 'blue'
 intC     <- 'brown'
 savingsC <- '#24913C'
 costC    <- 'red'
+avertedC <- '#24913C'
 
 baseData         <- read.csv('baseData.csv')
 interventionData <- read.csv('interventionData.csv')
@@ -93,10 +95,95 @@ savingsPlot <- ggplot(savingsData,aes(x=year)) +
 #totSpent  <- interTot - baseCost
 
 #Total Cases Averted
-totalCasesBase    <- baseData$progAcute0 + baseData$progAcute1 + 
-                     baseData$progChron0 + baseData$progChron1
-totalCasesBaseD   <- baseData$progTotalD0 + baseData$progTotalD1
-totalCasesInt     <- IntData$progAcute0 + IntData$progAcute1 + 
-                     IntData$progChron0 + IntData$progChron1
-totalCasesIntD    <- IntData$progTotalD0 + IntData$progTotalD1
-casesAvertedPlot  <-
+baseCases         <- 1e6*(baseData$progAcute0 + baseData$progAcute1 + 
+                          baseData$progChron0 + baseData$progChron1)
+baseCasesD        <- 1e6*(baseData$progTotalD0 + baseData$progTotalD1)
+intCases          <- 1e6*(interventionData$progAcute0 + interventionData$progAcute1 + 
+                          interventionData$progChron0 + interventionData$progChron1)
+intCasesD         <- 1e6*(interventionData$progTotalD0 + interventionData$progTotalD1)
+casesAverted      <- baseCases - intCases
+casesAvertedD     <- baseCasesD - intCasesD
+
+casesAvertedData  <- data.frame(year=years,baseCases=baseCases,
+                                intCases=intCases,
+                                casesAverted =casesAverted)
+casesAvertedDataD <- data.frame(year=years,baseCases=baseCasesD,
+                                intCases=intCasesD,
+                                casesAverted=casesAvertedD)
+
+yrange            <- round(seq(min(casesAvertedData$baseCases),
+                               max(casesAvertedData$baseCases),by=1e5),1)
+casesAvertedPlot  <- 
+  ggplot(casesAvertedData,aes(x=year)) + 
+  labs(x="Years", y="Cases of TB", color="Intervention Status") +
+  scale_y_continuous(breaks=yrange) + 
+  ggtitle("Total Cases of TB Averted given Intervention A") +
+  geom_ribbon(aes(ymin=intCases,ymax=baseCases,fill=averted, alpha=0.2)) + 
+  geom_line(aes(y=baseCases,    color=noInt)) +
+  geom_line(aes(y=intCases,     color=int)) + 
+  geom_line(aes(y=casesAverted, color=averted)) +
+  scale_fill_manual(values=c(avertedC)) + 
+  scale_color_manual(values=c(avertedC,intC,noIntC)) + 
+  guides(fill=F, alpha=F)
+
+yrange            <- round(seq(min(casesAvertedDataD$baseCases),
+                               max(casesAvertedDataD$baseCases),by=1e5),1)
+casesAvertedPlotD <- 
+  ggplot(casesAvertedDataD,aes(x=year)) + 
+  labs(x="Years", y="Discounted Cases of TB", 
+       color="Intervention Status") +
+  scale_y_continuous(breaks=yrange) + 
+  ggtitle("Discounted Cases of TB Averted given Intervention A") +
+  geom_ribbon(aes(ymin=intCases,ymax=baseCases,fill=averted, alpha=0.2)) + 
+  geom_line(aes(y=baseCases, color=noInt)) +
+  geom_line(aes(y=intCases, color=int)) + 
+  geom_line(aes(y=casesAverted, color=averted)) +
+  scale_fill_manual(values=c(avertedC)) + 
+  scale_color_manual(values=c(avertedC,intC,noIntC)) + 
+  guides(fill=F, alpha=F)
+
+#TB Deaths:
+baseDeaths         <- 1e6*(baseData$tbdeath0 + baseData$tbdeath1)
+baseDeathsD        <- 1e6*(baseData$tbdeathD0 + baseData$tbdeathD1)
+intDeaths          <- 1e6*(interventionData$tbdeath0 + interventionData$tbdeath1)
+intDeathsD         <- 1e6*(interventionData$tbdeathD0 + interventionData$tbdeathD1)
+deathsAverted      <- baseDeaths - intDeaths
+deathsAvertedD     <- baseDeathsD - intDeathsD
+
+deathsAvertedData  <- data.frame(year=years,baseDeaths=baseDeaths,
+                                intDeaths=intDeaths,
+                                deathsAverted =deathsAverted)
+deathsAvertedDataD <- data.frame(year=years,baseDeaths=baseDeathsD,
+                                intDeaths=intDeathsD,
+                                deathsAverted=deathsAvertedD)
+
+yrange             <- round(seq(min(deathsAvertedData$baseDeaths),
+                               max(deathsAvertedData$baseDeaths),by=5e3),1)
+deathsAvertedPlot  <- 
+  ggplot(deathsAvertedData,aes(x=year)) + 
+  labs(x="Years", y="TB Deaths", color="Intervention Status") +
+  scale_y_continuous(breaks=yrange) + 
+  ggtitle("Total TB Lives Saved Given Intervention A") +
+  geom_ribbon(aes(ymin=intDeaths,ymax=baseDeaths,fill=averted, alpha=0.2)) + 
+  geom_line(aes(y=baseDeaths,    color=noInt)) +
+  geom_line(aes(y=intDeaths,     color=int)) + 
+  geom_line(aes(y=deathsAverted, color=averted)) +
+  scale_fill_manual(values=c(avertedC)) + 
+  scale_color_manual(values=c(avertedC,intC,noIntC)) + 
+  guides(fill=F, alpha=F)
+
+yrange             <- round(seq(min(deathsAvertedDataD$baseDeaths),
+                               max(deathsAvertedDataD$baseDeaths),by=5e3),1)
+deathsAvertedPlotD <- 
+  ggplot(deathsAvertedDataD,aes(x=year)) + 
+  labs(x="Years", y="Discounted TB Deaths", 
+       color="Intervention Status") +
+  scale_y_continuous(breaks=yrange) + 
+  ggtitle("Discounted TB Lives Saved Given Intervention A") +
+  geom_ribbon(aes(ymin=intDeaths,ymax=baseDeaths,fill=averted, alpha=0.2)) + 
+  geom_line(aes(y=baseDeaths, color=noInt)) +
+  geom_line(aes(y=intDeaths, color=int)) + 
+  geom_line(aes(y=deathsAverted, color=averted)) +
+  scale_fill_manual(values=c(avertedC)) + 
+  scale_color_manual(values=c(avertedC,intC,noIntC)) + 
+  guides(fill=F, alpha=F)
