@@ -16,7 +16,7 @@ generateIncidence <- function(dataSet) {
 
 args <- commandArgs(trailingOnly = T)
 if (length(args) > 0) {
-  firstDataSet <- read.csv('data/modelDataRun1.csv')
+  firstDataSet <- read.csv('modelDataRun1.csv')
   deltaT  <- as.numeric(args[1])
   print(deltaT)
   if (length(args) > 2) {
@@ -28,7 +28,7 @@ if (length(args) > 0) {
     finalYr   <- 2100
   }
 } else if (!exists('noImport')) {
-  firstDataSet   <- read.csv('data/modelDataRun1.csv')
+  firstDataSet   <- read.csv('modelDataRun1.csv')
   deltaT    <- .05
   initialYr <- 2000
   finalYr   <- 2100
@@ -54,14 +54,14 @@ firstInc <- generateIncidence(firstDataSet)
 #Plot:
 yrange <- range(c(0.5,firstInc$IN1,firstInc$INall))
 dev.new()
-plot( yrs, firstInc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue',log = 'y')
+plot( yrs, firstInc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue', log = 'y')
 lines(yrs, firstInc$INall, type='l', col='red')
 lines(yrs, firstInc$IN1,   type='l', col='green')
 
-filename <- "data/modelDataRun"
+filename <- "modelDataRun"
 runNumber <- 2
 extension <- ".csv"
-fileNameFull <- "data/modelDataRun2.csv"
+fileNameFull <- "modelDataRun2.csv"
 while (file.exists(fileNameFull)) {
 	dataSet <- read.csv(fileNameFull)
 	inc <- generateIncidence(dataSet)

@@ -20,7 +20,7 @@ double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 100; //For now
+const double popConst = 1; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
@@ -199,14 +199,16 @@ int run(string rfname)
         turtleList::iterator newIter = population.erase(turtleIter);
         turtleIter = --newIter;//TODO: store previous state in case of dead turtle for sake of updating pops
       } else {
-        //Check for exogenous re-infection TODO: abstract this to a function
-        double infParam = (double)rand()/(double)RAND_MAX;
-        if ((t.getCountry() == turtle::USA) && (infParam <= probOfReinfectionUSB))
-        {
-          t.infect(); 
-        } else if ((t.getCountry() == turtle::OTHER) 
-                   && (infParam <= probOfReinfectionFB)) {
-          t.infect();  
+        if (t.getState()==turtle::CHRONIC_LTBI){
+          //Check for exogenous re-infection TODO: abstract this to a function
+          double infParam = (double)rand()/(double)RAND_MAX;
+          if ((t.getCountry() == turtle::USA) && (infParam <= probOfReinfectionUSB))
+          {
+            t.reinfect(); 
+          } else if ((t.getCountry() == turtle::OTHER) 
+                     && (infParam <= probOfReinfectionFB)) {
+            t.reinfect();  
+          }
         }
 
         //Update our population lists
@@ -223,26 +225,26 @@ int run(string rfname)
     // this time step.
 
     // US birth and death (-> S0)
-    S0[i] += S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T);
-    S0[i] -= (int) floor(mu0*S0[i-1])*DELTA_T;
+    S0[i] += S0[i-1] + (int) floor(ro*(N0[i-1]+N1[i-1])*DELTA_T+.5);
+    S0[i] -= (int) floor(mu0*S0[i-1] + .5)*DELTA_T;
     // susceptible arrival (-> S1)
-    S1[i] += S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T);         
-    S1[i] -= (int) floor(mu1*S1[i-1])*DELTA_T;
+    S1[i] += S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T + .5);         
+    S1[i] -= (int) floor(mu1*S1[i-1] + .5)*DELTA_T;
  	 	
     //Creating Binomial Distributions for generating new infections from S0/S1
     binomial_distribution<int> usInfec(S0[i-1], lambda0 * DELTA_T);
- 	binomial_distribution<int> fbInfec(S1[i-1], lambda1 * DELTA_T);
+ 	  binomial_distribution<int> fbInfec(S1[i-1], lambda1 * DELTA_T);
 
     int numUSInfections = usInfec(generator);
-    int newf0           = floor(p * numUSInfections);
+    int newf0           = floor(p * numUSInfections + .5);
     int newl0           = numUSInfections - newf0;
     S0[i]              -= numUSInfections;
 		
     int numFBInfections = fbInfec(generator);
-    int newf1           = floor(p * numFBInfections);
+    int newf1           = floor(p * numFBInfections + .5);
     int newl1           = numFBInfections - newf1;
-    int LTBIArrivals    = floor(f * alpha * (N0[i-1] + N1[i-1]) * DELTA_T);
-    int AcuteArrivals   = floor(g * p * LTBIArrivals);
+    int LTBIArrivals    = floor(f * alpha * (N0[i-1] + N1[i-1]) * DELTA_T + .5);
+    int AcuteArrivals   = floor(g * p * LTBIArrivals + .5);
     newf1              += AcuteArrivals;
     newl1              += LTBIArrivals - AcuteArrivals;
     S1[i]              -= numFBInfections;
@@ -271,7 +273,7 @@ int run(string rfname)
 
 int main(int argc, char const *argv[])
 {
-  int numruns = 54; //number of runs performed
+  int numruns = 8; //number of runs performed
   int runnumber = atoi(argv[1]); // takes in the number of the run happening
   int adjustedi;
   string filename;
@@ -280,7 +282,7 @@ int main(int argc, char const *argv[])
     stringstream sstm;
     filename = "";
     adjustedi = i + (numruns*(runnumber-1));
-    sstm << "data/modelDataRun" << adjustedi << ".csv";
+    sstm << "modelDataRun" << adjustedi << ".csv";
     filename = sstm.str();
     run(filename);
     population.clear();

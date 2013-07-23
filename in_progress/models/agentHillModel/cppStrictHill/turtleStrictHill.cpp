@@ -129,12 +129,13 @@ turtle::State turtle::getState() {
   return state;
 }
 
-void turtle::infect(){
-  double r = (double)rand()/RAND_MAX;
+void turtle::reinfect(){
+  state = ACUTE_LTBI;
+  /*double r = (double)rand()/RAND_MAX;
   if (r < q) 
     state = INFECTIOUS_TB;
   else 
-    state = NONINFECTIOUS_TB;
+    state = NONINFECTIOUS_TB;*/
 }
 /*
 //Commented out to test compilation of agentbasedStrictHill.cpp
