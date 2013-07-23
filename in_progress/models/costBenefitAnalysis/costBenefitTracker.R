@@ -55,7 +55,10 @@ cutoffT <- floor(8/deltaT)
 S0 <- S1 <- F0 <- F1 <- L0 <- L1 <- I0 <- I1 <- J0 <- J1 <- N0 <- N1 <- rep(0,totT)  #compartment values
 cL0 <- cF0 <- cI0 <- cJ0 <- cL1 <- cF1 <- cI1 <- cJ1 <- cN0 <- cN1 <- rep(0,totT)    #costs associated with each compartment
 #Ct <- Cl <- rep(0,totT)  #total costs for active and latent treatment
-LTBIEn <- rep(0,totT)    #FB arrivals with LTBI entering the USA
+LTBIEn  <- rep(0,totT)    #FB arrivals with LTBI entering the USA
+LTBIEnD <- rep(0,totT)    #FB arrivals with LTBI entering the USA
+curedLTBIEn  <- rep(0,totT)    #FB arrivals with LTBI entering the USA
+curedLTBIEnD <- rep(0,totT)    #FB arrivals with LTBI entering the USA
 natdeath0 <- natdeath1 <- rep(0,totT)                               #natural deaths
 tbdeath0 <- tbdeath1 <- tbdeathD0 <- tbdeathD1 <- rep(0,totT)       #TB deaths, TB deaths with discounting
 progAcute0 <- progChron0 <- progAcute1 <- progChron1 <- rep(0,totT) #Progression from Acute, Chronic LTBI to Active TB
@@ -64,8 +67,8 @@ exogenous0 <- exogenous1 <- rep(0,totT)                             #Exogenous r
 interventionCost <- rep(0,totT)                                     #Cumulative intervention cost
 
 # ALSO TOOK OUT Ct,Cl FROM VECTOR BELOW
-P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1,LTBIEn,natdeath0,natdeath1,tbdeath0,tbdeath1,tbdeathD0,tbdeathD1,progAcute0,progChron0,progAcute1,progChron1,progTotalD0, progTotalD1, exogenous0,exogenous1, interventionCost)
 C <- c(newCases=0,totPop=0,LTBIEn=0) #Intervention cost array (cost of new cases, total population, and LTBI cases entering, each time step)
+P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,cJ1,cN0,cN1,LTBIEn,LTBIEnD,curedLTBIEn,curedLTBIEnD,natdeath0,natdeath1,tbdeath0,tbdeath1,tbdeathD0,tbdeathD1,progAcute0,progChron0,progAcute1,progChron1,progTotalD0, progTotalD1, exogenous0,exogenous1, interventionCost)
 IN0 <- IN1 <- INall <- rep(0,totT)
 
 #Total Population
@@ -174,7 +177,7 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
     dcN0    <- 0  #Total cost for all treatments (USB)
     dcN1    <- 0  #Total cost for all treatments (FB)
     
-    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,dLTBIEn*incLTBI,dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,dexogenous1,dInterventionCost) )
+    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,(dLTBIEn*incLTBI),(dLTBIEn*incLTBI*discV),dLTBIEn*(1-incLTBI),(dLTBIEn*(1-incLTBI)*discV),dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,dexogenous1, dInterventionCost) )
   }
   
   for (i in initial:(final-1)) {
@@ -259,13 +262,15 @@ legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 
 # abline(h = 1, lty = 'dotted')
 # legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
 
-# yearsPostCutoff <- years[(cutoffT+1):totT]
-# maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[(cutoffT+1):totT]
-# savingsPerCase  <- maxDifference/(1e6*P$LTBIEn[(cutoffT+1):totT])
-# dev.new()
-# plot(yearsPostCutoff, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
+yearsPostCutoff <- years[(cutoffT+1):totT]
+maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[(cutoffT+1):totT]
+savingsPerCase  <- maxDifference/(1e6*P$LTBIEn[(cutoffT+1):totT])
+dev.new()
+plot(yearsPostCutoff, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
 
-
+savingsPerCaseD <- maxDifference/(1e6*noImmLTBI$curedLTBIEnD[(cutoffT+1):totT])
+dev.new()
+plot(yearsPostCutoff, savingsPerCaseD, main="Savings Per Discounted Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
 
 ##Plot A: Where Transmission is cut after 2008
 #noTrans    <- hill(sigmaLBase,fBase,0)
