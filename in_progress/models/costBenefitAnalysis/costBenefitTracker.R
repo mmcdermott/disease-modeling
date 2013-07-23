@@ -1,3 +1,14 @@
+generateNewData = F
+baseFile = 'baseData.csv'
+intFilePrefix = 'intervention'
+intFileSuffix = '.csv'
+
+#Linux Config: 
+if (Sys.info()['sysname'] == "Linux") {
+  #Making it plot on linux
+  X11.options(type='nbcairo')
+}
+
 rkm <- function(Ydot,currY,deltaT,iter,startT=0){
   # This function performs a fourth-order Runge-Kutta Method on the system 
   # dY/dt = Ydot, and returns the next step after currY presuming timestep
@@ -176,7 +187,13 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
     dcN0    <- 0  #Total cost for all treatments (USB)
     dcN1    <- 0  #Total cost for all treatments (FB)
     
-    return( c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,(dLTBIEn*incLTBI),(dLTBIEn*incLTBI*discV),dLTBIEn*(1-incLTBI),(dLTBIEn*(1-incLTBI)*discV),dnatdeath0,dnatdeath1,dtbdeath0,dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,dexogenous1, dInterventionCost) )
+    return(c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,
+             dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,(dLTBIEn*incLTBI),
+             (dLTBIEn*incLTBI*discV),dLTBIEn*(1-incLTBI),
+             (dLTBIEn*(1-incLTBI)*discV),dnatdeath0,dnatdeath1,dtbdeath0,
+             dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,
+             dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,
+             dexogenous1, dInterventionCost) )
   }
   
   for (i in initial:(final-1)) {
@@ -196,9 +213,16 @@ generateIncidence <- function(dataSet) {
 	return(data.frame(IN0,IN1,INall))
 }
 
-P       <- hill(C,sigmaLBase,fBase,1,1,1,totT)
+if (generateNewData) {
+  P <- hill(C,sigmaLBase,fBase,1,1,1,totT)
+  write.csv(P,baseFile)
+  years   <- seq(2000+deltaT,2000+finalYr,deltaT)
+} else {
+  P     <- read.csv(baseFile)
+  years <- P$X
+  P$X   <- NULL
+}
 baseInc <- generateIncidence(P)
-years   <- seq(2000+deltaT,2000+finalYr,deltaT)
 
 #plot incidence data
 #  xlab, ylab  --> labels for x-, y-axes
@@ -250,7 +274,6 @@ plot(years, P$cN1+P$cN0, main="Plot A: cost of various interventions", xlab='yea
 lines(years, noImmLTBI$cN0 + noImmLTBI$cN1, type="l", col="green", lty=1)
 lines(years, someImmLTBI$cN0 + someImmLTBI$cN1, type="l", col="red", lty=1)
 lines(years, halfImmLTBI$cN0 + halfImmLTBI$cN1, type="l", col="purple", lty=1)
-abline(h = 1, lty = 'dotted')
 legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
 
 yearsPostCutoff <- years[(cutoffT+1):totT]
