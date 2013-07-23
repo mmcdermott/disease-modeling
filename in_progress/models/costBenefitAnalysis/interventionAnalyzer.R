@@ -18,24 +18,26 @@ generateIncidence <- function(dataSet) {
 }
 
 #Data Labels
-USB     <- rep("USB",             totT)
-FB      <- rep("FB",              totT)
-all     <- rep("All",             totT)
-noInt   <- rep("No Intervention", totT)
-int     <- rep("Intervention",    totT)
-savings <- rep("Savings",         totT)
-cost    <- rep("Cost",            totT)
-averted <- rep("Cases Averted",   totT)
+USB             <- rep("USB",             totT)
+FB              <- rep("FB",              totT)
+all             <- rep("All",             totT)
+noInt           <- rep("No Intervention", totT)
+int             <- rep("Intervention",    totT)
+savings         <- rep("Savings",         totT)
+cost            <- rep("Cost",            totT)
+averted         <- rep("Cases Averted",   totT)
+TBdeathsAverted <- rep("TB Deaths Averted",   totT)
 
 #Aesthetics
-USBC     <- 'blue'
-FBC      <- 'green'
-allC     <- 'red'
-noIntC   <- 'blue'
-intC     <- 'brown'
-savingsC <- '#24913C'
-costC    <- 'red'
-avertedC <- '#24913C'
+USBC             <- 'blue'
+FBC              <- 'green'
+allC             <- 'red'
+noIntC           <- 'blue'
+intC             <- 'brown'
+savingsC         <- '#24913C'
+costC            <- 'red'
+avertedC         <- '#24913C'
+TBdeathsAvertedC <- '#24913C'
 
 baseData         <- read.csv('baseData.csv')
 interventionData <- read.csv('interventionData.csv')
@@ -167,9 +169,9 @@ deathsAvertedPlot  <-
   geom_ribbon(aes(ymin=intDeaths,ymax=baseDeaths,fill=averted, alpha=0.2)) + 
   geom_line(aes(y=baseDeaths,    color=noInt)) +
   geom_line(aes(y=intDeaths,     color=int)) + 
-  geom_line(aes(y=deathsAverted, color=averted)) +
-  scale_fill_manual(values=c(avertedC)) + 
-  scale_color_manual(values=c(avertedC,intC,noIntC)) + 
+  geom_line(aes(y=deathsAverted, color=TBdeathsAverted)) +
+  scale_fill_manual(values=c(TBdeathsAvertedC)) + 
+  scale_color_manual(values=c(intC,noIntC,TBdeathsAvertedC)) + 
   guides(fill=F, alpha=F)
 
 yrange             <- round(seq(min(deathsAvertedDataD$baseDeaths),
@@ -183,7 +185,7 @@ deathsAvertedPlotD <-
   geom_ribbon(aes(ymin=intDeaths,ymax=baseDeaths,fill=averted, alpha=0.2)) + 
   geom_line(aes(y=baseDeaths, color=noInt)) +
   geom_line(aes(y=intDeaths, color=int)) + 
-  geom_line(aes(y=deathsAverted, color=averted)) +
-  scale_fill_manual(values=c(avertedC)) + 
-  scale_color_manual(values=c(avertedC,intC,noIntC)) + 
+  geom_line(aes(y=deathsAverted, color=TBdeathsAverted)) +
+  scale_fill_manual(values=c(TBdeathsAvertedC)) + 
+  scale_color_manual(values=c(intC,noIntC,TBdeathsAvertedC)) + 
   guides(fill=F, alpha=F)
