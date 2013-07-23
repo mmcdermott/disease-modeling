@@ -1,8 +1,13 @@
 library(ggplot2)
 #TODO: Make this read from the files somehow
-DELTA_T = 0.8
-years = seq(2000,2100 - DELTA_T, DELTA_T)
-totT = length(years)
+DELTA_T   = 0.8
+initialYr = 2000
+finalYr   = 2100
+cutoffYr  = 2008
+cutoffT   = (cutoffYr-initialYr)/DELTA_T + 1
+years     = seq(initialYr,finalYr - DELTA_T, DELTA_T)
+yearsPC   = seq(cutOffYr,finalYr - DELTA_T,DELTA_T)
+totT      = length(years)
 if (Sys.info()['sysname'] == "Linux") {
   #Making it plot on linux
   X11.options(type='nbcairo')
@@ -24,7 +29,7 @@ all             <- rep("All",             totT)
 noInt           <- rep("No Intervention", totT)
 int             <- rep("Intervention",    totT)
 savings         <- rep("Savings",         totT)
-cost            <- rep("Cost",            totT)
+costs           <- rep("Cost",            totT)
 averted         <- rep("Cases Averted",   totT)
 TBdeathsAverted <- rep("TB Deaths Averted",   totT)
 
@@ -32,10 +37,10 @@ TBdeathsAverted <- rep("TB Deaths Averted",   totT)
 USBC             <- 'blue'
 FBC              <- 'green'
 allC             <- 'red'
-noIntC           <- 'blue'
-intC             <- 'brown'
+noIntC           <- 'black'
+intC             <- 'blue'
 savingsC         <- '#24913C'
-costC            <- 'red'
+costsC           <- '#9F0013'
 avertedC         <- '#24913C'
 TBdeathsAvertedC <- '#24913C'
 
@@ -85,16 +90,32 @@ savingsPlot <- ggplot(savingsData,aes(x=year)) +
                geom_line(aes(y=interCost, color=int)) + 
                geom_line(aes(y=totSaved, color=savings)) +
                scale_fill_manual(values=c(savingsC)) + 
-               scale_color_manual(values=c(noIntC,intC,savingsC)) + 
+               scale_color_manual(values=c(intC,noIntC,savingsC)) + 
                guides(fill=F, alpha=F)
 
-##Total Costs Including Sticker Price: Comparing costs of various interventions
-##Implementation cost of intervention
-#costInter <- interventionData$implementationCost
-##Total US HCS cost due to intervention
-#interTot  <- interCost + costInter
-##Total additional spent by US HCS due to intervention
-#totSpent  <- interTot - baseCost
+#Total Costs Including Sticker Price: Comparing costs of various interventions
+#Implementation cost of intervention
+costInter <- (interventionData$interventionCost)/1e9
+#Total US HCS cost due to intervention
+interTot  <- interCost + costInter
+#Total additional spent by US HCS due to intervention
+totSpent  <- interTot - baseCost
+
+costData <- data.frame(year=years, baseCost=baseCost, interCost=interTot,
+                       totSpent=totSpent)
+yrange      <- round(seq(min(costData$interCost),max(costData$interCost)+0.5,by=0.5),1)
+costsPlot <- ggplot(costData,aes(x=year)) + 
+               labs(x="Years", y="Billions of USD", color="Intervention Status") +
+               scale_y_continuous(breaks=yrange) + 
+               ggtitle("Total Spent by US Health Care System given
+                        Intervention A, given presumed intervention cost") +
+               geom_ribbon(aes(ymin=baseCost,ymax=interCost,fill=costs, alpha=1)) + 
+               geom_line(aes(y=baseCost, color=noInt)) +
+               geom_line(aes(y=interCost, color=int)) + 
+               geom_line(aes(y=totSpent, color=costs)) +
+               scale_fill_manual(values=c(costsC)) + 
+               scale_color_manual(values=c(costsC,intC,noIntC)) + 
+               guides(fill=F, alpha=F)
 
 #Total Cases Averted
 baseCases         <- 1e6*(baseData$progAcute0 + baseData$progAcute1 + 
@@ -108,7 +129,7 @@ casesAvertedD     <- baseCasesD - intCasesD
 
 casesAvertedData  <- data.frame(year=years,baseCases=baseCases,
                                 intCases=intCases,
-                                casesAverted =casesAverted)
+                                casesAverted=casesAverted)
 casesAvertedDataD <- data.frame(year=years,baseCases=baseCasesD,
                                 intCases=intCasesD,
                                 casesAverted=casesAvertedD)
@@ -143,6 +164,26 @@ casesAvertedPlotD <-
   scale_fill_manual(values=c(avertedC)) + 
   scale_color_manual(values=c(avertedC,intC,noIntC)) + 
   guides(fill=F, alpha=F)
+
+#Cost per cases averted graph:
+cpcaData  <- data.frame(year=yearsPC,cpca=1e9*totSpent[cutoffT:totT]/casesAverted[cutoffT:totT])
+cpcaDataD <- data.frame(year=yearsPC,cpca=1e9*totSpent[cutoffT:totT]/casesAvertedD[cutoffT:totT])
+
+cpcaPlot  <- 
+  ggplot(cpcaData,aes(x=year)) + 
+  labs(x="Years", y="USD") +
+  scale_x_continuous(breaks=c(initialYr,cutoffYr,seq(initialYr,finalYr,25))) +
+  scale_y_log10() + 
+  ggtitle("Cost per Raw TB Case Averted due to Intervention A") +
+  geom_line(aes(y=cpca))
+
+cpcaPlotD <- 
+  ggplot(cpcaData,aes(x=year)) + 
+  labs(x="Years", y="USD") +
+  scale_x_continuous(breaks=c(initialYr,cutoffYr,seq(initialYr,finalYr,25))) +
+  #scale_y_log10() + 
+  ggtitle("Cost per Raw TB Case Averted due to Intervention A") +
+  geom_line(aes(y=cpca))
 
 #TB Deaths:
 baseDeaths         <- 1e6*(baseData$tbdeath0 + baseData$tbdeath1)
