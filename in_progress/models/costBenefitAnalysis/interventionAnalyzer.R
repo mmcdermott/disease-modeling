@@ -17,11 +17,23 @@ generateIncidence <- function(dataSet) {
   return(data.frame(IN0,IN1,INall))
 }
 
-USB   <- rep("USB",             totT)
-FB    <- rep("FB",              totT)
-all   <- rep("All",             totT)
-noInt <- rep("No Intervention", totT)
-int   <- rep("Intervention",    totT)
+#Data Labels
+USB     <- rep("USB",             totT)
+FB      <- rep("FB",              totT)
+all     <- rep("All",             totT)
+noInt   <- rep("No Intervention", totT)
+int     <- rep("Intervention",    totT)
+savings <- rep("Savings",         totT)
+cost    <- rep("Cost",            totT)
+
+#Aesthetics
+USBC     <- 'blue'
+FBC      <- 'green'
+allC     <- 'red'
+noIntC   <- 'blue'
+intC     <- 'brown'
+savingsC <- '#24913C'
+costC    <- 'red'
 
 baseData         <- read.csv('baseData.csv')
 interventionData <- read.csv('interventionData.csv')
@@ -49,32 +61,42 @@ incPlot <- ggplot(incData, aes(x=year)) +
            geom_line(aes(y=intAll,  color=all, linetype=int))
 
 #Total Costs Excluding Sticker Price: Comparing costs of various interventions
-baseCost  <- baseData$cN0 + baseData$cN1                 #US Health Care System
-                                                         # (HCS) TB costs due to
-                                                         # base system
-interCost <- interventionData$cN0 + interventionData$cN1 #US HCS TB costs due to
-                                                         # intervenvtion
-totSaved  <- baseCost - interCost                        #US HCS TB savings due
-                                                         # to intervention
+#US Health Care System (HCS) TB costs due to base system
+baseCost  <- (baseData$cN0 + baseData$cN1)/1e9
+#US HCS TB costs due to intervenvtion
+interCost <- (interventionData$cN0 + interventionData$cN1)/1e9
+#US HCS TB savings due to intervention
+totSaved  <- baseCost - interCost                        
+
 savingsData <- data.frame(year=years, baseCost=baseCost, interCost=interCost,
                           totSaved=totSaved)
+yrange      <- round(seq(min(savingsData$baseCost),max(savingsData$baseCost),by=0.5),1)
 savingsPlot <- ggplot(savingsData,aes(x=year)) + 
-               labs(x="Years", y="USD", color="Intervention Status") +
+               labs(x="Years", y="Billions of USD", color="Intervention Status") +
+               scale_y_continuous(breaks=yrange) + 
                ggtitle("Total Saved by US Health Care System given
                         Intervention A, ignoring intervention cost") +
-               geom_line(aes(y=baseCost, color=noInt)) + 
+               geom_ribbon(aes(ymin=interCost,ymax=baseCost,fill=savings, alpha=0.2)) + 
+               geom_line(aes(y=baseCost, color=noInt)) +
                geom_line(aes(y=interCost, color=int)) + 
-               geom_ribbon(aes(ymin=interCost,ymax=baseCost,alpha=0.8)) + 
-               geom_line(aes(y=totSaved, color=rep("Savings",totT)))
-#Total Costs Including Sticker Price: Comparing costs of various interventions
-#costInter <- interventionData$implementationCost         #Implementation cost of
-#                                                         # intervention
-#interTot  <- interCost + costInter                       #Total US cost due to
-#                                                         # intervention
-#totSpent  <- interTot - baseCost                         #Additional cost due to
-                                                         # intervention
+               geom_line(aes(y=totSaved, color=savings)) +
+               scale_fill_manual(values=c(savingsC)) + 
+               scale_color_manual(values=c(noIntC,intC,savingsC)) + 
+               guides(fill=F, alpha=F)
 
-#dev.new()
-#plot( years, baseCost,  type="l", col="brown")
-#lines(years, interCost, type="l", col="black")
-#lines(years, totSaved,  type="l", col="gold")
+##Total Costs Including Sticker Price: Comparing costs of various interventions
+##Implementation cost of intervention
+#costInter <- interventionData$implementationCost
+##Total US HCS cost due to intervention
+#interTot  <- interCost + costInter
+##Total additional spent by US HCS due to intervention
+#totSpent  <- interTot - baseCost
+
+#Total Cases Averted
+totalCasesBase    <- baseData$progAcute0 + baseData$progAcute1 + 
+                     baseData$progChron0 + baseData$progChron1
+totalCasesBaseD   <- baseData$progTotalD0 + baseData$progTotalD1
+totalCasesInt     <- IntData$progAcute0 + IntData$progAcute1 + 
+                     IntData$progChron0 + IntData$progChron1
+totalCasesIntD    <- IntData$progTotalD0 + IntData$progTotalD1
+casesAvertedPlot  <-
