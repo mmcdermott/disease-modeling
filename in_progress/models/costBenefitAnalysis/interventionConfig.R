@@ -1,3 +1,9 @@
+#TODO: these should go into hillconstants
+sigmaLBase  <- 0.057
+fBase       <- 0.187
+transBase   <- 1
+incLTBIBase <- 1
+
 baseFile         <- 'baseData.csv'
 intFilePrefix    <- ''
 intFileSuffix    <- '.csv'
