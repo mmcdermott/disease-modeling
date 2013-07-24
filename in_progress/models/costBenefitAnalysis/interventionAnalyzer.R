@@ -30,7 +30,8 @@ for (intervention in curInterventions) {
   intConfig <- interventionConfig(intervention)
   costs     <- intConfig["costs"]
   params    <- intConfig["params"]
-  interData <- hill(costs,params) #Make Params
+  interData <- hill(costs,params["sigmaL"],params["f"],params["trans"],
+                    params["incLTBI"])
   write.csv(interData, paste(c(intFilePrefix,intervention,intFileSuffix)))
 }
 
