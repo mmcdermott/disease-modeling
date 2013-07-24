@@ -19,4 +19,4 @@ cutoffYr  <- 2008
 totT      <- floor((finalYr-initialYr)/deltaT)  #Time steps
 cutoffT   <- floor((cutoffYr-initialYr)/deltaT) + 1
 years     <- seq(initialYr+deltaT,finalYr,deltaT)
-yearsPC   <- seq(cutoffYr,finalYr - deltaT,deltaT)
+yearsPC   <- seq(cutoffYr,finalYr - deltaT,deltaT) #years post cutoff

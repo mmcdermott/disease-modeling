@@ -25,7 +25,6 @@ sigmaF1 <- 1.301   #Cumulative fraction of treatment for acute infection for bot
 sigmaLBase <- 0.057 #Treatment rate for chronic LTBI per year
 fBase <- 0.187      #Fraction of FB arrivals with LTBI
 
-
 #2010 New Cases in Population i (millions)
 #source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
 newCases0 <- .008714  #US-born

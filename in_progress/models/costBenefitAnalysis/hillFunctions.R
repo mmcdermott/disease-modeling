@@ -1,3 +1,5 @@
+library(deSolve) # for lsoda routine
+
 #Hill Constants
 source('hillConstants.R')
 
@@ -25,7 +27,6 @@ interventionCost <- rep(0,totT)            #Cumulative intervention cost
 
 #Intervention per time step cost array 
 # cost of new cases, total population, and LTBI cases entering
-C <- c(newCases=0,totPop=0,LTBIEn=0) 
 P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,
                 cJ1,cN0,cN1,LTBIEn,LTBIEnD,curedLTBIEn,curedLTBIEnD,natdeath0,
                 natdeath1,tbdeath0,tbdeath1,tbdeathD0,tbdeathD1,progAcute0,
@@ -83,7 +84,7 @@ P$exogenous1[1]  <- 0
 hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,dataSet=P){
   #Differential Equation Functions
   Ddt <- function(t,v) {
-    discV = 1/(1.03^t)  #amount costs, health states are discounted each time step
+    discV   <- 1/(1.03^t)  #amount costs, health states are discounted each time step
     #parameter values initialized for each time step
     c01     <- (1-e0)*((1-e1)*v$N1)/((1-e0)*v$N0 + (1-e1)*v$N1)  #proportion of contacts made with FB individuals  (USB)
     c00     <- 1 - c01                                           #proportion of contacts made with USB individuals (USB)
@@ -124,8 +125,8 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
     dI1     <- q*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$I1
     dJ1     <- (1-q)*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*v$J1
     
-    dN0     <- 0
-    dN1     <- 0
+    dN0     <- dS0 + dF0 + dL0 + dI0 + dJ0
+    dN1     <- dS1 + dF1 + dL1 + dI1 + dJ1
     
     #Cost calculations
     dcL0    <- discV * Cl * sigmaL  * 1e6 * v$L0                    #cost for Chronic LTBI cures      (USB)
@@ -136,8 +137,8 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
     dcF1    <- discV * Cl * sigmaF1 * 1e6 * v$F1                    #cost for Acute LTBI cures        (FB)
     dcI1    <- discV * Ct * q*(dprogAcute1 + dprogChron1) * 1e6     #cost for Infectious TB cures     (FB)
     dcJ1    <- discV * Ct * (1-q)*(dprogAcute1 + dprogChron1) * 1e6 #cost for Non-Infectious TB cures (FB)
-    dcN0    <- 0  #Total cost for all treatments (USB)
-    dcN1    <- 0  #Total cost for all treatments (FB)
+    dcN0    <- dcF0 + dcL0 + dcI0 + dcJ0                            #Total cost for all treatments (USB)
+    dcN1    <- dcF1 + dcL1 + dcI1 + dcJ1                            #Total cost for all treatments (FB)
     
     return(c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,
              dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,(dLTBIEn*incLTBI),
@@ -148,12 +149,9 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
              dexogenous1, dInterventionCost) )
   }
   
+  #TODO: Convert to lsoda
   for (i in initial:(final-1)) {
-  	dataSet[i+1,]    <- rkm(Ddt,dataSet[i,],deltaT,i)
-  	dataSet$N0[i+1]  <- sum(dataSet[i+1,1:5])
-  	dataSet$N1[i+1]  <- sum(dataSet[i+1,6:10])
-  	dataSet$cN0[i+1] <- sum(dataSet[i+1,13:16])
-  	dataSet$cN1[i+1] <- sum(dataSet[i+1,17:20])
+  	dataSet[i+1,] <- rkm(Ddt,dataSet[i,],deltaT,i)
   }
   return(dataSet)
 }
@@ -164,4 +162,3 @@ generateIncidence <- function(dataSet) {
     INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
 	return(data.frame(IN0,IN1,INall))
 }
-
