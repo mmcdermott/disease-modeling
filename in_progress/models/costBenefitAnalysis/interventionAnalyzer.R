@@ -177,14 +177,14 @@ generateIncidence <- function(dataSet) {
 }
 
 #Base Data: 
+if (!generateNewData) {
+  P     <- read.csv(baseFile)
+  generateNewData <- length(P$X) != length(years)
+  P$X   <- NULL
+}
 if (generateNewData) {
   P <- hill(C,sigmaLBase,fBase,1,1,1,totT)
   write.csv(P,baseFile)
-  years   <- seq(initialYr+deltaT,finalYr,deltaT)
-} else {
-  P     <- read.csv(baseFile)
-  years <- P$X
-  P$X   <- NULL
 }
 baseInc <- generateIncidence(P)
 
@@ -234,15 +234,14 @@ lines(years, someImmLTBI$cN0 + someImmLTBI$cN1, type="l", col="red", lty=1)
 lines(years, halfImmLTBI$cN0 + halfImmLTBI$cN1, type="l", col="purple", lty=1)
 legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
 
-yearsPostCutoff <- years[cutoffT:totT]
 maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[cutoffT:totT]
 savingsPerCase  <- maxDifference/(1e6*P$LTBIEn[cutoffT:totT])
 dev.new()
-plot(yearsPostCutoff, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
+plot(yearsPC, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
 
 savingsPerCaseD <- maxDifference/(1e6*noImmLTBI$curedLTBIEnD[cutoffT:totT])
 dev.new()
-plot(yearsPostCutoff, savingsPerCaseD, main="Savings Per Discounted Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
+plot(yearsPC, savingsPerCaseD, main="Savings Per Discounted Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
 
 ##Plot A: Where Transmission is cut after 2008
 #noTrans    <- hill(sigmaLBase,fBase,0)

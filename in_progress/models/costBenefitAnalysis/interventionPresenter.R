@@ -1,8 +1,6 @@
 library(ggplot2)
 source('deSolConstants.R')
-years     = seq(initialYr,finalYr - deltaT, deltaT)
-yearsPC   = seq(cutoffYr,finalYr - deltaT,deltaT)
-totT      = length(years)
+
 if (Sys.info()['sysname'] == "Linux") {
   #Making it plot on linux
   X11.options(type='nbcairo')
