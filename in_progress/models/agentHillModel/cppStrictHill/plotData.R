@@ -7,6 +7,9 @@ generateIncidence <- function(dataSet) {
   IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
   IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
   INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+  #IN0   <- 1e6 * (dataSet$newI0 + dataSet$newJ0)/dataSet$N0
+  #IN1   <- 1e6 * (dataSet$newI1 + dataSet$newJ1)/dataSet$N1
+  #INall <- 1e6 * (dataSet$newI0 + dataSet$newI1 + dataSet$newJ0 + dataSet$newJ1)/(dataSet$N0 + dataSet$N1)
   frame <- data.frame(IN0,IN1,INall)
   write.table(frame, file="incData.csv", sep=",")
   return(frame)
@@ -52,7 +55,7 @@ firstInc <- generateIncidence(firstDataSet)
 #lines() plots data in the same window as the first plot() command
 
 #Plot:
-yrange <- range(c(0.5,firstInc$IN1,firstInc$INall))
+yrange <- range(c(0.5,500))#max(firstInc$IN1)))
 dev.new()
 plot( yrs, firstInc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue', log = 'y')
 lines(yrs, firstInc$INall, type='l', col='red')
