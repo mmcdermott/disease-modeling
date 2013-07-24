@@ -1,5 +1,8 @@
 // turtleStrictHill.hpp
 
+// get round to work
+//check exogenous reinfection
+
 #ifndef ____turtle__
 #define ____turtle__
 
@@ -68,7 +71,7 @@ public:
   void display();
   COB getCountry();
   State getState();
-  void infect();
+  void reinfect();
 
 private:
   COB country;

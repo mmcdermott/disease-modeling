@@ -7,6 +7,9 @@ generateIncidence <- function(dataSet) {
   IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
   IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
   INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+  #IN0   <- 1e6 * (dataSet$newI0 + dataSet$newJ0)/dataSet$N0
+  #IN1   <- 1e6 * (dataSet$newI1 + dataSet$newJ1)/dataSet$N1
+  #INall <- 1e6 * (dataSet$newI0 + dataSet$newI1 + dataSet$newJ0 + dataSet$newJ1)/(dataSet$N0 + dataSet$N1)
   frame <- data.frame(IN0,IN1,INall)
   write.table(frame, file="incData.csv", sep=",")
   return(frame)
@@ -16,7 +19,7 @@ generateIncidence <- function(dataSet) {
 
 args <- commandArgs(trailingOnly = T)
 if (length(args) > 0) {
-  firstDataSet <- read.csv('data/modelDataRun1.csv')
+  firstDataSet <- read.csv('modelDataRun1.csv')
   deltaT  <- as.numeric(args[1])
   print(deltaT)
   if (length(args) > 2) {
@@ -28,7 +31,7 @@ if (length(args) > 0) {
     finalYr   <- 2100
   }
 } else if (!exists('noImport')) {
-  firstDataSet   <- read.csv('data/modelDataRun1.csv')
+  firstDataSet   <- read.csv('modelDataRun1.csv')
   deltaT    <- .05
   initialYr <- 2000
   finalYr   <- 2100
@@ -52,16 +55,16 @@ firstInc <- generateIncidence(firstDataSet)
 #lines() plots data in the same window as the first plot() command
 
 #Plot:
-yrange <- range(c(0.5,firstInc$IN1,firstInc$INall))
+yrange <- range(c(0.5,500))#max(firstInc$IN1)))
 dev.new()
-plot( yrs, firstInc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue',log = 'y')
+plot( yrs, firstInc$IN0,   main='Incidence over Time', xlab='year', ylab='incidence/million', ylim=yrange, type='l', col='blue', log = 'y')
 lines(yrs, firstInc$INall, type='l', col='red')
 lines(yrs, firstInc$IN1,   type='l', col='green')
 
-filename <- "data/modelDataRun"
+filename <- "modelDataRun"
 runNumber <- 2
 extension <- ".csv"
-fileNameFull <- "data/modelDataRun2.csv"
+fileNameFull <- "modelDataRun2.csv"
 while (file.exists(fileNameFull)) {
 	dataSet <- read.csv(fileNameFull)
 	inc <- generateIncidence(dataSet)

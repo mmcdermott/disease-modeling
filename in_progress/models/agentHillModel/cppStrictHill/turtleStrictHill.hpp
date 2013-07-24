@@ -9,7 +9,7 @@
 #include <iostream>
 #include <math.h>
 
-const double DELTA_T = .02;  // measured in years
+const double DELTA_T = .05;  // measured in years
 
 //Hill model constants
 const double mu0     = 1./78;     // Natural mortality rate USB per year
@@ -66,7 +66,6 @@ public:
     NATURAL_DEATH    = 6
   };
   turtle(const COB &c, const State &s);
-  bool newinfect();
   bool dead();
   void updateState();
   void display();
@@ -77,7 +76,6 @@ public:
 private:
   COB country;
   State state;
-  bool newinfection;
 };
 
 extern const char* countryNames[2];

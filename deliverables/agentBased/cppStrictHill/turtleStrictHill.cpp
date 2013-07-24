@@ -27,7 +27,6 @@ bool turtle::dead() {
 void turtle::updateState(){
   //Initializations
   double r  = (double)rand()/RAND_MAX; //random number from (0,1]
-  
   if(country == USA){
     if (r < MU0) {  //Natural death rate (USB)
       state = NATURAL_DEATH;
@@ -129,12 +128,8 @@ turtle::State turtle::getState() {
   return state;
 }
 
-void turtle::infect(){
-  double r = (double)rand()/RAND_MAX;
-  if (r < q) 
-    state = INFECTIOUS_TB;
-  else 
-    state = NONINFECTIOUS_TB;
+void turtle::reinfect(){
+  state = ACUTE_LTBI;
 }
 /*
 //Commented out to test compilation of agentbasedStrictHill.cpp

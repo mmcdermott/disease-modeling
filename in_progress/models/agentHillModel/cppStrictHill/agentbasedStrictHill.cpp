@@ -20,7 +20,7 @@ double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 10; //For now
+double popConst; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
@@ -29,17 +29,7 @@ const int    totT     = (int) (finalYr/DELTA_T);
 //TODO upon moving over constants, fix them here.
 const int newCases0 = 8714; //US-born
 const int newCases1 = 7554; //Foreign-born
-//Initial Populations--source: Hill Model.
-const int initUSP   = (1./popConst)*250000000;                            
-const int initFBP   = (1./popConst)*31400000;                             
-const int initF0    = (1./popConst)*((1-r0)*(newCases0)/vF);              
-const int initF1    = (1./popConst)*((1-r1)*(newCases1)/vF);              
-const int initL0    = (1./popConst)*(r0*(newCases0)/vL0);                 
-const int initL1    = (1./popConst)*(r1*(newCases1)/vL1);                 
-const int initI0    = (1./popConst)*(q*newCases0/(mu0 + mud + phi0));     
-const int initI1    = (1./popConst)*(q*newCases1/(mu0 + mud + phi1));     
-const int initJ0    = (1./popConst)*((1-q)*newCases0/(mu0 + mud + phi0)); 
-const int initJ1    = (1./popConst)*((1-q)*newCases1/(mu1 + mud + phi1)); 
+
 
 turtleList population;
 
@@ -48,17 +38,13 @@ int S0[totT];
 int L0[totT];
 int F0[totT];
 int J0[totT];
-int newJ0[totT];
 int I0[totT];
-int newI0[totT];
 int N1[totT];
 int S1[totT];
 int L1[totT];
 int F1[totT];
 int I1[totT];
-int newI1[totT];
 int J1[totT];
-int newJ1[totT];
 double cost[totT];
 
 /* 
@@ -133,11 +119,11 @@ void createTurtles(const turtle::State &turtState, const turtle::COB &cob, int t
 void exportData(string fname) {
   ofstream output;
   output.open(fname);
-  output << "\"N0\",\"S0\",\"L0\",\"F0\",\"I0\",\"newI0\",\"J0\",\"newJ0\",";
-  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"newI1\",\"J1\",\"newJ1\",\"cost\"" << endl;
+  output << "\"N0\",\"S0\",\"L0\",\"F0\",\"I0\",\"J0\",";
+  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"J1\",\"cost\"" << endl;
   for (int i=0; i < totT; ++i) {
-    output << N0[i] << "," << S0[i] << "," << L0[i] << "," << F0[i] << "," << I0[i] << "," << newI0[i] << "," << J0[i] << "," << newJ0[i] << ",";
-    output << N1[i] << "," << S1[i] << "," << L1[i] << "," << F1[i] << "," << I1[i] << "," << newI1[i] << "," << J1[i] << "," << newJ1[i] << ",";
+    output << N0[i] << "," << S0[i] << "," << L0[i] << "," << F0[i] << "," << I0[i] << "," << J0[i] << ",";
+    output << N1[i] << "," << S1[i] << "," << L1[i] << "," << F1[i] << "," << I1[i] << "," << J1[i] << ",";
     output << cost[i] << endl;
   }
   output.close();
@@ -148,6 +134,18 @@ int run(string rfname)
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
   default_random_engine generator (seed);
   srand(time(NULL));
+
+  //Initial Populations--source: Hill Model.
+  const int initUSP   = (1./popConst)*250000000;                            
+  const int initFBP   = (1./popConst)*31400000;                             
+  const int initF0    = (1./popConst)*((1-r0)*(newCases0)/vF);              
+  const int initF1    = (1./popConst)*((1-r1)*(newCases1)/vF);              
+  const int initL0    = (1./popConst)*(r0*(newCases0)/vL0);                 
+  const int initL1    = (1./popConst)*(r1*(newCases1)/vL1);                 
+  const int initI0    = (1./popConst)*(q*newCases0/(mu0 + mud + phi0));     
+  const int initI1    = (1./popConst)*(q*newCases1/(mu0 + mud + phi1));     
+  const int initJ0    = (1./popConst)*((1-q)*newCases0/(mu0 + mud + phi0)); 
+  const int initJ1    = (1./popConst)*((1-q)*newCases1/(mu1 + mud + phi1)); 
 
   N0[0] = initUSP;
   N1[0] = initFBP;
@@ -167,10 +165,6 @@ int run(string rfname)
   S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
   S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
 
-  newJ0[0] = 1;
-  newI0[0] = 1;
-  newJ1[0] = 1;
-  newI1[0] = 1;
   if (debug) {
     cout << "Number of Iterations: " << totT << endl;
   }
@@ -187,7 +181,6 @@ int run(string rfname)
     //TODO: Maybe use some kind of exponential, or reed frost, or something?
     double probOfReinfectionUSB = x * p * lambda0 * DELTA_T;
     double probOfReinfectionFB  = x * p * lambda1 * DELTA_T;
-    //cout<< "it"<<i<<endl;
     //Debugging Info:
     if (debug)
     {
@@ -219,18 +212,7 @@ int run(string rfname)
                      && (infParam <= probOfReinfectionFB)) {
             t.reinfect();  
           }
-        } else if (t.newinfect()){
-          if (t.getCountry() == turtle::USA){
-            if (t.getState() == turtle::INFECTIOUS_TB){
-              newI0[i]++;
-            } else{newJ0[i]++;}
-          } else {
-            if (t.getState() == turtle::INFECTIOUS_TB){
-              newI1[i]++;
-            } else{newJ1[i]++;}
-          }
         }
-
         //Update our population lists
         updatePop(t.getState(), t.getCountry(), i);
 
@@ -251,17 +233,14 @@ int run(string rfname)
     S1[i] += S1[i-1] + (int) floor((1 - f) * alpha * (N0[i-1]+N1[i-1]) * DELTA_T + .5);         
     S1[i] -= (int) floor(mu1*S1[i-1] *DELTA_T + .5);
     //Creating Binomial Distributions for generating new infections from S0/S1
-    binomial_distribution<int> usInfec(S0[i-1], lambda0 * DELTA_T); //changed int to double
+    binomial_distribution<int> usInfec(S0[i-1], lambda0 * DELTA_T);
  	  binomial_distribution<int> fbInfec(S1[i-1], lambda1 * DELTA_T);
-    /*cout<<"S0[i-1]"<<S0[i-1]<<endl;
-    cout<<"lambda0"<<lambda0<<endl;
-    cout<<"lambda0 * DELTA_T"<<lambda0 * DELTA_T<<endl;
-    cout<<"lambda1 * DELTA_T"<<lambda1 * DELTA_T<<endl;*/
-    double numUSInfections = usInfec(generator);
+
+    int numUSInfections = usInfec(generator);
     int newf0           = floor(p * numUSInfections + .5);
     int newl0           = floor(numUSInfections + .5) - newf0;
     S0[i]              -= floor(numUSInfections + .5);
-    double numFBInfections = fbInfec(generator);
+    int numFBInfections = fbInfec(generator);
     int newf1           = floor(p * numFBInfections + .5);
     int newl1           = floor(numFBInfections + .5) - newf1;
     int LTBIArrivals    = floor(f * alpha * (N0[i-1] + N1[i-1]) * DELTA_T + .5);
@@ -269,10 +248,7 @@ int run(string rfname)
     newf1              += AcuteArrivals;
     newl1              += LTBIArrivals - AcuteArrivals;
     S1[i]              -= floor(numFBInfections + .5);
-    /*newL0[i] = newl0;
-    newF0[i] = newf0;
-    newL1[i] = newl1;
-    newF1[i] = newf1;*/
+
     //Creating the turtles
     createTurtles(turtle::ACUTE_LTBI,   turtle::USA,   i, newf0);
     createTurtles(turtle::CHRONIC_LTBI, turtle::USA,   i, newl0);
@@ -289,17 +265,48 @@ int run(string rfname)
     cost[i] += cost[i-1];
   }
   // write data to file
-  //exportData("modelData.csv");
   exportData(rfname);
   return 0;
 }
 
 int main(int argc, char const *argv[])
 {
-  int numruns = 1; //number of runs performed
-  int runnumber = atoi(argv[1]); // takes in the number of the run happening
+  vector<string> args(argv + 1, argv + argc);
+  int numruns;
+  int runnumber;
+  // Loop over command-line args
+  // (Actually I usually use an ordinary integer loop variable and compare
+  // args[i] instead of *i -- don't tell anyone! ;)
+  for (vector<string>::iterator i = args.begin(); i != args.end(); ++i) {
+    if (*i == "-h" || *i == "--help") {
+      cout << "Syntax: ./agentModelStrictHill [number of runs to perform] [population constant] [number of this run (default = 1)]" << endl;
+      return 0;
+    }
+  }
+  if (args.size() > 3) {
+    cout << "Too many arguments. Type -h or --help for more info." <<endl;
+    return 0;
+  } else if (args.size() < 2) {
+    cout << "Too few arguments. Type -h or --help for more info." <<endl;
+    /*for (vector<string>::iterator j = args.begin(); j != args.end(); ++j) {
+      cout << *j <<endl;
+    }*/
+    return 0;
+  }
+  else if (args.size() == 2) {
+    numruns = atoi(argv[1]); //number of runs performed
+    popConst = atof(argv[2]);
+    runnumber = 1; // takes in the number of the run happening
+  }
+  else if (args.size() == 3) {
+    numruns = atoi(argv[1]); //number of runs performed
+    popConst = atof(argv[2]);
+    runnumber = atoi(argv[3]); // takes in the number of the run happening
+    }
+  
   int adjustedi;
   string filename;
+  cout<<popConst<<endl;
 
   for (int i = 1 ; i <= numruns; ++i) {
     stringstream sstm;
@@ -315,21 +322,14 @@ int main(int argc, char const *argv[])
       L0[j] = 0;
       F0[j] = 0;
       J0[j] = 0;
-      newJ0[j] = 0;
       I0[j] = 0;
-      newI0[j] = 0;
       N1[j] = 0;
       S1[j] = 0;
       L1[j] = 0;
       F1[j] = 0;
       I1[j] = 0;
-      newI1[j] = 0;
       J1[j] = 0;
-      newJ1[j] = 0;
     }
   }
-  cout<<vL0<<" || "<<1 - exp(-vL0)<<" || "<<vL0*DELTA_T<<" || "<<PROB_CHRONIC_PROGRESSION_0<<endl;
-  cout<<vL1<<" || "<<1 - exp(-vL1)<<" || "<<vL1*DELTA_T<<" || "<<PROB_CHRONIC_PROGRESSION_1<<endl;
-  cout<<vF<<" || "<<1 - exp(-vF)<<" || "<<vF*DELTA_T<<" || "<<PROB_ACUTE_PROGRESSION<<endl;
   return 0;
 }

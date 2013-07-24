@@ -29,6 +29,9 @@ turtleStrictHill: turtleStrictHill.o
 plots: $(agentTarget)
 	time ./$(agentTarget) 1 1 && R < plotData.R --save --args ${DELTA_T} && ${OPEN} Rplots.pdf
 
+just_plots: 
+	R < plotData.R --save --args ${DELTA_T} && ${OPEN} Rplots.pdf
+
 test_run: clean clean_plots plots
 
 experiment_setup: clean clean_plots agentModelStrictHill
