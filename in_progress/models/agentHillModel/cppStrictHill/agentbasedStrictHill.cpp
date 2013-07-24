@@ -20,7 +20,7 @@ double lambda0;
 double lambda1;
 
 const double discRate = 1.03;
-const double popConst = 100; //For now
+const double popConst = 10; //For now
 const int    finalYr  = 100;
 const int    totT     = (int) (finalYr/DELTA_T);
 
@@ -258,7 +258,6 @@ int run(string rfname)
     cout<<"lambda0 * DELTA_T"<<lambda0 * DELTA_T<<endl;
     cout<<"lambda1 * DELTA_T"<<lambda1 * DELTA_T<<endl;*/
     double numUSInfections = usInfec(generator);
-    cout<<numUSInfections<<endl;
     int newf0           = floor(p * numUSInfections + .5);
     int newl0           = floor(numUSInfections + .5) - newf0;
     S0[i]              -= floor(numUSInfections + .5);
@@ -297,7 +296,7 @@ int run(string rfname)
 
 int main(int argc, char const *argv[])
 {
-  int numruns = 2; //number of runs performed
+  int numruns = 1; //number of runs performed
   int runnumber = atoi(argv[1]); // takes in the number of the run happening
   int adjustedi;
   string filename;
