@@ -16,9 +16,11 @@ const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectio
 //Implementation
 //Constructor
 turtle::turtle(const COB &c, const State &s)
-  : country(c), state(s)
+  : country(c), state(s), newinfection(false)
 {}
-
+bool turtle::newinfect() {
+  return newinfection;
+}
 bool turtle::dead() {
   return (state == NATURAL_DEATH || state == TB_DEATH);
 }
@@ -27,7 +29,7 @@ bool turtle::dead() {
 void turtle::updateState(){
   //Initializations
   double r  = (double)rand()/RAND_MAX; //random number from (0,1]
-  
+  newinfection = false;
   if(country == USA){
     if (r < MU0) {  //Natural death rate (USB)
       state = NATURAL_DEATH;
@@ -38,6 +40,7 @@ void turtle::updateState(){
     //Disease progression and self-cure
     if (state == CHRONIC_LTBI) {
       if (r < PROB_CHRONIC_PROGRESSION_0) {  //Disease progression from Chronic Latent to Active TB (USB)
+        newinfection = true;
         if (r < q*PROB_CHRONIC_PROGRESSION_0) {
           state = INFECTIOUS_TB;
         } else {
@@ -50,6 +53,7 @@ void turtle::updateState(){
       }
     } else if(state == ACUTE_LTBI){
       if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
+        newinfection = true;
         if(r < q*PROB_ACUTE_PROGRESSION) {
           state = INFECTIOUS_TB;
         } else {
@@ -81,6 +85,7 @@ void turtle::updateState(){
     //Disease progression and self-cure
     if (state == CHRONIC_LTBI) {
       if (r < PROB_CHRONIC_PROGRESSION_1) {  //Disease progression from Chronic Latent to Active TB (FB)
+        newinfection = true;
         if (r < q*PROB_CHRONIC_PROGRESSION_1) {
           state = INFECTIOUS_TB;
         } else {
@@ -93,6 +98,7 @@ void turtle::updateState(){
       }
     } else if(state == ACUTE_LTBI){
       if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
+        newinfection = true;
         if(r < q*PROB_ACUTE_PROGRESSION) {
           state = INFECTIOUS_TB;
         } else {
