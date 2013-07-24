@@ -3,20 +3,14 @@ source('deSolConstants.R')
 source('hillFunctions.R') #for generateIncidence
 source('interventionConfig.R')
 
-if (Sys.info()['sysname'] == "Linux") {
-  #Making it plot on linux
-  X11.options(type='nbcairo')
+#Title Generation:
+plotTitle <- function(base,interventionName,final="") {
+  if (final != "") {
+    return(ggtitle(paste(c(base,interventionName,final),collapse=" ")))
+  } else {
+    return(ggtitle(paste(c(base,interventionName),collapse=" ")))
+  }
 }
-
-#vF <- 1.5         #Progression rate of acute infection per year
-#vL0 <- 0.0014     #Progression rate for reactivation (chronic LTBI) in the USB population per year
-#vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB population per year
-#generateIncidence <- function(dataSet) {
-#  IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
-#  IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
-#  INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
-#  return(data.frame(IN0,IN1,INall))
-#}
 
 #Data Labels
 USB             <- rep("USB",             totT)
@@ -40,12 +34,12 @@ costsC           <- '#9F0013'
 avertedC         <- '#24913C'
 TBdeathsAvertedC <- '#24913C'
 
-baseData         <- read.csv('baseData.csv')
+baseData         <- read.csv(baseFile)
 baseInc          <- generateIncidence(baseData)
 
 presentIntervention <- function(interventionName) {
-  interventionData <- read.csv(paste(c(interventionName,intFileSuffix),
-                                     collapse=""))
+  interventionData <- read.csv(paste(c(intFilePrefix,interventionName,
+                                       intFileSuffix),collapse=""))
   interventionInc  <- generateIncidence(interventionData)
   
   #Incidence Reports: Comparing Baseline Incidence against Intervention Incidence
@@ -59,7 +53,7 @@ presentIntervention <- function(interventionName) {
                            limits=c(0.5,250)) + 
              labs(x="Years", y="Incidence/million", color="Population", 
                   linetype="Intervention Status") + 
-             ggtitle("Incidence Levels for Intervention A") + 
+             plotTitle("Incidence Levels for Intervention",interventionName) + 
              geom_line(aes(y=baseUSB, color=USB, linetype=noInt))  + 
              geom_line(aes(y=intUSB,  color=USB, linetype=int))    + 
              geom_line(aes(y=baseFB,  color=FB,  linetype=noInt))  + 
@@ -81,8 +75,9 @@ presentIntervention <- function(interventionName) {
   savingsPlot <- ggplot(savingsData,aes(x=year)) + 
                  labs(x="Years", y="Billions of USD", color="Intervention Status") +
                  scale_y_continuous(breaks=yrange) + 
-                 ggtitle("Total Saved by US Health Care System given
-                          Intervention A, ignoring intervention cost") +
+                 plotTitle("Total Saved by US Health Care System given 
+                           Intervention",interventionName,
+                           "ignoring intervention cost") +
                  geom_ribbon(aes(ymin=interCost,ymax=baseCost,fill=savings, alpha=0.2)) + 
                  geom_line(aes(y=baseCost, color=noInt)) +
                  geom_line(aes(y=interCost, color=int)) + 
@@ -105,8 +100,9 @@ presentIntervention <- function(interventionName) {
   costsPlot <- ggplot(costData,aes(x=year)) + 
                  labs(x="Years", y="Billions of USD", color="Intervention Status") +
                  scale_y_continuous(breaks=yrange) + 
-                 ggtitle("Total Spent by US Health Care System given
-                          Intervention A, given presumed intervention cost") +
+                 plotTitle("Total Spent by US Health Care System given
+                            Intervention",interventionName,
+                            "given presumed intervention cost") +
                  geom_ribbon(aes(ymin=baseCost,ymax=interCost,fill=costs, alpha=1)) + 
                  geom_line(aes(y=baseCost, color=noInt)) +
                  geom_line(aes(y=interCost, color=int)) + 
@@ -138,7 +134,7 @@ presentIntervention <- function(interventionName) {
     ggplot(casesAvertedData,aes(x=year)) + 
     labs(x="Years", y="Cases of TB", color="Intervention Status") +
     scale_y_continuous(breaks=yrange) + 
-    ggtitle("Total Cases of TB Averted given Intervention A") +
+    plotTitle("Total Cases of TB Averted given Intervention",interventionName) +
     geom_ribbon(aes(ymin=intCases,ymax=baseCases,fill=averted, alpha=0.2)) + 
     geom_line(aes(y=baseCases,    color=noInt)) +
     geom_line(aes(y=intCases,     color=int)) + 
@@ -154,7 +150,8 @@ presentIntervention <- function(interventionName) {
     labs(x="Years", y="Discounted Cases of TB", 
          color="Intervention Status") +
     scale_y_continuous(breaks=yrange) + 
-    ggtitle("Discounted Cases of TB Averted given Intervention A") +
+    plotTitle("Discounted Cases of TB Averted given Intervention",
+              interventionName) +
     geom_ribbon(aes(ymin=intCases,ymax=baseCases,fill=averted, alpha=0.2)) + 
     geom_line(aes(y=baseCases, color=noInt)) +
     geom_line(aes(y=intCases, color=int)) + 
@@ -171,16 +168,18 @@ presentIntervention <- function(interventionName) {
     ggplot(cpcaData,aes(x=year)) + 
     labs(x="Years", y="USD") +
     scale_x_continuous(breaks=c(initialYr,cutoffYr,seq(initialYr,finalYr,25))) +
-    scale_y_log10() + 
-    ggtitle("Cost per Raw TB Case Averted due to Intervention A") +
+    #scale_y_log10() + 
+    plotTitle("Cost per Raw TB Case Averted due to Intervention",
+              interventionName) +
     geom_line(aes(y=cpca))
   
   cpcaPlotD <- 
     ggplot(cpcaDataD,aes(x=year)) + 
     labs(x="Years", y="USD") +
     scale_x_continuous(breaks=c(initialYr,cutoffYr,seq(initialYr,finalYr,25))) +
-    scale_y_log10() + 
-    ggtitle("Cost per Discounted TB Case Averted due to Intervention A") +
+    #scale_y_log10() + 
+    plotTitle("Cost per Discounted TB Case Averted due to Intervention",
+              interventionName) +
     geom_line(aes(y=cpca))
   
   #TB Deaths:
@@ -204,7 +203,7 @@ presentIntervention <- function(interventionName) {
     ggplot(deathsAvertedData,aes(x=year)) + 
     labs(x="Years", y="TB Deaths", color="Intervention Status") +
     scale_y_continuous(breaks=yrange) + 
-    ggtitle("Total TB Lives Saved Given Intervention A") +
+    plotTitle("Total TB Lives Saved Given Intervention",interventionName) +
     geom_ribbon(aes(ymin=intDeaths,ymax=baseDeaths,fill=averted, alpha=0.2)) + 
     geom_line(aes(y=baseDeaths,    color=noInt)) +
     geom_line(aes(y=intDeaths,     color=int)) + 
@@ -217,10 +216,9 @@ presentIntervention <- function(interventionName) {
                                  max(deathsAvertedDataD$baseDeaths),by=5e3),1)
   deathsAvertedPlotD <- 
     ggplot(deathsAvertedDataD,aes(x=year)) + 
-    labs(x="Years", y="Discounted TB Deaths", 
-         color="Intervention Status") +
+    labs(x="Years", y="Discounted TB Deaths", color="Intervention Status") +
     scale_y_continuous(breaks=yrange) + 
-    ggtitle("Discounted TB Lives Saved Given Intervention A") +
+    plotTitle("Discounted TB Lives Saved Given Intervention",interventionName) +
     geom_ribbon(aes(ymin=intDeaths,ymax=baseDeaths,fill=averted, alpha=0.2)) + 
     geom_line(aes(y=baseDeaths, color=noInt)) +
     geom_line(aes(y=intDeaths, color=int)) + 
@@ -229,17 +227,21 @@ presentIntervention <- function(interventionName) {
     scale_color_manual(values=c(intC,noIntC,TBdeathsAvertedC)) + 
     guides(fill=F, alpha=F)
   
-  incPlot
-  savingsPlot
-  costsPlot
-  casesAvertedPlot
-  casesAvertedPlotD
-  cpcaPlot
-  cpcaPlotD
-  deathsAvertedPlot
-  deathsAvertedPlotD
+  fileName <- paste(c('interventions/',intervention,"Analysis.pdf"),collapse="")
+  pdf(fileName,onefile=T)
+  print(incPlot)
+  print(savingsPlot)
+  print(costsPlot)
+  print(casesAvertedPlot)
+  print(casesAvertedPlotD)
+  print(cpcaPlot)
+  print(cpcaPlotD)
+  print(deathsAvertedPlot)
+  print(deathsAvertedPlotD)
+  dev.off()
 }
 
 for (intervention in curInterventions) {
+  print(paste(c('Preparing Intervention',intervention),collapse=" "))
   presentIntervention(intervention)
 }

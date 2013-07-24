@@ -1,3 +1,8 @@
+sigmaLBase  <- 0.057
+fBase       <- 0.187
+transBase   <- 1
+incLTBIBase <- 1
+
 parms <- c(
 mu0   = 1/78,      #Natural mortality rate USB per year
 mu1   = 1/53,      #Natural mortality rate FB per year
@@ -23,8 +28,8 @@ phi0  = 1.114,     #Cumulative fraction self-cure and treatment of active diseas
 phi1  = 1.167,     #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (FB)
 sigmaF0 = 1.296,   #Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)
 sigmaF1 = 1.301,   #Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)
-sigmaLBase = 0.057, #Treatment rate for chronic LTBI per year
-fBase = 0.187,      #Fraction of FB arrivals with LTBI
+sigmaLBase = sigmaLBase, #Treatment rate for chronic LTBI per year
+fBase = fBase,      #Fraction of FB arrivals with LTBI
 
 #2010 New Cases in Population i (millions)
 #source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm

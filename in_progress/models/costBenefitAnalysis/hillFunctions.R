@@ -86,8 +86,8 @@ P$exogenous0[1]  <- 0
 P$exogenous1[1]  <- 0
 
   #Differential Equation Functions
-  Ddt <- function(t,v,parms) {
-with(as.list(c(t,v,parms)), {
+Ddt <- function(t,v,parms) {
+  with(as.list(c(t,v,parms)), {
     discV   <- 1/(1.03^t)  #amount costs, health states are discounted each time step
     #parameter values initialized for each time step
     c01     <- (1-e0)*((1-e1)*N1)/((1-e0)*N0 + (1-e1)*N1)  #proportion of contacts made with FB individuals  (USB)
@@ -160,7 +160,6 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
   newparms <- c(iCnewCases=as.vector(intervenCost['newCases']), iCtotPop=as.vector(intervenCost['totPop']), iCLTBIEn=as.vector(intervenCost['LTBIEn']),
 		sigmaL=sigmaL, f=f, transmission=transmission, incLTBI=incLTBI)
   parameters <- c(parms, newparms)
-  cat(parameters['iCnewCases'], '\n')
   # recursive=TRUE collapses dataframe to labeled vector
   initv <- c(dataSet[initial,], recursive=TRUE)
   # times = data points to be calculuated

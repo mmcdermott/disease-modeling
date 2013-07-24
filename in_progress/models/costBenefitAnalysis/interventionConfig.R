@@ -1,12 +1,9 @@
-#TODO: these should go into hillconstants
-sigmaLBase  <- 0.057
-fBase       <- 0.187
-transBase   <- 1
-incLTBIBase <- 1
+source('hillConstants.R')
 
-baseFile         <- 'baseData.csv'
-intFilePrefix    <- ''
-intFileSuffix    <- '.csv'
+directory     <- 'data/'
+baseFile      <- paste(c(directory,'baseData.csv'),collapse="")
+intFilePrefix <- directory
+intFileSuffix <- '.csv'
 #Intervention string details:
 # inc/red                   --> increase/reduce 
 # EnLTBI/Imm/LTBItrmt/Trans --> Entering LTBI, Immigration, LTBI Treatment, 
