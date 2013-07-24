@@ -18,9 +18,9 @@ intFileSuffix    <- '.csv'
 # redImm25&incLTBItrmt100   --> reduce immigration by 25% and increase LTBI 
 #                               treatment by 100%
 allInterventions <- c("redEnLTBI100","redEnLTBI75","redEnLTBI50","redTrans100",
-                      "redImm25","redImm50","incLTBItrmt100","incLTBItrmt300",
-                      "redImm25&incLTBItrmt100","redImm50&incLTBItrmt100",
-                      "redImm25&incLTBItrmt100","redImm50&incLTBItrmt300",
+                      "redImm75","redImm50","incLTBItrmt100","incLTBItrmt300",
+                      "redImm75&incLTBItrmt100","redImm50&incLTBItrmt100",
+                      "redImm75&incLTBItrmt100","redImm50&incLTBItrmt300",
                       "incLTBItrmt100&redEnLTBI100","incLTBItrmt100&redEnLTBI75",
                       "incLTBItrmt100&redEnLTBI50","incLTBItrmt300&redEnLTBI100",
                       "incLTBItrmt300&redEnLTBI75","incLTBItrmt300&redEnLTBI50")
@@ -43,10 +43,10 @@ interventionConfig <- function(interventionStr) {
       #TODO: Make this a function depending on magnitude for greater flexibility
       # (minor)
       if (interventionMag == 50) {
-        LTBIEn  <- LTBIEn + 500
+        LTBIEn  <- LTBIEn + 700
         incLTBI <- incLTBI*0.5
       } else if (interventionMag == 75) {
-        LTBIEn  <- LTBIEn + 700
+        LTBIEn  <- LTBIEn + 800
         incLTBI <- incLTBI*0.25
       } else if (interventionMag == 100) {
         LTBIEn  <- LTBIEn + 1000
@@ -92,5 +92,5 @@ interventionConfig <- function(interventionStr) {
   }
   costs <- c(newCases=newCases,totPop=totPop,LTBIEn=LTBIEn)
   params <- c(sigmaL=sigmaL,f=f,trans=trans,incLTBI=incLTBI)
-  return(c(costs=costs,params=params))
+  return(list(costs=costs,params=params))
 }

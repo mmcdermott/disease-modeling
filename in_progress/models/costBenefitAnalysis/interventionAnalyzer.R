@@ -28,67 +28,68 @@ baseInc <- generateIncidence(P)
 #Intervention Analyzing:
 for (intervention in curInterventions) {
   intConfig <- interventionConfig(intervention)
-  costs     <- intConfig["costs"]
-  params    <- intConfig["params"]
+  costs     <- intConfig$costs
+  params    <- intConfig$params
   interData <- hill(costs,params["sigmaL"],params["f"],params["trans"],
                     params["incLTBI"])
-  write.csv(interData, paste(c(intFilePrefix,intervention,intFileSuffix)))
+  write.csv(interData, paste(c(intFilePrefix,intervention,intFileSuffix),
+                             collapse=""))
 }
 
 #Intervention Data:
 # Curing Incoming LTBI:
 #  Costs:
-C100 <- C
-C75  <- C
-C50  <- C
-
-C100["LTBIEn"] <- 1000
-C75["LTBIEn"]  <- 800
-C50["LTBIEn"]  <- 700
-
-#Plot A: Where we eliminate incoming LTBI 100%, 75%, or 50%
-noImmLTBI      <- hill(C100,sigmaLBase,fBase,1,0)
-noImmLTBIInc   <- generateIncidence(noImmLTBI)
-someImmLTBI    <- hill(C75,sigmaLBase,fBase,1,0.25)
-someImmLTBIInc <- generateIncidence(someImmLTBI)
-halfImmLTBI    <- hill(C50,sigmaLBase,fBase,1,0.5)
-halfImmLTBIInc <- generateIncidence(halfImmLTBI)
-
-#When Calculating range, we presume that FB always has higher incidence rate
-yrange <- range(c(0.5,baseInc$IN1,noImmLTBIInc$IN1,someImmLTBIInc$IN1,halfImmLTBIInc$IN1))
-dev.new()
-plot(years, baseInc$IN0, main="Plot A: Reduce incoming LTBI in 2008", log='y', xlab='year', ylab='incidence/million', ylim=yrange, type="l", col="blue")
-lines(years, baseInc$INall, type="l", col="red")
-lines(years, baseInc$IN1, type="l", col="green")
-lines(years, noImmLTBIInc$IN0, type="l", col="blue", lty=2)
-lines(years, noImmLTBIInc$INall, type="l", col="red", lty=2)
-lines(years, noImmLTBIInc$IN1, type="l", col="green", lty=2)
-lines(years, someImmLTBIInc$IN0, type="l", col="blue", lty=3)
-lines(years, someImmLTBIInc$INall, type="l", col="red", lty=3)
-lines(years, someImmLTBIInc$IN1, type="l", col="green", lty=3)
-lines(years, halfImmLTBIInc$IN0, type="l", col="blue", lty=4)
-lines(years, halfImmLTBIInc$INall, type="l", col="red", lty=4)
-lines(years, halfImmLTBIInc$IN1, type="l", col="green", lty=4)
-abline(h = 1, lty = 'dotted')
-legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'No Incoming LTBI post 2008', '75% reduction of Inc. LTBI post 2008', '50% reduction of Inc. LTBI post 2008'), col=c("blue", "green", "red", "black","black","black"), lty=c(1,1,1,2,3,4))
-
-#Cost Plot A:
-yrange <- range(c(P$cN1+P$cN0,noImmLTBI$cN1+noImmLTBI$cN0,someImmLTBI$cN0+someImmLTBI$cN1,halfImmLTBI$cN0+halfImmLTBI$cN1))
-dev.new()
-plot(years, P$cN1+P$cN0, main="Plot A: cost of various interventions", xlab='year', ylab='USD', ylim=yrange, type="l", col="blue")
-lines(years, noImmLTBI$cN0 + noImmLTBI$cN1, type="l", col="green", lty=1)
-lines(years, someImmLTBI$cN0 + someImmLTBI$cN1, type="l", col="red", lty=1)
-lines(years, halfImmLTBI$cN0 + halfImmLTBI$cN1, type="l", col="purple", lty=1)
-legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
-
-maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[cutoffT:totT]
-savingsPerCase  <- maxDifference/(1e6*P$LTBIEn[cutoffT:totT])
-dev.new()
-plot(yearsPC, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
-
-savingsPerCaseD <- maxDifference/(1e6*noImmLTBI$curedLTBIEnD[cutoffT:totT])
-dev.new()
-plot(yearsPC, savingsPerCaseD, main="Savings Per Discounted Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
+#C100 <- C
+#C75  <- C
+#C50  <- C
+#
+#C100["LTBIEn"] <- 1000
+#C75["LTBIEn"]  <- 800
+#C50["LTBIEn"]  <- 700
+#
+##Plot A: Where we eliminate incoming LTBI 100%, 75%, or 50%
+#noImmLTBI      <- hill(C100,sigmaLBase,fBase,1,0)
+#noImmLTBIInc   <- generateIncidence(noImmLTBI)
+#someImmLTBI    <- hill(C75,sigmaLBase,fBase,1,0.25)
+#someImmLTBIInc <- generateIncidence(someImmLTBI)
+#halfImmLTBI    <- hill(C50,sigmaLBase,fBase,1,0.5)
+#halfImmLTBIInc <- generateIncidence(halfImmLTBI)
+#
+##When Calculating range, we presume that FB always has higher incidence rate
+#yrange <- range(c(0.5,baseInc$IN1,noImmLTBIInc$IN1,someImmLTBIInc$IN1,halfImmLTBIInc$IN1))
+#dev.new()
+#plot(years, baseInc$IN0, main="Plot A: Reduce incoming LTBI in 2008", log='y', xlab='year', ylab='incidence/million', ylim=yrange, type="l", col="blue")
+#lines(years, baseInc$INall, type="l", col="red")
+#lines(years, baseInc$IN1, type="l", col="green")
+#lines(years, noImmLTBIInc$IN0, type="l", col="blue", lty=2)
+#lines(years, noImmLTBIInc$INall, type="l", col="red", lty=2)
+#lines(years, noImmLTBIInc$IN1, type="l", col="green", lty=2)
+#lines(years, someImmLTBIInc$IN0, type="l", col="blue", lty=3)
+#lines(years, someImmLTBIInc$INall, type="l", col="red", lty=3)
+#lines(years, someImmLTBIInc$IN1, type="l", col="green", lty=3)
+#lines(years, halfImmLTBIInc$IN0, type="l", col="blue", lty=4)
+#lines(years, halfImmLTBIInc$INall, type="l", col="red", lty=4)
+#lines(years, halfImmLTBIInc$IN1, type="l", col="green", lty=4)
+#abline(h = 1, lty = 'dotted')
+#legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence', 'No Incoming LTBI post 2008', '75% reduction of Inc. LTBI post 2008', '50% reduction of Inc. LTBI post 2008'), col=c("blue", "green", "red", "black","black","black"), lty=c(1,1,1,2,3,4))
+#
+##Cost Plot A:
+#yrange <- range(c(P$cN1+P$cN0,noImmLTBI$cN1+noImmLTBI$cN0,someImmLTBI$cN0+someImmLTBI$cN1,halfImmLTBI$cN0+halfImmLTBI$cN1))
+#dev.new()
+#plot(years, P$cN1+P$cN0, main="Plot A: cost of various interventions", xlab='year', ylab='USD', ylim=yrange, type="l", col="blue")
+#lines(years, noImmLTBI$cN0 + noImmLTBI$cN1, type="l", col="green", lty=1)
+#lines(years, someImmLTBI$cN0 + someImmLTBI$cN1, type="l", col="red", lty=1)
+#lines(years, halfImmLTBI$cN0 + halfImmLTBI$cN1, type="l", col="purple", lty=1)
+#legend('topright', legend=c('Base Cost - No Interventions', 'Cost with elimination of Inc. LTBI', 'Cost with 75% reduction of Inc. LTBI', 'Cost with 50% reduction of Inc. LTBI'), col=c("blue", "green", "red", "purple"), lty=c(1,1,1,1))
+#
+#maxDifference   <- ((P$cN0+P$cN1)-(noImmLTBI$cN0+noImmLTBI$cN1))[cutoffT:totT]
+#savingsPerCase  <- maxDifference/(1e6*P$LTBIEn[cutoffT:totT])
+#dev.new()
+#plot(yearsPC, savingsPerCase, main="Savings Per Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
+#
+#savingsPerCaseD <- maxDifference/(1e6*noImmLTBI$curedLTBIEnD[cutoffT:totT])
+#dev.new()
+#plot(yearsPC, savingsPerCaseD, main="Savings Per Discounted Cured Case of Entering LTBI", xlab='year', ylab='USD', type="l", col="blue")
 
 ##Plot A: Where Transmission is cut after 2008
 #noTrans    <- hill(sigmaLBase,fBase,0)
