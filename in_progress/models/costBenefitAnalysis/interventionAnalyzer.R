@@ -12,9 +12,8 @@ source('hillFunctions.R')
 #Which interventions to run:
 source('interventionConfig.R')
 
-C <- c(newCases=0,totPop=0,LTBIEn=0) 
-
 #Base Data: 
+C <- c(newCases=0,totPop=0,LTBIEn=0) 
 if (!generateNewData) {
   P               <- read.csv(baseFile)
   generateNewData <- (length(P$X) != length(years))
@@ -25,6 +24,15 @@ if (generateNewData) {
   write.csv(P,baseFile)
 }
 baseInc <- generateIncidence(P)
+
+#Intervention Analyzing:
+for (intervention in curInterventions) {
+  intConfig <- interventionConfig(intervention)
+  costs     <- intConfig["costs"]
+  params    <- intConfig["params"]
+  interData <- hill(costs,params) #Make Params
+  write.csv(interData, paste(c(intFilePrefix,intervention,intFileSuffix)))
+}
 
 #Intervention Data:
 # Curing Incoming LTBI:

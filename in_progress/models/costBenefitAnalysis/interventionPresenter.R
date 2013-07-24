@@ -1,19 +1,21 @@
 library(ggplot2)
 source('deSolConstants.R')
+source('hillFunctions.R') #for generateIncidence
 
 if (Sys.info()['sysname'] == "Linux") {
   #Making it plot on linux
   X11.options(type='nbcairo')
 }
-vF <- 1.5         #Progression rate of acute infection per year
-vL0 <- 0.0014     #Progression rate for reactivation (chronic LTBI) in the USB population per year
-vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB population per year
-generateIncidence <- function(dataSet) {
-  IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
-  IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
-  INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
-  return(data.frame(IN0,IN1,INall))
-}
+
+#vF <- 1.5         #Progression rate of acute infection per year
+#vL0 <- 0.0014     #Progression rate for reactivation (chronic LTBI) in the USB population per year
+#vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB population per year
+#generateIncidence <- function(dataSet) {
+#  IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
+#  IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
+#  INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+#  return(data.frame(IN0,IN1,INall))
+#}
 
 #Data Labels
 USB             <- rep("USB",             totT)
