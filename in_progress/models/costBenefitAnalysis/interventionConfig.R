@@ -28,7 +28,7 @@ incLTBItrmt_Interventions <- allInterventions[7:8]
                       
 curInterventions <- allInterventions
 
-interventionConfig <- function(interventionStr, x=0) { #x is an integer refering to cost option, default = 0
+interventionConfig <- function(interventionStr, x=0) { #x is an integer refering to cost option, ranges 0 to 5
   error    <- F
   sigmaL   <- sigmaLBase #define me
   f        <- fBase
@@ -48,10 +48,10 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
         LTBIEn  <- LTBIEn + 600 + x*200
         incLTBI <- incLTBI*0.5
       } else if (interventionMag == 75) {
-        LTBIEn  <- LTBIEn + 800 + x*200
+        LTBIEn  <- LTBIEn + 600 + x*200
         incLTBI <- incLTBI*0.25
       } else if (interventionMag == 100) {
-        LTBIEn  <- LTBIEn + 1000 + x*200
+        LTBIEn  <- LTBIEn + 600 + x*200
         incLTBI <- 0
       } else {
         error = T
@@ -67,10 +67,10 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
       }
     } else if (interventionType == "incLTBItrmt") {
       if (interventionMag == 100) {
-        totPop <- totPop + 0.05 + x*0.025
+        totPop <- totPop + 0.025 + x*0.025
         sigmaL <- sigmaL * 2
       } else if (interventionMag == 300) {
-        totPop <- totPop + 0.1 + x*0.025
+        totPop <- totPop + 0.025 + x*0.025
         sigmaL <- sigmaL * 4
       } else {
         error = T
