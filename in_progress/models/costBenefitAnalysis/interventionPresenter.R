@@ -48,7 +48,15 @@ baseDeaths  <- 1e6*(baseData$tbdeath0 + baseData$tbdeath1)
 baseDeathsD <- 1e6*(baseData$tbdeathD0 + baseData$tbdeathD1)
 
 #TODO: Remove Duplicated Code
+#TODO: Add active disease cost plot
+#TODO: Add active disease savings plot
+#TODO: Make grouping possible
+#TODO: Make grouping configurable
+#TODO: Fix titles
+#TODO: switch line type for intervention status
+#TODO: determine how to handle plot defaults for multiple interventions
 
+#plotting Functions:
 incidencePlotG <- function(interventionData,interventionName) {
   #Incidence Reports: Comparing Baseline Incidence against Intervention Incidence
   interventionInc  <- generateIncidence(interventionData)
@@ -283,7 +291,6 @@ discountedDeathsAvertedPlotG <- function(interventionData,interventionName) {
     guides(fill=F, alpha=F)
 }
 
-#plotting Functions:
 presentIntervention <- function(interventionName) {
   interventionData <- read.csv(paste(c(intFilePrefix,interventionName,
                                        intFileSuffix),collapse=""))
@@ -301,9 +308,29 @@ presentIntervention <- function(interventionName) {
   deathsAvertedPlotD <- discountedDeathsAvertedPlotG(interventionData, interventionName)
 
   interventionType <- sub("\\d+","",intervention)#sub empty str for digits
-  plotsToPresent <- list(incPlot,savingsPlot,costsPlot,casesAvertedPlot,
-                      casesAvertedPlotD,cpcaPlot,cpcaPlotD,deathsAvertedPlot,
-                      deathsAvertedPlotD)
+  #Defaults: TODO: make this dependent on config set in interventionConfig.R
+  allPlots       <- list(incPlot,savingsPlot,costsPlot,casesAvertedPlot,
+                         casesAvertedPlotD,cpcaPlot,cpcaPlotD,deathsAvertedPlot,
+                         deathsAvertedPlotD)
+  plotsToPresent <- allPlots
+  if (interventionType == 'redImm') {
+    plotsToPresent <- list(incPlot,savingsPlot,casesAvertedPlot,
+                           casesAvertedPlotD,deathsAvertedPlot,
+                           deathsAvertedPlotD)
+  } else if (interventionType == 'redEnLTBI') {
+    plotsToPresent <- allPlots
+  } else if (interventionType == 'incLTBItrmt') {
+    plotsToPresent <- list(incPlot,costsPlot,casesAvertedPlot,
+                           casesAvertedPlotD,cpcaPlot,cpcaPlotD,
+                           deathsAvertedPlot,deathsAvertedPlotD)
+  } else if (interventionType == 'redTrans') {
+    plotsToPresent <- list(incPlot,savingsPlot,casesAvertedPlot,
+                           casesAvertedPlotD,deathsAvertedPlot,
+                           deathsAvertedPlotD)
+  } else {
+    print("I didn't recognize that intervention, so I'm plotting everything")
+    print(paste(c("Intervention:",intervention),collapse=" "))
+  }
 
   #Data Needed By Multiple Plots: 
   fileName <- paste(c('interventions/',intervention,"Analysis.pdf"),collapse="")
