@@ -301,25 +301,16 @@ presentIntervention <- function(interventionName) {
   deathsAvertedPlotD <- discountedDeathsAvertedPlotG(interventionData, interventionName)
 
   interventionType <- sub("\\d+","",intervention)#sub empty str for digits
-  plotsToPresent <- c(incPlot,savingsPlot,costsPlot,casesAvertedPlot,
+  plotsToPresent <- list(incPlot,savingsPlot,costsPlot,casesAvertedPlot,
                       casesAvertedPlotD,cpcaPlot,cpcaPlotD,deathsAvertedPlot,
                       deathsAvertedPlotD)
 
   #Data Needed By Multiple Plots: 
   fileName <- paste(c('interventions/',intervention,"Analysis.pdf"),collapse="")
   pdf(fileName,onefile=T)
-  #for (plot in plotsToPresent) {
-  #  print(plot)
-  #}
-  print(incPlot)
-  print(savingsPlot)
-  print(costsPlot)
-  print(casesAvertedPlot)
-  print(casesAvertedPlotD)
-  print(cpcaPlot)
-  print(cpcaPlotD)
-  print(deathsAvertedPlot)
-  print(deathsAvertedPlotD)
+    for (plot in plotsToPresent) {
+      print(plot)
+    }
   dev.off()
 }
 
