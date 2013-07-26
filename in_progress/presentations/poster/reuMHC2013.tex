@@ -36,11 +36,13 @@ text width=3em]
   \begin{columns}
     \begin{column}{.3\textwidth}
       \begin{block}{Introduction}
-        Compartmental models are often used to model disease spread in the
-        population. The canonical example of such a model is the SIR model,
-        which has three compartments: Susceptible, Infected, and Recovered. The
-        dynamics of a population modeled by this framework are shown in
-        figure~\ref{fig:SIRFlowchart}, with associated system of
+        The most common epidemiological models are compartmental models, in
+        which a system of differential equations describes how parts of the
+        population move between different disease states, or
+        \emph{compartments}. The canonical example of such a model is the SIR
+        model, which has three compartments: Susceptible, Infected, and
+        Recovered. The dynamics of a population modeled by this framework are
+        shown in figure~\ref{fig:SIRFlowchart}, with associated system of
         differential equations~\ref{eq:SIRdes}.
         %TODO equalize figure heights
         \begin{block}{}
@@ -74,6 +76,16 @@ text width=3em]
             \end{figure}
           \end{column}
         \end{block}
+        The SIR system, though very informative about basic disease dynamics,
+        fails to capture the intricacies of more complicated diseases. This
+        project examines the spread of tuberculosis (TB) in the United States
+        (US) via compartmental models and stochastic, agent-based models. These
+        explorations allow one to explore the impact, both epidemiological and
+        economic, of various intervention strategies. These models are based on
+        a 2012 compartmental model of TB in the US created by A. N. Hill, J. E.
+        Becerra, and K. G. Castro.
+      \end{block}
+      \begin{block}{The Basic Hill Model}
       \end{block}
     \end{column}
     \begin{column}{.3\textwidth}
