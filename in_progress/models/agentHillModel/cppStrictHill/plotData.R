@@ -4,6 +4,7 @@ vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB po
 popConst <- 1000
 
 generateIncidence <- function(dataSet) {
+  
   IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
   IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
   INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)

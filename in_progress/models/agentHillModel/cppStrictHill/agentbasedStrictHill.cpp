@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sstream>
+#include <time.h>
 #include "turtleStrictHill.hpp"
 using namespace std;
 
@@ -30,6 +31,7 @@ const int    totT     = (int) (finalYr/DELTA_T);
 const int newCases0 = 8714; //US-born
 const int newCases1 = 7554; //Foreign-born
 
+int chron = 0;
 
 turtleList population;
 
@@ -47,23 +49,32 @@ int I1[totT];
 int J1[totT];
 double cost[totT];
 
+  /*time_t start = time(NULL);
+  time_t stop = time(NULL);
+  double runtime = difftime(stop,start);*/
+
+
+
 /* 
  * void updatePop(...)
  *
  * This functions updates the population lists given the number of turtles of 
  * the given states. It returns nothing, as it is a state updating function.
  */
-void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeStep, 
+void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int timeinfec,
                int numTurtles = 1)
 {
   switch(cob) {
     case turtle::USA:
       switch(turtState) {
-        case turtle::CHRONIC_LTBI:
-          L0[timeStep] += numTurtles;
-          break;
-        case turtle::ACUTE_LTBI:
-          F0[timeStep] += numTurtles;
+        case turtle::LATENT:
+          if (timeinfec < 40)
+          {
+            F0[timeStep] += numTurtles;
+          }
+          else{
+            L0[timeStep] += numTurtles;
+          }
           break;
         case turtle::INFECTIOUS_TB:
           I0[timeStep] += numTurtles;
@@ -82,11 +93,14 @@ void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeS
       break;
     case turtle::OTHER:
       switch(turtState) {
-        case turtle::CHRONIC_LTBI:
-          L1[timeStep] += numTurtles;
-          break;
-        case turtle::ACUTE_LTBI:
-          F1[timeStep] += numTurtles;
+        case turtle::LATENT:
+          if (timeinfec < 40)
+          {
+            F1[timeStep] += numTurtles;
+          }
+          else{
+            L1[timeStep] += numTurtles;
+          }
           break;
         case turtle::INFECTIOUS_TB:
           I1[timeStep] += numTurtles;
@@ -106,13 +120,13 @@ void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeS
   }
 }
 
-void createTurtles(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int numTurtles)
+void createTurtles(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int numTurtles, int timeinfec)
 {
   for (int i = 0; i < numTurtles; ++i) 
   {
-    population.push_front(turtle(cob, turtState)); 
+    population.push_front(turtle(cob, turtState, timeinfec)); 
   }
-  updatePop(turtState, cob, timeStep, numTurtles);
+  updatePop(turtState, cob, timeStep, timeinfec, numTurtles);
 }
 
 /** Export sizes of N,S,L,F,I,J to file fname (csv file) */
@@ -150,24 +164,30 @@ int run(string rfname)
   N0[0] = initUSP;
   N1[0] = initFBP;
   //Acute (Fast) LTBI, new cases
-  createTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
-  createTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
+  // createTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
+  // createTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
   //Chronic (Long) LTBI
-  createTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
-  createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
+  // createTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
+  // createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
+  //LATENT LTBI
+  createTurtles(turtle::LATENT, turtle::USA, 0, initF0, 1);
+  createTurtles(turtle::LATENT, turtle::OTHER, 0, initF1, 1);
+  createTurtles(turtle::LATENT, turtle::USA, 0, initL0, (2/DELTA_T)+1);
+  createTurtles(turtle::LATENT, turtle::OTHER, 0, initL1, (2/DELTA_T)+1);
   //Infectious TB
-  createTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0);
-  createTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1);
+  createTurtles(turtle::INFECTIOUS_TB, turtle::USA, 0, initI0, 0);
+  createTurtles(turtle::INFECTIOUS_TB, turtle::OTHER, 0, initI1, 0);
   //Non-Infectious TB
-  createTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0);
-  createTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1);
+  createTurtles(turtle::NONINFECTIOUS_TB, turtle::USA, 0, initJ0, 0);
+  createTurtles(turtle::NONINFECTIOUS_TB, turtle::OTHER, 0, initJ1, 0);
   //Susceptible
-  S0[0] = (N0[0] - F0[0] - L0[0] - I0[0] - J0[0]);
-  S1[0] = (N1[0] - F1[0] - L1[0] - I1[0] - J1[0]);
+  S0[0] = (N0[0] - L0[0] - F0[0] - I0[0] - J0[0]);
+  S1[0] = (N1[0] - L1[0] - F1[0] - I1[0] - J1[0]);
 
   if (debug) {
     cout << "Number of Iterations: " << totT << endl;
   }
+  
   for (int i = 1; i < totT; ++i){
     //Generating Preferred contact rate based on previous time step
     double c01 = (1-e0)*((1-e1)*N1[i-1])/((1-e0)*N0[i-1]+(1-e1)*N1[i-1]);
@@ -188,21 +208,22 @@ int run(string rfname)
       cout << "number of Turtles " << population.size() << endl;
       cout << "Population Size " << N0[i-1] + N1[i-1] << endl;
     }
-
+   
 		for (turtleList::iterator turtleIter = population.begin(); 
 			turtleIter != population.end(); ++turtleIter)
 		{
 		  turtle &t = *turtleIter;
-
+      //cout<<t.InfectionTime()<<endl;
+  
       //Update the turtle's state
       t.updateState();
-      
+      //time_t start = time(NULL);
       if (t.dead())
       {
         turtleList::iterator newIter = population.erase(turtleIter);
         turtleIter = --newIter;//TODO: store previous state in case of dead turtle for sake of updating pops
       } else {
-        if (t.getState()==turtle::CHRONIC_LTBI){
+        if (t.getState()==turtle::LATENT && t.InfectionTime() > 2/DELTA_T){
           //Check for exogenous re-infection TODO: abstract this to a function
           double infParam = (double)rand()/(double)RAND_MAX;
           if ((t.getCountry() == turtle::USA) && (infParam <= probOfReinfectionUSB))
@@ -214,7 +235,7 @@ int run(string rfname)
           }
         }
         //Update our population lists
-        updatePop(t.getState(), t.getCountry(), i);
+        updatePop(t.getState(), t.getCountry(), i, t.InfectionTime());
 
         if (t.getState() == turtle::SUSCEPTIBLE) {
           turtleList::iterator newIter = population.erase(turtleIter);
@@ -222,6 +243,7 @@ int run(string rfname)
         }
       }
     }
+    //time_t startfor = time(NULL);
     // Agent independent Population Changes during this time step: 
     // Note that these did not affect infection likelihood during
     // this time step.
@@ -250,19 +272,22 @@ int run(string rfname)
     S1[i]              -= floor(numFBInfections + .5);
 
     //Creating the turtles
-    createTurtles(turtle::ACUTE_LTBI,   turtle::USA,   i, newf0);
-    createTurtles(turtle::CHRONIC_LTBI, turtle::USA,   i, newl0);
-    createTurtles(turtle::ACUTE_LTBI,   turtle::OTHER, i, newf1);
-    createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, i, newl1);
+    createTurtles(turtle::LATENT,   turtle::USA,   i, newf0, 1);
+    createTurtles(turtle::LATENT, turtle::USA,   i, newl0, (2/DELTA_T)+1);
+    createTurtles(turtle::LATENT,   turtle::OTHER, i, newf1, 1);
+    createTurtles(turtle::LATENT, turtle::OTHER, i, newl1, (2/DELTA_T)+1);
     if (debug) {
       cout << "numUsInfections: " << numUSInfections << endl;
       cout << "numFBInfections: " << numFBInfections << endl;
       cout << "LTBIArrivals: " << LTBIArrivals << endl;
     }
     //Resetting the populations
-    N0[i]    = S0[i] + F0[i] + L0[i] + I0[i] + J0[i];
-    N1[i]    = S1[i] + F1[i] + L1[i] + I1[i] + J1[i];
+    N0[i]    = S0[i] + L0[i] + F0[i] + I0[i] + J0[i];
+    N1[i]    = S1[i] + L1[i] + F1[i] + I1[i] + J1[i];
     cost[i] += cost[i-1];
+    //time_t stopfor = time(NULL);
+    //double forruntime = difftime(stopfor,startfor);
+    //cout<<"For runtime: "<<forruntime<<endl;
   }
   // write data to file
   exportData(rfname);
@@ -306,7 +331,6 @@ int main(int argc, char const *argv[])
   
   int adjustedi;
   string filename;
-  cout<<popConst<<endl;
 
   for (int i = 1 ; i <= numruns; ++i) {
     stringstream sstm;
