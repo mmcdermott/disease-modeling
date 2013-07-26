@@ -129,8 +129,44 @@ text width=3em]
       \end{block}
     \end{column}
     \begin{column}{.3\textwidth}
+      \begin{block}{TB Reduction Strategies for the United States}
+        From the Hill model, we 
+      \end{block}
       \begin{block}{Intervention Analysis}
         Intervention Analysis
+        \begin{figure}[h]
+          \begin{center}
+            \includegraphics[scale=1]{incidencePlotRedEnLTBI.pdf}
+          \end{center}
+          \caption{A graph of the projected incidence levels per million in
+                       the US-born, Foreign-born, and Total US population, given
+                       that LTBI rates in Foreign-born arrivals are reduced by 
+                       0\%, 50\%, 75\%, and 100\%.}
+          \label{fig:redEnLTBI_costs}
+        \end{figure}
+      \end{block}
+      \begin{block}{Economic Modeling}
+        We extended our basic implementation of the Hill model to incorporate
+        economic data of treatment costs for Active and Latent Tuberculosis.  
+        In our model, we estimate the average heath care costs to be \$14,014.90
+        and \$403.45 to treat a single case of Active or Latent TB respectively.  
+        Given these costs and the average treatment rates for Active and Latent
+        TB in the USA, we modeled the expected economic burden of Tuberculosis
+        projected over the next hundred years.  
+
+        \begin{figure}[h]
+          \begin{center}
+            \includegraphics[scale=1]{EnLTBIRedGroupCost.pdf}
+          \end{center}
+          \caption{A graph of the cumulative implementation costs, savings, and 
+                       net US health care system costs of reducing rates of LTBI in
+                       Foreign-born arrivals by 50\%, 75\%, and 100\%.  To determine the 
+                       implementation cost for each intervention, the average cost
+                       to identify and treat entering Foreign-born individuals with LTBI
+                       was set to be \$600, \$800, and \$1000 for the 50\%, 75\%, 
+                       and 100\% reduction strategies respectively.}
+          \label{fig:redEnLTBI_costs}
+        \end{figure}
       \end{block}
     \end{column}
     \begin{column}{.3\textwidth}
