@@ -85,9 +85,9 @@ to setup-globals
   
   set sigmaL 0.057
   set f 0.187
-  if popConst < 1000 [set popConst 1000]
-  ;; parameter to relate population to actual number of turtles in model
-  ;; the reason it's large is to ensure each compartment contains at least one initial person
+  if popConst > 1000 [set popConst 1000]
+  ;; popConst = number of individuals each turtle in the model represents
+  ;; the upper bound ensures that each compartment contains at least one turtle
 end
 
 to setup-turtles
@@ -95,24 +95,26 @@ to setup-turtles
   ;; New Cases in Population
   let newCases0 0.008714
   let newCases1 0.007554
+  ;; since parameters are in millions, we mutltiply by 1,000,000 / popConst
+  let popMult 1000000 / popConst
   
   ;; WARNING: THE METHOD OF CALCULATING THE SIZE OF EACH COMPARTMENT IS IFFY
   ;; Acute (Fast) LTBI
   ;; NOTE: spaces between operators are necessary
-  create-USBs round ((1 - r0) * newCases0 * popConst / vF) [ new-usb 1 ] ; (F0)
-  create-FBs round ((1 - r1) * newCases1 * popConst / vF) [ new-fb 1 ]  ; (F1)
+  create-USBs round ((1 - r0) * newCases0 * popMult / vF) [ new-usb 1 ] ; (F0)
+  create-FBs round ((1 - r1) * newCases1 * popMult / vF) [ new-fb 1 ]  ; (F1)
   ;; Chronic (Slow) LTBI ;; BIG
-  create-USBs round (r0 * newCases0 * popConst / vL0) [ new-usb 0 ] ; (L0)
-  create-FBs round (r1 * newCases1 * popConst / vL1) [ new-fb 0]  ; (L1)
+  create-USBs round (r0 * newCases0 * popMult / vL0) [ new-usb 0 ] ; (L0)
+  create-FBs round (r1 * newCases1 * popMult / vL1) [ new-fb 0]  ; (L1)
   ;; Infectious TB
-  create-USBs round (q * newCases0 * popConst / (mu0 + mud + phi0)) [ new-usb 2 ] ; (I0)
-  create-FBs round (q * newCases1 * popConst / (mu1 + mud + phi1)) [ new-fb 2 ]  ; (I1)
+  create-USBs round (q * newCases0 * popMult / (mu0 + mud + phi0)) [ new-usb 2 ] ; (I0)
+  create-FBs round (q * newCases1 * popMult / (mu1 + mud + phi1)) [ new-fb 2 ]  ; (I1)
   ;; Non-infectious TB
-  create-USBs round ((1 - q) * newCases0 * popConst / (mu0 + mud + phi0)) [ new-usb 3 ] ; (J0)
-  create-FBs round ((1 - q) * newCases1 * popConst / (mu1 + mud + phi1)) [ new-fb 3 ]  ; (J1)
+  create-USBs round ((1 - q) * newCases0 * popMult / (mu0 + mud + phi0)) [ new-usb 3 ] ; (J0)
+  create-FBs round ((1 - q) * newCases1 * popMult / (mu1 + mud + phi1)) [ new-fb 3 ]  ; (J1)
   ;; Susceptibles
-  set S0pop initial_N0 * popConst - count usbs
-  set S1pop initial_N1 * popConst - count fbs
+  set S0pop initial_N0 * popMult - count usbs
+  set S1pop initial_N1 * popMult - count fbs
 end
 
 to go
@@ -556,7 +558,7 @@ INPUTBOX
 174
 154
 popConst
-5000
+200
 1
 0
 Number

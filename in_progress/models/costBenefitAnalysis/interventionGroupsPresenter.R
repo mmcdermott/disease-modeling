@@ -2,6 +2,15 @@ library(ggplot2)
 source('interventionGroups.R')
 source('deSolConstants.R')
 
+#Title Generation:
+plotTitle <- function(base,interventionName,final="") {
+  if (final != "") {
+    return(ggtitle(paste(c(base,interventionName,final),collapse=" ")))
+  } else {
+    return(ggtitle(paste(c(base,interventionName),collapse=" ")))
+  }
+}
+
 baseData <- read.csv(baseFile)
 #Base Incidence
 baseInc <- generateIncidence(baseData)
