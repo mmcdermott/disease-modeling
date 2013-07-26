@@ -49,11 +49,6 @@ int I1[totT];
 int J1[totT];
 double cost[totT];
 
-  /*time_t start = time(NULL);
-  time_t stop = time(NULL);
-  double runtime = difftime(stop,start);*/
-
-
 
 /* 
  * void updatePop(...)
@@ -163,12 +158,7 @@ int run(string rfname)
 
   N0[0] = initUSP;
   N1[0] = initFBP;
-  //Acute (Fast) LTBI, new cases
-  // createTurtles(turtle::ACUTE_LTBI, turtle::USA, 0, initF0);
-  // createTurtles(turtle::ACUTE_LTBI, turtle::OTHER, 0, initF1);
-  //Chronic (Long) LTBI
-  // createTurtles(turtle::CHRONIC_LTBI, turtle::USA, 0, initL0);
-  // createTurtles(turtle::CHRONIC_LTBI, turtle::OTHER, 0, initL1);
+
   //LATENT LTBI
   createTurtles(turtle::LATENT, turtle::USA, 0, initF0, 1);
   createTurtles(turtle::LATENT, turtle::OTHER, 0, initF1, 1);
@@ -213,11 +203,10 @@ int run(string rfname)
 			turtleIter != population.end(); ++turtleIter)
 		{
 		  turtle &t = *turtleIter;
-      //cout<<t.InfectionTime()<<endl;
   
       //Update the turtle's state
       t.updateState();
-      //time_t start = time(NULL);
+
       if (t.dead())
       {
         turtleList::iterator newIter = population.erase(turtleIter);
@@ -243,7 +232,7 @@ int run(string rfname)
         }
       }
     }
-    //time_t startfor = time(NULL);
+
     // Agent independent Population Changes during this time step: 
     // Note that these did not affect infection likelihood during
     // this time step.
@@ -285,9 +274,6 @@ int run(string rfname)
     N0[i]    = S0[i] + L0[i] + F0[i] + I0[i] + J0[i];
     N1[i]    = S1[i] + L1[i] + F1[i] + I1[i] + J1[i];
     cost[i] += cost[i-1];
-    //time_t stopfor = time(NULL);
-    //double forruntime = difftime(stopfor,startfor);
-    //cout<<"For runtime: "<<forruntime<<endl;
   }
   // write data to file
   exportData(rfname);
@@ -299,9 +285,6 @@ int main(int argc, char const *argv[])
   vector<string> args(argv + 1, argv + argc);
   int numruns;
   int runnumber;
-  // Loop over command-line args
-  // (Actually I usually use an ordinary integer loop variable and compare
-  // args[i] instead of *i -- don't tell anyone! ;)
   for (vector<string>::iterator i = args.begin(); i != args.end(); ++i) {
     if (*i == "-h" || *i == "--help") {
       cout << "Syntax: ./agentModelStrictHill [number of runs to perform] [population constant] [number of this run (default = 1)]" << endl;
@@ -313,9 +296,6 @@ int main(int argc, char const *argv[])
     return 0;
   } else if (args.size() < 2) {
     cout << "Too few arguments. Type -h or --help for more info." <<endl;
-    /*for (vector<string>::iterator j = args.begin(); j != args.end(); ++j) {
-      cout << *j <<endl;
-    }*/
     return 0;
   }
   else if (args.size() == 2) {
