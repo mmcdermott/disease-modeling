@@ -183,3 +183,41 @@ generateIncidence <- function(dataSet) {
 	  return(data.frame(IN0,IN1,INall))
   })
 }
+
+generateTotalIncidence <- function(dataSet,incLTBI=1,transmission=1,f=fBase) {
+  with(as.list(parms), {
+    #proportion of contacts made with FB individuals  (USB)
+    c01          <- (1-e0)*((1-e1)*dataSet$N1)/((1-e0)*dataSet$N0 + 
+                    (1-e1)*dataSet$N1)
+    #proportion of contacts made with USB individuals (USB)
+    c00          <- 1 - c01
+    c10          <- (1-e1)*((1-e0)*dataSet$N0)/((1-e0)*dataSet$N0 + 
+                    (1-e1)*dataSet$N1)
+    #proportion of contacts made with USB individuals (FB)
+    c11          <- 1 - c10
+    #proportion of contacts made with FB individuals  (FB)
+    #Forces of Infection (USB)
+    lambda0      <- transmission*(beta*(c00*(dataSet$I0/dataSet$N0) + 
+                                        c01*(dataSet$I1/dataSet$N1)))
+    #Forces of Infection (FB)
+    lambda1      <- transmission*(beta*(c10*(dataSet$I0/dataSet$N0) + 
+                                        c11*(dataSet$I1/dataSet$N1)))
+
+
+    IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
+    IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
+    INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + 
+                    vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+    IL0   <- 1e6 * ((1-p) * lambda0 * dataSet$S0)
+    IL1   <- 1e6 * ((1-p) * lambda1 * dataSet$S1 + (1-g*p) * f * alpha * incLTBI
+                    * (dataSet$N0 + dataSet$N1))
+    IF0   <- 1e6 * (p     * lambda0 * dataSet$S0 + x * p * lambda0 * L0)
+    IF1   <- 1e6 * (p     * lambda1 * dataSet$S1 + g * p * f * alpha * incLTBI
+                    * (dataSet$N0 + dataSet$N1) + x * p * lambda1 * L1)
+    II0   <- 1e6 * q     * (vF*dataSet$F0 + vL0*dataSet$L0)
+    II1   <- 1e6 * q     * (vF*dataSet$F1 + vL1*dataSet$L1)
+    IJ0   <- 1e6 * (1-q) * (vF*dataSet$F0 + vL0*dataSet$L0)
+    IJ1   <- 1e6 * (1-q) * (vF*dataSet$F1 + vL1*dataSet$L1)
+    return(data.frame(IN0,IN1,INall,IL0,IL1,IF0,IF1,II0,II1,IJ0,IJ1))
+  })
+}
