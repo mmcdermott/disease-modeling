@@ -55,38 +55,59 @@ incPlotTotalAll <- ggplot(baseCumulativeInc, aes(x=year)) +
            geom_ribbon(aes(ymin=IL0c,ymax=II0c,fill=activeInfecUSBL))   + 
            geom_ribbon(aes(ymin=II0c,ymax=IJ0c,fill=activeNoInfecUSBL))
 
-interventionTypes <- list('redEnLTBI','redImm','incLTBItrmt')
+
+intLabels <- function(type,magnitude) {
+  redEnLTBI100L   <- rep("100% Reduction in Entering LTBI", totT)
+  redEnLTBI75L    <- rep("75% Reduction in Entering LTBI",  totT)
+  redEnLTBI50L    <- rep("50% Reduction in Entering LTBI",  totT)
+  redImm50L       <- rep("50% Reduction in Immigration",    totT)
+  redImm75L       <- rep("75% Reduction in Immigration",    totT)
+  incLTBItrmt100L <- rep("100% Increase in Immigration",    totT)
+  incLTBItrmt300L <- rep("300% Increase in Immigration",    totT)
+  redTrans100L    <- rep("100% Reduction in Transmission",  totT)
+  #TODO: This is not the best way to do this
+  return(eval(as.name(paste(c(type,magnitude,'L'),collapse=""))))
+}
+
+interventionTypes <- list('redEnLTBI','redImm','incLTBItrmt','redTrans')
 interventionMags <- list(redEnLTBI=list(50,75,100),redImm=list(50,75),
-                         incLTBItrmt=list(100,300))
+                         incLTBItrmt=list(100,300),redTrans=list(100))
 incDataTypeGrouped <- list()
 for (interventionType in interventionTypes) {
   dataL = list()
+  mags  = interventionMags[[interventionType]]
+  for (mag in mags) {
+    magnitude = as.character(mag)
+    dataName  = paste(c(interventionType,magnitude),collapse="")
+    dataL[[magnitude]] = incDataList[[dataName]]
+  }
   incDataTypeGrouped[[interventionType]] = dataL
 }
 
-incPlotTypeGroupedG <- function(incDataTypeGrouped, type) {
+incPlotTypeGroupedG <- function(type, incDataTypeGrouped=incDataTypeGrouped) {
   data <- incDataTypeGrouped[[type]]
-  return(
-  ggplot(data.frame(year=years, baseInc), aes(x=year)) + 
-         scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
-                       labels=c("Elimination (1)",2,5,10,25,50,100,200),
-                       limits=c(0.5,250)) + 
-         labs(x="Years", y="Incidence/million", color="Population", 
-                linetype="Intervention Status") + 
-         plotTitle("Incidence Levels for Various Reductions of Entering LTBI","") +
-         geom_line(aes(y=IN0,   color=USB, linetype=noInt))  + 
-         geom_line(aes(y=IN1,   color=FB,  linetype=noInt))  + 
-         geom_line(aes(y=INall, color=all, linetype=noInt))  + 
-         geom_line(aes(y=redEnLTBI100USB, color=USB, linetype=redEnLTBI100L))  + 
-         geom_line(aes(y=redEnLTBI100FB, color=FB, linetype=redEnLTBI100L))  + 
-         geom_line(aes(y=redEnLTBI100All, color=all, linetype=redEnLTBI100L))  + 
-         geom_line(aes(y=redEnLTBI75USB, color=USB, linetype=redEnLTBI75L))  + 
-         geom_line(aes(y=redEnLTBI75FB, color=FB, linetype=redEnLTBI75L))  + 
-         geom_line(aes(y=redEnLTBI75All, color=all, linetype=redEnLTBI75L))  + 
-         geom_line(aes(y=redEnLTBI50USB, color=USB, linetype=redEnLTBI50L))  + 
-         geom_line(aes(y=redEnLTBI50FB, color=FB, linetype=redEnLTBI50L))  + 
-         geom_line(aes(y=redEnLTBI50All, color=all, linetype=redEnLTBI50L))
-  ) 
+  plot <- ggplot() + 
+    scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
+                 labels=c("Elimination (1)",2,5,10,25,50,100,200),
+                 limits=c(0.5,250)) + 
+    labs(x="Years", y="Incidence/million", color="Population", 
+          linetype="Intervention Status") + 
+    plotTitle("Incidence Levels for Various Intervention Magnitudes","") +
+    geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=IN0,   
+              color=USB, linetype=noInt))  + 
+    geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=IN1,   
+              color=FB,  linetype=noInt))  + 
+    geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=INall, 
+              color=all, linetype=noInt))
+  for (magnitude in names(data)) {
+    incData   <- data.frame(year=years,data[[magnitude]],
+                            label=intLabels(type,magnitude))
+    plot <- plot + 
+    geom_line(data=incData, aes(x=year, y=IN0,   color=USB, linetype=label))+ 
+    geom_line(data=incData, aes(x=year, y=IN1,   color=FB,  linetype=label))+ 
+    geom_line(data=incData, aes(x=year, y=INall, color=all, linetype=label))
+  }
+  return(plot) 
 }
 
 incPlot <- ggplot(incData, aes(x=year)) + 
