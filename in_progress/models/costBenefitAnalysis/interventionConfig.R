@@ -21,17 +21,22 @@ allInterventions <- c("redEnLTBI100","redEnLTBI75","redEnLTBI50","redTrans100",
                       "incLTBItrmt100&redEnLTBI100","incLTBItrmt100&redEnLTBI75",
                       "incLTBItrmt100&redEnLTBI50","incLTBItrmt300&redEnLTBI100",
                       "incLTBItrmt300&redEnLTBI75","incLTBItrmt300&redEnLTBI50")
+                      
+redEnLTBI_Interventions <- allInterventions[1:3]
+redImm_Interventions <- allInterventions[5:6]
+incLTBItrmt_Interventions <- allInterventions[7:8]
+                      
 curInterventions <- allInterventions
 
-interventionConfig <- function(interventionStr) {
+interventionConfig <- function(interventionStr, x=0) { #x is an integer refering to cost option, ranges 0 to 5
   error    <- F
   sigmaL   <- sigmaLBase #define me
   f        <- fBase
   trans    <- transBase
   incLTBI  <- incLTBIBase
-  newCases <- 0
-  totPop   <- 0
-  LTBIEn   <- 0
+  newCases <- 0 #contact investigations
+  totPop   <- 0 #total population cost per time step
+  LTBIEn   <- 0 #LTBI entering cost
   interVector <- strsplit(interventionStr,'&')[[1]]
   for (intervention in interVector) {
     interventionType <- sub("\\d+","",intervention)#sub empty str for digits
@@ -40,13 +45,13 @@ interventionConfig <- function(interventionStr) {
       #TODO: Make this a function depending on magnitude for greater flexibility
       # (minor)
       if (interventionMag == 50) {
-        LTBIEn  <- LTBIEn + 700
+        LTBIEn  <- LTBIEn + 600 + x*100
         incLTBI <- incLTBI*0.5
       } else if (interventionMag == 75) {
-        LTBIEn  <- LTBIEn + 800
+        LTBIEn  <- LTBIEn + 800 + x*100
         incLTBI <- incLTBI*0.25
       } else if (interventionMag == 100) {
-        LTBIEn  <- LTBIEn + 1000
+        LTBIEn  <- LTBIEn + 1000 + x*100
         incLTBI <- 0
       } else {
         error = T
@@ -62,10 +67,10 @@ interventionConfig <- function(interventionStr) {
       }
     } else if (interventionType == "incLTBItrmt") {
       if (interventionMag == 100) {
-        totPop <- totPop + 0.05 #THESE ARE SO TOTALLY MADE UP. 
+        totPop <- totPop + 0.025 + x*0.025
         sigmaL <- sigmaL * 2
       } else if (interventionMag == 300) {
-        totPop <- totPop + 0.1 #THESE ARE SO TOTALLY MADE UP. 
+        totPop <- totPop + 0.025 + x*0.025
         sigmaL <- sigmaL * 4
       } else {
         error = T
