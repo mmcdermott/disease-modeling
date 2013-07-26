@@ -57,16 +57,16 @@ for (interventionName in redEnLTBI_Interventions) {
   #Implementation cost of intervention
   costOfInter[[y]] <- (interventionData$interventionCost)/1e9
   #Savings from intervention
-  saveOfInter[[y]] <- baseHCSCost - interHCSCost
+  saveOfInter[[y]] <- baseHCSCost - interHCSCost[[y]]
   #Total US HCS cost due to intervention
-  interTot[[y]] <- interHCSCost + costOfInter
+  interTot[[y]] <- interHCSCost[[y]] + costOfInter[[y]]
   #Total additional spent by US HCS due to intervention
-  totSpent[[y]]  <- interTot - baseHCSCost 
+  totSpent[[y]]  <- interTot[[y]] - baseHCSCost 
   
   #Cost per cases averted
   intCasesD         <- 1e6*(interventionData$progTotalD0 + interventionData$progTotalD1)
   casesAvertedD     <- baseCasesD - intCasesD
-  cpcaDataD <- 1e9*totSpent/casesAvertedD
+  cpcaDataD <- 1e9*totSpent[[y]]/casesAvertedD
   
   y <- y + 1
 }
@@ -99,15 +99,14 @@ x <- ggplot(redEnLTBI,aes(x=year)) +
        labs(x="Years", y="Billions of USD") +
        scale_y_continuous(breaks=yrange) + 
        plotTitle("Costs, Savings, and Net Costs for 
-                  100%, 75%, and 50% LTBI reduction") + 
+                  100%, 75%, and 50% LTBI reduction","") + 
        geom_line(aes(y=redEnLTBI100_costs, color=costsC)) +
        geom_line(aes(y=redEnLTBI75_costs, color=costsC)) +
        geom_line(aes(y=redEnLTBI50_costs, color=costsC)) +
-       geom_line(aes(y=redEnLTBI100_savings, color=savingsC) +
-       geom_line(aes(y=redEnLTBI75_savings, color=savingsC) +
-       geom_line(aes(y=redEnLTBI50_savings, color=savingsC) +
+       geom_line(aes(y=redEnLTBI100_savings, color=savingsC)) +
+       geom_line(aes(y=redEnLTBI75_savings, color=savingsC)) +
+       geom_line(aes(y=redEnLTBI50_savings, color=savingsC)) +
        geom_line(aes(y=redEnLTBI100_totCost, color='black')) +
        geom_line(aes(y=redEnLTBI75_totCost, color='black')) +
        geom_line(aes(y=redEnLTBI50_totCost, color='black')) +
        guides(fill=F, alpha=F)
-print(x)
