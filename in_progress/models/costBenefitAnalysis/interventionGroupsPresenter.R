@@ -38,3 +38,33 @@ baseCasesD <- 1e6*(baseData$progTotalD0 + baseData$progTotalD1)
     # colNum <- colNum + 1
   # }
 # }
+
+#Graphs
+interHCSCost <- as.list(1:3)
+costOfInter <- as.list(1:3)  #additional cost of intervention
+saveOfInter <- as.list(1:3)  #additional savings of intervention
+interTot <- as.list(1:3)
+totSpent <- as.list(1:3)  #net cost
+
+y <- 1
+for (interventionName in redEnLTBI_Interventions) {
+  interventionData <- read.csv(paste(c(intFilePrefix,interventionName,
+                                       intFileSuffix),collapse=""))
+  #HCS cost borne by intervention
+  interHCSCost[[y]] <- (interventionData$cN0 + interventionData$cN1)/1e9
+  #Implementation cost of intervention
+  costOfInter[[y]] <- (interventionData$interventionCost)/1e9
+  #Savings from intervention
+  saveOfInter[[y]] <- baseHCSCost - interHCSCost
+  #Total US HCS cost due to intervention
+  interTot[[y]] <- interHCSCost + costOfInter
+  #Total additional spent by US HCS due to intervention
+  totSpent[[y]]  <- interTot - baseHCSCost 
+  
+  #Cost per cases averted
+  intCasesD         <- 1e6*(interventionData$progTotalD0 + interventionData$progTotalD1)
+  casesAvertedD     <- baseCasesD - intCasesD
+  cpcaDataD <- 1e9*totSpent/casesAvertedD
+  
+  y <- y + 1
+}

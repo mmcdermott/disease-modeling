@@ -48,10 +48,10 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
         LTBIEn  <- LTBIEn + 600 + x*100
         incLTBI <- incLTBI*0.5
       } else if (interventionMag == 75) {
-        LTBIEn  <- LTBIEn + 600 + x*100
+        LTBIEn  <- LTBIEn + 800 + x*100
         incLTBI <- incLTBI*0.25
       } else if (interventionMag == 100) {
-        LTBIEn  <- LTBIEn + 600 + x*100
+        LTBIEn  <- LTBIEn + 1000 + x*100
         incLTBI <- 0
       } else {
         error = T
