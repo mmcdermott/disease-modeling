@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.27)  26 JUL 2013 13:39
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.27)  26 JUL 2013 14:49
 entering extended mode
 **reuMHC2013.tex
 
@@ -947,7 +947,11 @@ Package: beamerthemeI6pd2
 \columnheight=\skip57
 
 (C:\cygwin\home\Colin\GitHub\disease-modeling\in_progress\presentations\poster\
-reuMHC2013.aux)
+reuMHC2013.aux
+
+LaTeX Warning: Label `fig:redEnLTBI_costs' multiply defined.
+
+)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
 LaTeX Font Info:    ... okay on input line 25.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
@@ -1132,7 +1136,7 @@ Overfull \hbox (10.72404pt too wide) detected at line 25
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <24.88> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 151.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 175.
 
 
 Missing character: There is no , in font nullfont!
@@ -1142,12 +1146,12 @@ Missing character: There is no , in font nullfont!
 Missing character: There is no , in font nullfont!
 Missing character: There is no , in font nullfont!
 LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input 
-line 151.
+line 175.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\sansmathaccent\ot1mathkerncmss.fd"
 File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/ma
 thkerncmss.
 )
-Overfull \hbox (26.90533pt too wide) in paragraph at lines 151--151
+Overfull \hbox (26.90533pt too wide) in paragraph at lines 175--175
 [][][][]$\OML/cmm/m/it/24.88 \OT1/mathkerncmss/m/sl/24.88 S\OT1/cmss/m/n/24.88
  (\OT1/mathkerncmss/m/sl/24.88 t\OT1/cmss/m/n/24.88 )\OT1/mathkerncmss/m/sl/24.
 88 I\OT1/cmss/m/n/24.88 (\OT1/mathkerncmss/m/sl/24.88 t\OT1/cmss/m/n/24.88 )$  
@@ -1164,21 +1168,37 @@ Missing character: There is no , in font nullfont!
 File: figures/HillModelFlowChart.png Graphic file (type png)
 
 <use figures/HillModelFlowChart.png>
-Package pdftex.def Info: figures/HillModelFlowChart.png used on input line 151.
+Package pdftex.def Info: figures/HillModelFlowChart.png used on input line 175.
 
 (pdftex.def)             Requested size: 267.82346pt x 238.41956pt.
 
-Overfull \hbox (68.39342pt too wide) in paragraph at lines 151--151
+Overfull \hbox (68.39342pt too wide) in paragraph at lines 175--175
  [] 
  []
 
+<figures/incidencePlotRedEnLTBI.pdf, id=20, 505.89pt x 505.89pt>
+File: figures/incidencePlotRedEnLTBI.pdf Graphic file (type pdf)
+
+<use figures/incidencePlotRedEnLTBI.pdf>
+Package pdftex.def Info: figures/incidencePlotRedEnLTBI.pdf used on input line 
+175.
+(pdftex.def)             Requested size: 505.88875pt x 505.88875pt.
+
+<figures/EnLTBIRedGroupCost.pdf, id=21, 505.89pt x 505.89pt>
+File: figures/EnLTBIRedGroupCost.pdf Graphic file (type pdf)
+
+<use figures/EnLTBIRedGroupCost.pdf>
+Package pdftex.def Info: figures/EnLTBIRedGroupCost.pdf used on input line 175.
+
+(pdftex.def)             Requested size: 505.88875pt x 505.88875pt.
 File: figures/mhc/logos/base.jpg Graphic file (type jpg)
-<use figures/mhc/logos/base.jpg>
-Package pdftex.def Info: figures/mhc/logos/base.jpg used on input line 151.
+ <use figures/mhc/logos/base.jpg>
+Package pdftex.def Info: figures/mhc/logos/base.jpg used on input line 175.
 (pdftex.def)             Requested size: 248.6243pt x 109.52759pt.
 File: figures/nsf/logos/base.jpg Graphic file (type jpg)
- <use figures/nsf/logos/base.jpg>
-Package pdftex.def Info: figures/nsf/logos/base.jpg used on input line 151.
+
+<use figures/nsf/logos/base.jpg>
+Package pdftex.def Info: figures/nsf/logos/base.jpg used on input line 175.
 (pdftex.def)             Requested size: 109.526pt x 109.52759pt.
 
 Overfull \hbox (10.72404pt too wide) has occurred while \output is active
@@ -1188,34 +1208,43 @@ Overfull \hbox (10.72404pt too wide) has occurred while \output is active
 
 [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
 
- <C:/cygwin/home/Colin/GitHub/disease-modeling/in_progress/presentations/poster
-/figures/mhc/logos/base.jpg> <C:/cygwin/home/Colin/GitHub/disease-modeling/in_p
-rogress/presentations/poster/figures/nsf/logos/base.jpg> <C:/cygwin/home/Colin/
-GitHub/disease-modeling/in_progress/presentations/poster/figures/HillModelFlowC
-hart.png>]
+pdfTeX warning (ext4): destination with the same identifier (name{fig:redEnLTBI
+_costs}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.175 \end{frame}
+                  <C:/cygwin/home/Colin/GitHub/disease-modeling/in_progress/pre
+sentations/poster/figures/mhc/logos/base.jpg> <C:/cygwin/home/Colin/GitHub/dise
+ase-modeling/in_progress/presentations/poster/figures/nsf/logos/base.jpg> <C:/c
+ygwin/home/Colin/GitHub/disease-modeling/in_progress/presentations/poster/figur
+es/HillModelFlowChart.png> <C:/cygwin/home/Colin/GitHub/disease-modeling/in_pro
+gress/presentations/poster/figures/incidencePlotRedEnLTBI.pdf> <C:/cygwin/home/
+Colin/GitHub/disease-modeling/in_progress/presentations/poster/figures/EnLTBIRe
+dGroupCost.pdf>]
 \tf@nav=\write6
 \tf@toc=\write7
 \tf@snm=\write8
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 152.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 152.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 176.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 176.
 
 (C:\cygwin\home\Colin\GitHub\disease-modeling\in_progress\presentations\poster\
 reuMHC2013.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 152.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 152.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 176.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 176.
 Package rerunfilecheck Info: File `reuMHC2013.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 152.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 176.
  ) 
 Here is how much of TeX's memory you used:
- 20766 strings out of 493921
- 410753 string characters out of 3147282
- 579956 words of memory out of 3000000
- 23538 multiletter control sequences out of 15000+200000
+ 20785 strings out of 493921
+ 411184 string characters out of 3147282
+ 588877 words of memory out of 3000000
+ 23554 multiletter control sequences out of 15000+200000
  13382 words of font info for 51 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  56i,20n,68p,455b,1821s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1225,9 +1254,9 @@ les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Program Files/Mi
 KTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi17.pfb><C:/Program Files/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/
 type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on reuMHC2013.pdf (1 page, 732275 bytes).
+Output written on reuMHC2013.pdf (1 page, 757041 bytes).
 PDF statistics:
- 58 PDF objects out of 1000 (max. 8388607)
- 6 named destinations out of 1000 (max. 500000)
- 58 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 75 PDF objects out of 1000 (max. 8388607)
+ 7 named destinations out of 1000 (max. 500000)
+ 68 words of extra memory for PDF output out of 10000 (max. 10000000)
 
