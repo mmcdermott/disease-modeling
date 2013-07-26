@@ -34,9 +34,9 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
   f        <- fBase
   trans    <- transBase
   incLTBI  <- incLTBIBase
-  newCases <- 0
-  totPop   <- 0
-  LTBIEn   <- 0
+  newCases <- 0 #contact investigations
+  totPop   <- 0 #total population cost per time step
+  LTBIEn   <- 0 #LTBI entering cost
   interVector <- strsplit(interventionStr,'&')[[1]]
   for (intervention in interVector) {
     interventionType <- sub("\\d+","",intervention)#sub empty str for digits
@@ -45,13 +45,13 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
       #TODO: Make this a function depending on magnitude for greater flexibility
       # (minor)
       if (interventionMag == 50) {
-        LTBIEn  <- LTBIEn + 600 + x*200
+        LTBIEn  <- LTBIEn + 600 + x*100
         incLTBI <- incLTBI*0.5
       } else if (interventionMag == 75) {
-        LTBIEn  <- LTBIEn + 600 + x*200
+        LTBIEn  <- LTBIEn + 600 + x*100
         incLTBI <- incLTBI*0.25
       } else if (interventionMag == 100) {
-        LTBIEn  <- LTBIEn + 600 + x*200
+        LTBIEn  <- LTBIEn + 600 + x*100
         incLTBI <- 0
       } else {
         error = T
