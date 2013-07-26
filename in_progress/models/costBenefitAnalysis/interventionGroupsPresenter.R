@@ -2,6 +2,15 @@ library(ggplot2)
 source('interventionGroups.R')
 source('deSolConstants.R')
 
+#Title Generation:
+plotTitle <- function(base,interventionName,final="") {
+  if (final != "") {
+    return(ggtitle(paste(c(base,interventionName,final),collapse=" ")))
+  } else {
+    return(ggtitle(paste(c(base,interventionName),collapse=" ")))
+  }
+}
+
 baseData <- read.csv(baseFile)
 #Base Incidence
 baseInc <- generateIncidence(baseData)
@@ -9,6 +18,20 @@ baseInc <- generateIncidence(baseData)
 baseHCSCost <- (baseData$cN0 + baseData$cN1)/1e9
 baseCasesD <- 1e6*(baseData$progTotalD0 + baseData$progTotalD1)
 
+#Data Labels
+USB             <- rep("USB",                 totT)
+FB              <- rep("FB",                  totT)
+all             <- rep("All",                 totT)
+noInt           <- rep("No Intervention",     totT)
+int             <- rep("Intervention",        totT)
+savings         <- rep("Savings",             totT)
+costs           <- rep("Implementation Cost", totT)
+totalCosts      <- rep("US HCS Cost",         totT)
+averted         <- rep("Cases Averted",       totT)
+TBdeathsAverted <- rep("TB Deaths Averted",   totT)
+redEnLTBI100L   <- rep("100% reduction",      totT)
+redEnLTBI75L    <- rep("75% reduction",       totT)
+redEnLTBI50L    <- rep("50% reduction",       totT)
 # #Tables
 # redEnLTBIcostTable <- matrix(nrow=5,ncol=30)
 # redEnLTBIcpcaDTable <- matrix(nrow=5,ncol=30)
@@ -88,25 +111,27 @@ redEnLTBI <- data.frame(year = years,
                         redEnLTBI100_costs   = costOfInter[[1]], 
                         redEnLTBI75_costs    = costOfInter[[2]], 
                         redEnLTBI50_costs    = costOfInter[[3]],
-                        redEnLTBI100_savings = saveOfInter[[1]], 
-                        redEnLTBI75_savings  = saveOfInter[[2]], 
-                        redEnLTBI50_savings  = saveOfInter[[3]],
+                        redEnLTBI100_savings = -1*saveOfInter[[1]], 
+                        redEnLTBI75_savings  = -1*saveOfInter[[2]], 
+                        redEnLTBI50_savings  = -1*saveOfInter[[3]],
                         redEnLTBI100_totCost = totSpent[[1]], 
                         redEnLTBI75_totCost  = totSpent[[2]], 
                         redEnLTBI50_totCost  = totSpent[[3]])
 
 x <- ggplot(redEnLTBI,aes(x=year)) + 
-       labs(x="Years", y="Billions of USD") +
+       labs(x="Years", y="Billions of USD", color="Economic Distinction", 
+            linetype="% Reduction") +
        scale_y_continuous(breaks=yrange) + 
-       plotTitle("Costs, Savings, and Net Costs for 
-                  100%, 75%, and 50% LTBI reduction","") + 
-       geom_line(aes(y=redEnLTBI100_costs, color=costsC)) +
-       geom_line(aes(y=redEnLTBI75_costs, color=costsC)) +
-       geom_line(aes(y=redEnLTBI50_costs, color=costsC)) +
-       geom_line(aes(y=redEnLTBI100_savings, color=savingsC)) +
-       geom_line(aes(y=redEnLTBI75_savings, color=savingsC)) +
-       geom_line(aes(y=redEnLTBI50_savings, color=savingsC)) +
-       geom_line(aes(y=redEnLTBI100_totCost, color='black')) +
-       geom_line(aes(y=redEnLTBI75_totCost, color='black')) +
-       geom_line(aes(y=redEnLTBI50_totCost, color='black')) +
+       plotTitle("Implementation Costs, Savings, and 
+US Health Care System (US HCS) 
+Costs for 100%, 75%, and 50% LTBI reduction","") + 
+       geom_line(aes(y=redEnLTBI100_costs,   color=costs,      linetype=redEnLTBI100L)) +
+       geom_line(aes(y=redEnLTBI75_costs,    color=costs,      linetype=redEnLTBI75L)) +
+       geom_line(aes(y=redEnLTBI50_costs,    color=costs,      linetype=redEnLTBI50L)) +
+       geom_line(aes(y=redEnLTBI100_savings, color=savings,    linetype=redEnLTBI100L)) +
+       geom_line(aes(y=redEnLTBI75_savings,  color=savings,    linetype=redEnLTBI75L)) +
+       geom_line(aes(y=redEnLTBI50_savings,  color=savings,    linetype=redEnLTBI50L)) +
+       geom_line(aes(y=redEnLTBI100_totCost, color=totalCosts, linetype=redEnLTBI100L)) +
+       geom_line(aes(y=redEnLTBI75_totCost,  color=totalCosts, linetype=redEnLTBI75L)) +
+       geom_line(aes(y=redEnLTBI50_totCost,  color=totalCosts, linetype=redEnLTBI50L)) +
        guides(fill=F, alpha=F)
