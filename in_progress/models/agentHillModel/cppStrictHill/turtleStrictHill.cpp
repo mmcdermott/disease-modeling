@@ -42,7 +42,7 @@ void turtle::updateState(){
     //Disease progression and self-cure
     if (state == LATENT) {
       timeinfec++;
-      if (timeinfec < 2/DELTA_T) {
+      if (timeinfec <= 2/DELTA_T) {
         if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
           if(r < q*PROB_ACUTE_PROGRESSION) {
             state = INFECTIOUS_TB;
@@ -88,7 +88,7 @@ void turtle::updateState(){
     //Disease progression and self-cure
     if (state == LATENT) {
       timeinfec++;
-      if (timeinfec < 2/DELTA_T) {
+      if (timeinfec <= 2/DELTA_T) {
         if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
           if(r < q*PROB_ACUTE_PROGRESSION) {
             state = INFECTIOUS_TB;

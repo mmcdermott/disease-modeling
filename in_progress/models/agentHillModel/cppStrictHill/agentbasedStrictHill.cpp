@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sstream>
-#include <time.h>
 #include "turtleStrictHill.hpp"
 using namespace std;
 
@@ -30,8 +29,6 @@ const int    totT     = (int) (finalYr/DELTA_T);
 //TODO upon moving over constants, fix them here.
 const int newCases0 = 8714; //US-born
 const int newCases1 = 7554; //Foreign-born
-
-int chron = 0;
 
 turtleList population;
 
@@ -63,7 +60,7 @@ void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeS
     case turtle::USA:
       switch(turtState) {
         case turtle::LATENT:
-          if (timeinfec < 40)
+          if (timeinfec <= 2/DELTA_T)
           {
             F0[timeStep] += numTurtles;
           }
@@ -89,7 +86,7 @@ void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeS
     case turtle::OTHER:
       switch(turtState) {
         case turtle::LATENT:
-          if (timeinfec < 40)
+          if (timeinfec <= 2/DELTA_T)
           {
             F1[timeStep] += numTurtles;
           }
