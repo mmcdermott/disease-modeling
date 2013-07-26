@@ -10,22 +10,27 @@ using namespace std;
 
 
 const char* countryNames[2] = {"USA", "Other"};
-const char* stateNames[7] = {"Acute Latent (F)", "Chronic Latent (L)", "Infectious TB (I)",
-							"Non-Infectious TB (J)", "Susceptible (S)", "TB Death", "Natural Death"};
+const char* stateNames[6] = {"Infectious TB (I)",
+							"Non-Infectious TB (J)", "Susceptible (S)", "TB Death", "Natural Death", "Latent (L)"};
 
 //Implementation
 //Constructor
-turtle::turtle(const COB &c, const State &s)
-  : country(c), state(s)
+turtle::turtle(const COB &c, const State &s, int timeinfec)
+  : country(c), state(s), timeinfec(timeinfec)
 {}
 
 bool turtle::dead() {
   return (state == NATURAL_DEATH || state == TB_DEATH);
 }
 
+int turtle::InfecChange(){
+  return timeinfec - prevtime;
+}
+
 //Updates turtle state
 void turtle::updateState(){
   //Initializations
+  prevtime = timeinfec;
   double r  = (double)rand()/RAND_MAX; //random number from (0,1]
   if(country == USA){
     if (r < MU0) {  //Natural death rate (USB)
@@ -35,29 +40,32 @@ void turtle::updateState(){
     r -= MU0;  //Natural death rate probability accounted for
 
     //Disease progression and self-cure
-    if (state == CHRONIC_LTBI) {
-      if (r < PROB_CHRONIC_PROGRESSION_0) {  //Disease progression from Chronic Latent to Active TB (USB)
-        if (r < q*PROB_CHRONIC_PROGRESSION_0) {
-          state = INFECTIOUS_TB;
-        } else {
-          state = NONINFECTIOUS_TB;
+    if (state == LATENT) {
+      timeinfec++;
+      if (timeinfec <= 2/DELTA_T) {
+        if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
+          if(r < q*PROB_ACUTE_PROGRESSION) {
+            state = INFECTIOUS_TB;
+          } else {
+            state = NONINFECTIOUS_TB;
+          }
+          return;
+        } else if (r - PROB_ACUTE_PROGRESSION < PROB_ACUTE_LATENT_CURE_0) {
+          state = SUSCEPTIBLE;
+          return;
         }
-        return;
-      } else if (r - PROB_CHRONIC_PROGRESSION_0 < PROB_CHRONIC_LATENT_CURE) {
-        state = SUSCEPTIBLE;
-        return;
-      }
-    } else if(state == ACUTE_LTBI){
-      if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
-        if(r < q*PROB_ACUTE_PROGRESSION) {
-          state = INFECTIOUS_TB;
-        } else {
-          state = NONINFECTIOUS_TB;
+      } else {
+        if (r < PROB_CHRONIC_PROGRESSION_0) {  //Disease progression from Chronic Latent to Active TB (USB)
+          if (r < q*PROB_CHRONIC_PROGRESSION_0) {
+            state = INFECTIOUS_TB;
+          } else {
+            state = NONINFECTIOUS_TB;
+          }
+          return;
+        } else if (r - PROB_CHRONIC_PROGRESSION_0 < PROB_CHRONIC_LATENT_CURE) {
+          state = SUSCEPTIBLE;
+          return;
         }
-        return;
-      } else if (r - PROB_ACUTE_PROGRESSION < PROB_ACUTE_LATENT_CURE_0) {
-        state = SUSCEPTIBLE;
-        return;
       }
     } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
     
@@ -70,7 +78,7 @@ void turtle::updateState(){
       return;
     }
   }
-  else{ //country == OTHER
+  else { //country == OTHER
     if (r < MU1) {  //Natural death rate (FB)
       state = NATURAL_DEATH;
       return;
@@ -78,29 +86,32 @@ void turtle::updateState(){
     r -= MU1;  //Natural death rate probability accounted for
 
     //Disease progression and self-cure
-    if (state == CHRONIC_LTBI) {
-      if (r < PROB_CHRONIC_PROGRESSION_1) {  //Disease progression from Chronic Latent to Active TB (FB)
-        if (r < q*PROB_CHRONIC_PROGRESSION_1) {
-          state = INFECTIOUS_TB;
-        } else {
-          state = NONINFECTIOUS_TB;
+    if (state == LATENT) {
+      timeinfec++;
+      if (timeinfec <= 2/DELTA_T) {
+        if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
+          if(r < q*PROB_ACUTE_PROGRESSION) {
+            state = INFECTIOUS_TB;
+          } else {
+            state = NONINFECTIOUS_TB;
+          }
+          return;
+        } else if (r - PROB_ACUTE_PROGRESSION < PROB_ACUTE_LATENT_CURE_1) {
+          state = SUSCEPTIBLE;
+          return;
         }
-        return;
-      } else if (r - PROB_CHRONIC_PROGRESSION_1 < PROB_CHRONIC_LATENT_CURE) {
-        state = SUSCEPTIBLE;
-        return;
-      }
-    } else if(state == ACUTE_LTBI){
-      if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
-        if(r < q*PROB_ACUTE_PROGRESSION) {
-          state = INFECTIOUS_TB;
-        } else {
-          state = NONINFECTIOUS_TB;
+      } else {  
+        if (r < PROB_CHRONIC_PROGRESSION_1) {  //Disease progression from Chronic Latent to Active TB (USB)
+          if (r < q*PROB_CHRONIC_PROGRESSION_1) {
+            state = INFECTIOUS_TB;
+          } else {
+            state = NONINFECTIOUS_TB;
+          }
+          return;
+        } else if (r - PROB_CHRONIC_PROGRESSION_1 < PROB_CHRONIC_LATENT_CURE) {
+          state = SUSCEPTIBLE;
+          return;
         }
-        return;
-      } else if (r - PROB_ACUTE_PROGRESSION < PROB_ACUTE_LATENT_CURE_1) {
-        state = SUSCEPTIBLE;
-        return;
       }
     } else if(state == INFECTIOUS_TB || state == NONINFECTIOUS_TB){
     
@@ -128,8 +139,12 @@ turtle::State turtle::getState() {
   return state;
 }
 
+int turtle::InfectionTime() {
+  return timeinfec;
+}
+
 void turtle::reinfect(){
-  state = ACUTE_LTBI;
+  timeinfec = 0;
 }
 /*
 //Commented out to test compilation of agentbasedStrictHill.cpp
