@@ -55,6 +55,40 @@ incPlotTotalAll <- ggplot(baseCumulativeInc, aes(x=year)) +
            geom_ribbon(aes(ymin=IL0c,ymax=II0c,fill=activeInfecUSBL))   + 
            geom_ribbon(aes(ymin=II0c,ymax=IJ0c,fill=activeNoInfecUSBL))
 
+interventionTypes <- list('redEnLTBI','redImm','incLTBItrmt')
+interventionMags <- list(redEnLTBI=list(50,75,100),redImm=list(50,75),
+                         incLTBItrmt=list(100,300))
+incDataTypeGrouped <- list()
+for (interventionType in interventionTypes) {
+  dataL = list()
+  incDataTypeGrouped[[interventionType]] = dataL
+}
+
+incPlotTypeGroupedG <- function(incDataTypeGrouped, type) {
+  data <- incDataTypeGrouped[[type]]
+  return(
+  ggplot(data.frame(year=years, baseInc), aes(x=year)) + 
+         scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
+                       labels=c("Elimination (1)",2,5,10,25,50,100,200),
+                       limits=c(0.5,250)) + 
+         labs(x="Years", y="Incidence/million", color="Population", 
+                linetype="Intervention Status") + 
+         plotTitle("Incidence Levels for Various Reductions of Entering LTBI","") +
+         geom_line(aes(y=IN0,   color=USB, linetype=noInt))  + 
+         geom_line(aes(y=IN1,   color=FB,  linetype=noInt))  + 
+         geom_line(aes(y=INall, color=all, linetype=noInt))  + 
+         geom_line(aes(y=redEnLTBI100USB, color=USB, linetype=redEnLTBI100L))  + 
+         geom_line(aes(y=redEnLTBI100FB, color=FB, linetype=redEnLTBI100L))  + 
+         geom_line(aes(y=redEnLTBI100All, color=all, linetype=redEnLTBI100L))  + 
+         geom_line(aes(y=redEnLTBI75USB, color=USB, linetype=redEnLTBI75L))  + 
+         geom_line(aes(y=redEnLTBI75FB, color=FB, linetype=redEnLTBI75L))  + 
+         geom_line(aes(y=redEnLTBI75All, color=all, linetype=redEnLTBI75L))  + 
+         geom_line(aes(y=redEnLTBI50USB, color=USB, linetype=redEnLTBI50L))  + 
+         geom_line(aes(y=redEnLTBI50FB, color=FB, linetype=redEnLTBI50L))  + 
+         geom_line(aes(y=redEnLTBI50All, color=all, linetype=redEnLTBI50L))
+  ) 
+}
+
 incPlot <- ggplot(incData, aes(x=year)) + 
            scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
                          labels=c("Elimination (1)",2,5,10,25,50,100,200),
