@@ -1,0 +1,103 @@
+\documentclass[final]{beamer}
+%Poster Packages: 
+\usepackage[orientation=lanscape,size=a0]{beamerposter}
+%General Packages:
+\usepackage{amsmath,amsthm, amssymb, latexsym}
+%TikZ:
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\input{arrowsnew}
+
+%Theme:
+\mode<presentation>{\usetheme{I6pd2}}
+
+\graphicspath{{figures/}}
+
+\newlength{\columnheight}
+\setlength{\columnheight}{105cm}
+
+\title{\huge Modeling Intervention Strategies for TB Control in the United States}
+\author{Jessica Ginepro, Emma Hartman, Ryo Kimura, Matthew McDermott, Colin
+        Pawlowski, \& Dylan Shepardson}
+\institute[MHC]{Mathematical Modeling Group, Mount Holyoke College, South
+                Hadley, MA, USA}
+\date[July 31, 2013]{July 31, 2013}
+\begin{document}
+%For the compartmental models:
+\tikzstyle{compartment} = [rectangle, draw, fill=blue!20, text badly centered,
+  node distance=3.8em, inner sep=0.4em, rounded corners]
+\tikzstyle{compartment rate} = [right of=start, color=black, node distance=2.2em,
+text width=3em]
+%TODO: Increase arrow head size
+\tikzstyle{line} = [draw, -latexnew, arrowhead = 7mm]
+
+
+\begin{frame}
+  \begin{columns}
+    \begin{column}{.3\textwidth}
+      \begin{block}{Introduction}
+        The most common epidemiological models are compartmental models, in
+        which a system of differential equations describes how parts of the
+        population move between different disease states, or
+        \emph{compartments}. The canonical example of such a model is the SIR
+        model, which has three compartments: Susceptible, Infected, and
+        Recovered. The dynamics of a population modeled by this framework are
+        shown in figure~\ref{fig:SIRFlowchart}, with associated system of
+        differential equations~\ref{eq:SIRdes}.
+        %TODO equalize figure heights
+        \begin{block}{}
+          \begin{column}{.39\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \begin{tikzpicture}
+                  \node [compartment] (S) {Susceptible (S)};
+                  \node [compartment, below of=S] (I) {Infected (I)};
+                  \node [compartment, below of=I] (R) {Recovered (R)};
+                  \path [line] (S) -- node [compartment rate] {$\beta S(t)I(t)$} (I);
+                  \path [line] (I) -- node [compartment rate] {$\gamma I(t)$} (R);
+                \end{tikzpicture}
+              \end{center}
+              \caption{This flowchart depicts the standard SIR epidemiological
+                       model. It is accomponanied by the system of differential
+                       equations~\ref{eq:SIRdes}.}
+              \label{fig:SIRFlowchart}
+            \end{figure}
+          \end{column}
+          \begin{column}{.39\textwidth}
+            \begin{figure}[h]
+              \begin{align*}
+                \frac{dS}{dt} &= -\beta S(t)I(t) \\
+                \frac{dI}{dt} &= \beta S(t)I(t) - \gamma I(t) \\
+                \frac{dR}{dt} &= \gamma I(t)\\
+              \end{align*}
+              \caption{The system of differential equations governing the SIR
+                       model.}
+              \label{eq:SIRdes}
+            \end{figure}
+          \end{column}
+        \end{block}
+        The SIR system, though very informative about basic disease dynamics,
+        fails to capture the intricacies of more complicated diseases. This
+        project examines the spread of tuberculosis (TB) in the United States
+        (US) via compartmental models and stochastic, agent-based models. These
+        explorations allow one to explore the impact, both epidemiological and
+        economic, of various intervention strategies. These models are based on
+        a 2012 compartmental model of TB in the US created by A. N. Hill, J. E.
+        Becerra, and K. G. Castro.
+      \end{block}
+      \begin{block}{The Basic Hill Model}
+      \end{block}
+    \end{column}
+    \begin{column}{.3\textwidth}
+      \begin{block}{Intervention Analysis}
+        Intervention Analysis
+      \end{block}
+    \end{column}
+    \begin{column}{.3\textwidth}
+      \begin{block}{An Agent Based Implementation}
+        Implementing an Agent Based Framework
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+\end{document}
