@@ -929,7 +929,7 @@ NetLogo 5.0.4
       <value value="31.4"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="popConst">
-      <value value="10000"/>
+      <value value="100"/>
     </enumeratedValueSet>
   </experiment>
   <experiment name="incidence experiment" repetitions="12" runMetricsEveryStep="true">
@@ -948,7 +948,7 @@ NetLogo 5.0.4
       <value value="0.1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="popConst">
-      <value value="10000"/>
+      <value value="100"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="totT">
       <value value="100"/>
@@ -959,7 +959,7 @@ NetLogo 5.0.4
     <go>go</go>
     <metric>1e6 * (vF * count fbs with [dstate = 1] + vL1 * count fbs with [dstate = 0]) / (S1pop + count fbs)</metric>
     <enumeratedValueSet variable="popConst">
-      <value value="5000"/>
+      <value value="200"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="initial_N0">
       <value value="250"/>

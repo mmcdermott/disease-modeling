@@ -171,7 +171,36 @@ text width=3em]
     \end{column}
     \begin{column}{.3\textwidth}
       \begin{block}{An Agent Based Implementation}
-        Implementing an Agent Based Framework
+        In addition to the extended Hill model (implemented in R), we also
+        created a stochastic agent-based counterpart in both NetLogo and C++.
+        Stochastic models add notions of uncertainty into the model structure,
+        while agent-based models simulate global behavior of the system by
+        describing local behavior of individual agents in the population.
+
+        Figure~\ref{fig:NLHMinc} shows the incidence rate over time for both
+        the R and NetLogo models. Although the NetLogo model is stochastic, its
+        incidence rates roughly coincide with those given by the R model. With the
+        C++ model (figure~\ref{fig:finalRun}), we obtain even better convergence.
+        \begin{block}{}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{NLHMinc}
+              \end{center}
+              \caption{Incidence per million for R and NetLogo models (12 runs)}
+              \label{fig:NLHMinc}
+            \end{figure}
+          \end{column}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{finalRunSmall}
+              \end{center}
+              \caption{Incidence per million for R and C++ models (2100 runs)}
+              \label{fig:finalRun}
+            \end{figure}
+          \end{column}
+        \end{block}
       \end{block}
     \end{column}
   \end{columns}
