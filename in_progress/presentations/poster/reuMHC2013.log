@@ -1,6 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.5.10)  26 JUL 2013 15:13
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.5.10)  26 JUL 2013 16:26
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
 **reuMHC2013.tex
 (./reuMHC2013.tex
@@ -721,15 +722,12 @@ beamerposter: checking size input, please wait.
 beamerposter: the input a0\ 1\ was correct, we proceed.
 beamerposter: finished size input check.
 beamerposter: myfontscale=1.0
-beamerposter: checking orientation input, please wait.
-
-Package beamerposter Warning: the input lanscape\ was incorrect and was ignored
-. on input line 105.
-
-beamerposter: finished orientation check.
 beamerposter: checking size input, please wait.
-beamerposter: the input a0\ 1\ was correct, we proceed.
+beamerposter: the input custom\ 6\ was correct, we proceed.
 beamerposter: finished size input check.
+beamerposter: custom poster height=91.4
+beamerposter: custom poster width=121.9
+beamerposter: myfontscale=1.8
 (/usr/local/texlive/2012/texmf-dist/tex/latex/fp/fp.sty
 Package: fp 1995/04/02
 
@@ -778,6 +776,7 @@ Package: fp-upn 1996/10/21
 (/usr/local/texlive/2012/texmf-dist/tex/latex/fp/fp-eval.sty
 Package: fp-eval 1995/04/03
 )) ( FP-UPN
+( FP-SUB ) ) ( FP-UPN ( FP-SUB ) ) ( FP-UPN ( FP-MUL ) ( FP-ROUND ) ) ( FP-UPN
 ( FP-MUL ) ( FP-ROUND ) ) ( FP-UPN ( FP-MUL ) ( FP-ROUND ) ) ( FP-UPN ( FP-MUL
 ) ( FP-ROUND ) ) ( FP-UPN ( FP-MUL ) ( FP-ROUND ) ) ( FP-UPN ( FP-MUL )
 ( FP-ROUND ) ) ( FP-UPN ( FP-MUL ) ( FP-ROUND ) ) ( FP-UPN ( FP-MUL )
@@ -790,14 +789,12 @@ Package: fp-eval 1995/04/03
 ( FP-ROUND ) ) ( FP-UPN ( FP-MUL ) ( FP-ROUND ) ) ( FP-UPN ( FP-MUL )
 ( FP-ROUND ) ) ( FP-UPN ( FP-MUL ) ( FP-ROUND ) ) ( FP-UPN ( FP-MUL )
 ( FP-ROUND ) ) ( FP-UPN ( FP-MUL ) ( FP-ROUND ) ) ( FP-UPN ( FP-MUL )
-( FP-ROUND ) ) ( FP-UPN ( FP-MUL ) ( FP-ROUND ) ))
-(/usr/local/texlive/2012/texmf-dist/tex/latex/base/latexsym.sty
+( FP-ROUND ) )) (/usr/local/texlive/2012/texmf-dist/tex/latex/base/latexsym.sty
 Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
 \symlasy=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
 (Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
-)
-(/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+) (/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 (/usr/local/texlive/2012/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
 Package: pgf 2008/01/15 v2.10 (rcs-revision 1.12)
 
@@ -946,27 +943,23 @@ File: pgflibraryarrows.code.tex 2008/10/27 v2.10 (rcs-revision 1.9)
 Package: beamerthemeI6pd2 
 )
 \columnheight=\skip57
- (./reuMHC2013.aux
-
-LaTeX Warning: Label `fig:redEnLTBI_costs' multiply defined.
-
-)
+ (./reuMHC2013.aux)
 \openout1 = `reuMHC2013.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
-LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -976,12 +969,12 @@ LaTeX Font Info:    ... okay on input line 25.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: includehead includefoot 
-* h-part:(L,W,R)=(28.45274pt, 3323.85117pt, 28.45274pt)
-* v-part:(T,H,B)=(0.0pt, 2388.89357pt, 0.0pt)
-* \paperwidth=3380.75665pt
-* \paperheight=2388.89357pt
-* \textwidth=3323.85117pt
-* \textheight=2360.44084pt
+* h-part:(L,W,R)=(28.45274pt, 3411.48528pt, 28.45274pt)
+* v-part:(T,H,B)=(0.0pt, 2600.58171pt, 0.0pt)
+* \paperwidth=3468.39076pt
+* \paperheight=2600.58171pt
+* \textwidth=3411.48528pt
+* \textheight=2572.12898pt
 * \oddsidemargin=-43.81725pt
 * \evensidemargin=-43.81725pt
 * \topmargin=-72.26999pt
@@ -1032,7 +1025,7 @@ e
 ))
 ABD: EveryShipout initializing macros
 \AtBeginShipoutBox=\box77
-Package hyperref Info: Link coloring OFF on input line 25.
+Package hyperref Info: Link coloring OFF on input line 27.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -1042,56 +1035,56 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count180
 )
-LaTeX Info: Redefining \ref on input line 25.
-LaTeX Info: Redefining \pageref on input line 25.
-LaTeX Info: Redefining \nameref on input line 25.
+LaTeX Info: Redefining \ref on input line 27.
+LaTeX Info: Redefining \pageref on input line 27.
+LaTeX Info: Redefining \nameref on input line 27.
 
 (./reuMHC2013.out) (./reuMHC2013.out)
 \@outlinefile=\write5
 \openout5 = `reuMHC2013.out'.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 25.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 27.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 25.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 27.
 \symnumbers=\mathgroup7
 \sympureletters=\mathgroup8
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 25.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 25.
+(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 27.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 25.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 25.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 25.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 27.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 25.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 25.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 25.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 27.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 25.
+(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 25.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 25.
+(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 27.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 25.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 25.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 27.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 25.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 27.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 25.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmr/bx/n on input line 25.
+(Font)                  OT1/cmss/bx/n --> OT1/cmr/bx/n on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/bx/n on input line 25.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/bx/n on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 25.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 25.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 27.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/bx/n on input line 25.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/bx/n on input line 27.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/beamer/translator/dicts/translato
 r-basic-dictionary/translator-basic-dictionary-English.dict
@@ -1117,138 +1110,104 @@ Dictionary: translator-numbers-dictionary, Language: English
 r-theorem-dictionary/translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
-LaTeX Info: Redefining \includegraphics on input line 25.
+LaTeX Info: Redefining \includegraphics on input line 27.
 
 (./reuMHC2013.nav)
 <figures/mhc/logos/base.jpg, id=13, 316.0608pt x 139.2402pt>
 File: figures/mhc/logos/base.jpg Graphic file (type jpg)
 
 <use figures/mhc/logos/base.jpg>
-Package pdftex.def Info: figures/mhc/logos/base.jpg used on input line 25.
-(pdftex.def)             Requested size: 248.6243pt x 109.52759pt.
+Package pdftex.def Info: figures/mhc/logos/base.jpg used on input line 27.
+(pdftex.def)             Requested size: 255.06741pt x 112.36671pt.
 
 <figures/nsf/logos/base.jpg, id=14, 525.162pt x 525.162pt>
 File: figures/nsf/logos/base.jpg Graphic file (type jpg)
 
 <use figures/nsf/logos/base.jpg>
-Package pdftex.def Info: figures/nsf/logos/base.jpg used on input line 25.
-(pdftex.def)             Requested size: 109.526pt x 109.52759pt.
+Package pdftex.def Info: figures/nsf/logos/base.jpg used on input line 27.
+(pdftex.def)             Requested size: 112.36272pt x 112.36671pt.
 
-Overfull \hbox (10.72404pt too wide) detected at line 25
+Overfull \hbox (12.47713pt too wide) detected at line 27
 [][][] [][][][][][][][][] [][][][][][][][][] [][][][][][][][][] [][][][][][][] 
 
  []
 
-
-LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <24.88> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 207.
-
-
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-
-LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <20.74> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 207.
-
-
-
-LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <17.28> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 207.
-
-
-
-Overfull \hbox (26.90533pt too wide) in paragraph at lines 207--207
-[][][][]$\OML/cmm/m/it/24.88 ^^L\OT1/cmss/m/sl/24.88 S\OT1/cmss/m/n/24.88 (\OT1
-/cmss/m/sl/24.88 t\OT1/cmss/m/n/24.88 )\OT1/cmss/m/sl/24.88 I\OT1/cmss/m/n/24.8
-8 (\OT1/cmss/m/sl/24.88 t\OT1/cmss/m/n/24.88 )$  
- []
-
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-Missing character: There is no , in font nullfont!
-<figures/HillModelFlowChart.png, id=20, 1071.29646pt x 953.68059pt>
+<figures/HillModelFlowChart.png, id=15, 1071.29646pt x 953.68059pt>
 File: figures/HillModelFlowChart.png Graphic file (type png)
 
 <use figures/HillModelFlowChart.png>
 Package pdftex.def Info: figures/HillModelFlowChart.png used on input line 207.
 
-(pdftex.def)             Requested size: 267.82346pt x 238.41956pt.
-
-Overfull \hbox (68.39342pt too wide) in paragraph at lines 207--207
- [] 
- []
+(pdftex.def)             Requested size: 803.47038pt x 715.2587pt.
+LaTeX Font Info:    Calculating math sizes for size <44.78> on input line 207.
 
 
-LaTeX Warning: File `incidencePlotRedEnLTBI.pdf' not found on input line 207.
+LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <44.78> not available
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 207.
 
 
-! Package pdftex.def Error: File `incidencePlotRedEnLTBI.pdf' not found.
 
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.207 \end{frame}
-                 
-? 
+LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <31.34586> not available
 
-LaTeX Warning: File `EnLTBIRedGroupCost.pdf' not found on input line 207.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 207.
 
 
-! Package pdftex.def Error: File `EnLTBIRedGroupCost.pdf' not found.
 
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.207 \end{frame}
-                 
-? 
-<figures/NLHMinc.pdf, id=23, 827.09pt x 827.09pt>
+LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <22.39> not available
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 207.
+
+
+<figures/incidencePlotRedEnLTBI.pdf, id=16, 505.89pt x 505.89pt>
+File: figures/incidencePlotRedEnLTBI.pdf Graphic file (type pdf)
+
+<use figures/incidencePlotRedEnLTBI.pdf>
+Package pdftex.def Info: figures/incidencePlotRedEnLTBI.pdf used on input line 
+207.
+(pdftex.def)             Requested size: 505.88875pt x 505.88875pt.
+
+<figures/EnLTBIRedGroupCost.pdf, id=17, 505.89pt x 505.89pt>
+File: figures/EnLTBIRedGroupCost.pdf Graphic file (type pdf)
+
+<use figures/EnLTBIRedGroupCost.pdf>
+Package pdftex.def Info: figures/EnLTBIRedGroupCost.pdf used on input line 207.
+
+(pdftex.def)             Requested size: 505.88875pt x 505.88875pt.
+
+<figures/NLHMinc.pdf, id=18, 827.09pt x 827.09pt>
 File: figures/NLHMinc.pdf Graphic file (type pdf)
  <use figures/NLHMinc.pdf>
 Package pdftex.def Info: figures/NLHMinc.pdf used on input line 207.
-(pdftex.def)             Requested size: 448.72142pt x 448.72954pt.
+(pdftex.def)             Requested size: 460.55206pt x 460.55482pt.
 
-<figures/finalRunSmall.png, id=24, 2007.5pt x 2007.5pt>
+<figures/finalRunSmall.png, id=19, 2007.5pt x 2007.5pt>
 File: figures/finalRunSmall.png Graphic file (type png)
 
 <use figures/finalRunSmall.png>
 Package pdftex.def Info: figures/finalRunSmall.png used on input line 207.
-(pdftex.def)             Requested size: 448.72142pt x 448.69672pt.
+(pdftex.def)             Requested size: 460.55206pt x 460.55128pt.
+
+Overfull \vbox (350.28348pt too high) detected at line 207
+ []
+
 File: figures/mhc/logos/base.jpg Graphic file (type jpg)
- <use figures/mhc/logos/base.jpg>
+<use figures/mhc/logos/base.jpg>
 Package pdftex.def Info: figures/mhc/logos/base.jpg used on input line 207.
-(pdftex.def)             Requested size: 248.6243pt x 109.52759pt.
+(pdftex.def)             Requested size: 255.06741pt x 112.36671pt.
 File: figures/nsf/logos/base.jpg Graphic file (type jpg)
-
-<use figures/nsf/logos/base.jpg>
+ <use figures/nsf/logos/base.jpg>
 Package pdftex.def Info: figures/nsf/logos/base.jpg used on input line 207.
-(pdftex.def)             Requested size: 109.526pt x 109.52759pt.
+(pdftex.def)             Requested size: 112.36272pt x 112.36671pt.
 
-Overfull \hbox (10.72404pt too wide) has occurred while \output is active
+Overfull \hbox (12.47713pt too wide) has occurred while \output is active
 [][][] [][][][][][][][][] [][][][][][][][][] [][][][][][][][][] [][][][][][][] 
 
  []
 
 [1{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-pdfTeX warning (ext4): destination with the same identifier (name{fig:redEnLTBI
-_costs}) has been already used, duplicate ignored
-
-\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
-                                                  
-l.207 \end{frame}
-                  <./figures/mhc/logos/base.jpg> <./figures/nsf/logos/base.jpg>
- <./figures/HillModelFlowChart.png> <./figures/NLHMinc.pdf> <./figures/finalRun
-Small.png>]
+ <./figures/mhc/logos/base.jpg> <./figures/nsf/logos/base.jpg> <./figures/HillM
+odelFlowChart.png> <./figures/incidencePlotRedEnLTBI.pdf> <./figures/EnLTBIRedG
+roupCost.pdf> <./figures/NLHMinc.pdf> <./figures/finalRunSmall.png>]
 \tf@nav=\write6
 \openout6 = `reuMHC2013.nav'.
 
@@ -1265,30 +1224,24 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 208.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 208.
 Package rerunfilecheck Info: File `reuMHC2013.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 208.
  ) 
 Here is how much of TeX's memory you used:
- 20766 strings out of 493481
- 410996 string characters out of 3140965
- 605151 words of memory out of 3000000
- 23550 multiletter control sequences out of 15000+200000
- 12892 words of font info for 50 fonts, out of 3000000 for 9000
+ 20717 strings out of 493481
+ 410163 string characters out of 3140965
+ 563663 words of memory out of 3000000
+ 23503 multiletter control sequences out of 15000+200000
+ 13197 words of font info for 51 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 49i,20n,66p,454b,1805s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
-></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb>
-</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb
-></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi17.pfb
-></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on reuMHC2013.pdf (1 page, 1822196 bytes).
+ 49i,20n,66p,471b,1368s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb
+></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pf
+b></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb
+>
+Output written on reuMHC2013.pdf (1 page, 1816006 bytes).
 PDF statistics:
- 94 PDF objects out of 1000 (max. 8388607)
- 65 compressed objects within 1 object stream
- 9 named destinations out of 1000 (max. 500000)
- 68 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 88 PDF objects out of 1000 (max. 8388607)
+ 59 compressed objects within 1 object stream
+ 8 named destinations out of 1000 (max. 500000)
+ 78 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,6 +1,8 @@
 \documentclass[final]{beamer}
 %Poster Packages: 
-\usepackage[orientation=lanscape,size=a0]{beamerposter}
+%\usepackage[orientation=lanscape,size=a0]{beamerposter}
+%dimensions are in cm, scale is for font size
+\usepackage[size=custom,height=91.4,width=121.9,scale=1.8]{beamerposter}
 %General Packages:
 \usepackage{amsmath,amsthm, amssymb, latexsym}
 %TikZ:
@@ -35,88 +37,83 @@ text width=3em]
 \begin{frame}
   \begin{columns}
     \begin{column}{.3\textwidth}
-      \begin{block}{Introduction}
-        The most common epidemiological models are compartmental models, in
-        which a system of differential equations describes how parts of the
-        population move between different disease states, or
-        \emph{compartments}. The canonical example of such a model is the SIR
-        model, which has three compartments: Susceptible, Infected, and
-        Recovered. The dynamics of a population modeled by this framework are
-        shown in figure~\ref{fig:SIRFlowchart}, with associated system of
-        differential equations~\ref{eq:SIRdes}.
+%      \begin{block}{Introduction}
+%        The most common epidemiological models are compartmental models, in
+%        which a system of differential equations describes how parts of the
+%        population move between different disease states, or
+%        \emph{compartments}. The canonical example of such a model is the SIR
+%        model, which has three compartments: Susceptible, Infected, and
+%        Recovered. The dynamics of a population modeled by this framework are
+%        shown in figure~\ref{fig:SIRFlowchart}, with associated system of
+%        differential equations~\ref{eq:SIRdes}.
         %TODO equalize figure heights
-        \vspace{-3em}
-        \begin{block}{}
-          \begin{column}{.39\textwidth}
-            \begin{figure}[h]
-              \begin{center}
-                \begin{tikzpicture}
-                  \node [compartment] (S) {Susceptible (S)};
-                  \node [compartment, below of=S] (I) {Infected (I)};
-                  \node [compartment, below of=I] (R) {Recovered (R)};
-                  \path [line] (S) -- node [compartment rate] {$\beta S(t)I(t)$} (I);
-                  \path [line] (I) -- node [compartment rate] {$\gamma I(t)$} (R);
-                \end{tikzpicture}
-              \end{center}
-              \caption{This flowchart depicts the standard SIR epidemiological
-                       model. It is accomponanied by the system of differential
-                       equations~\ref{eq:SIRdes}.}
-              \label{fig:SIRFlowchart}
-            \end{figure}
-          \end{column}
-          \begin{column}{.39\textwidth}
-            \begin{figure}[h]
-              \begin{align*}
-                \frac{dS}{dt} &= -\beta S(t)I(t) \\
-                \frac{dI}{dt} &= \beta S(t)I(t) - \gamma I(t) \\
-                \frac{dR}{dt} &= \gamma I(t)\\
-                N             &= S(t) + I(t) + R(t)\\
-              \end{align*}
-              \caption{The system of differential equations governing the SIR
-                       model.}
-              \label{eq:SIRdes}
-            \end{figure}
-          \end{column}
-        \end{block}
-        The SIR system, though very informative about basic disease dynamics,
-        fails to capture the intricacies of more complicated diseases. This
-        project examines the spread of tuberculosis (TB) in the United States
-        (US) via compartmental models and stochastic, agent-based models. These
-        explorations allow one to explore the impact, both epidemiological and
-        economic, of various intervention strategies. These models are based on
-        a 2012 compartmental model of TB in the US created by A. N. Hill, J. E.
-        Becerra, and K. G. Castro.
-      \end{block}
+%        \vspace{-3em}
+%        \begin{block}{}
+%          \begin{column}{.39\textwidth}
+%            \begin{figure}[h]
+%              \begin{center}
+%                \begin{tikzpicture}
+%                  \node [compartment] (S) {Susceptible (S)};
+%                  \node [compartment, below of=S] (I) {Infected (I)};
+%                  \node [compartment, below of=I] (R) {Recovered (R)};
+%                  \path [line] (S) -- node [compartment rate] {$\beta S(t)I(t)$} (I);
+%                  \path [line] (I) -- node [compartment rate] {$\gamma I(t)$} (R);
+%                \end{tikzpicture}
+%              \end{center}
+%              \caption{This flowchart depicts the standard SIR epidemiological
+%                       model. It is accomponanied by the system of differential
+%                       equations~\ref{eq:SIRdes}.}
+%              \label{fig:SIRFlowchart}
+%            \end{figure}
+%          \end{column}
+%          \begin{column}{.39\textwidth}
+%            \begin{figure}[h]
+%              \begin{align*}
+%                \frac{dS}{dt} &= -\beta S(t)I(t) \\
+%                \frac{dI}{dt} &= \beta S(t)I(t) - \gamma I(t) \\
+%                \frac{dR}{dt} &= \gamma I(t)\\
+%                N             &= S(t) + I(t) + R(t)\\
+%              \end{align*}
+%              \caption{The system of differential equations governing the SIR
+%                       model.}
+%              \label{eq:SIRdes}
+%            \end{figure}
+%          \end{column}
+%        \end{block}
+%        The SIR system, though very informative about basic disease dynamics,
+%        fails to capture the intricacies of more complicated diseases. This
+%        project examines the spread of tuberculosis (TB) in the United States
+%        (US) via compartmental models and stochastic, agent-based models. These
+%        explorations allow one to explore the impact, both epidemiological and
+%        economic, of various intervention strategies. These models are based on
+%        a 2012 compartmental model of TB in the US created by A. N. Hill, J. E.
+%        Becerra, and K. G. Castro.
+%      \end{block}
+      
       \begin{block}{The Basic Hill Model}
-        The Hill model is another compartmental model, illustrated in
-        figure~\ref{fig:hillFlow}.
-        \vspace{-2em}
         \begin{block}{}
-          \begin{column}{.2\textwidth}
             \begin{figure}[h]
               \begin{center}
-                \includegraphics[scale=.25]{HillModelFlowChart}
+                \includegraphics[scale=.75]{HillModelFlowChart}
               \end{center}
               \caption{A flow chart representing the compartments of the Hill
                        Model.}
               \label{fig:hillFlow}
             \end{figure}
-          \end{column}
-          \begin{column}{.6\textwidth}
-            The illustration of this model is not full, as there are two
-            subpopulations in the Hill Model. TB dynamics in the US differ
-            radically between US born (USB) individuals and foreign born (FB)
-            individuals,  so this model maintains two distinct populations in
-            which the disease can spread. There is a near identical diagram to
-            describe the dynamics of the model for the FB population. Further,
-            each compartment in this model also loses people to do natural
-            death. The system of differential equations for this model is
-            naturally more complex and is provided in an appendix. In order to
-            implement this model, Hill, Becerra, and Castro used the \texttt{R}
-            programming language, with the \texttt{lsoda} routine to numerically
-            solve the differential equations. 
-          \end{column}
         \end{block}
+%            The illustration of this model is not full, as there are two
+%            subpopulations in the Hill Model. TB dynamics in the US differ
+%            radically between US born (USB) individuals and foreign born (FB)
+%            individuals,  so this model maintains two distinct populations in
+%            which the disease can spread. There is a near identical diagram to
+%            describe the dynamics of the model for the FB population. Further,
+%            each compartment in this model also loses people to do natural
+%            death. The system of differential equations for this model is
+%            naturally more complex and is provided in an appendix. In order to
+%            implement this model, Hill, Becerra, and Castro used the \texttt{R}
+%            programming language, with the \texttt{lsoda} routine to numerically
+%            solve the differential equations. 
+            
         For this implementation, various numerical solvers were implemented,
         including an Eulerian Method, a Quadratic Method, a Fourth-order runge
         kutta method, and the $\texttt{lsoda}$ routine. Once the basic Hill
@@ -128,6 +125,7 @@ text width=3em]
         exploring the possibility of treating incoming LTBI cases.
       \end{block}
     \end{column}
+    
     \begin{column}{.3\textwidth}
       \begin{block}{TB Reduction Strategies for the United States}
         From the Hill model, we 
@@ -142,7 +140,7 @@ text width=3em]
                        the US-born, Foreign-born, and Total US population, given
                        that LTBI rates in Foreign-born arrivals are reduced by 
                        0\%, 50\%, 75\%, and 100\%.}
-          \label{fig:redEnLTBI_costs}
+          \label{fig:redEnLTBI_incidence}
         \end{figure}
       \end{block}
       \begin{block}{Economic Modeling}
@@ -176,11 +174,6 @@ text width=3em]
         Stochastic models add notions of uncertainty into the model structure,
         while agent-based models simulate global behavior of the system by
         describing local behavior of individual agents in the population.
-
-        Figure~\ref{fig:NLHMinc} shows the incidence rate over time for both
-        the R and NetLogo models. Although the NetLogo model is stochastic, its
-        incidence rates roughly coincide with those given by the R model. With the
-        C++ model (figure~\ref{fig:finalRun}), we obtain even better convergence.
         \begin{block}{}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
@@ -202,6 +195,13 @@ text width=3em]
           \end{column}
         \end{block}
       \end{block}
+      
+      \begin{block}{Stochastic Models as a Measure of Variability}
+      \end{block}
+      
+      \begin{block}{Future Extensions}
+      \end{block}
+      
     \end{column}
   \end{columns}
 \end{frame}
