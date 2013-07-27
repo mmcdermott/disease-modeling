@@ -37,92 +37,83 @@ text width=3em]
 \begin{frame}
   \begin{columns}
     \begin{column}{.3\textwidth}
-%      \begin{block}{Introduction}
-%        The most common epidemiological models are compartmental models, in
-%        which a system of differential equations describes how parts of the
-%        population move between different disease states, or
-%        \emph{compartments}. The canonical example of such a model is the SIR
-%        model, which has three compartments: Susceptible, Infected, and
-%        Recovered. The dynamics of a population modeled by this framework are
-%        shown in figure~\ref{fig:SIRFlowchart}, with associated system of
-%        differential equations~\ref{eq:SIRdes}.
-        %TODO equalize figure heights
-%        \vspace{-3em}
-%        \begin{block}{}
-%          \begin{column}{.39\textwidth}
-%            \begin{figure}[h]
-%              \begin{center}
-%                \begin{tikzpicture}
-%                  \node [compartment] (S) {Susceptible (S)};
-%                  \node [compartment, below of=S] (I) {Infected (I)};
-%                  \node [compartment, below of=I] (R) {Recovered (R)};
-%                  \path [line] (S) -- node [compartment rate] {$\beta S(t)I(t)$} (I);
-%                  \path [line] (I) -- node [compartment rate] {$\gamma I(t)$} (R);
-%                \end{tikzpicture}
-%              \end{center}
-%              \caption{This flowchart depicts the standard SIR epidemiological
-%                       model. It is accomponanied by the system of differential
-%                       equations~\ref{eq:SIRdes}.}
-%              \label{fig:SIRFlowchart}
-%            \end{figure}
-%          \end{column}
-%          \begin{column}{.39\textwidth}
-%            \begin{figure}[h]
-%              \begin{align*}
-%                \frac{dS}{dt} &= -\beta S(t)I(t) \\
-%                \frac{dI}{dt} &= \beta S(t)I(t) - \gamma I(t) \\
-%                \frac{dR}{dt} &= \gamma I(t)\\
-%                N             &= S(t) + I(t) + R(t)\\
-%              \end{align*}
-%              \caption{The system of differential equations governing the SIR
-%                       model.}
-%              \label{eq:SIRdes}
-%            \end{figure}
-%          \end{column}
-%        \end{block}
-%        The SIR system, though very informative about basic disease dynamics,
-%        fails to capture the intricacies of more complicated diseases. This
-%        project examines the spread of tuberculosis (TB) in the United States
-%        (US) via compartmental models and stochastic, agent-based models. These
-%        explorations allow one to explore the impact, both epidemiological and
-%        economic, of various intervention strategies. These models are based on
-%        a 2012 compartmental model of TB in the US created by A. N. Hill, J. E.
-%        Becerra, and K. G. Castro.
-%      \end{block}
-      
-      \begin{block}{The Basic Hill Model}
+      \vspace{-8em}
+      \begin{block}{Introduction}
+        Epidemiological models offer insight into the structure of disease
+        outbreaks and the merits of various interventions. The most common
+        epidemiological models are compartmental differential equation models,
+        such as the SIR system, illustrated in figures~\ref{fig:SIRFlowchart}
+        and~\ref{eq:SIRdes}. 
+       %TODO equalize figure heights
+        \vspace{-2em}
         \begin{block}{}
+          \begin{column}{.39\textwidth}
             \begin{figure}[h]
               \begin{center}
-                \includegraphics[scale=.75]{HillModelFlowChart}
+                \begin{tikzpicture}
+                  \node [compartment] (S) {Susceptible (S)};
+                  \node [compartment, below of=S] (I) {Infected (I)};
+                  \node [compartment, below of=I] (R) {Recovered (R)};
+                  \path [line] (S) -- node [compartment rate] {$\beta S(t)I(t)$} (I);
+                  \path [line] (I) -- node [compartment rate] {$\gamma I(t)$} (R);
+                \end{tikzpicture}
+              \end{center}
+              \caption{This flowchart depicts the standard SIR epidemiological
+                       model. It is accomponanied by the system of differential
+                       equations~\ref{eq:SIRdes}.}
+              \label{fig:SIRFlowchart}
+            \end{figure}
+          \end{column}
+          \begin{column}{.39\textwidth}
+            \begin{figure}[h]
+              \begin{align*}
+                \frac{dS}{dt} &= -\beta S(t)I(t) \\
+                \frac{dI}{dt} &= \beta S(t)I(t) - \gamma I(t) \\
+                \frac{dR}{dt} &= \gamma I(t)\\
+                N             &= S(t) + I(t) + R(t)\\
+              \end{align*}
+              \caption{The system of differential equations governing the SIR
+                       model.}
+              \label{eq:SIRdes}
+            \end{figure}
+          \end{column}
+        \end{block}
+      \end{block}
+      
+      \begin{block}{The Basic Hill Model}
+        In order to model tuberculosis (TB) in the United States (US), Hill,
+        Becerra, and Castro designed a complex compartmental model called the
+        hill model. 
+        \vspace{-2em}
+        \begin{block}{}
+          \begin{column}{.6\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[scale=.5]{HillModelFlowChart}
               \end{center}
               \caption{A flow chart representing the compartments of the Hill
                        Model.}
               \label{fig:hillFlow}
             \end{figure}
+          \end{column}
+          \begin{column}{.33\textwidth}
+            Populations:
+            \begin{itemize}
+              \item US Born Individuals (USB) 
+              \item Foreign Born Individuals (FB)
+            \end{itemize}
+            Individuals also leave the model due to natural death.
+          \end{column}
         \end{block}
-%            The illustration of this model is not full, as there are two
-%            subpopulations in the Hill Model. TB dynamics in the US differ
-%            radically between US born (USB) individuals and foreign born (FB)
-%            individuals,  so this model maintains two distinct populations in
-%            which the disease can spread. There is a near identical diagram to
-%            describe the dynamics of the model for the FB population. Further,
-%            each compartment in this model also loses people to do natural
-%            death. The system of differential equations for this model is
-%            naturally more complex and is provided in an appendix. In order to
-%            implement this model, Hill, Becerra, and Castro used the \texttt{R}
-%            programming language, with the \texttt{lsoda} routine to numerically
-%            solve the differential equations. 
-            
-        For this implementation, various numerical solvers were implemented,
-        including an Eulerian Method, a Quadratic Method, a Fourth-order runge
-        kutta method, and the $\texttt{lsoda}$ routine. Once the basic Hill
-        model was implemented, further tracking capabilities were added as well
-        as economic modeling. This implementation tracks total active TB cases,
-        entering cases of LTBI, and treatment costs for active and latent disease
-        for all populations. Tracking was used to evaluate various interventions
-        explored in Hill, Becerra, and Castro's work, as well as interventions
-        exploring the possibility of treating incoming LTBI cases.
+        %For this implementation, various numerical solvers were implemented,
+        %including an Eulerian Method, a Quadratic Method, a Fourth-order runge
+        %kutta method, and the $\texttt{lsoda}$ routine. Once the basic Hill
+        %model was implemented, further tracking capabilities were added as well
+        %as economic modeling. This implementation tracks total active TB cases,
+        %entering cases of LTBI, and treatment costs for active and latent disease
+        %for all populations. Tracking was used to evaluate various interventions
+        %explored in Hill, Becerra, and Castro's work, as well as interventions
+        %exploring the possibility of treating incoming LTBI cases.
       \end{block}
     \end{column}
     
