@@ -30,3 +30,7 @@ modelData.csv
 
 # .swp files
 *.swp
+
+#data Files
+in_progress/models/costBenefitAnalysis/data/inc*.csv
+in_progress/models/costBenefitAnalysis/data/red*.csv
