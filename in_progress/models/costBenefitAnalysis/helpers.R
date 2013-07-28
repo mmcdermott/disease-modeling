@@ -31,8 +31,15 @@ incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
            geom_ribbon(aes(ymin=IdF1c,ymax=IdL0c,fill=chronicLatentUSBL)) + 
            geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))   + 
            theme_gray(base_size=20) + theme(legend.position=c(0.6,0.8)) + 
-           coord_fixed(ratio=1/200)
-ggsave('incPlotSourced2.pdf',incPlotSourced)
+           coord_fixed(ratio=1/200) + 
+           scale_fill_discrete(breaks=c('USB Acute Latent', 
+                                        'USB Chronic Latent',
+                                        'FB Acute Latent',
+                                        'FB Chronic Latent'), 
+                               levels=c(acuteLatentUSBc,chronicLatentUSBc,
+                                        acuteLatentFBc,chronicLatentFBc))
+incPlotSourced
+ggsave('forPoster/incPlotSourced2.pdf',incPlotSourced)
 
 #Order: IF1 = IF1c, IF1 + IL1 = IL1c 
 IF1c <- baseTotalInc$IF1
