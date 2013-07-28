@@ -37,7 +37,7 @@ text width=3em]
 \begin{frame}
   \begin{columns}
     \begin{column}{.3\textwidth}
-      \vspace{-8em}
+      \vspace{-30em}
       \begin{block}{Introduction}
         Epidemiological models offer insight into the structure of disease
         outbreaks and the merits of various interventions. The most common
@@ -45,7 +45,6 @@ text width=3em]
         such as the SIR system, illustrated in figures~\ref{fig:SIRFlowchart}
         and~\ref{eq:SIRdes}. 
        %TODO equalize figure heights
-        \vspace{-2em}
         \begin{block}{}
           \begin{column}{.39\textwidth}
             \begin{figure}[h]
@@ -105,24 +104,37 @@ text width=3em]
             Individuals also leave the model due to natural death.
           \end{column}
         \end{block}
-        %For this implementation, various numerical solvers were implemented,
-        %including an Eulerian Method, a Quadratic Method, a Fourth-order runge
-        %kutta method, and the $\texttt{lsoda}$ routine. Once the basic Hill
-        %model was implemented, further tracking capabilities were added as well
-        %as economic modeling. This implementation tracks total active TB cases,
-        %entering cases of LTBI, and treatment costs for active and latent disease
-        %for all populations. Tracking was used to evaluate various interventions
-        %explored in Hill, Becerra, and Castro's work, as well as interventions
-        %exploring the possibility of treating incoming LTBI cases.
       \end{block}
     \end{column}
     
     \begin{column}{.3\textwidth}
-      \begin{block}{TB Reduction Strategies for the United States}
-        From the Hill model, we 
-      \end{block}
-      \begin{block}{Intervention Analysis}
-        Intervention Analysis
+      \begin{block}{Analyzing US TB Reduction Strategies}
+        \begin{enumerate}
+          \item Implemented in \texttt{R}, with various numerical DE solvers.
+          \item Tracks US Health Care System (HCS) cost.
+          \item Tracks statistics about various health states.
+        \end{enumerate}
+        \begin{block}{Basic Hill Behaviour}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[scale=1]{incPlotSourced}
+              \end{center}
+              \caption{A plot showing the source population of yearly US TB
+              incindecence.}
+              \label{fig:incPlotSourced}
+            \end{figure}
+          \end{column}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[scale=1]{incPlotTotal}
+              \end{center}
+              \caption{New cases per year of various types of TB in the US.}
+              \label{fig:incPlotTotal}
+            \end{figure}
+          \end{column}
+        \end{block}
         \begin{figure}[h]
           \begin{center}
             \includegraphics[scale=1]{incidencePlotRedEnLTBI.pdf}
