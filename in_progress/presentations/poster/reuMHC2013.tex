@@ -1,6 +1,5 @@
 \documentclass[final]{beamer}
 %Poster Packages: 
-%\usepackage[orientation=lanscape,size=a0]{beamerposter}
 %dimensions are in cm, scale is for font size
 \usepackage[size=custom,height=91.4,width=121.9,scale=1.8]{beamerposter}
 %General Packages:
@@ -15,10 +14,10 @@
 
 \graphicspath{{figures/}}
 
-\newlength{\columnheight}
-\setlength{\columnheight}{105cm}
+%\newlength{\columnheight}
+%\setlength{\columnheight}{88cm}
 
-\title{\huge Modeling Intervention Strategies for TB Control in the United States}
+\title{\huge Modeling Intervention Strategies for United States TB Control}
 \author{Jessica Ginepro, Emma Hartman, Ryo Kimura, Matthew McDermott, Colin
         Pawlowski, \& Dylan Shepardson}
 \institute[MHC]{Mathematical Modeling Group, Mount Holyoke College, South
@@ -37,7 +36,7 @@ text width=3em]
 \begin{frame}
   \begin{columns}
     \begin{column}{.3\textwidth}
-      \vspace{-25em}
+      \vspace{-3em}
       \begin{block}{Introduction}
         Epidemiological models offer insight into the structure of disease
         outbreaks and the merits of various interventions. The most common
@@ -115,20 +114,20 @@ text width=3em]
           \item Tracks statistics about various health states.
         \end{enumerate}
         \begin{block}{Basic Hill Behaviour}
+          \vspace{-1.6em}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
-                \includegraphics[scale=1]{incPlotSourced}
+                \includegraphics[height=10cm,width=\textwidth]{incPlotSourced}
               \end{center}
-              \caption{A plot showing the source population of yearly US TB
-              incindecence.}
+              \caption{The source population of US TB incindecence}
               \label{fig:incPlotSourced}
             \end{figure}
           \end{column}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
-                \includegraphics[scale=1]{incPlotTotal}
+                \includegraphics[height=10cm,width=\textwidth]{incPlotTotal}
               \end{center}
               \caption{New cases per year of various types of TB in the US.}
               \label{fig:incPlotTotal}
@@ -136,52 +135,57 @@ text width=3em]
           \end{column}
         \end{block}
         \begin{block}{Intervention Analysis}
+          \vspace{-1.6em}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
-                \includegraphics[scale=1]{incidencePlotRedEnLTBI}
+                \includegraphics[height=10cm,width=\textwidth]{incidencePlotRedEnLTBI}
               \end{center}
-              \caption{The projected incidence levels per million in
-                       USB, FB, and total populations, given 0\%, 50\%, 75\%, or
-                       100\% of incoming LTBI cases are cured.}
+              \caption{Incidence/million in USB, FB, and total populations,
+                       given 0\%, 50\%, 75\%, or 100\% treatment of incoming
+                       LTBI.}
               \label{fig:redEnLTBI_incidence}
             \end{figure}
           \end{column}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
-                \includegraphics[scale=1]{incLTBItrmtIncGrouped}
+                \includegraphics[height=10cm,width=\textwidth]{incLTBItrmtIncGrouped}
               \end{center}
-              \caption{The projected incidence levels per million in
-                       USB, FB, and total populations, given 0\%, 100\%, or
-                       300\% increase in LTBI treatment.}
+              \caption{Incidence/million in USB, FB, and total populations,
+                       given 0\%, 100\%, or 300\% LTBI treatment increase.}
               \label{fig:incLTBItrmt_incidence}
             \end{figure}
           \end{column}
         \end{block}
       \end{block}
       \begin{block}{Economic Modeling}
-        We extended our basic implementation of the Hill model to incorporate
-        economic data of treatment costs for Active and Latent Tuberculosis.  
-%        In our model, we estimate the average heath care costs to be \$14,014.90
-%        and \$403.45 to treat a single case of Active or Latent TB respectively.  
-%        Given these costs and the average treatment rates for Active and Latent
-%        TB in the USA, we modeled the expected economic burden of Tuberculosis
-%        projected over the next hundred years.  
-
-        \begin{figure}[h]
-          \begin{center}
-            \includegraphics[scale=1]{EnLTBIRedGroupCost.pdf}
-          \end{center}
-          \caption{A graph of the cumulative implementation costs, savings, and 
-                       net US health care system costs of reducing rates of LTBI in
-                       Foreign-born arrivals by 50\%, 75\%, and 100\%.  To determine the 
-                       implementation cost for each intervention, the average cost
-                       to identify and treat entering Foreign-born individuals with LTBI
-                       was set to be \$600, \$800, and \$1000 for the 50\%, 75\%, 
-                       and 100\% reduction strategies respectively.}
-          \label{fig:redEnLTBI_costs}
-        \end{figure}
+        \begin{enumerate}
+          \item Tracks treatment costs for various disease states
+          \item Estimates implementation cost of intervention
+        \end{enumerate}
+        \begin{block}{}
+          \vspace{-4em}
+          \begin{column}{.66\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth,height=13cm]{EnLTBIRedGroupCost.pdf}
+              \end{center}
+              \caption{Cumulative implementation costs, US HCS savings, and net
+                       US costs of LTBI arrival cure rates. Cost/case cured was
+                       \$600, \$800, and \$1000 for 50\%, 75\%, and 100\%
+                       cured.}
+              \label{fig:redEnLTBI_costs}
+            \end{figure}
+          \end{column}
+          \begin{column}{.26\textwidth}
+            Base HCS Costs:
+            \begin{enumerate}
+              \item Active TB: \$14,014.90
+              \item LTBI: \$403.45
+            \end{enumerate}
+          \end{column}
+        \end{block}
       \end{block}
     \end{column}
     \begin{column}{.3\textwidth}
