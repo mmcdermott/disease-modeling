@@ -1,4 +1,5 @@
 library(MASS)
+library(ggplot2)
 vF <- 1.5         #Progression rate of acute infection per year
 vL0 <- 0.0014     #Progression rate for reactivation (chronic LTBI) in the USB population per year
 vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB population per year
@@ -10,6 +11,21 @@ getIncidence <- function(slice) {
   INall <- 1e6 * (vF*(slice$F0 + slice$F1) + vL0*slice$L0 + vL1*slice$L1)/(slice$N0 + slice$N1)
   return(c(IN0,IN1,INall))
 }
+
+# simpleHistogram <- function(data) {
+#   dev.new()
+#   hist(data, prob=TRUE, breaks=50)
+#   fitLine <- fitdistr(data, "Normal")
+#   datmean <- fitLine$estimate['mean']
+#   datsd <- fitLine$estimate['sd']
+#   curve(dnorm(x,datmean, datsd), add=TRUE,col='red')
+#   legend('topright', legend=c(
+#       paste('sample mean: ', signif(mean(data))),
+#       paste('sample stdev: ', signif(sd(data))),
+#       paste('fitted mean: ', signif(datmean)),
+#       paste('fitted stdev: ', signif(datsd))
+#   ))
+# }
 
 args <- commandArgs(trailingOnly = T)
 if (length(args) > 0) {
@@ -94,32 +110,30 @@ while (file.exists(fileNameFull)) {
     # paste('fitted stdev: ', signif(L1sd))
 # ))
 
+incFrame <- data.frame(USBIncidence  = finalValues[,14], FBIncidence = finalValues[,15])
+
 # IN0 histogram
-dev.new()
-USBIncidence <- finalValues[,14]
-hist(USBIncidence, prob=TRUE, breaks=50)
-fitLine <- fitdistr(USBIncidence, "Normal")
+fitLine <- fitdistr(incFrame$USBIncidence, "Normal")
 IN0mean <- fitLine$estimate['mean']
 IN0sd <- fitLine$estimate['sd']
-curve(dnorm(x,IN0mean, IN0sd), add=TRUE,col='red')
-legend('topright', legend=c(
-    paste('sample mean: ', signif(mean(USBIncidence))),
-    paste('sample stdev: ', signif(sd(USBIncidence))),
-    paste('fitted mean: ', signif(IN0mean)),
-    paste('fitted stdev: ', signif(IN0sd))
-))
+IN0hist <- ggplot(incFrame, aes(x=USBIncidence)) +
+             geom_histogram(aes(y=..density.., fill = ..density..)) +
+             stat_function(fun = dnorm, args = list(mean = IN0mean, sd = IN0sd), colour = 'red')
+cat('IN0: mean =', IN0mean, ", sd =", IN0sd, '\n')
 
 # IN1 histogram
-dev.new()
-FBIncidence <- finalValues[,15]
-hist(FBIncidence, prob=TRUE, breaks=50)
-fitLine <- fitdistr(FBIncidence, "Normal")
+fitLine <- fitdistr(incFrame$FBIncidence, "Normal")
 IN1mean <- fitLine$estimate['mean']
 IN1sd <- fitLine$estimate['sd']
-curve(dnorm(x,IN1mean, IN1sd), add=TRUE,col='red')
-legend('topright', legend=c(
-    paste('sample mean: ', signif(mean(FBIncidence))),
-    paste('sample stdev: ', signif(sd(FBIncidence))),
-    paste('fitted mean: ', signif(IN1mean)),
-    paste('fitted stdev: ', signif(IN1sd))
-))
+IN1hist <- ggplot(incFrame, aes(x=FBIncidence)) +
+             geom_histogram(aes(y=..density.., fill = ..density..)) +
+             stat_function(fun = dnorm, args = list(mean = IN1mean, sd = IN1sd), colour = 'red')
+cat('IN1: mean =', IN1mean, ", sd =", IN1sd, '\n')
+
+# export histograms to pdf file
+pdf('IN0dist.pdf')
+print(IN0hist)
+dev.off()
+pdf('IN1dist.pdf')
+print(IN1hist)
+dev.off()
