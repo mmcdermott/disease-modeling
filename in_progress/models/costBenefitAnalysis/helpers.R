@@ -1,11 +1,11 @@
-acuteLatentFBL    <- rep("Acute Latent (FB)",totT)
-chronicLatentFBL  <- rep("Chronic Latent (FB)", totT)
-acuteLatentUSBL   <- rep("Acute Latent (USB)",totT)
-chronicLatentUSBL <- rep("Chronic Latent (USB)", totT)
-activeInfecFBL    <- rep("Active Infectious TB (FB)",totT)
-activeNoInfecFBL  <- rep("Active Non-infectious TB (FB)", totT)
-activeInfecUSBL   <- rep("Active Infectious TB (USB)",totT)
-activeNoInfecUSBL <- rep("Active Non-infectious TB (USB)", totT)
+acuteLatentFBL    <- rep("FB Acute Latent",totT)
+chronicLatentFBL  <- rep("FB Chronic Latent", totT)
+acuteLatentUSBL   <- rep("USB Acute Latent",totT)
+chronicLatentUSBL <- rep("USB Chronic Latent", totT)
+activeInfecFBL    <- rep("FB Active Infectious TB",totT)
+activeNoInfecFBL  <- rep("FB Active Non-infectious TB", totT)
+activeInfecUSBL   <- rep("USB Active Infectious TB",totT)
+activeNoInfecUSBL <- rep("USB Active Non-infectious TB", totT)
 
 generateSourcedIncidence <- function(dataSet) {
   with(as.list(parms), {
@@ -24,14 +24,15 @@ IdL0c <- IdF1c + baseSourcedInc$IdL0
 IdF0c <- IdL0c + baseSourcedInc$IdF0
 baseCumulativeSourcedInc <- data.frame(year=years,IdL1c,IdF1c,IdL0c,IdF0c)
 incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) + 
-           labs(x="Years", y="Incidence", fill="Population and Health State") + 
-           plotTitle("Incidence Levels due to Various 
-Populations With No Intervention","") +
+           labs(x="Years", y="Incidence", fill="Incidence Source") + 
+           plotTitle("Sourced US TB Incidence/Million","") +
            geom_ribbon(aes(ymin=0,    ymax=IdL1c,fill=chronicLatentFBL))  + 
            geom_ribbon(aes(ymin=IdL1c,ymax=IdF1c,fill=acuteLatentFBL))    + 
            geom_ribbon(aes(ymin=IdF1c,ymax=IdL0c,fill=chronicLatentUSBL)) + 
-           geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))
-
+           geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))   + 
+           theme_gray(base_size=20) + theme(legend.position=c(0.6,0.8)) + 
+           coord_fixed(ratio=1/200)
+ggsave('incPlotSourced2.pdf',incPlotSourced)
 
 #Order: IF1 = IF1c, IF1 + IL1 = IL1c 
 IF1c <- baseTotalInc$IF1

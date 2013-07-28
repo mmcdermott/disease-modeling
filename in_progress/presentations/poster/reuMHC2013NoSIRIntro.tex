@@ -1,0 +1,227 @@
+\documentclass[final]{beamer}
+%Poster Packages: 
+%dimensions are in cm, scale is for font size
+\usepackage[size=custom,height=91.4,width=121.9,scale=1.8]{beamerposter}
+%General Packages:
+\usepackage{amsmath,amsthm, amssymb, latexsym}
+%TikZ:
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\input{arrowsnew}
+
+%Theme:
+\mode<presentation>{\usetheme{I6pd2}}
+
+\graphicspath{{figures/}}
+
+%\newlength{\columnheight}
+%\setlength{\columnheight}{88cm}
+
+\title{\huge Modeling Intervention Strategies for United States TB Control}
+\author{Jessica Ginepro, Emma Hartman, Ryo Kimura, Matthew McDermott, Colin
+        Pawlowski, \& Dylan Shepardson}
+\institute[MHC]{Mathematical Modeling Group, Mount Holyoke College, South
+                Hadley, MA, USA}
+\date[July 31, 2013]{July 31, 2013}
+\begin{document}
+%For the compartmental models:
+\tikzstyle{compartment} = [rectangle, draw, fill=blue!20, text badly centered,
+  node distance=3.8em, inner sep=0.4em, rounded corners]
+\tikzstyle{compartment rate} = [right of=start, color=black, node distance=2.2em,
+text width=3em]
+%TODO: Increase arrow head size
+\tikzstyle{line} = [draw, -latexnew, arrowhead = 7mm]
+
+
+\begin{frame}
+  \begin{columns}
+    \begin{column}{.3\textwidth}
+      \vspace{-2em}
+      \begin{block}{Introduction}
+        \begin{itemize}
+          \item Epidemiological models describe disease outbreaks.
+          \item Compartmental Differential Equation models are common and
+            rigorous epidemiological models.
+          \item The Hill Model is a complex compartmental model of tuberculosis
+            (TB) in the United States (US).
+        \end{itemize}
+       % Epidemiological models offer insight into the structure of disease
+       % outbreaks and the merits of various interventions. The most common
+       % epidemiological models are compartmental differential equation models,
+       % in which the population is dispersed between a variety of distinct
+       % compartments, through which they move according to a system of
+       % Differential Equations. In order to model tuberculosis (TB) in the
+       % United States (US), Hill, Becerra, and Castro designed a complex
+       % compartmental model called the hill model.
+      \end{block}
+      \begin{block}{The Basic Hill Model}
+        \vspace{-2em}
+        \begin{block}{}
+          \begin{column}{.5\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[height=12cm,width=.9\textwidth]{HillModelFlowChart}
+              \end{center}
+              \caption{A flow chart representing the compartments of the Hill
+                       Model.}
+              \label{fig:hillFlow}
+            \end{figure}
+          \end{column}
+          \begin{column}{.43\textwidth}
+            Populations:
+            \begin{itemize}
+              \item US Born Individuals (USB) 
+              \item Foreign Born Individuals (FB)
+            \end{itemize}
+            Individuals also leave the model due to natural death.
+          \end{column}
+          \begin{figure}[h]
+            \begin{center}
+              \includegraphics[height=25cm,width=\textwidth]{incPlotSourced2}
+            \end{center}
+            \caption{The source population of US TB incindecence}
+            \label{fig:incPlotSourced}
+          \end{figure}
+          \vspace{-1em}
+          \begin{figure}[h]
+            \begin{center}
+              \includegraphics[height=15cm,width=\textwidth]{incPlotTotal}
+            \end{center}
+            \caption{New cases per year of various types of TB in the US.}
+            \label{fig:incPlotTotal}
+          \end{figure}
+        \end{block}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{.3\textwidth}
+      \vspace{-1.5em}
+      \begin{block}{Analyzing US TB Reduction Strategies}
+        \begin{itemize}
+          \item Implemented in \texttt{R}, with various numerical DE solvers.
+          \item Tracks US Health Care System (HCS) cost.
+          \item Tracks statistics about various health states.
+        \end{itemize}
+        \begin{block}{Intervention Analysis}
+          \vspace{-1.6em}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[height=10cm,width=\textwidth]{incidencePlotRedEnLTBI}
+              \end{center}
+              \caption{Incidence/million in USB, FB, and total populations,
+                       given 0\%, 50\%, 75\%, or 100\% treatment of incoming
+                       LTBI.}
+              \label{fig:redEnLTBI_incidence}
+            \end{figure}
+          \end{column}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[height=10cm,width=\textwidth]{incLTBItrmtIncGrouped}
+              \end{center}
+              \caption{Incidence/million in USB, FB, and total populations,
+                       given 0\%, 100\%, or 300\% LTBI treatment increase.}
+              \label{fig:incLTBItrmt_incidence}
+            \end{figure}
+          \end{column}
+        \end{block}
+      \end{block}
+      \begin{block}{Economic Modeling}
+        \begin{itemize}
+          \item Tracks treatment costs for various disease states
+          \item Estimates implementation cost of intervention
+        \end{itemize}
+        \begin{block}{}
+          \vspace{-4em}
+          \begin{column}{.66\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth,height=13cm]{EnLTBIRedGroupCost.pdf}
+              \end{center}
+              \caption{Cumulative implementation costs, US HCS savings, and net
+                       US costs of LTBI arrival cure rates. Cost/case cured was
+                       \$600, \$800, and \$1000 for 50\%, 75\%, and 100\%
+                       cured.}
+              \label{fig:redEnLTBI_costs}
+            \end{figure}
+          \end{column}
+          \begin{column}{.26\textwidth}
+            Base HCS Costs:
+            \begin{description}
+              \item[Active TB:]\hfill \\ 
+                \$14,014.90
+              \item[LTBI:]\hfill \\ 
+                \$403.45
+            \end{description}
+          \end{column}
+        \end{block}
+      \end{block}
+    \end{column}
+    \begin{column}{.3\textwidth}
+      \vspace{-.5em}
+      \begin{block}{An Agent Based Implementation}
+        Agent based models capture disease dynamics on the individual level, and
+        reflect stochasticity and granularity lost in compartmental models.
+        Agent based counterparts to the Hill model were implemented in Netlogo
+        and \texttt{c++}.
+        \begin{block}{}
+          \vspace{-2em}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{NLHMinc}
+              \end{center}
+              \caption{Incidence/million for R and NetLogo models (12 runs, $\Delta t$ = 0.1, popConst = 100)}
+              \label{fig:NLHMinc}
+            \end{figure}
+          \end{column}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{finalRunSmall}
+              \end{center}
+              \caption{Incidence/million for R and C++ models (2100 runs, $\Delta t$ = 0.01, popConst = 1)}
+              \label{fig:finalRun}
+            \end{figure}
+          \end{column}
+        \end{block}
+      \end{block}
+      
+      \begin{block}{Stochastic Models as a Measure of Variability}
+        The stochastic model provides data on the variability of the results
+        of the deterministic model.
+        \begin{block}{}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{IN0dist}
+              \end{center}
+              \caption{Distribution of USB Incidence (C++) with fitted Normal curve}
+              \label{fig:IN0dist}
+            \end{figure}
+          \end{column}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{IN1dist}
+              \end{center}
+              \caption{Distribution of FB Incidence (C++) with fitted Normal curve}
+              \label{fig:IN1dist}
+            \end{figure}
+          \end{column}
+        \end{block}
+      \end{block}
+      
+      \begin{block}{Future Extensions}
+        \begin{itemize}
+          \item Including contact structure
+          \item Multi-drug resistant TB
+          \item HIV
+        \end{itemize}
+      \end{block}
+      
+    \end{column}
+  \end{columns}
+\end{frame}
+\end{document}
