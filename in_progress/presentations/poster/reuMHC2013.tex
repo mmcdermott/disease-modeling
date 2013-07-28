@@ -37,7 +37,7 @@ text width=3em]
 \begin{frame}
   \begin{columns}
     \begin{column}{.3\textwidth}
-      \vspace{-20em}
+      \vspace{-25em}
       \begin{block}{Introduction}
         Epidemiological models offer insight into the structure of disease
         outbreaks and the merits of various interventions. The most common
@@ -135,16 +135,30 @@ text width=3em]
             \end{figure}
           \end{column}
         \end{block}
-        \begin{figure}[h]
-          \begin{center}
-            \includegraphics[scale=1]{incidencePlotRedEnLTBI.pdf}
-          \end{center}
-          \caption{A graph of the projected incidence levels per million in
-                       the US-born, Foreign-born, and Total US population, given
-                       that LTBI rates in Foreign-born arrivals are reduced by 
-                       0\%, 50\%, 75\%, and 100\%.}
-          \label{fig:redEnLTBI_incidence}
-        \end{figure}
+        \begin{block}{Intervention Analysis}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[scale=1]{incidencePlotRedEnLTBI}
+              \end{center}
+              \caption{The projected incidence levels per million in
+                       USB, FB, and total populations, given 0\%, 50\%, 75\%, or
+                       100\% of incoming LTBI cases are cured.}
+              \label{fig:redEnLTBI_incidence}
+            \end{figure}
+          \end{column}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[scale=1]{incLTBItrmtIncGrouped}
+              \end{center}
+              \caption{The projected incidence levels per million in
+                       USB, FB, and total populations, given 0\%, 100\%, or
+                       300\% increase in LTBI treatment.}
+              \label{fig:incLTBItrmt_incidence}
+            \end{figure}
+          \end{column}
+        \end{block}
       \end{block}
       \begin{block}{Economic Modeling}
         We extended our basic implementation of the Hill model to incorporate
