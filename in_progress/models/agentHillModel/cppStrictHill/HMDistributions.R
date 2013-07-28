@@ -127,6 +127,7 @@ IN1mean <- fitLine$estimate['mean']
 IN1sd <- fitLine$estimate['sd']
 IN1hist <- ggplot(incFrame, aes(x=FBIncidence)) +
              geom_histogram(aes(y=..density.., fill = ..density..)) +
+             scale_fill_gradient('density', low = 'darkgreen', high = 'green') +
              stat_function(fun = dnorm, args = list(mean = IN1mean, sd = IN1sd), colour = 'red')
 cat('IN1: mean =', IN1mean, ", sd =", IN1sd, '\n')
 
