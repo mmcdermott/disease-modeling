@@ -36,7 +36,7 @@ text width=3em]
 \begin{frame}
   \begin{columns}
     \begin{column}{.3\textwidth}
-      \vspace{-3em}
+      \vspace{-3.6em}
       \begin{block}{Introduction}
         Epidemiological models offer insight into the structure of disease
         outbreaks and the merits of various interventions. The most common
@@ -107,12 +107,13 @@ text width=3em]
     \end{column}
     
     \begin{column}{.3\textwidth}
+      \vspace{-1.5em}
       \begin{block}{Analyzing US TB Reduction Strategies}
-        \begin{enumerate}
+        \begin{itemize}
           \item Implemented in \texttt{R}, with various numerical DE solvers.
           \item Tracks US Health Care System (HCS) cost.
           \item Tracks statistics about various health states.
-        \end{enumerate}
+        \end{itemize}
         \begin{block}{Basic Hill Behaviour}
           \vspace{-1.6em}
           \begin{column}{.45\textwidth}
@@ -160,10 +161,10 @@ text width=3em]
         \end{block}
       \end{block}
       \begin{block}{Economic Modeling}
-        \begin{enumerate}
+        \begin{itemize}
           \item Tracks treatment costs for various disease states
           \item Estimates implementation cost of intervention
-        \end{enumerate}
+        \end{itemize}
         \begin{block}{}
           \vspace{-4em}
           \begin{column}{.66\textwidth}
@@ -180,19 +181,25 @@ text width=3em]
           \end{column}
           \begin{column}{.26\textwidth}
             Base HCS Costs:
-            \begin{enumerate}
-              \item Active TB: \$14,014.90
-              \item LTBI: \$403.45
-            \end{enumerate}
+            \begin{description}
+              \item[Active TB:]\hfill \\ 
+                \$14,014.90
+              \item[LTBI:]\hfill \\ 
+                \$403.45
+            \end{description}
           \end{column}
         \end{block}
       \end{block}
     \end{column}
     \begin{column}{.3\textwidth}
+      \vspace{-.5em}
       \begin{block}{An Agent Based Implementation}
-        We also wrote a stochastic agent-based version of the Hill model in both
-        NetLogo and C++.
+        Agent based models capture disease dynamics on the individual level, and
+        reflect stochasticity and granularity lost in compartmental models.
+        Agent based counterparts to the Hill model were implemented in Netlogo
+        and \texttt{c++}.
         \begin{block}{}
+          \vspace{-2em}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
@@ -215,7 +222,7 @@ text width=3em]
       \end{block}
       
       \begin{block}{Stochastic Models as a Measure of Variability}
-        The stochastic model gives us a sense of the variability of the results
+        The stochastic model provides data on the variability of the results
         of the deterministic model.
         \begin{block}{}
           \begin{column}{.45\textwidth}
@@ -240,8 +247,11 @@ text width=3em]
       \end{block}
       
       \begin{block}{Future Extensions}
-        Possible extensions to our model include the incorporation of non-homogeneous
-        contact structures and MDR (multi-drug resistant) TB.
+        \begin{itemize}
+          \item Including contact structure
+          \item Multi-drug resistant TB
+          \item HIV
+        \end{itemize}
       \end{block}
       
     \end{column}

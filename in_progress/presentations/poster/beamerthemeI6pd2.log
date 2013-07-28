@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.4.27)  25 JUL 2013 15:15
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.4.27)  28 JUL 2013 14:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1635,7 +1635,7 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.67       \begin{column}
-                         {.15\paperwidth}
+                         {.18\paperwidth}
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
@@ -1648,17 +1648,17 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.67       \begin{column}{.
-                           15\paperwidth}
+                           18\paperwidth}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 Missing character: There is no . in font nullfont!
 Missing character: There is no 1 in font nullfont!
-Missing character: There is no 5 in font nullfont!
+Missing character: There is no 8 in font nullfont!
 ! Missing number, treated as zero.
 <to be read again> 
                    }
-l.67       \begin{column}{.15\paperwidth}
+l.67       \begin{column}{.18\paperwidth}
                                          
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
@@ -1667,7 +1667,7 @@ look up `weird error' in the index to The TeXbook.)
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    }
-l.67       \begin{column}{.15\paperwidth}
+l.67       \begin{column}{.18\paperwidth}
                                          
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -1700,7 +1700,7 @@ Overfull \hbox (20.0pt too wide) in paragraph at lines 69--69
 
 ! Undefined control sequence.
 l.70           \includegraphics
-                               [height=.15\linewidth]{figures/mhc/logos/base}
+                               [height=.18\linewidth]{figures/mhc/logos/base}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -1717,11 +1717,11 @@ Missing character: There is no t in font nullfont!
 Missing character: There is no = in font nullfont!
 Missing character: There is no . in font nullfont!
 Missing character: There is no 1 in font nullfont!
-Missing character: There is no 5 in font nullfont!
+Missing character: There is no 8 in font nullfont!
 ! Missing number, treated as zero.
 <to be read again> 
                    ]
-l.70 ...    \includegraphics[height=.15\linewidth]
+l.70 ...    \includegraphics[height=.18\linewidth]
                                                   {figures/mhc/logos/base}
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
@@ -1730,7 +1730,7 @@ look up `weird error' in the index to The TeXbook.)
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    ]
-l.70 ...    \includegraphics[height=.15\linewidth]
+l.70 ...    \includegraphics[height=.18\linewidth]
                                                   {figures/mhc/logos/base}
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -1762,49 +1762,75 @@ Missing character: There is no b in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no s in font nullfont!
 Missing character: There is no e in font nullfont!
+! Undefined control sequence.
+l.72           \includegraphics
+                               [height=.18\linewidth]{figures/nsf/logos/base}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-! LaTeX Error: \begin{document} ended by \end{column}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.73       \end{column}
-                       
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! LaTeX Error: Environment column undefined.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.74       \begin{column}
-                         {.02\paperwidth}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
+Missing character: There is no [ in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no = in font nullfont!
 Missing character: There is no . in font nullfont!
-Missing character: There is no 0 in font nullfont!
-Missing character: There is no 2 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 8 in font nullfont!
 ! Missing number, treated as zero.
 <to be read again> 
-                   }
-l.74       \begin{column}{.02\paperwidth}
-                                         
+                   ]
+l.72 ...    \includegraphics[height=.18\linewidth]
+                                                  {figures/nsf/logos/base}
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
 look up `weird error' in the index to The TeXbook.)
 
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
-                   }
-l.74       \begin{column}{.02\paperwidth}
-                                         
+                   ]
+l.72 ...    \includegraphics[height=.18\linewidth]
+                                                  {figures/nsf/logos/base}
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+Missing character: There is no ] in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no / in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no f in font nullfont!
+Missing character: There is no / in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no / in font nullfont!
+Missing character: There is no b in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no s in font nullfont!
+Missing character: There is no e in font nullfont!
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \endcolumn 
+l.75       \end{column}
+                       
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
 I'll assume that you meant to say pt, for printer's points.
@@ -1826,13 +1852,63 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
+! LaTeX Error: Environment column undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.76       \begin{column}
+                         {.02\paperwidth}
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 2 in font nullfont!
+! Missing number, treated as zero.
+<to be read again> 
+                   }
+l.76       \begin{column}{.02\paperwidth}
+                                         
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   }
+l.76       \begin{column}{.02\paperwidth}
+                                         
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+
+! LaTeX Error: \begin{document} ended by \end{column}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.77       \end{column}
+                       
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
 ! LaTeX Error: \begin{document} ended by \end{columns}.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.76     \end{columns}
+l.78     \end{columns}
                       
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
@@ -1845,7 +1921,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.78   \end{beamercolorbox}
+l.80   \end{beamercolorbox}
                            
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
@@ -1858,7 +1934,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.80   \begin{beamercolorbox}
+l.82   \begin{beamercolorbox}
                              [wd=\paperwidth]{lower separation line head}
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
@@ -1871,7 +1947,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.80   \begin{beamercolorbox}[
+l.82   \begin{beamercolorbox}[
                               wd=\paperwidth]{lower separation line head}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1883,7 +1959,7 @@ Missing character: There is no = in font nullfont!
 ! Missing number, treated as zero.
 <to be read again> 
                    ]
-l.80   \begin{beamercolorbox}[wd=\paperwidth]
+l.82   \begin{beamercolorbox}[wd=\paperwidth]
                                              {lower separation line head}
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
@@ -1892,7 +1968,7 @@ look up `weird error' in the index to The TeXbook.)
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    ]
-l.80   \begin{beamercolorbox}[wd=\paperwidth]
+l.82   \begin{beamercolorbox}[wd=\paperwidth]
                                              {lower separation line head}
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -1932,19 +2008,19 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.82   \end{beamercolorbox}
+l.84   \end{beamercolorbox}
                            
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 80--84
+Overfull \hbox (20.0pt too wide) in paragraph at lines 82--86
 []
  []
 
 ! Undefined control sequence.
-l.86 \setbeamertemplate
+l.88 \setbeamertemplate
                        {footline}{
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1959,7 +2035,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.86 \setbeamertemplate{f
+l.88 \setbeamertemplate{f
                          ootline}{
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1979,7 +2055,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.87   \begin{beamercolorbox}
+l.89   \begin{beamercolorbox}
                              [wd=\paperwidth]{upper separation line foot}
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
@@ -1992,7 +2068,7 @@ Missing character: There is no = in font nullfont!
 ! Missing number, treated as zero.
 <to be read again> 
                    ]
-l.87   \begin{beamercolorbox}[wd=\paperwidth]
+l.89   \begin{beamercolorbox}[wd=\paperwidth]
                                              {upper separation line foot}
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
@@ -2001,7 +2077,7 @@ look up `weird error' in the index to The TeXbook.)
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    ]
-l.87   \begin{beamercolorbox}[wd=\paperwidth]
+l.89   \begin{beamercolorbox}[wd=\paperwidth]
                                              {upper separation line foot}
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
@@ -2041,14 +2117,14 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.89   \end{beamercolorbox}
+l.91   \end{beamercolorbox}
                            
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 86--90
+Overfull \hbox (20.0pt too wide) in paragraph at lines 88--92
 []
  []
 
@@ -2059,7 +2135,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.91   \leavevmode
+l.93   \leavevmode
                   %
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -2071,7 +2147,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.92   \begin{beamercolorbox}
+l.94   \begin{beamercolorbox}
                              [ht=4ex,leftskip=1em,rightskip=1em]{author in h...
 
 Your command was ignored.
@@ -2131,18 +2207,13 @@ Missing character: There is no o in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no t in font nullfont!
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 91--96
+Overfull \hbox (20.0pt too wide) in paragraph at lines 93--98
 []
  []
 
 
-Overfull \hbox (204.74821pt too wide) in paragraph at lines 91--96
-\OT1/cmtt/m/n/10 http://www-i6.informatik.rwth-aachen.de
- []
-
-
-Overfull \hbox (141.74876pt too wide) in paragraph at lines 91--96
-\OT1/cmtt/m/n/10 <surname>@cs.rwth-aachen.de 
+Overfull \hbox (262.49771pt too wide) in paragraph at lines 93--98
+\OT1/cmtt/m/n/10 https://www.github.com/mmcdermott/disease-modeling
  []
 
 
@@ -2152,7 +2223,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.97   \end{beamercolorbox}
+l.99   \end{beamercolorbox}
                            
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
@@ -2165,8 +2236,8 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.99   \begin{beamercolorbox}
-                             [wd=\paperwidth]{lower separation line foot}
+l.101   \begin{beamercolorbox}
+                              [wd=\paperwidth]{lower separation line foot}
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
@@ -2178,8 +2249,8 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.99   \begin{beamercolorbox}[
-                              wd=\paperwidth]{lower separation line foot}
+l.101   \begin{beamercolorbox}[
+                               wd=\paperwidth]{lower separation line foot}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
@@ -2190,8 +2261,8 @@ Missing character: There is no = in font nullfont!
 ! Missing number, treated as zero.
 <to be read again> 
                    ]
-l.99   \begin{beamercolorbox}[wd=\paperwidth]
-                                             {lower separation line foot}
+l.101   \begin{beamercolorbox}[wd=\paperwidth]
+                                              {lower separation line foot}
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
 look up `weird error' in the index to The TeXbook.)
@@ -2199,8 +2270,8 @@ look up `weird error' in the index to The TeXbook.)
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    ]
-l.99   \begin{beamercolorbox}[wd=\paperwidth]
-                                             {lower separation line foot}
+l.101   \begin{beamercolorbox}[wd=\paperwidth]
+                                              {lower separation line foot}
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
 I'll assume that you meant to say pt, for printer's points.
@@ -2239,19 +2310,19 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.101   \end{beamercolorbox}
+l.103   \end{beamercolorbox}
                             
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 99--103
+Overfull \hbox (20.0pt too wide) in paragraph at lines 101--105
 []
  []
 
 ! Undefined control sequence.
-l.109 \mode
+l.111 \mode
            <all>
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2266,7 +2337,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.109 \mode<
+l.111 \mode<
             all>
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -2277,12 +2348,12 @@ Missing character: There is no l in font nullfont!
 Missing character: There is no l in font nullfont!
 Missing character: There is no > in font nullfont!
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 109--110
+Overfull \hbox (20.0pt too wide) in paragraph at lines 111--112
 [] 
  []
 
 ! Undefined control sequence.
-l.112 \setbeamertemplate
+l.114 \setbeamertemplate
                         {itemize items}[triangle]
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2297,7 +2368,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.112 \setbeamertemplate{i
+l.114 \setbeamertemplate{i
                           temize items}[triangle]
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -2325,7 +2396,7 @@ Missing character: There is no l in font nullfont!
 Missing character: There is no e in font nullfont!
 Missing character: There is no ] in font nullfont!
 ! Undefined control sequence.
-l.113 \setbeamertemplate
+l.115 \setbeamertemplate
                         {itemize item}{\raisebox{0.12ex}{$\blacktrianglerigh...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2347,7 +2418,7 @@ Missing character: There is no m in font nullfont!
 ! Undefined control sequence.
 <recently read> \blacktriangleright 
                                     
-l.113 ...{\raisebox{0.12ex}{$\blacktriangleright$}
+l.115 ...{\raisebox{0.12ex}{$\blacktriangleright$}
                                                   \hskip0.1em}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2356,7 +2427,7 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 ! Undefined control sequence.
-l.114 \setbeamertemplate
+l.116 \setbeamertemplate
                         {itemize subitem}{\raisebox{0.12ex}{$\triangleright$...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2379,17 +2450,17 @@ Missing character: There is no t in font nullfont!
 Missing character: There is no e in font nullfont!
 Missing character: There is no m in font nullfont!
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 112--116
+Overfull \hbox (20.0pt too wide) in paragraph at lines 114--118
 []
  []
 
 
-Overfull \hbox (5.00002pt too wide) in paragraph at lines 112--116
+Overfull \hbox (5.00002pt too wide) in paragraph at lines 114--118
 []
  []
 
 ! Undefined control sequence.
-l.118 \setbeamerfont
+l.120 \setbeamerfont
                     {itemize/enumerate body}{size=\normalsize}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2404,7 +2475,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.118 \setbeamerfont{i
+l.120 \setbeamerfont{i
                       temize/enumerate body}{size=\normalsize}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -2443,14 +2514,14 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.118 ...{itemize/enumerate body}{size=\normalsize
+l.120 ...{itemize/enumerate body}{size=\normalsize
                                                   }
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 ! Undefined control sequence.
-l.119 \setbeamerfont
+l.121 \setbeamerfont
                     {itemize/enumerate subbody}{size=\normalsize}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2495,14 +2566,14 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.119 ...emize/enumerate subbody}{size=\normalsize
+l.121 ...emize/enumerate subbody}{size=\normalsize
                                                   }
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 ! Undefined control sequence.
-l.120 \setbeamerfont
+l.122 \setbeamerfont
                     {itemize/enumerate subsubbody}{size=\normalsize}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2550,14 +2621,14 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.120 ...ze/enumerate subsubbody}{size=\normalsize
+l.122 ...ze/enumerate subsubbody}{size=\normalsize
                                                   }
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 118--121
+Overfull \hbox (20.0pt too wide) in paragraph at lines 120--123
 []
  []
 
