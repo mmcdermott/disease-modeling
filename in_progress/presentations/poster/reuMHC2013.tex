@@ -137,11 +137,11 @@ text width=3em]
       \begin{block}{Economic Modeling}
         We extended our basic implementation of the Hill model to incorporate
         economic data of treatment costs for Active and Latent Tuberculosis.  
-        In our model, we estimate the average heath care costs to be \$14,014.90
-        and \$403.45 to treat a single case of Active or Latent TB respectively.  
-        Given these costs and the average treatment rates for Active and Latent
-        TB in the USA, we modeled the expected economic burden of Tuberculosis
-        projected over the next hundred years.  
+%        In our model, we estimate the average heath care costs to be \$14,014.90
+%        and \$403.45 to treat a single case of Active or Latent TB respectively.  
+%        Given these costs and the average treatment rates for Active and Latent
+%        TB in the USA, we modeled the expected economic burden of Tuberculosis
+%        projected over the next hundred years.  
 
         \begin{figure}[h]
           \begin{center}
@@ -160,18 +160,15 @@ text width=3em]
     \end{column}
     \begin{column}{.3\textwidth}
       \begin{block}{An Agent Based Implementation}
-        In addition to the extended Hill model (implemented in R), we also
-        created a stochastic agent-based counterpart in both NetLogo and C++.
-        Stochastic models add notions of uncertainty into the model structure,
-        while agent-based models simulate global behavior of the system by
-        describing local behavior of individual agents in the population.
+        We also wrote a stochastic agent-based version of the Hill model in both
+        NetLogo and C++.
         \begin{block}{}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
                 \includegraphics[width=\textwidth]{NLHMinc}
               \end{center}
-              \caption{Incidence per million for R and NetLogo models (12 runs)}
+              \caption{Incidence/million for R and NetLogo models (12 runs, $\Delta t$ = 0.1, popConst = 100)}
               \label{fig:NLHMinc}
             \end{figure}
           \end{column}
@@ -180,7 +177,7 @@ text width=3em]
               \begin{center}
                 \includegraphics[width=\textwidth]{finalRunSmall}
               \end{center}
-              \caption{Incidence per million for R and C++ models (2100 runs)}
+              \caption{Incidence/million for R and C++ models (2100 runs, $\Delta t$ = 0.01, popConst = 1)}
               \label{fig:finalRun}
             \end{figure}
           \end{column}
@@ -188,9 +185,33 @@ text width=3em]
       \end{block}
       
       \begin{block}{Stochastic Models as a Measure of Variability}
+        The stochastic model gives us a sense of the variability of the results
+        of the deterministic model.
+        \begin{block}{}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{IN0dist}
+              \end{center}
+              \caption{Distribution of USB Incidence (C++) with fitted Normal curve}
+              \label{fig:IN0dist}
+            \end{figure}
+          \end{column}
+          \begin{column}{.45\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{IN1dist}
+              \end{center}
+              \caption{Distribution of FB Incidence (C++) with fitted Normal curve}
+              \label{fig:IN1dist}
+            \end{figure}
+          \end{column}
+        \end{block}
       \end{block}
       
       \begin{block}{Future Extensions}
+        Possible extensions to our model include the incorporation of non-homogeneous
+        contact structures and MDR (multi-drug resistant) TB.
       \end{block}
       
     \end{column}
