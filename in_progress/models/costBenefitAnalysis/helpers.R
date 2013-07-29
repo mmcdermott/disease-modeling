@@ -172,23 +172,26 @@ incPlotTypeGroupedG <- function(type, incDataTypeGrouped) {
     plotTitle("Incidence/Million vs. Intervention Magnitude","") +
     scale_linetype_manual(values=ltvalues) +  
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=IN0,   
-              color=USB, linetype=noIntL))  + 
+              color=USB, linetype=noIntL), size=2)  + 
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=IN1,   
-              color=FB,  linetype=noIntL))  + 
+              color=FB,  linetype=noIntL), size=2)  + 
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=INall, 
-              color=all, linetype=noIntL))  +
+              color=all, linetype=noIntL), size=2)  +
     theme_gray(base_size=20) + 
     theme(legend.position=c(0.18,0.22), axis.title=element_text(size=34), 
           axis.text=element_text(size=25), plot.title=element_text(size=34),
           legend.key.height=unit(1.8,'line')) + 
-    geom_hline(data=data.frame(year=years), aes(x=year,y=1))
+    geom_hline(data=data.frame(year=years), aes(x=year,y=1), size=2)
   for (magnitude in names(data)) {
     incData   <- data.frame(year=years,data[[magnitude]],
                             label=intLabels(type,magnitude))
     plot <- plot + 
-    geom_line(data=incData, aes(x=year, y=IN0,   color=USB, linetype=label))+ 
-    geom_line(data=incData, aes(x=year, y=IN1,   color=FB,  linetype=label))+ 
-    geom_line(data=incData, aes(x=year, y=INall, color=all, linetype=label))
+    geom_line(data=incData, aes(x=year, y=IN0,   color=USB, linetype=label),
+      size=2)+ 
+    geom_line(data=incData, aes(x=year, y=IN1,   color=FB,  linetype=label),
+      size=2)+ 
+    geom_line(data=incData, aes(x=year, y=INall, color=all, linetype=label),
+      size=2)
   }
   return(plot) 
 }
