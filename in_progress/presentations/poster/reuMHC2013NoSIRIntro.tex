@@ -178,7 +178,6 @@ text width=3em]
         Agent-based counterparts to the Hill model were implemented in Netlogo
         and \texttt{C++}.
         \begin{columns}[T]
-          \vspace{-2em}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
@@ -193,7 +192,7 @@ text width=3em]
               \begin{center}
                 \includegraphics[height=0.8\textwidth,width=\textwidth]{finalRunSmall2}
               \end{center}
-              \caption{Incidence/million for R and C++ models (2100 runs, $\Delta t$ = 0.01, popConst = 1)}
+              \caption{Incidence/million for R and \texttt{C++} models (2100 runs, $\Delta t$ = 0.01, popConst = 1)}
               \label{fig:finalRun}
             \end{figure}
           \end{column}
@@ -201,7 +200,6 @@ text width=3em]
       \end{block}
       
       \begin{block}{Stochastic Models as a Measure of Variability}
-        %\vspace{-0.5em}
         %\begin{columns}[T]
           %\begin{column}{.45\textwidth}
             %\begin{figure}[h]
@@ -224,8 +222,9 @@ text width=3em]
         %\end{columns}
         \begin{figure}[h]
           \begin{center}
-            \includegraphics[height=0.25\textwidth,width=0.45\textwidth]{IN0dist}
-            \includegraphics[height=0.25\textwidth,width=0.45\textwidth]{IN1dist}
+            \includegraphics[width=0.45\textwidth]{IN0dist}
+            \hspace{0.8em}
+            \includegraphics[width=0.45\textwidth]{IN1dist}
           \end{center}
           \caption{USB and FB Incidence (\texttt{c++}) with fitted Normal curves (USB: $\mu = 0.233, \sigma = 0.016534$, FB: $\mu = 98.6, \sigma = 0.525294$)}
           \label{fig:INdist}
@@ -237,8 +236,8 @@ text width=3em]
       \begin{block}{Summary}
         \begin{itemize}
           \item TB elimination is possible
-          \item new framework for disease modeling
-          \item something else
+          \item New framework for disease modeling
+          \item Numpy and SuperTurtle
         \end{itemize}
       \end{block}
       %\vspace{.9em}
