@@ -39,52 +39,60 @@ text width=3em]
       \begin{block}{Introduction}
         Epidemiological models offer insight into the structure of disease outbreaks and the merits of various interventions.  Compartmental differential equation models are a common model in which populations move between various health states, or compartments, according to predetermined rates.  This work is an extension of the Hill Model, a complex compartmental model of tuberculosis (TB) in the United States.
       \end{block}
-      \vspace{1.5em}
+      \vspace{1em}
       \begin{block}{The Basic Hill Model}
         \begin{columns}[T]
-          \begin{column}{.47\textwidth}
+          \begin{column}{.5\textwidth}
             \begin{figure}[h]
               \begin{center}
                 \includegraphics[width=\textwidth]{HillModelFlowChart}
               \end{center}
-              \caption{A flow chart representing the compartments of the Hill Model.}
+              \caption{The Hill Model schematic}
               \label{fig:hillFlow}
             \end{figure}
           \end{column}
-          \begin{column}{.43\textwidth}
+          \begin{column}{.45\textwidth}
               \vspace{1.5em}
             Populations:
             \begin{itemize}
               \item US Born (USB) 
               \item Foreign Born (FB)
+              %\item USB TB incidence declining
+              %\item FB latent TB infection (LTBI) high
+              %\item TB elimination in total population not projected by 2100
             \end{itemize}
-            \vspace{0.5em}
             Individuals also leave the model due to natural death.
           \end{column}
         \end{columns}
 
         \vspace{1em}
         \begin{itemize}
-          \item USB TB levels are declining
-          \item FB LTBI arrivals remain high
-          \item TB elimination in total US population not projected by 2100
+          \item USB TB incidence rates are declining
+          \item FB latent TB infection (LTBI) arrivals remain high
+          \item TB elimination in total population not projected by 2100
         \end{itemize}
-
-        \begin{figure}[h]
-          \begin{center}
-            \includegraphics[height=15cm] {incPlotSourced2}
-          \end{center}
-          \caption{The source population of US TB incidence}
-          \label{fig:incPlotSourced}
-        \end{figure}
-        %\begin{figure}[h]
-          %\begin{center}
-            %\includegraphics[width=15cm]{costPlotSourced}
-          %\end{center}
-          %\caption{New cases per year of various types of TB in the US.}
-          %\label{fig:incPlotTotal}
-        %\end{figure}
-      \end{block}
+        \vspace{1em}
+        \begin{columns}
+          \begin{column}{.47\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth] {incPlotSourced2}
+              \end{center}
+              \caption{The source population of US TB incidence}
+              \label{fig:incPlotSourced}
+            \end{figure}
+          \end{column}
+          \begin{column}{.47\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{costPlotSourced2}
+              \end{center}
+              \caption{Source population of US HCS TB cost}
+              \label{fig:incPlotTotal}
+             \end{figure}
+           \end{column}
+         \end{columns}
+       \end{block}
     \end{column}
     
     \begin{column}{.3\textwidth}
@@ -100,23 +108,31 @@ text width=3em]
       \begin{block}{Intervention Analysis}
         %\vspace{-1.6em}
         \begin{figure}[h]
-          \begin{center}
-            \includegraphics[height=10cm,width=\textwidth]{incidencePlotRedEnLTBI}
-          \end{center}
-          \caption{Incidence/million in USB, FB, and total populations,
-                   given 0\%, 50\%, 75\%, or 100\% treatment of incoming
-                   LTBI.}
+          %\begin{center}
+            %\includegraphics[height=.3\textwidth,width=.6\textwidth]{redEnLTBIIncGrouped}
+          %\end{center}
+          %\caption{Incidence/million in USB, FB, and total populations,
+                   %given 0\%, 50\%, 75\%, or 100\% treatment of incoming
+                   %LTBI}
+          %\label{fig:redEnLTBI_incidence}
+          \begin{minipage}[l]{0.6\textwidth}
+            \includegraphics[height=.5\textwidth,width=\textwidth]{redEnLTBIIncGrouped}
+          \end{minipage}
+          \begin{minipage}[r]{0.35\textwidth}
+            \caption{Incidence/million in USB, FB, and total populations,
+                     given 0\%, 50\%, 75\%, or 100\% treatment of incoming
+                     LTBI}
+          \end{minipage}
           \label{fig:redEnLTBI_incidence}
         \end{figure}
         \begin{figure}[h]
           \begin{center}
-            \includegraphics[height=10cm,width=\textwidth]{incLTBItrmtIncGrouped}
+            \includegraphics[height=.3\textwidth,width=.6\textwidth]{incLTBItrmtIncGrouped}
           \end{center}
           \caption{Incidence/million in USB, FB, and total populations,
-                   given 0\%, 100\%, or 300\% LTBI treatment increase.}
+                   given 0\%, 100\%, or 300\% LTBI treatment increase}
           \label{fig:incLTBItrmt_incidence}
         \end{figure}
-        %\end{column}
       \end{block}
       \begin{block}{Economic Modeling}
         \begin{itemize}
@@ -132,7 +148,7 @@ text width=3em]
               \caption{Cumulative implementation costs, US HCS savings, and net
                        US costs of LTBI arrival cure rates. Cost/case cured was
                        \$600, \$800, and \$1000 for 50\%, 75\%, and 100\%
-                       cured.}
+                       cured}
               \label{fig:redEnLTBI_costs}
             \end{figure}
           \end{column}
@@ -152,7 +168,7 @@ text width=3em]
     \begin{column}{.3\textwidth}
       %\vspace{-.5em}
       \begin{block}{An Agent-Based Implementation}
-        Agent-based models capture disease dynamics on the individual level, and
+        Agent-based models capture disease dynamics on the individual level and
         reflect stochasticity and granularity lost in compartmental models.
         Agent-based counterparts to the Hill model were implemented in Netlogo
         and \texttt{C++}.
@@ -203,7 +219,7 @@ text width=3em]
         \end{columns}
       \end{block}
       
-      \vspace{1.5em}
+      \vspace{1em}
       \begin{block}{References}
         Hill, A. N., Becerra, J. E., \& Castro, K. G. (2012). Modelling tuberculosis trends in the USA. Epidemiology and infection, 140(10), 1862.
       \end{block}
