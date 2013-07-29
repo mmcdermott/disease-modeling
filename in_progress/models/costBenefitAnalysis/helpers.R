@@ -62,7 +62,10 @@ incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
            geom_ribbon(aes(ymin=IdL1c,ymax=IdF1c,fill=acuteLatentFBL))    + 
            geom_ribbon(aes(ymin=IdF1c,ymax=IdL0c,fill=chronicLatentUSBL)) + 
            geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))   + 
-           theme_gray(base_size=20) + theme(legend.position=c(0.6,0.8)) + 
+           theme_gray(base_size=20) + 
+           theme(legend.position=c(0.6,0.8), axis.title=element_text(size=40), 
+           axis.text=element_text(size=27), plot.title=element_text(size=40),
+           legend.key.height=unit(1.8,'line')) + 
            coord_fixed(ratio=1/200) + 
            scale_fill_manual(breaks=c(acuteLatentUSBLs, 
                                        chronicLatentUSBLs,
@@ -70,7 +73,6 @@ incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
                                        chronicLatentFBLs), 
                                values=c(acuteLatentUSBc,chronicLatentUSBc,
                                         acuteLatentFBc,chronicLatentFBc))
-incPlotSourced
 ggsave('forPoster/incPlotSourced2.pdf',incPlotSourced,width=10,height=8)
 
 #Order: IF1 = IF1c, IF1 + IL1 = IL1c 
@@ -234,7 +236,8 @@ costPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
   geom_ribbon(aes(ymin=cActUSBdL0c, ymax=cActUSBdF0c, fill=activeTBUSBdF0L)) + 
   theme_gray(base_size=26) + 
   theme(legend.position=c(0.22,0.85), axis.title=element_text(size=40), 
-        axis.text=element_text(size=27), plot.title=element_text(size=40)) + 
+        axis.text=element_text(size=27), plot.title=element_text(size=40),
+        legend.key.height=unit(1.8,'line')) + 
   scale_fill_manual(breaks=c(activeTBUSBdF0Ls,activeTBUSBdL0Ls,latentUSBLs,
                              activeTBFBdF1Ls,activeTBFBdL1Ls,latentFBLs),
                     values=c(activeTBUSBdF0c,activeTBUSBdL0c,latentUSBc,
