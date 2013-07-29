@@ -1,7 +1,15 @@
-acuteLatentFBL       <- rep("FB Acute Latent",totT)
-chronicLatentFBL     <- rep("FB Chronic Latent", totT)
-acuteLatentUSBL      <- rep("USB Acute Latent",totT)
-chronicLatentUSBL    <- rep("USB Chronic Latent", totT)
+acuteLatentFBLs      <- "FB Acute LTBI"
+acuteLatentFBL       <- rep(acuteLatentFBLs,totT)
+chronicLatentFBLs    <- "FB Chronic LTBI"
+chronicLatentFBL     <- rep(chronicLatentFBLs, totT)
+acuteLatentUSBLs     <- "USB Acute LTBI"
+acuteLatentUSBL      <- rep(acuteLatentUSBLs,totT)
+chronicLatentUSBLs   <- "USB Chronic LTBI"
+chronicLatentUSBL    <- rep(chronicLatentUSBLs, totT)
+acuteLatentFBc       <- "#FFA573"
+chronicLatentFBc     <- "#FFC973"
+acuteLatentUSBc      <- "#6999D3"
+chronicLatentUSBc    <- "#5FD3B3"
 
 activeInfecFBL       <- rep("FB Active Infectious TB",totT)
 activeNoInfecFBL     <- rep("FB Active Non-infectious TB", totT)
@@ -46,14 +54,14 @@ incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
            geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))   + 
            theme_gray(base_size=20) + theme(legend.position=c(0.6,0.8)) + 
            coord_fixed(ratio=1/200) + 
-           scale_fill_discrete(breaks=c('USB Acute Latent', 
-                                        'USB Chronic Latent',
-                                        'FB Acute Latent',
-                                        'FB Chronic Latent'), 
-                               levels=c(acuteLatentUSBc,chronicLatentUSBc,
+           scale_fill_manual(breaks=c(acuteLatentUSBLs, 
+                                       chronicLatentUSBLs,
+                                       acuteLatentFBLs,
+                                       chronicLatentFBLs), 
+                               values=c(acuteLatentUSBc,chronicLatentUSBc,
                                         acuteLatentFBc,chronicLatentFBc))
 incPlotSourced
-ggsave('forPoster/incPlotSourced2.pdf',incPlotSourced)
+ggsave('forPoster/incPlotSourced2.pdf',incPlotSourced,width=10,height=8)
 
 #Order: IF1 = IF1c, IF1 + IL1 = IL1c 
 IF1c <- baseTotalInc$IF1
