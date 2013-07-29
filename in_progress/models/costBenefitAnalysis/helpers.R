@@ -178,8 +178,8 @@ incPlotTypeGroupedG <- function(type, incDataTypeGrouped) {
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=INall, 
               color=all, linetype=noIntL))  +
     theme_gray(base_size=20) + 
-    theme(legend.position=c(0.18,0.22), axis.title=element_text(size=30), 
-          axis.text=element_text(size=20), plot.title=element_text(size=30),
+    theme(legend.position=c(0.18,0.22), axis.title=element_text(size=34), 
+          axis.text=element_text(size=25), plot.title=element_text(size=34),
           legend.key.height=unit(1.8,'line')) + 
     geom_hline(data=data.frame(year=years), aes(x=year,y=1))
   for (magnitude in names(data)) {
@@ -192,9 +192,10 @@ incPlotTypeGroupedG <- function(type, incDataTypeGrouped) {
   }
   return(plot) 
 }
-#J <- incPlotTypeGroupedG('redEnLTBI',incDataTypeGrouped)
-#ggsave('forPoster/redEnLTBIIncGrouped.pdf',J,width=10,height=10)
-J <- incPlotTypeGroupedG('incLTBItrmt',incDataTypeGrouped)
+J <- incPlotTypeGroupedG('redEnLTBI',incDataTypeGrouped)
+ggsave('forPoster/redEnLTBIIncGrouped.pdf',J,width=10,height=10)
+J <- incPlotTypeGroupedG('incLTBItrmt',incDataTypeGrouped) + 
+     theme(legend.position=c(0.78,0.22))
 ggsave('forPoster/incLTBItrmtIncGrouped.pdf',J,width=10,height=10)
 
 incPlot <- ggplot(incData, aes(x=year)) + 
