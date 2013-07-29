@@ -1,3 +1,7 @@
+#TODO: Make all values named vectors
+noIntLs              <- "No Intervention"
+noIntL               <- rep(noInts,totT)
+
 acuteLatentFBLs      <- "FB Acute LTBI"
 acuteLatentFBL       <- rep(acuteLatentFBLs,totT)
 chronicLatentFBLs    <- "FB Chronic LTBI"
@@ -91,60 +95,102 @@ incPlotTotalAll <- ggplot(baseCumulativeInc, aes(x=year)) +
            geom_ribbon(aes(ymin=IL0c,ymax=II0c,fill=activeInfecUSBL))   + 
            geom_ribbon(aes(ymin=II0c,ymax=IJ0c,fill=activeNoInfecUSBL))
 
-
-intLabels <- function(type,magnitude) {
-  redEnLTBI100L   <- rep("100% Reduction in Entering LTBI", totT)
-  redEnLTBI75L    <- rep("75% Reduction in Entering LTBI",  totT)
-  redEnLTBI50L    <- rep("50% Reduction in Entering LTBI",  totT)
-  redImm50L       <- rep("50% Reduction in Immigration",    totT)
-  redImm75L       <- rep("75% Reduction in Immigration",    totT)
-  incLTBItrmt100L <- rep("100% Increase in Immigration",    totT)
-  incLTBItrmt300L <- rep("300% Increase in Immigration",    totT)
-  redTrans100L    <- rep("100% Reduction in Transmission",  totT)
+  
+intLabels <- function(type,magnitude,vec=T) {
+  redEnLTBI100Ls   <- "100% Entering LTBI Cured"
+  redEnLTBI75Ls    <- "75% Entering LTBI Cured"
+  redEnLTBI50Ls    <- "50% Entering LTBI Cured"
+  redImm50Ls       <- "50% Immigration Reduction"
+  redImm75Ls       <- "75% Immigration Reduction"
+  incLTBItrmt100Ls <- "100% LTBI Treatment Increase"
+  incLTBItrmt300Ls <- "300% LTBI Treatment Increase"
+  redTrans100Ls    <- "100% Reduction in Transmission"
+  redEnLTBI100L    <- rep("100% Entering LTBI Cured",        totT)
+  redEnLTBI75L     <- rep("75% Entering LTBI Cured",         totT)
+  redEnLTBI50L     <- rep("50% Entering LTBI Cured",         totT)
+  redImm50L        <- rep("50% Immigration Reduction",       totT)
+  redImm75L        <- rep("75% Immigration Reduction",       totT)
+  incLTBItrmt100L  <- rep("100% LTBI Treatment Increase",    totT)
+  incLTBItrmt300L  <- rep("300% LTBI Treatment Increase",    totT)
+  redTrans100L     <- rep("100% Reduction in Transmission",  totT)
   #TODO: This is not the best way to do this
-  return(eval(as.name(paste(c(type,magnitude,'L'),collapse=""))))
+  if (vec) {
+    return(eval(as.name(paste(c(type,magnitude,'L'),collapse=""))))
+  } else {
+    return(eval(as.name(paste(c(type,magnitude,'Ls'),collapse=""))))
+  }
 }
 
-interventionTypes <- list('redEnLTBI')#,'redImm','incLTBItrmt','redTrans')
+intLinetypes <- function(type,magnitude) {
+  redEnLTBI100lt   <- 2
+  redEnLTBI75lt    <- 3
+  redEnLTBI50lt    <- 4
+  redImm50lt       <- 2
+  redImm75lt       <- 3
+  incLTBItrmt100lt <- 2
+  incLTBItrmt300lt <- 3
+  redTrans100lt    <- 2
+  #TODO: This is not the best way to do this
+  return(eval(as.name(paste(c(type,magnitude,'lt'),collapse=""))))
+}
+
+interventionTypes <- list('redEnLTBI','redImm','incLTBItrmt','redTrans')
 interventionMags <- list(redEnLTBI=list(50,75,100),redImm=list(50,75),
                          incLTBItrmt=list(100,300),redTrans=list(100))
 incDataTypeGrouped <- list()
 for (interventionType in interventionTypes) {
-  dataL = list()
-  mags  = interventionMags[[interventionType]]
+  dataL <- list()
+  mags  <- interventionMags[[interventionType]]
   for (mag in mags) {
-    magnitude = as.character(mag)
-    dataName  = paste(c(interventionType,magnitude),collapse="")
-    dataL[[magnitude]] = incDataList[[dataName]]
+    magnitude <- as.character(mag)
+    dataName  <- paste(c(interventionType,magnitude),collapse="")
+    fileName  <- paste(c('data/',dataName,'.csv'),collapse="")
+    intData   <- read.csv(fileName)
+    dataL[[magnitude]] = generateIncidence(intData)
   }
   incDataTypeGrouped[[interventionType]] = dataL
 }
 
-incPlotTypeGroupedG <- function(type, incDataTypeGrouped=incDataTypeGrouped) {
+incPlotTypeGroupedG <- function(type, incDataTypeGrouped) {
   data <- incDataTypeGrouped[[type]]
+  #Line Type Specifications
+  ltvalues <- c()
+  ltvalues[[noIntLs]] <- 1
+  #ltbreaks = c(noIntLs)
+  for (i in (2:(length(data)+1))) {
+    label <- intLabels(type,names(data)[i-1],F)
+    ltvalues[[label]] <- intLinetypes(type,names(data)[i-1])
+  }
   plot <- ggplot() + 
     scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
                  labels=c("Elimination (1)",2,5,10,25,50,100,200),
                  limits=c(0.5,250)) + 
     labs(x="Years", y="Incidence/million", color="Population", 
           linetype="Intervention Status") + 
-    plotTitle("Incidence Levels for Various Intervention Magnitudes","") +
+    plotTitle("Incidence/Million vs. Intervention Magnitude","") +
+    scale_linetype_manual(values=ltvalues) +  
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=IN0,   
-              color=USB, linetype=noInt))  + 
+              color=USB, linetype=noIntL), size=.9)  + 
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=IN1,   
-              color=FB,  linetype=noInt))  + 
+              color=FB,  linetype=noIntL), size=.9)  + 
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=INall, 
-              color=all, linetype=noInt))
+              color=all, linetype=noIntL), size=.9)  +
+    theme_gray(base_size=18) + theme(legend.position=c(0.18,0.22))
   for (magnitude in names(data)) {
     incData   <- data.frame(year=years,data[[magnitude]],
                             label=intLabels(type,magnitude))
     plot <- plot + 
-    geom_line(data=incData, aes(x=year, y=IN0,   color=USB, linetype=label))+ 
-    geom_line(data=incData, aes(x=year, y=IN1,   color=FB,  linetype=label))+ 
-    geom_line(data=incData, aes(x=year, y=INall, color=all, linetype=label))
+    geom_line(data=incData, aes(x=year, y=IN0,   color=USB, linetype=label),
+              size=.9)+ 
+    geom_line(data=incData, aes(x=year, y=IN1,   color=FB,  linetype=label),
+              size=.9)+ 
+    geom_line(data=incData, aes(x=year, y=INall, color=all, linetype=label),
+              size=.9)
   }
   return(plot) 
 }
+J <- incPlotTypeGroupedG('redEnLTBI',incDataTypeGrouped)
+ggsave('redEnLTBIInc.pdf',J,width=10,height=10)
 
 incPlot <- ggplot(incData, aes(x=year)) + 
            scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
@@ -186,7 +232,7 @@ costPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
   geom_ribbon(aes(ymin=cActFBdF1c,  ymax=cLTBIUSBc,   fill=latentUSBL))      + 
   geom_ribbon(aes(ymin=cLTBIUSBc,   ymax=cActUSBdL0c, fill=activeTBUSBdL0L)) + 
   geom_ribbon(aes(ymin=cActUSBdL0c, ymax=cActUSBdF0c, fill=activeTBUSBdF0L)) + 
-  theme_gray(base_size=20) + theme(legend.position=c(0.2,0.85)) + 
+  theme_gray(base_size=21) + theme(legend.position=c(0.2,0.85)) + 
   #coord_fixed(ratio=1/200) + 
   scale_fill_manual(breaks=c(activeTBUSBdF0Ls,activeTBUSBdL0Ls,latentUSBLs,
                              activeTBFBdF1Ls,activeTBFBdL1Ls,latentFBLs),
@@ -194,5 +240,5 @@ costPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
                              activeTBFBdF1c,activeTBFBdL1c,latentFBc))
 
 costPlotSourced
-ggsave('forPoster/costPlotSourced.pdf',costPlotSourced)
+ggsave('forPoster/costPlotSourced.pdf',costPlotSourced,width=13.5,height=8)
 
