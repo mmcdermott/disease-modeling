@@ -39,10 +39,10 @@ text width=3em]
       \begin{block}{Introduction}
         Epidemiological models offer insight into the structure of disease outbreaks and the merits of various interventions.  Compartmental differential equation models are a common model in which populations move between various health states, or compartments, according to predetermined rates.  This work is an extension of the Hill Model, a complex compartmental model of tuberculosis (TB) in the United States.
       \end{block}
-      \vspace{1.5em}
+      \vspace{1em}
       \begin{block}{The Basic Hill Model}
         \begin{columns}[T]
-          \begin{column}{.47\textwidth}
+          \begin{column}{.5\textwidth}
             \begin{figure}[h]
               \begin{center}
                 \includegraphics[width=\textwidth]{HillModelFlowChart}
@@ -51,14 +51,13 @@ text width=3em]
               \label{fig:hillFlow}
             \end{figure}
           \end{column}
-          \begin{column}{.43\textwidth}
+          \begin{column}{.45\textwidth}
               \vspace{1.5em}
             Populations:
             \begin{itemize}
               \item US Born (USB) 
               \item Foreign Born (FB)
             \end{itemize}
-            \vspace{0.5em}
             Individuals also leave the model due to natural death.
           \end{column}
         \end{columns}
@@ -66,25 +65,31 @@ text width=3em]
         \vspace{1em}
         \begin{itemize}
           \item USB TB levels are declining
-          \item FB LTBI arrivals remain high
+          \item FB latent TB infection (LTBI) arrivals remain high
           \item TB elimination in total US population not projected by 2100
         \end{itemize}
 
-        \begin{figure}[h]
-          \begin{center}
-            \includegraphics[height=15cm] {incPlotSourced2}
-          \end{center}
-          \caption{The source population of US TB incidence}
-          \label{fig:incPlotSourced}
-        \end{figure}
-        %\begin{figure}[h]
-          %\begin{center}
-            %\includegraphics[width=15cm]{costPlotSourced}
-          %\end{center}
-          %\caption{New cases per year of various types of TB in the US.}
-          %\label{fig:incPlotTotal}
-        %\end{figure}
-      \end{block}
+        \begin{columns}
+          \begin{column}{.47\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth] {incPlotSourced2}
+              \end{center}
+              \caption{The source population of US TB incidence}
+              \label{fig:incPlotSourced}
+            \end{figure}
+          \end{column}
+          \begin{column}{.47\textwidth}
+            \begin{figure}[h]
+              \begin{center}
+                \includegraphics[width=\textwidth]{costPlotSourced2}
+              \end{center}
+              \caption{New cases per year of various types of TB in the US.}
+              \label{fig:incPlotTotal}
+             \end{figure}
+           \end{column}
+         \end{columns}
+       \end{block}
     \end{column}
     
     \begin{column}{.3\textwidth}
@@ -101,7 +106,7 @@ text width=3em]
         %\vspace{-1.6em}
         \begin{figure}[h]
           \begin{center}
-            \includegraphics[height=10cm,width=\textwidth]{incidencePlotRedEnLTBI}
+            \includegraphics[height=.3\textwidth,width=.6\textwidth]{redEnLTBIIncGrouped}
           \end{center}
           \caption{Incidence/million in USB, FB, and total populations,
                    given 0\%, 50\%, 75\%, or 100\% treatment of incoming
@@ -110,7 +115,7 @@ text width=3em]
         \end{figure}
         \begin{figure}[h]
           \begin{center}
-            \includegraphics[height=10cm,width=\textwidth]{incLTBItrmtIncGrouped}
+            \includegraphics[height=.3\textwidth,width=.6\textwidth]{incLTBItrmtIncGrouped}
           \end{center}
           \caption{Incidence/million in USB, FB, and total populations,
                    given 0\%, 100\%, or 300\% LTBI treatment increase.}
@@ -203,7 +208,7 @@ text width=3em]
         \end{columns}
       \end{block}
       
-      \vspace{1.5em}
+      \vspace{1em}
       \begin{block}{References}
         Hill, A. N., Becerra, J. E., \& Castro, K. G. (2012). Modelling tuberculosis trends in the USA. Epidemiology and infection, 140(10), 1862.
       \end{block}
