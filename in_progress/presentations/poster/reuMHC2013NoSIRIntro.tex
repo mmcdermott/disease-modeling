@@ -47,7 +47,7 @@ text width=3em]
               \begin{center}
                 \includegraphics[width=\textwidth]{HillModelFlowChart}
               \end{center}
-              \caption{A flow chart representing the compartments of the Hill Model.}
+              \caption{The Hill Model schematic}
               \label{fig:hillFlow}
             \end{figure}
           \end{column}
@@ -57,6 +57,9 @@ text width=3em]
             \begin{itemize}
               \item US Born (USB) 
               \item Foreign Born (FB)
+              %\item USB TB incidence declining
+              %\item FB latent TB infection (LTBI) high
+              %\item TB elimination in total population not projected by 2100
             \end{itemize}
             Individuals also leave the model due to natural death.
           \end{column}
@@ -64,11 +67,11 @@ text width=3em]
 
         \vspace{1em}
         \begin{itemize}
-          \item USB TB levels are declining
+          \item USB TB incidence rates are declining
           \item FB latent TB infection (LTBI) arrivals remain high
-          \item TB elimination in total US population not projected by 2100
+          \item TB elimination in total population not projected by 2100
         \end{itemize}
-
+        \vspace{1em}
         \begin{columns}
           \begin{column}{.47\textwidth}
             \begin{figure}[h]
@@ -84,7 +87,7 @@ text width=3em]
               \begin{center}
                 \includegraphics[width=\textwidth]{costPlotSourced2}
               \end{center}
-              \caption{New cases per year of various types of TB in the US.}
+              \caption{Source population of US HCS TB cost}
               \label{fig:incPlotTotal}
              \end{figure}
            \end{column}
@@ -105,12 +108,21 @@ text width=3em]
       \begin{block}{Intervention Analysis}
         %\vspace{-1.6em}
         \begin{figure}[h]
-          \begin{center}
-            \includegraphics[height=.3\textwidth,width=.6\textwidth]{redEnLTBIIncGrouped}
-          \end{center}
-          \caption{Incidence/million in USB, FB, and total populations,
-                   given 0\%, 50\%, 75\%, or 100\% treatment of incoming
-                   LTBI.}
+          %\begin{center}
+            %\includegraphics[height=.3\textwidth,width=.6\textwidth]{redEnLTBIIncGrouped}
+          %\end{center}
+          %\caption{Incidence/million in USB, FB, and total populations,
+                   %given 0\%, 50\%, 75\%, or 100\% treatment of incoming
+                   %LTBI}
+          %\label{fig:redEnLTBI_incidence}
+          \begin{minipage}[l]{0.6\textwidth}
+            \includegraphics[height=.5\textwidth,width=\textwidth]{redEnLTBIIncGrouped}
+          \end{minipage}
+          \begin{minipage}[r]{0.35\textwidth}
+            \caption{Incidence/million in USB, FB, and total populations,
+                     given 0\%, 50\%, 75\%, or 100\% treatment of incoming
+                     LTBI}
+          \end{minipage}
           \label{fig:redEnLTBI_incidence}
         \end{figure}
         \begin{figure}[h]
@@ -118,10 +130,9 @@ text width=3em]
             \includegraphics[height=.3\textwidth,width=.6\textwidth]{incLTBItrmtIncGrouped}
           \end{center}
           \caption{Incidence/million in USB, FB, and total populations,
-                   given 0\%, 100\%, or 300\% LTBI treatment increase.}
+                   given 0\%, 100\%, or 300\% LTBI treatment increase}
           \label{fig:incLTBItrmt_incidence}
         \end{figure}
-        %\end{column}
       \end{block}
       \begin{block}{Economic Modeling}
         \begin{itemize}
@@ -160,7 +171,7 @@ text width=3em]
     \begin{column}{.3\textwidth}
       %\vspace{-.5em}
       \begin{block}{An Agent-Based Implementation}
-        Agent-based models capture disease dynamics on the individual level, and
+        Agent-based models capture disease dynamics on the individual level and
         reflect stochasticity and granularity lost in compartmental models.
         Agent-based counterparts to the Hill model were implemented in Netlogo
         and \texttt{C++}.
