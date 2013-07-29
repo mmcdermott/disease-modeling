@@ -119,7 +119,7 @@ IN0sd <- fitLine$estimate['sd']
 IN0hist <- ggplot(incFrame, aes(x=USBIncidence)) +
              geom_histogram(aes(y=..density.., fill = ..density..)) +
              stat_function(fun = dnorm, args = list(mean = IN0mean, sd = IN0sd), colour = 'red') +
-             opts(legend.position = 'none')
+             theme(legend.position = 'none')
 cat('IN0: mean =', IN0mean, ", sd =", IN0sd, '\n')
 
 # IN1 histogram
@@ -130,13 +130,9 @@ IN1hist <- ggplot(incFrame, aes(x=FBIncidence)) +
              geom_histogram(aes(y=..density.., fill = ..density..)) +
              scale_fill_gradient('density', low = 'darkgreen', high = 'green') +
              stat_function(fun = dnorm, args = list(mean = IN1mean, sd = IN1sd), colour = 'red') +
-             opts(legend.position = 'none')
+             theme(legend.position = 'none')
 cat('IN1: mean =', IN1mean, ", sd =", IN1sd, '\n')
 
 # export histograms to pdf file
-pdf('IN0dist.pdf')
-print(IN0hist)
-dev.off()
-pdf('IN1dist.pdf')
-print(IN1hist)
-dev.off()
+ggsave('IN0dist.pdf', IN0hist, height=8, width=16)
+ggsave('IN1dist.pdf', IN1hist, height=8, width=16)

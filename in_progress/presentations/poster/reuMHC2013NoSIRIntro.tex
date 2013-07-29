@@ -177,12 +177,11 @@ text width=3em]
         reflect stochasticity and granularity lost in compartmental models.
         Agent-based counterparts to the Hill model were implemented in Netlogo
         and \texttt{C++}.
-        \begin{columns}
-          %\vspace{-2em}
+        \begin{columns}[T]
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
-                \includegraphics[width=\textwidth]{NLHMinc}
+                \includegraphics[height=0.8\textwidth,width=\textwidth]{NLHMinc}
               \end{center}
               \caption{Incidence/million for R and NetLogo models (12 runs, $\Delta t$ = 0.1, popConst = 100)}
               \label{fig:NLHMinc}
@@ -191,9 +190,9 @@ text width=3em]
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
               \begin{center}
-                \includegraphics[width=\textwidth]{finalRunSmall2}
+                \includegraphics[height=0.8\textwidth,width=\textwidth]{finalRunSmall2}
               \end{center}
-              \caption{Incidence/million for R and C++ models (2100 runs, $\Delta t$ = 0.01, popConst = 1)}
+              \caption{Incidence/million for R and \texttt{C++} models (2100 runs, $\Delta t$ = 0.01, popConst = 1)}
               \label{fig:finalRun}
             \end{figure}
           \end{column}
@@ -201,30 +200,47 @@ text width=3em]
       \end{block}
       
       \begin{block}{Stochastic Models as a Measure of Variability}
-        \begin{columns}
-          %\vspace{-2em}
-          \begin{column}{.45\textwidth}
-            \begin{figure}[h]
-              \begin{center}
-                \includegraphics[width=\textwidth]{IN0dist}
-              \end{center}
-              \caption{Distribution of USB Incidence (C++) with fitted Normal curve}
-              \label{fig:IN0dist}
-            \end{figure}
-          \end{column}
-          \begin{column}{.45\textwidth}
-            \begin{figure}[h]
-              \begin{center}
-                \includegraphics[width=\textwidth]{IN1dist}
-              \end{center}
-              \caption{Distribution of FB Incidence (C++) with fitted Normal curve}
-              \label{fig:IN1dist}
-            \end{figure}
-          \end{column}
-        \end{columns}
+        %\begin{columns}[T]
+          %\begin{column}{.45\textwidth}
+            %\begin{figure}[h]
+              %\begin{center}
+                %\includegraphics[height=0.5\textwidth,width=\textwidth]{IN0dist}
+              %\end{center}
+              %\caption{USB Incidence (\texttt{c++}) with fitted Normal curve ($\mu = 0.233196, \sigma = 0.016534$)}
+              %\label{fig:IN0dist}
+            %\end{figure}
+          %\end{column}
+          %\begin{column}{.45\textwidth}
+            %\begin{figure}[h]
+              %\begin{center}
+                %\includegraphics[height=0.5\textwidth,width=\textwidth]{IN1dist}
+              %\end{center}
+              %\caption{FB Incidence (\texttt{c++}) with fitted Normal curve ($\mu = 98.6087, \sigma = 0.525294$)}
+              %\label{fig:IN1dist}
+            %\end{figure}
+          %\end{column}
+        %\end{columns}
+        \begin{figure}[h]
+          \begin{center}
+            \includegraphics[width=0.45\textwidth]{IN0dist}
+            \hspace{0.8em}
+            \includegraphics[width=0.45\textwidth]{IN1dist}
+          \end{center}
+          \caption{USB and FB Incidence (\texttt{c++}) with fitted Normal curves (USB: $\mu = 0.233, \sigma = 0.016534$, FB: $\mu = 98.6, \sigma = 0.525294$)}
+          \label{fig:INdist}
+        \end{figure}
+              %\caption{FB Incidence (\texttt{c++}) with fitted Normal curve ($\mu = 98.6087, \sigma = 0.525294$)}
+              %\label{fig:IN1dist}
       \end{block}
       
-      \vspace{.9em}
+      \begin{block}{Summary}
+        \begin{itemize}
+          \item LTBI dominates US TB dynamics
+          \item Reducing FB LTBI most cost effective
+          \item Agent-based models effective for evaluating robustness
+        \end{itemize}
+      \end{block}
+      %\vspace{.9em}
       \begin{block}{References \& Acknowledgments}
         This research was supported via an NSF REU grant. 
         \small{[1] Hill, A. N., Becerra, J. E., \& Castro, K. G. (2012). Modelling
