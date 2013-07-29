@@ -240,5 +240,5 @@ costPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
                              activeTBFBdF1c,activeTBFBdL1c,latentFBc))
 
 costPlotSourced
-ggsave('forPoster/costPlotSourced.pdf',costPlotSourced,width=13.5,height=8)
+ggsave('forPoster/costPlotSourced.pdf',costPlotSourced,width=10,height=8)
 
