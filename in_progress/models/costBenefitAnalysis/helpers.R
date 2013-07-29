@@ -62,9 +62,9 @@ incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
            geom_ribbon(aes(ymin=IdL1c,ymax=IdF1c,fill=acuteLatentFBL))    + 
            geom_ribbon(aes(ymin=IdF1c,ymax=IdL0c,fill=chronicLatentUSBL)) + 
            geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))   + 
-           theme_gray(base_size=20) + 
-           theme(legend.position=c(0.6,0.8), axis.title=element_text(size=40), 
-           axis.text=element_text(size=27), plot.title=element_text(size=40),
+           theme_gray(base_size=25) + 
+           theme(legend.position=c(0.6,0.8), axis.title=element_text(size=30), 
+           axis.text=element_text(size=17), plot.title=element_text(size=30),
            legend.key.height=unit(1.8,'line')) + 
            coord_fixed(ratio=1/200) + 
            scale_fill_manual(breaks=c(acuteLatentUSBLs, 
@@ -165,34 +165,35 @@ incPlotTypeGroupedG <- function(type, incDataTypeGrouped) {
   }
   plot <- ggplot() + 
     scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
-                 labels=c("Elimination (1)",2,5,10,25,50,100,200),
+                 labels=c(1,2,5,10,25,50,100,200),
                  limits=c(0.5,250)) + 
     labs(x="Years", y="Incidence/million", color="Population", 
           linetype="Intervention Status") + 
     plotTitle("Incidence/Million vs. Intervention Magnitude","") +
     scale_linetype_manual(values=ltvalues) +  
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=IN0,   
-              color=USB, linetype=noIntL), size=.9)  + 
+              color=USB, linetype=noIntL))  + 
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=IN1,   
-              color=FB,  linetype=noIntL), size=.9)  + 
+              color=FB,  linetype=noIntL))  + 
     geom_line(data = data.frame(year=years, baseInc), aes(x=year, y=INall, 
-              color=all, linetype=noIntL), size=.9)  +
-    theme_gray(base_size=18) + theme(legend.position=c(0.18,0.22))
+              color=all, linetype=noIntL))  +
+    theme_gray(base_size=20) + 
+    theme(legend.position=c(0.18,0.22), axis.title=element_text(size=30), 
+          axis.text=element_text(size=20), plot.title=element_text(size=30),
+          legend.key.height=unit(1.8,'line')) + 
+    geom_hline(data=data.frame(year=years), aes(x=year,y=1))
   for (magnitude in names(data)) {
     incData   <- data.frame(year=years,data[[magnitude]],
                             label=intLabels(type,magnitude))
     plot <- plot + 
-    geom_line(data=incData, aes(x=year, y=IN0,   color=USB, linetype=label),
-              size=.9)+ 
-    geom_line(data=incData, aes(x=year, y=IN1,   color=FB,  linetype=label),
-              size=.9)+ 
-    geom_line(data=incData, aes(x=year, y=INall, color=all, linetype=label),
-              size=.9)
+    geom_line(data=incData, aes(x=year, y=IN0,   color=USB, linetype=label))+ 
+    geom_line(data=incData, aes(x=year, y=IN1,   color=FB,  linetype=label))+ 
+    geom_line(data=incData, aes(x=year, y=INall, color=all, linetype=label))
   }
   return(plot) 
 }
 J <- incPlotTypeGroupedG('redEnLTBI',incDataTypeGrouped)
-ggsave('redEnLTBIInc.pdf',J,width=10,height=10)
+ggsave('forPoster/redEnLTBIIncGrouped.pdf',J,width=10,height=10)
 
 incPlot <- ggplot(incData, aes(x=year)) + 
            scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
