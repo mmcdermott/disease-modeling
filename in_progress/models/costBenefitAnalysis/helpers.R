@@ -192,8 +192,10 @@ incPlotTypeGroupedG <- function(type, incDataTypeGrouped) {
   }
   return(plot) 
 }
-J <- incPlotTypeGroupedG('redEnLTBI',incDataTypeGrouped)
-ggsave('forPoster/redEnLTBIIncGrouped.pdf',J,width=10,height=10)
+#J <- incPlotTypeGroupedG('redEnLTBI',incDataTypeGrouped)
+#ggsave('forPoster/redEnLTBIIncGrouped.pdf',J,width=10,height=10)
+J <- incPlotTypeGroupedG('incLTBItrmt',incDataTypeGrouped)
+ggsave('forPoster/incLTBItrmtIncGrouped.pdf',J,width=10,height=10)
 
 incPlot <- ggplot(incData, aes(x=year)) + 
            scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
