@@ -11,6 +11,8 @@ source('deSolConstants.R')
 S0<-S1<-F0<-F1<-L0<-L1<-I0<-I1<-J0<-J1<-N0<-N1<-rep(0,totT)
 # Compartment Costs:
 cL0<-cF0<-cI0<-cJ0<-cL1<-cF1<-cI1<-cJ1<-cN0<-cN1<-rep(0,totT)
+# Compartment Cost Sources:
+cI0dL0<-cI0dF0<-cJ0dL0<-cJ0dF0<-cI1dL1<-cI1dF1<-cJ1dL1<-cJ1dF1<-rep(0,totT)
 # Tracking Data:
 LTBIEn       <- rep(0,totT)                #LTBI arrivals
 LTBIEnD      <- rep(0,totT)                #Discounted LTBI arrivals
@@ -27,8 +29,9 @@ interventionCost <- rep(0,totT)            #Cumulative intervention cost
 
 #Intervention per time step cost array 
 # cost of new cases, total population, and LTBI cases entering
-P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cJ0,cL1,cF1,cI1,
-                cJ1,cN0,cN1,LTBIEn,LTBIEnD,curedLTBIEn,curedLTBIEnD,natdeath0,
+P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cI0dL0,cI0dF0,
+                cJ0,cJ0dL0,cJ0dF0,cL1,cF1,cI1,cI1dL1,cI1dF1,cJ1,cJ1dL1,cJ1dF1,
+                cN0,cN1,LTBIEn,LTBIEnD,curedLTBIEn,curedLTBIEnD,natdeath0,
                 natdeath1,tbdeath0,tbdeath1,tbdeathD0,tbdeathD1,progAcute0,
                 progChron0,progAcute1,progChron1,progTotalD0,progTotalD1, 
                 exogenous0,exogenous1,interventionCost)
@@ -139,15 +142,24 @@ Ddt <- function(t,v,parms) {
     dcF0 <- discV * Cl * sigmaF0 * 1e6 * F0                    #cost for Acute LTBI cures        (USB)
     dcI0 <- discV * Ct * q*(dprogAcute0 + dprogChron0) * 1e6     #cost for Infectious TB cures     (USB)
     dcJ0 <- discV * Ct * (1-q)*(dprogAcute0 + dprogChron0) * 1e6 #cost for Non-Infectious TB cures (USB)
+    dcI0dL0 <- discV * Ct * q*(dprogChron0) * 1e6     #cost for Infectious TB cures     (USB)
+    dcI0dF0 <- discV * Ct * q*(dprogChron0) * 1e6     #cost for Infectious TB cures     (USB)
+    dcJ0dL0 <- discV * Ct * (1-q)*(dprogAcute0) * 1e6 #cost for Non-Infectious TB cures (USB)
+    dcJ0dF0 <- discV * Ct * (1-q)*(dprogAcute0) * 1e6 #cost for Non-Infectious TB cures (USB)
     dcL1 <- discV * Cl * sigmaL  * 1e6 * L1                    #cost for Chronic LTBI cures      (FB)
     dcF1 <- discV * Cl * sigmaF1 * 1e6 * F1                    #cost for Acute LTBI cures        (FB)
     dcI1 <- discV * Ct * q*(dprogAcute1 + dprogChron1) * 1e6     #cost for Infectious TB cures     (FB)
     dcJ1 <- discV * Ct * (1-q)*(dprogAcute1 + dprogChron1) * 1e6 #cost for Non-Infectious TB cures (FB)
+    dcI1dL1 <- discV * Ct * q*(dprogChron1) * 1e6     #cost for Infectious TB cures     (USB)
+    dcI1dF1 <- discV * Ct * q*(dprogChron1) * 1e6     #cost for Infectious TB cures     (USB)
+    dcJ1dL1 <- discV * Ct * (1-q)*(dprogAcute1) * 1e6 #cost for Non-Infectious TB cures (USB)
+    dcJ1dF1 <- discV * Ct * (1-q)*(dprogAcute1) * 1e6 #cost for Non-Infectious TB cures (USB)
     dcN0 <- dcF0 + dcL0 + dcI0 + dcJ0                            #Total cost for all treatments (USB)
     dcN1 <- dcF1 + dcL1 + dcI1 + dcJ1                            #Total cost for all treatments (FB)
  
     return(list(c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,
-             dcJ0,dcL1,dcF1,dcI1,dcJ1,dcN0,dcN1,(dLTBIEn*incLTBI),
+             dcI0dL0,dcI0dF0,dcJ0,dcJ0dL0,dcJ0dF0,dcL1,dcF1,dcI1,dcI1dL1,dcI1dF1,
+             dcJ1,dcJ1dL1,dcJ1dF1,dcN0,dcN1,(dLTBIEn*incLTBI),
              (dLTBIEn*incLTBI*discV),dLTBIEn*(1-incLTBI),
              (dLTBIEn*(1-incLTBI)*discV),dnatdeath0,dnatdeath1,dtbdeath0,
              dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,

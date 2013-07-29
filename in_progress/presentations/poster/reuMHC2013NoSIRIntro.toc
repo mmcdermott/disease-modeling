@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 \beamer@endinputifotherversion {3.26pt}
+=======
+\beamer@endinputifotherversion {3.10pt}
+>>>>>>> d4f52ec9e9291cba82ec1fda758c5012e4fa80aa
