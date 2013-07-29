@@ -232,8 +232,9 @@ costPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
   geom_ribbon(aes(ymin=cActFBdF1c,  ymax=cLTBIUSBc,   fill=latentUSBL))      + 
   geom_ribbon(aes(ymin=cLTBIUSBc,   ymax=cActUSBdL0c, fill=activeTBUSBdL0L)) + 
   geom_ribbon(aes(ymin=cActUSBdL0c, ymax=cActUSBdF0c, fill=activeTBUSBdF0L)) + 
-  theme_gray(base_size=26) + theme(legend.position=c(0.2,0.85)) + 
-  #coord_fixed(ratio=1/200) + 
+  theme_gray(base_size=26) + 
+  theme(legend.position=c(0.22,0.85), axis.title=element_text(size=40), 
+        axis.text=element_text(size=27), plot.title=element_text(size=40)) + 
   scale_fill_manual(breaks=c(activeTBUSBdF0Ls,activeTBUSBdL0Ls,latentUSBLs,
                              activeTBFBdF1Ls,activeTBFBdL1Ls,latentFBLs),
                     values=c(activeTBUSBdF0c,activeTBUSBdL0c,latentUSBc,
