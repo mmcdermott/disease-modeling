@@ -36,15 +36,8 @@ text width=3em]
 \begin{frame}
   \begin{columns}
     \begin{column}{.3\textwidth}
-      \vspace{-2em}
       \begin{block}{Introduction}
-        \begin{itemize}
-          \item Epidemiological models describe disease outbreaks.
-          \item Compartmental Differential Equation models are common and
-            rigorous epidemiological models.
-          \item The Hill Model is a complex compartmental model of tuberculosis
-            (TB) in the United States (US).
-        \end{itemize}
+        Epidemiological models offer insight into the structure of disease outbreaks and the merits of various interventions.  Compartmental differential equation models are a common model in which populations move between various health states, or compartments, according to predetermined rates.  This work is an extension of the Hill Model, a complex compartmental model of tuberculosis (TB) in the United States.
        % Epidemiological models offer insight into the structure of disease
        % outbreaks and the merits of various interventions. The most common
        % epidemiological models are compartmental differential equation models,
@@ -55,42 +48,40 @@ text width=3em]
        % compartmental model called the hill model.
       \end{block}
       \begin{block}{The Basic Hill Model}
-        \vspace{-2em}
-        \begin{block}{}
+        \begin{columns}[T]
           \begin{column}{.5\textwidth}
             \begin{figure}[h]
               \begin{center}
                 \includegraphics[height=12cm,width=.9\textwidth]{HillModelFlowChart}
               \end{center}
-              \caption{A flow chart representing the compartments of the Hill
-                       Model.}
+              \caption{A flow chart representing the compartments of the Hill Model.}
               \label{fig:hillFlow}
             \end{figure}
           \end{column}
           \begin{column}{.43\textwidth}
             Populations:
             \begin{itemize}
-              \item US Born Individuals (USB) 
-              \item Foreign Born Individuals (FB)
+              \item US Born (USB) 
+              \item Foreign Born (FB)
             \end{itemize}
             Individuals also leave the model due to natural death.
           \end{column}
-          \begin{figure}[h]
-            \begin{center}
-              \includegraphics[height=25cm,width=\textwidth]{incPlotSourced2}
-            \end{center}
-            \caption{The source population of US TB incindecence}
-            \label{fig:incPlotSourced}
-          \end{figure}
-          \vspace{-1em}
-          \begin{figure}[h]
-            \begin{center}
-              \includegraphics[height=15cm,width=\textwidth]{incPlotTotal}
-            \end{center}
-            \caption{New cases per year of various types of TB in the US.}
-            \label{fig:incPlotTotal}
-          \end{figure}
-        \end{block}
+        \end{columns}
+        \begin{figure}[h]
+          \begin{center}
+            \includegraphics[height=20cm] {newfig}%{incPlotSourced2}
+          \end{center}
+          \caption{The source population of US TB incidence}
+          \label{fig:incPlotSourced}
+        \end{figure}
+        \vspace{-1em}
+        \begin{figure}[h]
+          \begin{center}
+            \includegraphics[height=15cm]{costPlotSourced}
+          \end{center}
+          \caption{New cases per year of various types of TB in the US.}
+          \label{fig:incPlotTotal}
+        \end{figure}
       \end{block}
     \end{column}
     
@@ -98,42 +89,38 @@ text width=3em]
       \vspace{-1.5em}
       \begin{block}{Analyzing US TB Reduction Strategies}
         \begin{itemize}
-          \item Implemented in \texttt{R}, with various numerical DE solvers.
-          \item Tracks US Health Care System (HCS) cost.
-          \item Tracks statistics about various health states.
+          \item Implemented in \texttt{R}, with various numerical DE solvers
+          \item Tracks US Health Care System (HCS) cost
+          \item Tracks statistics about various health states
         \end{itemize}
-        \begin{block}{Intervention Analysis}
-          \vspace{-1.6em}
-          \begin{column}{.45\textwidth}
-            \begin{figure}[h]
-              \begin{center}
-                \includegraphics[height=10cm,width=\textwidth]{incidencePlotRedEnLTBI}
-              \end{center}
-              \caption{Incidence/million in USB, FB, and total populations,
-                       given 0\%, 50\%, 75\%, or 100\% treatment of incoming
-                       LTBI.}
-              \label{fig:redEnLTBI_incidence}
-            \end{figure}
-          \end{column}
-          \begin{column}{.45\textwidth}
-            \begin{figure}[h]
-              \begin{center}
-                \includegraphics[height=10cm,width=\textwidth]{incLTBItrmtIncGrouped}
-              \end{center}
-              \caption{Incidence/million in USB, FB, and total populations,
-                       given 0\%, 100\%, or 300\% LTBI treatment increase.}
-              \label{fig:incLTBItrmt_incidence}
-            \end{figure}
-          \end{column}
-        \end{block}
+      \end{block}
+      \begin{block}{Intervention Analysis}
+        \vspace{-1.6em}
+        \begin{figure}[h]
+          \begin{center}
+            \includegraphics[height=10cm,width=\textwidth]{incidencePlotRedEnLTBI}
+          \end{center}
+          \caption{Incidence/million in USB, FB, and total populations,
+                   given 0\%, 50\%, 75\%, or 100\% treatment of incoming
+                   LTBI.}
+          \label{fig:redEnLTBI_incidence}
+        \end{figure}
+        \begin{figure}[h]
+          \begin{center}
+            \includegraphics[height=10cm,width=\textwidth]{incLTBItrmtIncGrouped}
+          \end{center}
+          \caption{Incidence/million in USB, FB, and total populations,
+                   given 0\%, 100\%, or 300\% LTBI treatment increase.}
+          \label{fig:incLTBItrmt_incidence}
+        \end{figure}
+        %\end{column}
       \end{block}
       \begin{block}{Economic Modeling}
         \begin{itemize}
           \item Tracks treatment costs for various disease states
           \item Estimates implementation cost of intervention
         \end{itemize}
-        \begin{block}{}
-          \vspace{-4em}
+        \begin{columns}
           \begin{column}{.66\textwidth}
             \begin{figure}[h]
               \begin{center}
@@ -155,17 +142,18 @@ text width=3em]
                 \$403.45
             \end{description}
           \end{column}
-        \end{block}
+        \end{columns}
       \end{block}
     \end{column}
+
     \begin{column}{.3\textwidth}
       \vspace{-.5em}
-      \begin{block}{An Agent Based Implementation}
-        Agent based models capture disease dynamics on the individual level, and
+      \begin{block}{An Agent-Based Implementation}
+        Agent-based models capture disease dynamics on the individual level, and
         reflect stochasticity and granularity lost in compartmental models.
-        Agent based counterparts to the Hill model were implemented in Netlogo
-        and \texttt{c++}.
-        \begin{block}{}
+        Agent-based counterparts to the Hill model were implemented in Netlogo
+        and \texttt{C++}.
+        \begin{columns}
           \vspace{-2em}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
@@ -185,13 +173,11 @@ text width=3em]
               \label{fig:finalRun}
             \end{figure}
           \end{column}
-        \end{block}
+        \end{columns}
       \end{block}
       
       \begin{block}{Stochastic Models as a Measure of Variability}
-        The stochastic model provides data on the variability of the results
-        of the deterministic model.
-        \begin{block}{}
+        \begin{columns}
           \vspace{-2em}
           \begin{column}{.45\textwidth}
             \begin{figure}[h]
@@ -211,15 +197,11 @@ text width=3em]
               \label{fig:IN1dist}
             \end{figure}
           \end{column}
-        \end{block}
+        \end{columns}
       \end{block}
       
-      \begin{block}{Future Extensions}
-        \begin{itemize}
-          \item Including contact structure
-          \item Multi-drug resistant TB
-          \item HIV
-        \end{itemize}
+      \begin{block}{References}
+        Hill, A. N., Becerra, J. E., \& Castro, K. G. (2012). Modelling tuberculosis trends in the USA. Epidemiology and infection, 140(10), 1862.
       \end{block}
       
     \end{column}
