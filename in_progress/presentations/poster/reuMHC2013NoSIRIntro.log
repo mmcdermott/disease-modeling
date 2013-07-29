@@ -1,6 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.5.10)  29 JUL 2013 14:14
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.5.10)  29 JUL 2013 14:33
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
 **reuMHC2013NoSIRIntro.tex
 (./reuMHC2013NoSIRIntro.tex
@@ -1278,7 +1279,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 254.
 Here is how much of TeX's memory you used:
  20802 strings out of 493481
  412299 string characters out of 3140965
- 590299 words of memory out of 3000000
+ 591631 words of memory out of 3000000
  23579 multiletter control sequences out of 15000+200000
  18773 words of font info for 73 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -1290,7 +1291,7 @@ Here is how much of TeX's memory you used:
 ></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
 </usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.
 pfb>
-Output written on reuMHC2013NoSIRIntro.pdf (1 page, 1456325 bytes).
+Output written on reuMHC2013NoSIRIntro.pdf (1 page, 1456327 bytes).
 PDF statistics:
  135 PDF objects out of 1000 (max. 8388607)
  94 compressed objects within 1 object stream
