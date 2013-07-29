@@ -26,7 +26,7 @@ redEnLTBI_Interventions <- allInterventions[1:3]
 redImm_Interventions <- allInterventions[5:6]
 incLTBItrmt_Interventions <- allInterventions[7:8]
                       
-curInterventions <- allInterventions
+curInterventions <- c()#allInterventions
 
 interventionConfig <- function(interventionStr, x=0) { #x is an integer refering to cost option, ranges 0 to 5
   error    <- F

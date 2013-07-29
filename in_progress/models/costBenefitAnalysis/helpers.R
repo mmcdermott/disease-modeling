@@ -1,11 +1,25 @@
-acuteLatentFBL    <- rep("FB Acute Latent",totT)
-chronicLatentFBL  <- rep("FB Chronic Latent", totT)
-acuteLatentUSBL   <- rep("USB Acute Latent",totT)
-chronicLatentUSBL <- rep("USB Chronic Latent", totT)
-activeInfecFBL    <- rep("FB Active Infectious TB",totT)
-activeNoInfecFBL  <- rep("FB Active Non-infectious TB", totT)
-activeInfecUSBL   <- rep("USB Active Infectious TB",totT)
-activeNoInfecUSBL <- rep("USB Active Non-infectious TB", totT)
+acuteLatentFBL       <- rep("FB Acute Latent",totT)
+chronicLatentFBL     <- rep("FB Chronic Latent", totT)
+acuteLatentUSBL      <- rep("USB Acute Latent",totT)
+chronicLatentUSBL    <- rep("USB Chronic Latent", totT)
+
+activeInfecFBL       <- rep("FB Active Infectious TB",totT)
+activeNoInfecFBL     <- rep("FB Active Non-infectious TB", totT)
+activeInfecUSBL      <- rep("USB Active Infectious TB",totT)
+activeNoInfecUSBL    <- rep("USB Active Non-infectious TB", totT)
+
+latentFBLs           <- "FB LTBI"
+latentFBL            <- rep(latentFBLs,totT)
+latentUSBLs          <- "USB LTBI"
+latentUSBL           <- rep(latentUSBLs,totT)
+activeTBFBdL1Ls      <- "FB Active TB due to Activation of LTBI"
+activeTBFBdL1L       <- rep(activeTBFBdL1Ls,totT)
+activeTBFBdF1Ls      <- "FB Active TB due to Novel Infection"
+activeTBFBdF1L       <- rep(activeTBFBdF1Ls,totT)
+activeTBUSBdL0Ls     <- "USB Active TB due to Activation of LTBI"
+activeTBUSBdL0L      <- rep(activeTBUSBdL0Ls,totT)
+activeTBUSBdF0Ls     <- "USB Active TB due to Novel Infection"
+activeTBUSBdF0L      <- rep(activeTBUSBdF0Ls,totT)
 
 generateSourcedIncidence <- function(dataSet) {
   with(as.list(parms), {
@@ -25,7 +39,7 @@ IdF0c <- IdL0c + baseSourcedInc$IdF0
 baseCumulativeSourcedInc <- data.frame(year=years,IdL1c,IdF1c,IdL0c,IdF0c)
 incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) + 
            labs(x="Years", y="Incidence", fill="Incidence Source") + 
-           plotTitle("Sourced US TB Incidence/Million","") +
+           plotTitle("Sourced US TB Incidence","") +
            geom_ribbon(aes(ymin=0,    ymax=IdL1c,fill=chronicLatentFBL))  + 
            geom_ribbon(aes(ymin=IdL1c,ymax=IdF1c,fill=acuteLatentFBL))    + 
            geom_ribbon(aes(ymin=IdF1c,ymax=IdL0c,fill=chronicLatentUSBL)) + 
@@ -137,3 +151,36 @@ incPlot <- ggplot(incData, aes(x=year)) +
            geom_line(aes(y=redEnLTBI50USB, color=USB, linetype=redEnLTBI50L))  + 
            geom_line(aes(y=redEnLTBI50FB, color=FB, linetype=redEnLTBI50L))  + 
            geom_line(aes(y=redEnLTBI50All, color=all, linetype=redEnLTBI50L))
+           
+baseData    <- read.csv('data/baseData.csv') 
+cLTBIFBc    <- (baseData$cL1 + baseData$cF1)/1e9
+cActFBdL1c  <- cLTBIFBc + (baseData$cI1dL1 + baseData$cJ1dL1)/1e9
+cActFBdF1c  <- cActFBdL1c + (baseData$cI1dF1 + baseData$cJ1dF1)/1e9
+cLTBIUSBc   <- cActFBdF1c + (baseData$cL0 + baseData$cF0)/1e9
+cActUSBdL0c <- cLTBIUSBc + (baseData$cI0dL0 + baseData$cJ0dL0)/1e9
+cActUSBdF0c <- cActUSBdL0c + (baseData$cI0dF0 + baseData$cJ0dF0)/1e9
+costDataSourced <- data.frame(year=years,cLTBIFBc,cActFBdL1c,cActFBdF1c,
+                              cLTBIUSBc,cActUSBdL0c,cActUSBdF0c)
+yrange          <- round(seq(0,14.5,by=0.5),1)
+costPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) + 
+  labs(x="Years", y="Billions of USD", fill="Cost Source") + 
+  scale_y_continuous(breaks=yrange) + 
+  plotTitle("Sourced US TB HCS Cost","") +
+  geom_ribbon(aes(ymin=0,           ymax=cLTBIFBc,    fill=latentFBL))       + 
+  geom_ribbon(aes(ymin=cLTBIFBc,    ymax=cActFBdL1c,  fill=activeTBFBdL1L))  + 
+  geom_ribbon(aes(ymin=cActFBdL1c,  ymax=cActFBdF1c,  fill=activeTBFBdF1L))  + 
+  geom_ribbon(aes(ymin=cActFBdF1c,  ymax=cLTBIUSBc,   fill=latentUSBL))      + 
+  geom_ribbon(aes(ymin=cLTBIUSBc,   ymax=cActUSBdL0c, fill=activeTBUSBdL0L)) + 
+  geom_ribbon(aes(ymin=cActUSBdL0c, ymax=cActUSBdF0c, fill=activeTBUSBdF0L)) + 
+  theme_gray(base_size=20) + theme(legend.position=c(0.2,0.85)) + 
+  #coord_fixed(ratio=1/200) + 
+  scale_fill_discrete(breaks=c(activeTBUSBdF0Ls,
+                               activeTBUSBdL0Ls,
+                               latentUSBLs,
+                               activeTBFBdF1Ls,
+                               activeTBFBdL1Ls,
+                               latentFBLs))
+
+costPlotSourced
+ggsave('forPoster/costPlotSourced.pdf',costPlotSourced)
+
