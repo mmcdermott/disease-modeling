@@ -134,4 +134,10 @@ Costs for 100%, 75%, and 50% LTBI reduction","") +
        geom_line(aes(y=redEnLTBI100_totCost, color=totalCosts, linetype=redEnLTBI100L)) +
        geom_line(aes(y=redEnLTBI75_totCost,  color=totalCosts, linetype=redEnLTBI75L)) +
        geom_line(aes(y=redEnLTBI50_totCost,  color=totalCosts, linetype=redEnLTBI50L)) +
-       guides(fill=F, alpha=F)
+       guides(fill=F, alpha=F) + 
+       theme_gray(base_size=25) +
+       theme(legend.position=c(0.22,0.82), axis.title=element_text(size=40), 
+             axis.text=element_text(size=27), plot.title=element_text(size=40))
+             #legend.key.height=unit(1.8,'line')) + 
+
+ggsave('costRedEnLTBI.pdf',x,width=15,height=12)
