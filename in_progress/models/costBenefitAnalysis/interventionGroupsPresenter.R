@@ -125,15 +125,16 @@ x <- ggplot(redEnLTBI,aes(x=year)) +
        plotTitle("Implementation Costs, Savings, and 
 US Health Care System (US HCS) 
 Costs for 100%, 75%, and 50% LTBI reduction","") + 
-       geom_line(aes(y=redEnLTBI100_costs,   color=costs,      linetype=redEnLTBI100L)) +
-       geom_line(aes(y=redEnLTBI75_costs,    color=costs,      linetype=redEnLTBI75L)) +
-       geom_line(aes(y=redEnLTBI50_costs,    color=costs,      linetype=redEnLTBI50L)) +
-       geom_line(aes(y=redEnLTBI100_savings, color=savings,    linetype=redEnLTBI100L)) +
-       geom_line(aes(y=redEnLTBI75_savings,  color=savings,    linetype=redEnLTBI75L)) +
-       geom_line(aes(y=redEnLTBI50_savings,  color=savings,    linetype=redEnLTBI50L)) +
-       geom_line(aes(y=redEnLTBI100_totCost, color=totalCosts, linetype=redEnLTBI100L)) +
-       geom_line(aes(y=redEnLTBI75_totCost,  color=totalCosts, linetype=redEnLTBI75L)) +
-       geom_line(aes(y=redEnLTBI50_totCost,  color=totalCosts, linetype=redEnLTBI50L)) +
+       geom_hline(aes(y=0),size=2) +
+       geom_line(aes(y=redEnLTBI100_costs,   color=costs,      linetype=redEnLTBI100L), size=2) +
+       geom_line(aes(y=redEnLTBI75_costs,    color=costs,      linetype=redEnLTBI75L), size=2) +
+       geom_line(aes(y=redEnLTBI50_costs,    color=costs,      linetype=redEnLTBI50L), size=2) +
+       geom_line(aes(y=redEnLTBI100_savings, color=savings,    linetype=redEnLTBI100L), size=2) +
+       geom_line(aes(y=redEnLTBI75_savings,  color=savings,    linetype=redEnLTBI75L), size=2) +
+       geom_line(aes(y=redEnLTBI50_savings,  color=savings,    linetype=redEnLTBI50L), size=2) +
+       geom_line(aes(y=redEnLTBI100_totCost, color=totalCosts, linetype=redEnLTBI100L), size=2) +
+       geom_line(aes(y=redEnLTBI75_totCost,  color=totalCosts, linetype=redEnLTBI75L), size=2) +
+       geom_line(aes(y=redEnLTBI50_totCost,  color=totalCosts, linetype=redEnLTBI50L), size=2) +
        guides(fill=F, alpha=F) + 
        theme_gray(base_size=25) +
        theme(legend.position=c(0.22,0.82), axis.title=element_text(size=40), 
