@@ -28,5 +28,10 @@ agentModelStrictHill
 incData.csv
 modelData.csv
 
-# .swp files
+# Temp editing files
 *.swp
+*.*~
+
+#data Files
+in_progress/models/costBenefitAnalysis/data/inc*.csv
+in_progress/models/costBenefitAnalysis/data/red*.csv

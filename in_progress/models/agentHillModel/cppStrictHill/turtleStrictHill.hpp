@@ -1,5 +1,8 @@
 // turtleStrictHill.hpp
 
+// get round to work
+//check exogenous reinfection
+
 #ifndef ____turtle__
 #define ____turtle__
 
@@ -54,28 +57,33 @@ public:
     OTHER = 1
   };
   enum State {  // Health state
-    ACUTE_LTBI       = 0,
-    CHRONIC_LTBI     = 1,
+    //ACUTE_LTBI       = 0,
+    //CHRONIC_LTBI     = 1,
     INFECTIOUS_TB    = 2,
     NONINFECTIOUS_TB = 3,
     SUSCEPTIBLE      = 4,
     TB_DEATH         = 5,
-    NATURAL_DEATH    = 6
+    NATURAL_DEATH    = 6,
+    LATENT           = 7
   };
-  turtle(const COB &c, const State &s);
+  turtle(const COB &c, const State &s, int timeinfec);
   bool dead();
   void updateState();
   void display();
   COB getCountry();
   State getState();
-  void infect();
+  void reinfect();
+  int InfectionTime();
+  int InfecChange();
 
 private:
   COB country;
   State state;
+  int prevtime;
+  int timeinfec;
 };
 
 extern const char* countryNames[2];
-extern const char* stateNames[7];
+extern const char* stateNames[6];
 
 #endif /* defined(____turtle__) */
