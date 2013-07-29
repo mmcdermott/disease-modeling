@@ -10,6 +10,12 @@ acuteLatentFBc       <- "#FFA573"
 chronicLatentFBc     <- "#FFC973"
 acuteLatentUSBc      <- "#6999D3"
 chronicLatentUSBc    <- "#5FD3B3"
+latentFBc            <- "#FFB773"
+latentUSBc           <- "#64B6C3"
+activeTBFBdL1c       <- "#AA4DA6"
+activeTBFBdF1c       <- "#D56097"
+activeTBUSBdL0c      <- "#BFF27A"
+activeTBUSBdF0c      <- "#FFFE80"
 
 activeInfecFBL       <- rep("FB Active Infectious TB",totT)
 activeNoInfecFBL     <- rep("FB Active Non-infectious TB", totT)
@@ -99,7 +105,7 @@ intLabels <- function(type,magnitude) {
   return(eval(as.name(paste(c(type,magnitude,'L'),collapse=""))))
 }
 
-interventionTypes <- list('redEnLTBI','redImm','incLTBItrmt','redTrans')
+interventionTypes <- list('redEnLTBI')#,'redImm','incLTBItrmt','redTrans')
 interventionMags <- list(redEnLTBI=list(50,75,100),redImm=list(50,75),
                          incLTBItrmt=list(100,300),redTrans=list(100))
 incDataTypeGrouped <- list()
@@ -182,12 +188,10 @@ costPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) +
   geom_ribbon(aes(ymin=cActUSBdL0c, ymax=cActUSBdF0c, fill=activeTBUSBdF0L)) + 
   theme_gray(base_size=20) + theme(legend.position=c(0.2,0.85)) + 
   #coord_fixed(ratio=1/200) + 
-  scale_fill_discrete(breaks=c(activeTBUSBdF0Ls,
-                               activeTBUSBdL0Ls,
-                               latentUSBLs,
-                               activeTBFBdF1Ls,
-                               activeTBFBdL1Ls,
-                               latentFBLs))
+  scale_fill_manual(breaks=c(activeTBUSBdF0Ls,activeTBUSBdL0Ls,latentUSBLs,
+                             activeTBFBdF1Ls,activeTBFBdL1Ls,latentFBLs),
+                    values=c(activeTBUSBdF0c,activeTBUSBdL0c,latentUSBc,
+                             activeTBFBdF1c,activeTBFBdL1c,latentFBc))
 
 costPlotSourced
 ggsave('forPoster/costPlotSourced.pdf',costPlotSourced)
