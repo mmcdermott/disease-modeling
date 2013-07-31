@@ -3,6 +3,20 @@ fBase       <- 0.187
 transBase   <- 1
 incLTBIBase <- 1
 
+
+#Treatment Effectiveness Data:
+probHosp      <- .49 #Probability of hospitalization for active TB treatment
+efficacyLTBI  <- .9  #LTBI treatement efficacy
+adherenceLTBI <- .64 #LTBI treatment adherence
+probLTBItreatsuccess <- efficacyLTBI*adherenceLTBI 
+
+#Cost Parameter Values: 
+costtb   <- 2985   #TB treatment cost w/o hopsitalization <- Dylan supp. p.11-12
+costhosp <- 25495  #TB treatment cost w/ hospitalization  <- Dylan supp. p.10
+costLTBI <- 403.45 #LTBI treatment cost
+Ct       <- costtb*(1-probHosp) + costhosp*probHosp #Cost of active TB treatment
+Cl       <- costLTBI/probLTBItreatsuccess           #Cost of LTBI treatment
+
 parms <- c(
 mu0   = 1/78,      #Natural mortality rate USB per year
 mu1   = 1/53,      #Natural mortality rate FB per year
@@ -22,7 +36,7 @@ x     = 0.111,     #Fraction of re-infected chronic LTBI moving to acute infecti
 ARI0  = 0.030/100, #Annual risk of infection for USB in 2000
 beta  = 10.39,     #Effective contact rate per year
 e0    = 0.965,     #Fraction of preferred contacts with own population for USB
-e1    = 0.985,      #Fraction of preferred contacts with own population for FB
+e1    = 0.985,     #Fraction of preferred contacts with own population for FB
 g     = 0.0047,    #Fraction of FB arrivals with LTBI who are fast progressors
 phi0  = 1.114,     #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (USB)
 phi1  = 1.167,     #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (FB)
@@ -34,5 +48,8 @@ fBase = fBase,      #Fraction of FB arrivals with LTBI
 #2010 New Cases in Population i (millions)
 #source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
 newCases0 = .008714,  #US-born
-newCases1 = .007554  #Foreign-born
+newCases1 = .007554,  #Foreign-born
+
+CtBase = Ct,
+ClBase = Cl
 )
