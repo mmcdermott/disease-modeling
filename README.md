@@ -20,7 +20,7 @@ nearly 2000 runs of the original model with each agent representing 1 true indiv
         + agentBased.cpp
             A more nuanced version of agent based implementation of the Hill Model [1] in c++, analyzing TB on the population level while assessing intervention cost effectiveness.
 2. costBenefitAnalysis/
-    * costBenefitAnalysis.R
+    * interventionAnalyzer.R
         An R script to estimate the cost effectiveness of various intervention
 strategies for controlling US TB level. The model is a re-implementation of the
 Hill Model [1], extended to provide conservative estimates for total costs
@@ -28,27 +28,14 @@ incurred with a variety of intervention styles. Of note are the three plots as
 well, which detail the cost effectiveness of intervening via reducing incoming
 LTBI among immigrating populations. These are especially interesting given that
 the results of the basic model show us that the most effective intervention
-strategy is reducing the incoming LTBI population.
+strategy is reducing the incoming LTBI population. You can set the interventions
+you want analyzed in 'interventionConfig.R', in the variable 'curInterventions'. 
+Once you have analyzed the interventions and produced the requisite data files, 
+'interventionPresenter.R' will produce a variety of summary statistics
 
 3. basicHillModel
     * lsodaHillModel.R
         An R implementation of the Hill Model [1] using R, with DE approximation routine lsoda.
-
-Upcoming:
-=========
-
-Agent Based C++ Hill Model
---------------------------
-
-NOT YET WORKING. 
-
-This model is a c++ implementation of an agent based, population level model of
-US TB levels that also analyzes cost. To run, download the files, navigate to 
-models/agentHillModel, run make, then run ./agentModel. To plot the results, 
-run R < plotData.R --save --args true [deltaT], where [deltaT] is your timestep. 
-
-Alternatively, you can run 'make plots DELTA\_T=[deltaT]' to compile, run, and 
-plot the system. 
 
 
 Citations:

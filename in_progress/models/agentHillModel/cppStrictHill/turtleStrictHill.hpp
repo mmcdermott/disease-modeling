@@ -42,7 +42,7 @@ const double MU1                        = 1 - exp(-mu1 * DELTA_T);     // Natura
 const double MUD                        = 1 - exp(-mud * DELTA_T);     // TB Mortality prob per timestep
 const double PROB_CHRONIC_PROGRESSION_0 = 1 - exp(-vL0 * DELTA_T);     // Probability of disease progression from chronic latent to active TB every timestep (USB)
 const double PROB_CHRONIC_PROGRESSION_1 = 1 - exp(-vL1 * DELTA_T);     // Probability of disease progression from chronic latent to active TB every timestep (FB)
-const double PROB_ACUTE_PROGRESSION     = 1 - exp(-vF * DELTA_T);      // Probability of disease progression from acute latent to active TB every timestep
+const double PROB_ACUTE_PROGRESSION     = 1 - pow(1-p*.95,DELTA_T/2);  //exp(-vF * DELTA_T);      // Probability of disease progression from acute latent to active TB every timestep
 const double PROB_ACTIVE_CURE_0         = 1 - exp(-phi0 * DELTA_T);    // Probability of active TB cure per time step (USB)
 const double PROB_ACTIVE_CURE_1         = 1 - exp(-phi1 * DELTA_T);    // Probability of active TB cure per time step (FB)
 const double PROB_CHRONIC_LATENT_CURE   = 1 - exp(-sigmaL * DELTA_T);  // Probability of chronic latent TB cure per time step
@@ -57,14 +57,12 @@ public:
     OTHER = 1
   };
   enum State {  // Health state
-    //ACUTE_LTBI       = 0,
-    //CHRONIC_LTBI     = 1,
-    INFECTIOUS_TB    = 2,
-    NONINFECTIOUS_TB = 3,
-    SUSCEPTIBLE      = 4,
-    TB_DEATH         = 5,
-    NATURAL_DEATH    = 6,
-    LATENT           = 7
+    LATENT           = 0,
+    INFECTIOUS_TB    = 1,
+    NONINFECTIOUS_TB = 2,
+    SUSCEPTIBLE      = 3,
+    TB_DEATH         = 4,
+    NATURAL_DEATH    = 5
   };
   turtle(const COB &c, const State &s, int timeinfec);
   bool dead();
@@ -74,13 +72,13 @@ public:
   State getState();
   void reinfect();
   int InfectionTime();
-  int InfecChange();
+  bool getPrevState();
 
 private:
   COB country;
   State state;
-  int prevtime;
   int timeinfec;
+  bool changeState;
 };
 
 extern const char* countryNames[2];
