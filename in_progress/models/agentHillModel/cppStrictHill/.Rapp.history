@@ -1255,130 +1255,6 @@ hill <- function(sigmaL,f,transmission=TRUE){#
 		N0[i+1] = N0[i] + (1-exp(-deltat*(ro - mu0)))*N0[i] + (1-exp(-deltat*ro))*N1[i] - (1-exp(-deltat*mud))*(I0[i]+J0[i])#
     	N1[i+1] = N1[i] + (1-exp(-deltat*alpha))*N0[i] + (1-exp(-deltat*(alpha - mu1)))*N1[i] - (1-exp(-deltat*mud))*(I1[i]+J1[i])#
 	#calculate incidence data#
-		IN0[i] <- 1e6 * (vF*F0[i] + vL0*L0[i])/N0[i]#
-		IN1[i] <- 1e6 * (vF*F1[i] + vL1*L1[i])/N1[i]#
-		INall[i] <- 1e6 * (vF*(F0[i] + F1[i]) + vL0*L0[i] + vL1*L1[i])/(N0[i] + N1[i])#
-	}#
-	output <- data.frame(IN0,IN1,INall)#
-	write.table(output, file="incData.csv", sep=",")#
-	return(output)#
-}#
-#
-#plot incidence data#
-#  xlab, ylab  --> labels for x-, y-axes#
-#  log='y'     --> use logarithmic scale#
-#  ylim=yrange --> ensure we show all data#
-#  type="l"    --> draw line connecting data points#
-#col="blue"  --> color of graph#
-#lines() plots data in the same window as the first plot() command#
-#
-resA<-hill(.057,.187)#
-yrange <- range(c(0.5,resA$IN0,resA$IN1,resA$INall))#
-plot(1:T*deltat+2000, resA$IN0, xlab='year', ylab='incidence/million', log = 'y', ylim=yrange, type="l", col="blue")#
-lines(1:T*deltat+2000, resA$INall, type="l", col="red")#
-lines(1:T*deltat+2000, resA$IN1, type="l", col="green")#
-#WHO target incidence line#
-abline(h = 1, lty = 'dotted')#
-#
-#I'm sure there's a better way to do legend()...#
-legend('topright', legend=c('USB incidence', 'FB incidence', 'Total incidence'), col=c("blue", "green", "red"), lty=c(1,1,1))
-deltat <- .001    #The length of each time step (years)#
-totT <- 100       #In years#
-T <- totT/deltat  #Time steps#
-#Variables#
-	mu0 <- 1/78       #Natural mortality rate USB per year#
-	mu1 <-1/53        #Natural mortality rate FB per year#
-	ro <- 0.018       #USB birth rate per year#
-	alpha <- 0.005    #FB birth rate per year#
-	p <- 0.103        #Fraction of new infections which are acute (fast progressors)#
-	vF <- 1.5         #Progression rate of acute infection per year#
-	l0 <- 0.015       #Prevalence of LTBI in the USB population in 2000#
-	l1 <- 0.211       #Prevalence of LTBI in the FB population in 2000: #
-	r0 <- 0.667       #Fraction of cases due to reactivation in the USB population#
-	r1 <- 0.780       #Fraction of cases due to reactivation in the FB population#
-	vL0 <- 0.0014     #Progression rate for reactivation (chronic LTBI) in the USB population per year#
-	vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB population per year#
-	q <- 0.708        #Fraction of infections progressing to infectious disease#
-	mud <- 0.115      #Mortality rate due to TB per year#
-	x <- 0.111        #Fraction of re-infected chronic LTBI moving to acute infection#
-   #f <- 0.187        #Fraction of FB arrivals with LTBI#
-	ARI0 <- 0.030/100 #Annual risk of infection for USB in 2000#
-	beta <- 10.39     #Effective contact rate per year#
-	e0 <- 0.965       #Fraction of preferred contacts with own population for USB#
-	e1 <-0.985        #Fraction of preferred contacts with own population for FB#
-	g <- 0.0047       #Fraction of FB arrivals with LTBI who are fast progressors#
-                      #Cumulative fraction self-cure and treatment of active disease for both populations: 0.897#
-	phi0 <- 1.114     #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (USB)#
-	phi1 <- 1.167     #Cumulative fraction self-cure and treatment of active disease for both populations pre year RATES (FB)#
-                      #Cumulative fraction of treatment for acute infection for both populations: 0.461#
-	sigmaF0 <- 1.296  #Cumulative fraction of treatment for acute infection for both populations per year RATES (USB)#
-	sigmaF1 <- 1.301  #Cumulative fraction of treatment for acute infection for both populations per year RATES (FB)#
-#
-   #sigmaL <- 0.057   #Treatment rate for chronic LTBI per year#
-   #deltat <- .001    #The length of each time step (years).#
-hill <- function(sigmaL,f,transmission=TRUE){#
-#arrays of compartment values#
-	S0 <- S1 <- F0 <- F1 <- L0 <- L1 <- I0 <- I1 <- J0 <- J1 <- N0 <- N1 <- rep(0,T)#
-	IN0 <- IN1 <- INall <- rep(0,T)#
-#
-#Initial Values#
-#
-#N0[1] <- 268         #2010 in millions USB#
-#N1[1] <- 40          #2010 in millions FB#
-#
-	N0[1] <- 250         #in millions USB#
-	N1[1] <- 31.4        #in millions FB#
-#2010 incidence rates http://www.cdc.gov/mmwr/pdf/wk/mm6011.pdf#
-#
-#Acute (Fast) LTBI#
-#F0[1] <- p*l0*N0[1]#
-#F1[1] <- p*l1*N1[1]#
-	F0[1] <- (1-r0)*(.008714)/vF#
-	F1[1] <- (1-r1)*(.007554)/vF#
-#Chronic (Long) LTBI#
-#L0[1] <- (1-p)*l0*N0[1]#
-#L1[1] <- (1-p)*l1*N1[1]#
-	L0[1] <- r0*(.008714)/vL0#
-	L1[1] <- r1*(.007554)/vL1#
-#New Cases in Population i#
-	newCases0 <- L0[1]*vL0/r0#
-	newCases1 <- L1[1]*vL1/r1#
-#Infectious TB, source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm#
-	I0[1] <- q*.008714/(mu0 + mud + phi0)#
-	I1[1] <- q*.007554/(mu1 + mud + phi1)#
-#I0[1] <- q*.004474/(mu0 + mud + phi0) #using 2010 data, source above#
-#I1[1] <- q*.006707/(mu1 + mud + phi1) #2010 data#
-#Non-Infectious TB#
-	J0[1] <- (1-q)*.008714/(mu0 + mud + phi0)#
-	J1[1] <- (1-q)*.007554/(mu1 + mud + phi1)#
-#Susceptible#
-	S0[1] <- N0[1] - F0[1] - L0[1] - I0[1] - J0[1]#
-	S1[1] <- N1[1] - F1[1] - L1[1] - I1[1] - J1[1]#
-#
-	for (i in 1:T){#
-		c01 <- (1-e0)*((1-e1)*N1[i])/((1-e0)*N0[i] + (1-e1)*N1[i])#
-		c00 <- 1 - c01#
-		c10 <- (1-e1)*((1-e0)*N0[i])/((1-e0)*N0[i] + (1-e1)*N1[i])#
-		c11 <- 1 - c10#
-		if ((!transmission) && (i*deltat > 8)) {#
-			lambda0 <- lambda1 <- 0#
-		} else {#
-     		lambda0 <- beta*(c00*(I0[i]/N0[i]) + c01*(I1[i]/N1[i]))#
-	 		lambda1 <- beta*(c10*(I0[i]/N0[i]) + c11*(I1[i]/N1[i]))#
-     	}	#
-		S0[i+1] <- S0[i] + (1 - exp(-deltat*ro))*(N0[i]+N1[i]) + (1-exp(-deltat*sigmaF0))*F0[i] + (1-exp(-deltat*sigmaL))*L0[i] + (1-exp(-deltat*phi0))*(I0[i]+J0[i]) - (1-exp(-deltat*lambda0))*S0[i] - (1-exp(-deltat*mu0))*S0[i]#
-		F0[i+1] <- F0[i] + (1-exp(-deltat*p*lambda0))*S0[i] + (1-exp(-deltat*x*p*lambda0))*L0[i] - (1-exp(-deltat*(mu0 + vF + sigmaF0)))*F0[i]#
-		L0[i+1] <- L0[i] + (1-exp(-deltat*(1-p)*lambda0))*S0[i] - (1-exp(-deltat*x*p*lambda0))*L0[i] - (1-exp(-deltat*(mu0 + vL0 + sigmaL)))*L0[i]#
-		I0[i+1] <- I0[i] + (1-exp(-deltat*q*vF))*F0[i] + (1-exp(-deltat*q*vL0))*L0[i] - (1-exp(-deltat*(mu0 + mud + phi0)))*I0[i]#
-		J0[i+1] <- J0[i] + (1-exp(-deltat*(1-q)*vF))*F0[i]+(1-exp(-deltat*(1-q)*vL0))*L0[i] - (1-exp(-deltat*(mu0 + mud + phi0)))*J0[i]#
-		S1[i+1] <- S1[i] + (1-exp(-deltat*(1-f)*alpha))*(N0[i]+N1[i]) + (1-exp(-deltat*sigmaF1))*F1[i] + (1-exp(-deltat*sigmaL))*L1[i] + (1-exp(-deltat*phi1))*(I1[i] + J1[i]) - (1-exp(-deltat*lambda1))*S1[i] - (1-exp(-deltat*mu1))*S1[i]#
-		F1[i+1] <- F1[i] + (1-exp(-deltat*g*p*f*alpha))*(N0[i]+N1[i]) + (1-exp(-deltat*p*lambda1))*S1[i] + (1-exp(-deltat*x*p*lambda1))*L1[i] - (1-exp(-deltat*(mu1 + vF + sigmaF1)))*F1[i]#
-		L1[i+1] <- L1[i] + (1-exp(-deltat*(1-g*p)*f*alpha))*(N0[i]+N1[i]) + (1-exp(-deltat*(1-p)*lambda1))*S1[i] - (1-exp(-deltat*x*p*lambda1))*L1[i] - (1-exp(-deltat*(mu1 + vL1 +sigmaL)))*L1[i]#
-		I1[i+1] <- I1[i] + (1-exp(-deltat*q*vF))*F1[i] + (1-exp(-deltat*q*vL1))*L1[i] - (1-exp(-deltat*(mu1 + mud + phi1)))*I1[i]#
-		J1[i+1] <- J1[i] + (1-exp(-deltat*(1-q)*vF))*F1[i] + (1-exp(-deltat*(1-q)*vL1))*L1[i] - (1-exp(-deltat*(mu1 + mud + phi1)))*J1[i]#
-		N0[i+1] = N0[i] + (1-exp(-deltat*(ro - mu0)))*N0[i] + (1-exp(-deltat*ro))*N1[i] - (1-exp(-deltat*mud))*(I0[i]+J0[i])#
-    	N1[i+1] = N1[i] + (1-exp(-deltat*alpha))*N0[i] + (1-exp(-deltat*(alpha - mu1)))*N1[i] - (1-exp(-deltat*mud))*(I1[i]+J1[i])#
-	#calculate incidence data#
 		#IN0[i] <- 1e6 * (vF*F0[i] + vL0*L0[i])/N0[i]#
 		#IN1[i] <- 1e6 * (vF*F1[i] + vL1*L1[i])/N1[i]#
 		#INall[i] <- 1e6 * (vF*(F0[i] + F1[i]) + vL0*L0[i] + vL1*L1[i])/(N0[i] + N1[i])#
@@ -3665,3 +3541,115 @@ yrs <- seq(2000, 2000+finalYr, deltaT)#
 P<-hill(sigmaLBase,fBase,T,1,totT+1)#
 baseInc <- generateIncidence(P)#
 write.table(baseInc, file="detHillData.csv", sep=",")
+generateSourcedIncidence <- function(dataSet) {#
+  with(as.list(parms), {#
+    IdF0  <- 1e6 * vF  * dataSet$F0#
+    IdF1  <- 1e6 * vF  * dataSet$F1#
+    IdL0  <- 1e6 * vL0 * dataSet$L0#
+    IdL1  <- 1e6 * vL1 * dataSet$L1#
+	  return(data.frame(IdF0,IdF1,IdL0,IdL1))#
+  })#
+}#
+#
+baseSourcedInc <- generateSourcedIncidence(baseData)#
+IdL1c <- baseSourcedInc$IdL1#
+IdF1c <- IdL1c + baseSourcedInc$IdF1#
+IdL0c <- IdF1c + baseSourcedInc$IdL0#
+IdF0c <- IdL0c + baseSourcedInc$IdF0#
+baseCumulativeSourcedInc <- data.frame(year=years,IdL1c,IdF1c,IdL0c,IdF0c)#
+incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) + #
+           labs(x="Years", y="Incidence", fill="Incidence Source") + #
+           plotTitle("Sourced US TB Incidence","") +#
+           geom_ribbon(aes(ymin=0,    ymax=IdL1c,fill=chronicLatentFBL))  + #
+           geom_ribbon(aes(ymin=IdL1c,ymax=IdF1c,fill=acuteLatentFBL))    + #
+           geom_ribbon(aes(ymin=IdF1c,ymax=IdL0c,fill=chronicLatentUSBL)) + #
+           geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))   + #
+           theme_gray(base_size=25) + #
+           theme(legend.position=c(0.6,0.8), axis.title=element_text(size=30), #
+           axis.text=element_text(size=17), plot.title=element_text(size=30),#
+           legend.key.height=unit(1.8,'line')) + #
+           coord_fixed(ratio=1/200) + #
+           scale_fill_manual(breaks=c(acuteLatentUSBLs, #
+                                       chronicLatentUSBLs,#
+                                       acuteLatentFBLs,#
+                                       chronicLatentFBLs), #
+                               values=c(acuteLatentUSBc,chronicLatentUSBc,#
+                                        acuteLatentFBc,chronicLatentFBc))#
+ggsave('forPoster/incPlotSourced2.pdf',incPlotSourced,width=10,height=8)
+TODO: Make all values named vectors#
+noIntLs              <- "No Intervention"#
+noIntL               <- rep(noInts,totT)#
+#
+acuteLatentFBLs      <- "FB Acute LTBI"#
+acuteLatentFBL       <- rep(acuteLatentFBLs,totT)#
+chronicLatentFBLs    <- "FB Chronic LTBI"#
+chronicLatentFBL     <- rep(chronicLatentFBLs, totT)#
+acuteLatentUSBLs     <- "USB Acute LTBI"#
+acuteLatentUSBL      <- rep(acuteLatentUSBLs,totT)#
+chronicLatentUSBLs   <- "USB Chronic LTBI"#
+chronicLatentUSBL    <- rep(chronicLatentUSBLs, totT)#
+acuteLatentFBc       <- "#FFA573"#
+chronicLatentFBc     <- "#FFC973"#
+acuteLatentUSBc      <- "#6999D3"#
+chronicLatentUSBc    <- "#5FD3B3"#
+latentFBc            <- "#FFB773"#
+latentUSBc           <- "#64B6C3"#
+activeTBFBdL1c       <- "#AA4DA6"#
+activeTBFBdF1c       <- "#D56097"#
+activeTBUSBdL0c      <- "#BFF27A"#
+activeTBUSBdF0c      <- "#FFFE80"#
+#
+activeInfecFBL       <- rep("FB Active Infectious TB",totT)#
+activeNoInfecFBL     <- rep("FB Active Non-infectious TB", totT)#
+activeInfecUSBL      <- rep("USB Active Infectious TB",totT)#
+activeNoInfecUSBL    <- rep("USB Active Non-infectious TB", totT)#
+#
+latentFBLs           <- "FB LTBI"#
+latentFBL            <- rep(latentFBLs,totT)#
+latentUSBLs          <- "USB LTBI"#
+latentUSBL           <- rep(latentUSBLs,totT)#
+activeTBFBdL1Ls      <- "FB Active TB due to Activation of LTBI"#
+activeTBFBdL1L       <- rep(activeTBFBdL1Ls,totT)#
+activeTBFBdF1Ls      <- "FB Active TB due to Novel Infection"#
+activeTBFBdF1L       <- rep(activeTBFBdF1Ls,totT)#
+activeTBUSBdL0Ls     <- "USB Active TB due to Activation of LTBI"#
+activeTBUSBdL0L      <- rep(activeTBUSBdL0Ls,totT)#
+activeTBUSBdF0Ls     <- "USB Active TB due to Novel Infection"#
+activeTBUSBdF0L      <- rep(activeTBUSBdF0Ls,totT)#
+#
+generateSourcedIncidence <- function(dataSet) {#
+  with(as.list(parms), {#
+    IdF0  <- 1e6 * vF  * dataSet$F0#
+    IdF1  <- 1e6 * vF  * dataSet$F1#
+    IdL0  <- 1e6 * vL0 * dataSet$L0#
+    IdL1  <- 1e6 * vL1 * dataSet$L1#
+	  return(data.frame(IdF0,IdF1,IdL0,IdL1))#
+  })#
+}#
+#
+baseSourcedInc <- generateSourcedIncidence(baseData)#
+IdL1c <- baseSourcedInc$IdL1#
+IdF1c <- IdL1c + baseSourcedInc$IdF1#
+IdL0c <- IdF1c + baseSourcedInc$IdL0#
+IdF0c <- IdL0c + baseSourcedInc$IdF0#
+baseCumulativeSourcedInc <- data.frame(year=years,IdL1c,IdF1c,IdL0c,IdF0c)#
+incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) + #
+           labs(x="Years", y="Incidence", fill="Incidence Source") + #
+           plotTitle("Sourced US TB Incidence","") +#
+           geom_ribbon(aes(ymin=0,    ymax=IdL1c,fill=chronicLatentFBL))  + #
+           geom_ribbon(aes(ymin=IdL1c,ymax=IdF1c,fill=acuteLatentFBL))    + #
+           geom_ribbon(aes(ymin=IdF1c,ymax=IdL0c,fill=chronicLatentUSBL)) + #
+           geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))   + #
+           theme_gray(base_size=25) + #
+           theme(legend.position=c(0.6,0.8), axis.title=element_text(size=30), #
+           axis.text=element_text(size=17), plot.title=element_text(size=30),#
+           legend.key.height=unit(1.8,'line')) + #
+           coord_fixed(ratio=1/200) + #
+           scale_fill_manual(breaks=c(acuteLatentUSBLs, #
+                                       chronicLatentUSBLs,#
+                                       acuteLatentFBLs,#
+                                       chronicLatentFBLs), #
+                               values=c(acuteLatentUSBc,chronicLatentUSBc,#
+                                        acuteLatentFBc,chronicLatentFBc))#
+ggsave('forPoster/incPlotSourced2.pdf',incPlotSourced,width=10,height=8)
+source('hillConstants.R')

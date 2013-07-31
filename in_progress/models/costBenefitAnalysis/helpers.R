@@ -39,41 +39,7 @@ activeTBUSBdL0L      <- rep(activeTBUSBdL0Ls,totT)
 activeTBUSBdF0Ls     <- "USB Active TB due to Novel Infection"
 activeTBUSBdF0L      <- rep(activeTBUSBdF0Ls,totT)
 
-generateSourcedIncidence <- function(dataSet) {
-  with(as.list(parms), {
-    IdF0  <- 1e6 * vF  * dataSet$F0
-    IdF1  <- 1e6 * vF  * dataSet$F1
-    IdL0  <- 1e6 * vL0 * dataSet$L0
-    IdL1  <- 1e6 * vL1 * dataSet$L1
-	  return(data.frame(IdF0,IdF1,IdL0,IdL1))
-  })
-}
-
-baseSourcedInc <- generateSourcedIncidence(baseData)
-IdL1c <- baseSourcedInc$IdL1
-IdF1c <- IdL1c + baseSourcedInc$IdF1
-IdL0c <- IdF1c + baseSourcedInc$IdL0
-IdF0c <- IdL0c + baseSourcedInc$IdF0
-baseCumulativeSourcedInc <- data.frame(year=years,IdL1c,IdF1c,IdL0c,IdF0c)
-incPlotSourced <- ggplot(baseCumulativeSourcedInc, aes(x=year)) + 
-           labs(x="Years", y="Incidence", fill="Incidence Source") + 
-           plotTitle("Sourced US TB Incidence","") +
-           geom_ribbon(aes(ymin=0,    ymax=IdL1c,fill=chronicLatentFBL))  + 
-           geom_ribbon(aes(ymin=IdL1c,ymax=IdF1c,fill=acuteLatentFBL))    + 
-           geom_ribbon(aes(ymin=IdF1c,ymax=IdL0c,fill=chronicLatentUSBL)) + 
-           geom_ribbon(aes(ymin=IdL0c,ymax=IdF0c,fill=acuteLatentUSBL))   + 
-           theme_gray(base_size=25) + 
-           theme(legend.position=c(0.6,0.8), axis.title=element_text(size=30), 
-           axis.text=element_text(size=17), plot.title=element_text(size=30),
-           legend.key.height=unit(1.8,'line')) + 
-           coord_fixed(ratio=1/200) + 
-           scale_fill_manual(breaks=c(acuteLatentUSBLs, 
-                                       chronicLatentUSBLs,
-                                       acuteLatentFBLs,
-                                       chronicLatentFBLs), 
-                               values=c(acuteLatentUSBc,chronicLatentUSBc,
-                                        acuteLatentFBc,chronicLatentFBc))
-ggsave('forPoster/incPlotSourced2.pdf',incPlotSourced,width=10,height=8)
++
 
 #Order: IF1 = IF1c, IF1 + IL1 = IL1c 
 IF1c <- baseTotalInc$IF1
