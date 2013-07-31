@@ -65,13 +65,6 @@ efficacyLTBI  <- .9  #LTBI treatement efficacy
 adherenceLTBI <- .64 #LTBI treatment adherence
 probLTBItreatsuccess <- efficacyLTBI*adherenceLTBI 
 
-#Cost Parameter Values: 
-costtb   <- 2985   #TB treatment cost w/o hopsitalization <- Dylan supp. p.11-12
-costhosp <- 25495  #TB treatment cost w/ hospitalization  <- Dylan supp. p.10
-costLTBI <- 403.45 #LTBI treatment cost
-Ct       <- costtb*(1-probHosp) + costhosp*probHosp #Cost of active TB treatment
-Cl       <- costLTBI/probLTBItreatsuccess           #Cost of LTBI treatment
-
 #Rate of time and health state discounting
 discRt   <- 0.03  
 
@@ -91,7 +84,6 @@ P$exogenous1[1]  <- 0
   #Differential Equation Functions
 Ddt <- function(t,v,parms) {
   with(as.list(c(t,v,parms)), {
-    #TODO: Is this right?
     discV   <- 1/(1.03^t)  #amount costs, health states discount constant
 
     #parameter values initialized for each time step
@@ -168,12 +160,13 @@ Ddt <- function(t,v,parms) {
   })
 }
 
-hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,dataSet=P){
+hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,activeTxC=F,LTBITxC=F,initial=cutoffT,final=totT,dataSet=P){
   # set values in parameters
   newparms <- c(iCnewCases=as.vector(intervenCost['newCases']), 
                 iCtotPop=as.vector(intervenCost['totPop']), 
                 iCLTBIEn=as.vector(intervenCost['LTBIEn']),
-                sigmaL=sigmaL, f=f, transmission=transmission, incLTBI=incLTBI)
+                sigmaL=sigmaL, f=f, transmission=transmission, incLTBI=incLTBI,
+                Ct=activeTxC,Cl=LTBITxC)
   parameters <- c(parms, newparms)
   # recursive=TRUE collapses dataframe to labeled vector
   initv <- c(dataSet[initial,], recursive=TRUE)
