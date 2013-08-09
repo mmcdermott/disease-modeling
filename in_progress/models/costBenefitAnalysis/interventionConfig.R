@@ -25,8 +25,16 @@ allInterventions <- c("redEnLTBI100","redEnLTBI75","redEnLTBI50","redTrans100",
 redEnLTBI_Interventions <- allInterventions[1:3]
 redImm_Interventions <- allInterventions[5:6]
 incLTBItrmt_Interventions <- allInterventions[7:8]
+split20RedEnLTBIInter <- c('redEnLTBI0','redEnLTBI5','redEnLTBI10',
+                           'redEnLTBI15','redEnLTBI20','redEnLTBI25',
+                           'redEnLTBI30','redEnLTBI35','redEnLTBI40',
+                           'redEnLTBI45','redEnLTBI50','redEnLTBI55',
+                           'redEnLTBI60','redEnLTBI65','redEnLTBI70',
+                           'redEnLTBI75','redEnLTBI80','redEnLTBI85',
+                           'redEnLTBI90','redEnLTBI95','redEnLTBI100')
                       
-curInterventions <- c('redEnLTBI100')#allInterventions
+curInterventions <- split20RedEnLTBIInter#allInterventions
+incLTBICost <- 0
 
 interventionConfig <- function(interventionStr, x=0) { #x is an integer refering to cost option, ranges 0 to 5
   error    <- F
@@ -40,22 +48,12 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
   interVector <- strsplit(interventionStr,'&')[[1]]
   for (intervention in interVector) {
     interventionType <- sub("\\d+","",intervention)#sub empty str for digits
-    interventionMag  <- sub("\\D+","",intervention)#sub empty str for non-digits
+    interventionMag  <- as.numeric(sub("\\D+","",intervention))#sub empty str for non-digits
     if (interventionType == "redEnLTBI") {
       #TODO: Make this a function depending on magnitude for greater flexibility
       # (minor)
-      if (interventionMag == 50) {
-        LTBIEn  <- LTBIEn + 600 + x*100
-        incLTBI <- incLTBI*0.5
-      } else if (interventionMag == 75) {
-        LTBIEn  <- LTBIEn + 800 + x*100
-        incLTBI <- incLTBI*0.25
-      } else if (interventionMag == 100) {
-        LTBIEn  <- LTBIEn + 1000 + x*100
-        incLTBI <- 0
-      } else {
-        error = T
-      }
+      incLTBI <- incLTBI*(interventionMag/100)
+      LTBIEn  <- LTBIEn + 400 + 600*(interventionMag/100) + x*100
     } else if (interventionType == "redImm") {
       #No Costs!
       if (interventionMag == 75) {

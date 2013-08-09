@@ -1,16 +1,14 @@
 vF <- 1.5         #Progression rate of acute infection per year
 vL0 <- 0.0014     #Progression rate for reactivation (chronic LTBI) in the USB population per year
 vL1 <- 0.0010     #Progression rate for reactivation (chronic LTBI) in the FB population per year
-popConst <- 1000
 
 generateIncidence <- function(dataSet) {
-  
-  IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
-  IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
-  INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
-  #IN0   <- 1e6 * (dataSet$newI0 + dataSet$newJ0)/dataSet$N0
-  #IN1   <- 1e6 * (dataSet$newI1 + dataSet$newJ1)/dataSet$N1
-  #INall <- 1e6 * (dataSet$newI0 + dataSet$newI1 + dataSet$newJ0 + dataSet$newJ1)/(dataSet$N0 + dataSet$N1)
+  #IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
+  #IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
+  #INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+  IN0   <- 1e6 * 20 * (dataSet$newI0 + dataSet$newJ0)/dataSet$N0
+  IN1   <- 1e6 * 20 * (dataSet$newI1 + dataSet$newJ1)/dataSet$N1
+  INall <- 1e6 * 20 * (dataSet$newI0 + dataSet$newI1 + dataSet$newJ0 + dataSet$newJ1)/(dataSet$N0 + dataSet$N1)
   frame <- data.frame(IN0,IN1,INall)
   write.table(frame, file="incData.csv", sep=",")
   return(frame)

@@ -44,6 +44,10 @@ int L1[totT];
 int F1[totT];
 int I1[totT];
 int J1[totT];
+int newI0[totT];
+int newJ0[totT];
+int newI1[totT];
+int newJ1[totT];
 double cost[totT];
 
 
@@ -53,7 +57,7 @@ double cost[totT];
  * This functions updates the population lists given the number of turtles of 
  * the given states. It returns nothing, as it is a state updating function.
  */
-void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int timeinfec,
+void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeStep, int timeinfec, bool change,
                int numTurtles = 1)
 {
   switch(cob) {
@@ -70,9 +74,15 @@ void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeS
           break;
         case turtle::INFECTIOUS_TB:
           I0[timeStep] += numTurtles;
+          if(change == true){
+            newI0[timeStep] += numTurtles;
+          }
           break;
         case turtle::NONINFECTIOUS_TB:
           J0[timeStep] += numTurtles;
+          if(change == true){
+            newJ0[timeStep] += numTurtles;
+          }
           break;
         case turtle::SUSCEPTIBLE:
           S0[timeStep] += numTurtles;
@@ -96,9 +106,15 @@ void updatePop(const turtle::State &turtState, const turtle::COB &cob, int timeS
           break;
         case turtle::INFECTIOUS_TB:
           I1[timeStep] += numTurtles;
+          if(change == true){
+            newI1[timeStep] += numTurtles;
+          }
           break;
         case turtle::NONINFECTIOUS_TB:
           J1[timeStep] += numTurtles;
+          if(change == true){
+            newJ1[timeStep] += numTurtles;
+          }
           break;
         case turtle::SUSCEPTIBLE:
           S1[timeStep] += numTurtles;
@@ -125,11 +141,11 @@ void createTurtles(const turtle::State &turtState, const turtle::COB &cob, int t
 void exportData(string fname) {
   ofstream output;
   output.open(fname);
-  output << "\"N0\",\"S0\",\"L0\",\"F0\",\"I0\",\"J0\",";
-  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"J1\",\"cost\"" << endl;
+  output << "\"N0\",\"S0\",\"L0\",\"F0\",\"I0\",\"J0\",\"newI0\",\"newJ0\",";
+  output << "\"N1\",\"S1\",\"L1\",\"F1\",\"I1\",\"J1\",\"newI1\",\"newJ1\",\"cost\"" << endl;
   for (int i=0; i < totT; ++i) {
-    output << N0[i] << "," << S0[i] << "," << L0[i] << "," << F0[i] << "," << I0[i] << "," << J0[i] << ",";
-    output << N1[i] << "," << S1[i] << "," << L1[i] << "," << F1[i] << "," << I1[i] << "," << J1[i] << ",";
+    output << N0[i] << "," << S0[i] << "," << L0[i] << "," << F0[i] << "," << I0[i] << "," << J0[i] << "," << newI0[i] << "," << newJ0[i] << ",";
+    output << N1[i] << "," << S1[i] << "," << L1[i] << "," << F1[i] << "," << I1[i] << "," << J1[i] << "," << newI1[i] << "," << newJ1[i] << ",";
     output << cost[i] << endl;
   }
   output.close();
@@ -155,6 +171,11 @@ int run(string rfname)
 
   N0[0] = initUSP;
   N1[0] = initFBP;
+
+  newI0[0] = 1;
+  newJ0[0] = 1;
+  newI1[0] = 1;
+  newJ1[0] = 1;
 
   //LATENT LTBI
   createTurtles(turtle::LATENT, turtle::USA, 0, initF0, 1);
@@ -221,7 +242,7 @@ int run(string rfname)
           }
         }
         //Update our population lists
-        updatePop(t.getState(), t.getCountry(), i, t.InfectionTime());
+        updatePop(t.getState(), t.getCountry(), i, t.InfectionTime(), t.getPrevState());
 
         if (t.getState() == turtle::SUSCEPTIBLE) {
           turtleList::iterator newIter = population.erase(turtleIter);
@@ -249,19 +270,21 @@ int run(string rfname)
     int newl0           = floor(numUSInfections + .5) - newf0;
     S0[i]              -= floor(numUSInfections + .5);
     int numFBInfections = fbInfec(generator);
-    int newf1           = floor(p * numFBInfections + .5);
-    int newl1           = floor(numFBInfections + .5) - newf1;
+    //int newf1           = floor(p * numFBInfections + .5);
+    //int newl1           = floor(numFBInfections + .5) - newf1;
     int LTBIArrivals    = floor(f * alpha * (N0[i-1] + N1[i-1]) * DELTA_T + .5);
     int AcuteArrivals   = floor(g * p * LTBIArrivals + .5);
-    newf1              += AcuteArrivals;
-    newl1              += LTBIArrivals - AcuteArrivals;
+    int newRecentInfec  = numFBInfections + AcuteArrivals;
+    int newChronicLTBI  = LTBIArrivals - AcuteArrivals;
+    //newf1              += AcuteArrivals;
+    //newl1              += LTBIArrivals - AcuteArrivals;
     S1[i]              -= floor(numFBInfections + .5);
 
     //Creating the turtles
-    createTurtles(turtle::LATENT,   turtle::USA,   i, newf0, 1);
-    createTurtles(turtle::LATENT, turtle::USA,   i, newl0, (2/DELTA_T)+1);
-    createTurtles(turtle::LATENT,   turtle::OTHER, i, newf1, 1);
-    createTurtles(turtle::LATENT, turtle::OTHER, i, newl1, (2/DELTA_T)+1);
+    createTurtles(turtle::LATENT, turtle::USA,   i, newf0, 1);
+    createTurtles(turtle::LATENT, turtle::USA,   i, newl0, 1); //(2/DELTA_T)+1);
+    createTurtles(turtle::LATENT, turtle::OTHER, i, newRecentInfec, 1);
+    createTurtles(turtle::LATENT, turtle::OTHER, i, newChronicLTBI, (2/DELTA_T)+1);
     if (debug) {
       cout << "numUsInfections: " << numUSInfections << endl;
       cout << "numFBInfections: " << numFBInfections << endl;

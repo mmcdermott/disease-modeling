@@ -1,4 +1,4 @@
-//  turtle.cpp
+//  turtleStrictHill.cpp
 
 #include <iostream>
 #include <math.h>
@@ -23,14 +23,10 @@ bool turtle::dead() {
   return (state == NATURAL_DEATH || state == TB_DEATH);
 }
 
-int turtle::InfecChange(){
-  return timeinfec - prevtime;
-}
-
 //Updates turtle state
 void turtle::updateState(){
   //Initializations
-  prevtime = timeinfec;
+  changeState = false;
   double r  = (double)rand()/RAND_MAX; //random number from (0,1]
   if(country == USA){
     if (r < MU0) {  //Natural death rate (USB)
@@ -44,6 +40,7 @@ void turtle::updateState(){
       timeinfec++;
       if (timeinfec <= 2/DELTA_T) {
         if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
+          changeState = true;
           if(r < q*PROB_ACUTE_PROGRESSION) {
             state = INFECTIOUS_TB;
           } else {
@@ -56,6 +53,7 @@ void turtle::updateState(){
         }
       } else {
         if (r < PROB_CHRONIC_PROGRESSION_0) {  //Disease progression from Chronic Latent to Active TB (USB)
+          changeState = true;
           if (r < q*PROB_CHRONIC_PROGRESSION_0) {
             state = INFECTIOUS_TB;
           } else {
@@ -90,6 +88,7 @@ void turtle::updateState(){
       timeinfec++;
       if (timeinfec <= 2/DELTA_T) {
         if(r < PROB_ACUTE_PROGRESSION){  //Disease progression from Acute Latent to Active TB
+          changeState = true;
           if(r < q*PROB_ACUTE_PROGRESSION) {
             state = INFECTIOUS_TB;
           } else {
@@ -102,6 +101,7 @@ void turtle::updateState(){
         }
       } else {  
         if (r < PROB_CHRONIC_PROGRESSION_1) {  //Disease progression from Chronic Latent to Active TB (USB)
+          changeState = true;
           if (r < q*PROB_CHRONIC_PROGRESSION_1) {
             state = INFECTIOUS_TB;
           } else {
@@ -126,6 +126,10 @@ void turtle::updateState(){
   }
 }
 
+bool turtle::getPrevState(){
+  return changeState;
+}
+
 void turtle::display(){
   cout << "\nCountry of Birth: " << countryNames[country] << "\n";
   cout << "Health State: " << stateNames[state] << "\n";
@@ -139,7 +143,7 @@ turtle::State turtle::getState() {
   return state;
 }
 
-int turtle::InfectionTime() {
+int turtle::InfectionTime(){
   return timeinfec;
 }
 

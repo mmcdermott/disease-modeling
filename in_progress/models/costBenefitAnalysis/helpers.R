@@ -118,6 +118,7 @@ activeTBUSBdF0L      <- rep(activeTBUSBdF0Ls,totT)
 #                                      chronicLatentFBLs), 
 #                             values=scale_fill_values)
 #ggsave('forPoster/incPlotSourced2.pdf',incPlotSourced,width=10,height=8)
+>>>>>>> 922876bf9af44fa2f7e61e41ccd64bea4d0e5709
 
 #Order: IF1 = IF1c, IF1 + IL1 = IL1c 
 #IF1c <- baseTotalInc$IF1
