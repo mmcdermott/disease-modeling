@@ -1,0 +1,41 @@
+\documentclass{article}[11pt]
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\graphicspath{{../figures/}}
+\begin{document}
+\title{Sensitivity Analysis}
+\author{Colin Pawlowski}
+\date{}
+\maketitle
+
+%This document would most likely end up in the Supplementary Material for the paper
+
+\section{Overview}
+We divide our sensitivity analysis into two sections, to analyze the robustness of the deterministic and stochastic models separately.  For the deterministic model, we used Latin Hypercube Sampling to test the sensitivity of our model to input parameters from the Hill model and estimates for treatment costs.  We also
+performed extensive multivariate analysis on the economic components of our deterministic model which go beyond the original Hill model, including treatment costs and intervention costs to reduce incoming LTBI.  
+For the stochastic model, we fixed all input parameters and estimates for treatment costs to default values, and ran the model for 2,000 trials.  
+
+\section{Deterministic Model}
+\subsection{Latin Hypercube Sampling}
+We computed partial rank correlation coefficients for each of the initial parameters and treatment costs, and validated the results against the Sensitivity Analysis in the Hill model.  \\
+
+%Add table of distributions for initial parameters and treatment costs
+%Add table of Partial Rank Correlation Coefficients
+
+\subsection{Variability due to Uncertainty of Treatment Costs}
+Next, we performed more extensive multivariate analysis on the economic part of the deterministic model.  Keeping all of the input parameters from the Hill model at their default values, we ran the model approximately two million times, varying the cost of treatment for LTBI and Active TB and the treatment rate for incoming LTBI.  \\
+
+%Add 3-D contour plot
+%Add explanation of the effects of treatment costs, incoming LTBI treatment rate on total HCS cost
+
+\subsection{Variability of Intervention Cost for Treating Cases of Incoming LTBI}
+Similarly, we performed extensive multivariate analysis on the intervention cost for reducing incoming LTBI.  With all input parameters from the Hill model at their default values, we ran the model approximately two million times, varying the treatment rate, incidence, and cost to cure for incoming LTBI.  \\
+
+%Add 3-D contour plot
+%Add explanation of the effects of intervention costs, incoming LTBI treatment rate on total HCS cost
+
+\section{Stochastic Model}
+\subsection{Variability due to Probabilistic Nature of Disease Spread}
+
+\section{Summary}
+\end{document}
