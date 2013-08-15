@@ -22,7 +22,7 @@ allInterventions <- c("redEnLTBI100","redEnLTBI75","redEnLTBI50","redTrans100",
                       "incLTBItrmt100&redEnLTBI50","incLTBItrmt300&redEnLTBI100",
                       "incLTBItrmt300&redEnLTBI75","incLTBItrmt300&redEnLTBI50")
                       
-redEnLTBI_Interventions <- allInterventions[1:3]
+
 redImm_Interventions <- allInterventions[5:6]
 incLTBItrmt_Interventions <- allInterventions[7:8]
 split20RedEnLTBIInter <- c('redEnLTBI0','redEnLTBI5','redEnLTBI10',
@@ -32,7 +32,7 @@ split20RedEnLTBIInter <- c('redEnLTBI0','redEnLTBI5','redEnLTBI10',
                            'redEnLTBI60','redEnLTBI65','redEnLTBI70',
                            'redEnLTBI75','redEnLTBI80','redEnLTBI85',
                            'redEnLTBI90','redEnLTBI95','redEnLTBI100')
-                      
+redEnLTBI_Interventions <- c(allInterventions[3],allInterventions[6],allInterventions[11])                  
 curInterventions <- split20RedEnLTBIInter#allInterventions
 incLTBICost <- 0
 

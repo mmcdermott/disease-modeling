@@ -31,13 +31,13 @@ for(x in 0:9){
     write.csv(interData, paste(c(intFilePrefix,intervention,x,intFileSuffix),
                              collapse=""))
   }
-  for(intervention in incLTBItrmt_Interventions) {
-    intConfig <- interventionConfig(intervention,x)
-    costs     <- intConfig$costs
-    params    <- intConfig$params
-    interData <- hill(costs,params[["sigmaL"]],params[["f"]],params[["trans"]],
-                    params[["incLTBI"]])
-    write.csv(interData, paste(c(intFilePrefix,intervention,x,intFileSuffix),
-                             collapse=""))
-  }
+  # for(intervention in incLTBItrmt_Interventions) {
+    # intConfig <- interventionConfig(intervention,x)
+    # costs     <- intConfig$costs
+    # params    <- intConfig$params
+    # interData <- hill(costs,params[["sigmaL"]],params[["f"]],params[["trans"]],
+                    # params[["incLTBI"]])
+    # write.csv(interData, paste(c(intFilePrefix,intervention,x,intFileSuffix),
+                             # collapse=""))
+  # }
 }
