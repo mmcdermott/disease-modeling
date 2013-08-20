@@ -9,8 +9,8 @@ Epidemiological models allow public health professionals to predict and analyze
 disease dynamics and intervention effectiveness. The most common examples of
 such models are compartmental differential equation models, in which the
 population is split between several possible health states, with flow between
-each state given according to deterministic differential equations. In ++++++
-(year of hill model), Hill, Becerra, and Castro implemented a compartmental
+each state given according to deterministic differential equations. In 2012, 
+Hill, Becerra, and Castro implemented a compartmental
 differential equaiton model of tuberculosis (TB) in the United States (US).
 Their model utilized five health states and two subpopulations, US born (USB)
 and foreign born (FB) for a total of 10 compartments. They used this model to
@@ -25,14 +25,18 @@ to TB given our current policy as well as for various interventions. Finally, a
 population level, agent based implementation of the Hill Model was created, in
 order to validate the Hill Model against the natural stochasticity present in
 real world disease spread. 
+
 \section{Methods}
+
 \subsection{Basic Implementation}
 Both the basic Hill Model and this extended Hill Model were implemented in
 \texttt{R} as a system of differential equations, which were solved via the
-$\texttt{lsoda}$ routine. The system of differential equations used in the Basic
-Hill model are shown in figure INSERT FIGURE HERE, whereas the revised system of
-differential equations used in the extended Hill Model are given in figure
-INSERT FIGURE HERE. 
+$\texttt{lsoda}$ routine. The systems of differential equations used in the Basic
+Hill Model and the extended Hill Model are shown below in Figure 1 and Figure 2
+respectively.   
+
+INSERT FIGURES HERE
+
 \subsection{Additional Tracking Capabilities}
 In order to refine the tracking capabilities of the
 Hill Model, the original differential equations used to describe TB spread were
@@ -44,6 +48,7 @@ cases were made from a theoretical and an experimental perspective. Experimental
 data were calculated by reducing the initial population of FB or USB active,
 infectious TB cases by 1 and predicting the final number of cases seen in each
 case, in $\texttt{R}$. 
+
 \subsection{Economic Modeling}
 Further, estimates for the cost of active TB treatment and for the cost of
 latent TB infection (LTBI) treatment were obtained from Dylan et. al. and So and
@@ -78,6 +83,7 @@ interventions were implemented so as to take effect during the year 2013 and run
 to 2100. The numerical DE solver $\texttt{lsoda}$ used was run with a time step
 of $0.8$. Sensitivity analysis was performed on this parameter and reducing the
 time step was shown to have minimal effect on final size or cost values. 
+
 \subsection{Agent Based}
 The population level agent based model was implemented in several ways. Early
 implementations were built in \texttt{Netlogo} and \texttt{Java}, but final
@@ -89,7 +95,9 @@ approximations. The final size standard deviation and distribution data was
 collected via 2160 (MINUS SOME) runs with each agent in the model truly
 representing one individual and a time step of $0.01$. These data were analyzed
 in $R$. 
+
 \section{Results}
+
 \subsection{Basic Population Breakdown}
 The additional tracking capabilities offered several key insights into US TB
 dynamics. Figure INSERT FIGURE HERE shows the yearly incidence of US TB, broken
@@ -116,6 +124,7 @@ number of cases infected will follow a geometric series. This analysis predicts
 that over 100 years, one USB individual will infect $1.03$ other individuals,
 whereas one FB individual will infect $.64$ other individuals. Experimentally,
 these data were also analyzed, with results of $1.04$ and $.8$, respectively. 
+
 \subsection{Intervention Analysis}
 The primary interventions analyzed by the extended Hill were those that analyzed
 curing various percentages of entering LTBI cases. Four indicative percentages
@@ -123,6 +132,7 @@ chosen were $20\%$, $35\%$, $50\%$, and $65\%$. Note that the hill model does
 not distinguish documented immigration from undocumented immigration, and as
 such estimates of entering LTBI cure rates higher than $65\%$ become much more
 difficult to acheive. 
+
 \subsection{Agent Based Evaluation}
 \subsection{Sensitivity Analysis}
 \end{document}
