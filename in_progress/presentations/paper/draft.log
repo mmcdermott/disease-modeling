@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.27)  20 AUG 2013 14:21
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.27)  20 AUG 2013 17:24
 entering extended mode
 **draft.tex
 
@@ -114,39 +114,120 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 \thm@headsep=\skip50
 \dth@everypar=\toks24
 )
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks25
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count99
+))
+\Gin@req@height=\dimen114
+\Gin@req@width=\dimen115
+)
 (C:\cygwin\home\Colin\GitHub\disease-modeling\in_progress\presentations\paper\d
 raft.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Try loading font information for U+msa on input line 4.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Try loading font information for U+msa on input line 5.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 4.
+LaTeX Font Info:    Try loading font information for U+msb on input line 5.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3]
+)
+("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count100
+\scratchdimen=\dimen116
+\scratchbox=\box29
+\nofMPsegments=\count101
+\nofMParguments=\count102
+\everyMPshowfont=\toks26
+\MPscratchCnt=\count103
+\MPscratchDim=\dimen117
+\MPnumerator=\count104
+\makeMPintoPDFobject=\count105
+\everyMPtoPDFconversion=\toks27
+)
+Underfull \hbox (badness 10000) in paragraph at lines 33--38
+
+ []
+
+<figures/HillModelFlowChart.png, id=1, 1071.29646pt x 953.68059pt>
+File: figures/HillModelFlowChart.png Graphic file (type png)
+
+<use figures/HillModelFlowChart.png>
+Package pdftex.def Info: figures/HillModelFlowChart.png used on input line 40.
+(pdftex.def)             Requested size: 267.82346pt x 238.41956pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--52
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--60
+
+ []
+
+[1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
+
+pdfTeX warning: pdflatex.exe (file C:/cygwin/home/Colin/GitHub/disease-modeling
+/in_progress/presentations/paper/figures/BasicHillEquations.pdf): PDF inclusion
+: found PDF version <1.6>, but at most version <1.5> allowed
+<figures/BasicHillEquations.pdf, id=10, 457.26834pt x 212.21283pt>
+File: figures/BasicHillEquations.pdf Graphic file (type pdf)
+
+<use figures/BasicHillEquations.pdf>
+Package pdftex.def Info: figures/BasicHillEquations.pdf used on input line 71.
+(pdftex.def)             Requested size: 342.95041pt x 159.15921pt.
+ [2 <C:/cygwin/home/Colin/GitHub/disease-modeling/in_progress/presentations/pap
+er/figures/HillModelFlowChart.png>]
+[3 <C:/cygwin/home/Colin/GitHub/disease-modeling/in_progress/presentations/pape
+r/figures/BasicHillEquations.pdf>] [4] [5]
 (C:\cygwin\home\Colin\GitHub\disease-modeling\in_progress\presentations\paper\d
 raft.aux) ) 
 Here is how much of TeX's memory you used:
- 1382 strings out of 493921
- 15687 string characters out of 3147282
- 74621 words of memory out of 3000000
- 4555 multiletter control sequences out of 15000+200000
+ 2282 strings out of 493921
+ 28065 string characters out of 3147282
+ 86417 words of memory out of 3000000
+ 5420 multiletter control sequences out of 15000+200000
  9898 words of font info for 40 fonts, out of 3000000 for 9000
  1002 hyphenation exceptions out of 8191
- 34i,5n,31p,242b,212s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 34i,6n,31p,321b,216s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.p
 fb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/
 Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program 
@@ -155,9 +236,9 @@ TeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/f
 onts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
 /public/amsfonts/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
 amsfonts/cm/cmtt10.pfb>
-Output written on draft.pdf (3 pages, 110594 bytes).
+Output written on draft.pdf (5 pages, 202686 bytes).
 PDF statistics:
- 44 PDF objects out of 1000 (max. 8388607)
+ 54 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

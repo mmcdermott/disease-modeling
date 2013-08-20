@@ -1,6 +1,7 @@
 \documentclass{amsart}
+\usepackage[pdftex]{graphicx}
 
-\title{INSERT TITLE HERE}
+\title{Modeling Intervention Strategies for United States TB Control}
 \begin{document}
 \maketitle
 
@@ -12,8 +13,8 @@ population is split between several possible health states, with flow between
 each state given according to deterministic differential equations. In 2012, 
 Hill, Becerra, and Castro implemented a compartmental
 differential equaiton model of tuberculosis (TB) in the United States (US).
-Their model utilized five health states and two subpopulations, US born (USB)
-and foreign born (FB) for a total of 10 compartments. They used this model to
+Their model utilized five health states and two subpopulations, US-born (USB)
+and foreign-born (FB) for a total of 10 compartments. They used this model to
 evaluate several possible intervention strategies, and ultimately conclude that
 though increasing LTBI treatment was a good intervention strategy, the US was
 unlikely to meet their stated goal of elimination of TB in the US by 2100. In
@@ -26,16 +27,53 @@ population level, agent based implementation of the Hill Model was created, in
 order to validate the Hill Model against the natural stochasticity present in
 real world disease spread. 
 
+\section{Background}
+
+\subsection{The Hill Model}
+A flowchart representation of the Hill Model is shown in Figure 1.  Each compartment
+represents a different possible health state with respect to TB for every 
+US-born or foreign-born individual, and arrows between different compartments
+represent possible transitions between states.  Individuals also leave the model 
+from all compartments due to natural death, which is left out of the figure for clarity.  \\
+
+\begin{figure}
+\includegraphics[scale=0.25]{figures/HillModelFlowChart.png}
+\end{figure}
+
+The majority of USB and FB individuals fall into the Susceptible (S) category, which includes everyone
+who is uninfected and has not been exposed to TB.  After exposure to an individual
+with TB, a person in the Susceptible compartment can develop Latent TB Infection (LTBI) and changes
+health states to either the Acute LTBI (F) or Chronic LTBI (L) compartment.  Latently
+infected individuals are not infectious, but have some risk of developing active TB infection
+over time.  However, the rates of disease progression are not equal, and individuals in the
+Acute LTBI compartment have a higher risk of developing active TB than those in
+the Chronic LTBI compartment.  Individuals in the Chronic LTBI compartment
+may also be exogenously re-infected and transition to the Acute LTBI compartment.  \\
+
+Latently infected individuals may progress to one of two active TB states: Infectious TB (I) or 
+Non-Infectious TB (J).  Individuals in both compartments have an increased risk of death from
+active TB infection, but only individuals in the Infectious TB compartment are contagious.  
+In addition, individuals in all of the infected compartments (F, L, I, J) may be treated or self-cure
+themselves of their respective TB health condition.  However, in the model, treatment or self-cure from TB
+does not grant immunity, and all healthy individuals are grouped in the Susceptible compartment
+and may be re-infected at a later time.  \\
+
 \section{Methods}
 
 \subsection{Basic Implementation}
 Both the basic Hill Model and this extended Hill Model were implemented in
 \texttt{R} as a system of differential equations, which were solved via the
 $\texttt{lsoda}$ routine. The systems of differential equations used in the Basic
-Hill Model and the extended Hill Model are shown below in Figure 1 and Figure 2
+Hill Model and the extended Hill Model are shown below in Figure 2 and Figure 3
 respectively.   
 
-INSERT FIGURES HERE
+\begin{figure}
+\includegraphics[scale=0.75]{figures/BasicHillEquations.pdf}
+\end{figure}
+
+The vector variables $S_{0}, F_{0}, L_{0}, I_{0}, J_{0}$ contain the number of US-born individuals in the S, F, L, I, J compartments respectively, and $S_{1}, F_{1}, L_{1}, I_{1}, J_{1}$ contain foreign-born individuals.  $N_{0}$ and $N_{1}$ are the total populations of US-born and foreign-born individuals.
+The constants $\rho$ and $\alpha$ are birth rates, while $\mu_{i}$, and $\mu_{d}$ are death rates.  
+A complete list and descriptions of all constants used in the model can be found in the appendix.
 
 \subsection{Additional Tracking Capabilities}
 In order to refine the tracking capabilities of the
