@@ -109,7 +109,7 @@ treatment rate given in the Hill Model. The fraction of these indviduals who
 leave this compartment due to self cure was assumed to be zero. Given the
 uncertainty in measurments of LTBI treatment cost, extensive sensitivity
 analysis was performed on this parameter relative to final cost outcomes, which
-showed that it had an XXXXXXXXX effect. In addition to US HCS cost, the system
+showed that it had an linear effect. In addition to US HCS cost, the system
 was implemented so as to also track projected intervention implementation cost,
 given user-inputted parameters relating to various possible intervention cost
 strategies. The extended Hill Model was used to track the effect of many
@@ -139,7 +139,7 @@ in $R$.
 \subsection{Basic Population Breakdown}
 The additional tracking capabilities offered several key insights into US TB
 dynamics. Figure INSERT FIGURE HERE shows the yearly incidence of US TB, broken
-down into infeciton source. It can be seen that the majority of the US TB load
+down into infection source. It can be seen that the majority of the US TB load
 is driven by activations of FB LTBI, followed by USB LTBI activations. This data
 further agrees with the conclusions drawn by Hill, Becerra, and Castro about the
 necessity of LTBI treatment in any valuable intervention strategy. Further,
@@ -159,9 +159,10 @@ Presuming there are no overlaps in infectious contacts, if a single case of
 infectious TB in either population infects $p_f, p_u$ new cases in one year,
 respectively, then we can say that over the course of 100 years, the total
 number of cases infected will follow a geometric series. This analysis predicts
-that over 100 years, one USB individual will infect $1.03$ other individuals,
-whereas one FB individual will infect $.64$ other individuals. Experimentally,
-these data were also analyzed, with results of $1.04$ and $.8$, respectively. 
+that over 100 years, one USB infection will lead to $1.03$ subsequent infections,
+whereas one FB infection will lead to $.64$ subsequent infections. The full calculations
+are included in the appendix.  Experimentally, these data were also analyzed, 
+with results of $1.04$ and $.8$, respectively. 
 
 \subsection{Intervention Analysis}
 The primary interventions analyzed by the extended Hill were those that analyzed
