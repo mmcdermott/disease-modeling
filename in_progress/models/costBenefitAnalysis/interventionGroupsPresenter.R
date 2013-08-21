@@ -152,7 +152,7 @@ ggsave('costRedEnLTBI.pdf',x,width=15,height=12)
 redEnLTBI <- data.frame(year = years, 
                         redEnLTBI10_savings = saveOfInter[[1]], 
                         redEnLTBI25_savings  = saveOfInter[[2]], 
-                        redEnLTBI50_savings  = saveOfInter[[3]],
+                        redEnLTBI50_savings  = saveOfInter[[3]])
 
 x <- ggplot(redEnLTBI,aes(x=year)) + 
        labs(x="Years", y="Billions of USD", color="Economic Distinction", 
