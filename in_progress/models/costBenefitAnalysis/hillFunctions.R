@@ -91,7 +91,7 @@ Ddt <- function(t,v,parms) {
     c00          <- 1 - c01                                          #proportion of contacts made with USB individuals (USB)
     c10          <- (1-e1)*((1-e0)*N0)/((1-e0)*N0 + (1-e1)*N1)       #proportion of contacts made with USB individuals (FB)
     c11          <- 1 - c10                                          #proportion of contacts made with FB individuals  (FB)
-    dLTBIEn      <- f*alpha*(N0+N1)                                  #FB arrivals with LTBI entering
+    dLTBIEn      <- alpha*(N0+N1)                                    #FB arrivals with LTBI entering
     dnatdeath0   <- mu0 * N0                                         #Natural deaths (USB)
     dnatdeath1   <- mu1 * N1                                         #Natural deaths (FB)
     dtbdeath0    <- mud * (I0 + J0)                                  #TB deaths (USB)
@@ -110,7 +110,7 @@ Ddt <- function(t,v,parms) {
     lambda1      <- transmission*(beta*(c10*(I0/N0) + c11*(I1/N1)))  #Forces of Infection (FB)
     dexogenous0	 <- x*p*lambda0*L0                                   #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
     dexogenous1  <- x*p*lambda1*L1                                   #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
-    dInterventionCost <- discV * (iCnewCases*1e6*(dprogTotal0+dprogTotal1) + iCtotPop*1e6*(N0+N1) + iCLTBIEn*1e6*dLTBIEn*(1-incLTBI))
+    dInterventionCost <- discV * (iCnewCases*1e6*(dprogTotal0+dprogTotal1) + iCtotPop*1e6*(N0+N1) + iCLTBIEn*1e6*dLTBIEn*(1-f))
     
     #Difference Equations (USB)
     dS0 <- ro*(N0+N1) + sigmaF0*F0 + sigmaL*L0 + phi0*(I0+J0) - lambda0*S0 - mu0*S0
@@ -120,9 +120,9 @@ Ddt <- function(t,v,parms) {
     dJ0 <- (1-q)*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*J0
     
     #Difference Equations (FB)
-    dS1 <- (1-incLTBI)*dLTBIEn+(1-f)*alpha*(N0+N1) + sigmaF1*F1 + sigmaL*L1 + phi1*(I1 + J1) - lambda1*S1 - mu1*S1
-    dF1 <- g*p*dLTBIEn*incLTBI + p*lambda1*S1 + dexogenous1 - (mu1 + vF + sigmaF1)*F1
-    dL1 <- (1-g*p)*dLTBIEn*incLTBI + (1-p)*lambda1*S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*L1
+    dS1 <- (1-f)*dLTBIEn + sigmaF1*F1 + sigmaL*L1 + phi1*(I1 + J1) - lambda1*S1 - mu1*S1
+    dF1 <- g*p*dLTBIEn*f + p*lambda1*S1 + dexogenous1 - (mu1 + vF + sigmaF1)*F1
+    dL1 <- (1-g*p)*dLTBIEn*f + (1-p)*lambda1*S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*L1
     dI1 <- q*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*I1
     dJ1 <- (1-q)*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*J1
     
@@ -151,22 +151,21 @@ Ddt <- function(t,v,parms) {
  
     return(list(c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,
              dcI0dL0,dcI0dF0,dcJ0,dcJ0dL0,dcJ0dF0,dcL1,dcF1,dcI1,dcI1dL1,dcI1dF1,
-             dcJ1,dcJ1dL1,dcJ1dF1,dcN0,dcN1,(dLTBIEn*incLTBI),
-             (dLTBIEn*incLTBI*discV),dLTBIEn*(1-incLTBI),
-             (dLTBIEn*(1-incLTBI)*discV),dnatdeath0,dnatdeath1,dtbdeath0,
+             dcJ1,dcJ1dL1,dcJ1dF1,dcN0,dcN1,(dLTBIEn*f),
+             (dLTBIEn*f*discV),dLTBIEn*(1-f),
+             (dLTBIEn*(1-f)*discV),dnatdeath0,dnatdeath1,dtbdeath0,
              dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,
              dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,
              dexogenous1, dInterventionCost)))
   })
 }
 
-hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,activeTxC=F,LTBITxC=F,initial=cutoffT,final=totT,dataSet=P){
+hill <- function(intervenCost,sigmaL,f,transmission=1,initial=cutoffT,final=totT,dataSet=P){
   # set values in parameters
   newparms <- c(iCnewCases=as.vector(intervenCost['newCases']), 
                 iCtotPop=as.vector(intervenCost['totPop']), 
                 iCLTBIEn=as.vector(intervenCost['LTBIEn']),
-                sigmaL=sigmaL, f=f, transmission=transmission, incLTBI=incLTBI,
-                Ct=activeTxC,Cl=LTBITxC)
+                sigmaL=sigmaL, f=f, transmission=transmission)
   parameters <- c(parms, newparms)
   # recursive=TRUE collapses dataframe to labeled vector
   initv <- c(dataSet[initial,], recursive=TRUE)
@@ -189,7 +188,7 @@ generateIncidence <- function(dataSet) {
   })
 }
 
-generateTotalIncidence <- function(dataSet,incLTBI=1,transmission=1,f=fBase) {
+generateTotalIncidence <- function(dataSet,transmission=1,f=fBase) {
   with(as.list(parms), {
     #proportion of contacts made with FB individuals  (USB)
     c01          <- (1-e0)*((1-e1)*dataSet$N1)/((1-e0)*dataSet$N0 + 
@@ -214,10 +213,10 @@ generateTotalIncidence <- function(dataSet,incLTBI=1,transmission=1,f=fBase) {
     INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + 
                     vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
     IL0   <- 1e6 * ((1-p) * lambda0 * dataSet$S0)
-    IL1   <- 1e6 * ((1-p) * lambda1 * dataSet$S1 + (1-g*p) * f * alpha * incLTBI
+    IL1   <- 1e6 * ((1-p) * lambda1 * dataSet$S1 + (1-g*p) * f * alpha
                     * (dataSet$N0 + dataSet$N1))
     IF0   <- 1e6 * (p     * lambda0 * dataSet$S0 + x * p * lambda0 * L0)
-    IF1   <- 1e6 * (p     * lambda1 * dataSet$S1 + g * p * f * alpha * incLTBI
+    IF1   <- 1e6 * (p     * lambda1 * dataSet$S1 + g * p * f * alpha
                     * (dataSet$N0 + dataSet$N1) + x * p * lambda1 * L1)
     II0   <- 1e6 * q     * (vF*dataSet$F0 + vL0*dataSet$L0)
     II1   <- 1e6 * q     * (vF*dataSet$F1 + vL1*dataSet$L1)

@@ -21,76 +21,56 @@ allInterventions <- c("redEnLTBI100","redEnLTBI75","redEnLTBI50","redTrans100",
                       "incLTBItrmt100&redEnLTBI100","incLTBItrmt100&redEnLTBI75",
                       "incLTBItrmt100&redEnLTBI50","incLTBItrmt300&redEnLTBI100",
                       "incLTBItrmt300&redEnLTBI75","incLTBItrmt300&redEnLTBI50")
-                      
 
 redImm_Interventions <- allInterventions[5:6]
 incLTBItrmt_Interventions <- allInterventions[7:8]
-split20RedEnLTBIInter <- c('redEnLTBI0','redEnLTBI5','redEnLTBI10',
-                           'redEnLTBI15','redEnLTBI20','redEnLTBI25',
-                           'redEnLTBI30','redEnLTBI35','redEnLTBI40',
-                           'redEnLTBI45','redEnLTBI50','redEnLTBI55',
-                           'redEnLTBI60','redEnLTBI65','redEnLTBI70',
-                           'redEnLTBI75','redEnLTBI80','redEnLTBI85',
-                           'redEnLTBI90','redEnLTBI95','redEnLTBI100')
-redEnLTBI_Interventions <- c(allInterventions[3],allInterventions[6],allInterventions[11])                  
-curInterventions <- split20RedEnLTBIInter#allInterventions
-incLTBICost <- 0
+redEnLTBI_Interventions <- allInterventions[1:3]
+
+curInterventions <- redEnLTBI_Interventions
+
+printError <- function(intervention,error) {
+  print("I didn't recognize that intervention strategy. I'm sorry.")
+  print("Here's the intervention you gave me: ")
+  print(intervention)
+  print("And here's the error")
+  print(error)
+}
+
+redEnLTBICFun   <- function(mag,baseCost){return(baseCost+600*(mag/100))}
+incLTBItrmtCFun <- function(mag,baseCost){return(baseCost+0.025)}
+redTransCFun    <- function(mag,baseCost){return(baseCost+1000*(mag/100))}
+interventionProps <- list(
+  redEnLTBI   =list(prop='f',      cost=list(c('LTBIEn',   redEnLTBICFun))),
+  redImm      =list(prop='f',      cost=list()),
+  incLTBItrmt =list(prop='sigmaL', cost=list(c('totPop',   incLTBItrmtCFun))),
+  redTrans    =list(prop='trans',  cost=list(c('newCases', redTransCFun))))
 
 interventionConfig <- function(interventionStr, x=0) { #x is an integer refering to cost option, ranges 0 to 5
-  error    <- F
-  sigmaL   <- sigmaLBase #define me
-  f        <- fBase
-  trans    <- transBase
-  incLTBI  <- incLTBIBase
-  newCases <- 0 #contact investigations
-  totPop   <- 0 #total population cost per time step
-  LTBIEn   <- 0 #LTBI entering cost
-  interVector <- strsplit(interventionStr,'&')[[1]]
-  for (intervention in interVector) {
-    interventionType <- sub("\\d+","",intervention)#sub empty str for digits
-    interventionMag  <- as.numeric(sub("\\D+","",intervention))#sub empty str for non-digits
-    if (interventionType == "redEnLTBI") {
-      #TODO: Make this a function depending on magnitude for greater flexibility
-      # (minor)
-      incLTBI <- incLTBI*(interventionMag/100)
-      LTBIEn  <- 800 #LTBIEn + 400 + 600*(interventionMag/100) + x*100
-    } else if (interventionType == "redImm") {
-      #No Costs!
-      if (interventionMag == 75) {
-        f <- f * 0.25
-      } else if (interventionMag == 50) {
-        f <- f * 0.5
-      } else {
-        error = T
-      }
-    } else if (interventionType == "incLTBItrmt") {
-      if (interventionMag == 100) {
-        totPop <- totPop + 0.025 + x*0.025
-        sigmaL <- sigmaL * 2
-      } else if (interventionMag == 300) {
-        totPop <- totPop + 0.025 + x*0.025
-        sigmaL <- sigmaL * 4
-      } else {
-        error = T
-      }
-    } else if (interventionType == "redTrans") {
-      if (interventionMag == 100) {
-        newCases <- newCases + 1000
-        trans    <- 0
-      } else {
-        error = T
-      }
+  costs  <- c(newCases=0,totPop=0,LTBIEn=Cl)
+  params <- c(sigmaL=sigmaLBase,f=fBase,trans=transBase)
+  intrs  <- strsplit(interventionStr,'&')[[1]]
+  for (intervention in intrs) {
+    type <- sub("\\d+","",intervention)#sub empty str for digits
+    mag  <- as.numeric(sub("\\D+","",intervention))#sub empty str for non-digits
+    if (pmatch("red",type,nomatch=-1) == 1) {
+      sign <- -1
+    } else if (pmatch("inc",type,nomatch=-1) == 1) {
+      sign <- 1
     } else {
-      error = T
+      printError(intervention, 'Unrecognized Prefix')
+      next()
     }
-    if (error) {
-      print("I didn't recognize that intervention strategy. I'm sorry.")
-      print("Here's the intervention you gave me: ")
-      print(intervention)
-      stop()
+    details <- interventionProps[[type]]
+    if (length(details) == 0) {
+      printError(intervention, 'No Stored Intervention Properties')
+      next()
+    }
+    for (intProp in details$prop) {
+      params[[intProp]] <- (1+sign*mag/100)*params[[intProp]]
+    }
+    for (costList in details$cost) {
+      costs[[costList[1][[1]]]]<-costList[2][[1]](mag,costs[[costList[1][[1]]]])
     }
   }
-  costs <- c(newCases=newCases,totPop=totPop,LTBIEn=LTBIEn)
-  params <- c(sigmaL=sigmaL,f=f,trans=trans,incLTBI=incLTBI)
   return(list(costs=costs,params=params))
 }
