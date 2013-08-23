@@ -109,41 +109,41 @@ TBdeathsAvertedC <- '#24913C'
 
 yrange <- round(seq(min(-1*saveOfInter[[1]])-0.5,max(costOfInter[[1]])+0.5,by=0.5),1)
 
-redEnLTBI <- data.frame(year = years, 
-                        redEnLTBI100_costs   = costOfInter[[1]], 
-                        redEnLTBI75_costs    = costOfInter[[2]], 
-                        redEnLTBI50_costs    = costOfInter[[3]],
-                        redEnLTBI100_savings = -1*saveOfInter[[1]], 
-                        redEnLTBI75_savings  = -1*saveOfInter[[2]], 
-                        redEnLTBI50_savings  = -1*saveOfInter[[3]],
-                        redEnLTBI100_totCost = totSpent[[1]], 
-                        redEnLTBI75_totCost  = totSpent[[2]], 
-                        redEnLTBI50_totCost  = totSpent[[3]])
-
-x <- ggplot(redEnLTBI,aes(x=year)) + 
-       labs(x="Years", y="Billions of USD", color="Economic Distinction", 
-            linetype="% Reduction") +
-       scale_y_continuous(breaks=yrange) + 
-       plotTitle("Implementation Costs, Savings, and 
-US Health Care System (US HCS) 
-Costs for 100%, 75%, and 50% LTBI reduction","") + 
-       geom_hline(aes(y=0),size=2) +
-       geom_line(aes(y=redEnLTBI100_costs,   color=costs,      linetype=redEnLTBI100L), size=2) +
-       geom_line(aes(y=redEnLTBI75_costs,    color=costs,      linetype=redEnLTBI75L), size=2) +
-       geom_line(aes(y=redEnLTBI50_costs,    color=costs,      linetype=redEnLTBI50L), size=2) +
-       geom_line(aes(y=redEnLTBI100_savings, color=savings,    linetype=redEnLTBI100L), size=2) +
-       geom_line(aes(y=redEnLTBI75_savings,  color=savings,    linetype=redEnLTBI75L), size=2) +
-       geom_line(aes(y=redEnLTBI50_savings,  color=savings,    linetype=redEnLTBI50L), size=2) +
-       geom_line(aes(y=redEnLTBI100_totCost, color=totalCosts, linetype=redEnLTBI100L), size=2) +
-       geom_line(aes(y=redEnLTBI75_totCost,  color=totalCosts, linetype=redEnLTBI75L), size=2) +
-       geom_line(aes(y=redEnLTBI50_totCost,  color=totalCosts, linetype=redEnLTBI50L), size=2) +
-       guides(fill=F, alpha=F) + 
-       theme_gray(base_size=25) +
-       theme(legend.position=c(0.22,0.82), axis.title=element_text(size=40), 
-             axis.text=element_text(size=27), plot.title=element_text(size=40))
-             #legend.key.height=unit(1.8,'line')) + 
-
-ggsave('costRedEnLTBI.pdf',x,width=15,height=12)
+#redEnLTBI <- data.frame(year = years, 
+#                        redEnLTBI100_costs   = costOfInter[[1]], 
+#                        redEnLTBI75_costs    = costOfInter[[2]], 
+#                        redEnLTBI50_costs    = costOfInter[[3]],
+#                        redEnLTBI100_savings = -1*saveOfInter[[1]], 
+#                        redEnLTBI75_savings  = -1*saveOfInter[[2]], 
+#                        redEnLTBI50_savings  = -1*saveOfInter[[3]],
+#                        redEnLTBI100_totCost = totSpent[[1]], 
+#                        redEnLTBI75_totCost  = totSpent[[2]], 
+#                        redEnLTBI50_totCost  = totSpent[[3]])
+#
+#x <- ggplot(redEnLTBI,aes(x=year)) + 
+#       labs(x="Years", y="Billions of USD", color="Economic Distinction", 
+#            linetype="% Reduction") +
+#       scale_y_continuous(breaks=yrange) + 
+#       plotTitle("Implementation Costs, Savings, and 
+#US Health Care System (US HCS) 
+#Costs for 100%, 75%, and 50% LTBI reduction","") + 
+#       geom_hline(aes(y=0),size=2) +
+#       geom_line(aes(y=redEnLTBI100_costs,   color=costs,      linetype=redEnLTBI100L), size=2) +
+#       geom_line(aes(y=redEnLTBI75_costs,    color=costs,      linetype=redEnLTBI75L), size=2) +
+#       geom_line(aes(y=redEnLTBI50_costs,    color=costs,      linetype=redEnLTBI50L), size=2) +
+#       geom_line(aes(y=redEnLTBI100_savings, color=savings,    linetype=redEnLTBI100L), size=2) +
+#       geom_line(aes(y=redEnLTBI75_savings,  color=savings,    linetype=redEnLTBI75L), size=2) +
+#       geom_line(aes(y=redEnLTBI50_savings,  color=savings,    linetype=redEnLTBI50L), size=2) +
+#       geom_line(aes(y=redEnLTBI100_totCost, color=totalCosts, linetype=redEnLTBI100L), size=2) +
+#       geom_line(aes(y=redEnLTBI75_totCost,  color=totalCosts, linetype=redEnLTBI75L), size=2) +
+#       geom_line(aes(y=redEnLTBI50_totCost,  color=totalCosts, linetype=redEnLTBI50L), size=2) +
+#       guides(fill=F, alpha=F) + 
+#       theme_gray(base_size=25) +
+#       theme(legend.position=c(0.22,0.82), axis.title=element_text(size=40), 
+#             axis.text=element_text(size=27), plot.title=element_text(size=40))
+#             #legend.key.height=unit(1.8,'line')) + 
+#
+#ggsave('costRedEnLTBI.pdf',x,width=15,height=12)
 
 # Plot of cost averted (savings)
 # Only includes costs for Active TB treatment
@@ -157,9 +157,8 @@ redEnLTBI <- data.frame(year = years,
 x <- ggplot(redEnLTBI,aes(x=year)) + 
        labs(x="Years", y="Billions of USD", color="Economic Distinction", 
             linetype="% Reduction") +
-       scale_y_continuous(breaks=yrange) + 
-       plotTitle("Averted TB Costs for the
-US Health Care System (US HCS) given 10%, 25%, and 50% LTBI reduction","") + 
+       #scale_y_continuous(breaks=yrange) + 
+       plotTitle("Averted TB Costs for US HCS given 10%, 25%, and 50% LTBI reduction","") + 
        geom_hline(aes(y=0),size=2) +
        geom_line(aes(y=redEnLTBI10_savings,  color=savings,    linetype=redEnLTBI10L), size=2) +
        geom_line(aes(y=redEnLTBI25_savings,  color=savings,    linetype=redEnLTBI25L), size=2) +
@@ -168,7 +167,6 @@ US Health Care System (US HCS) given 10%, 25%, and 50% LTBI reduction","") +
        theme_gray(base_size=25) +
        theme(legend.position=c(0.22,0.82), axis.title=element_text(size=40), 
              axis.text=element_text(size=27), plot.title=element_text(size=40))
-			 
 			 
 
 ggsave('costAvertedRedEnLTBI.pdf',x,width=15,height=12)
