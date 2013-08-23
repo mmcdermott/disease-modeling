@@ -158,7 +158,8 @@ x <- ggplot(redEnLTBI,aes(x=year)) +
        labs(x="Years", y="Billions of USD", color="Economic Distinction", 
             linetype="% Reduction") +
        #scale_y_continuous(breaks=yrange) + 
-       plotTitle("Averted TB Costs for US HCS given 10%, 25%, and 50% LTBI reduction","") + 
+       plotTitle("Averted TB Costs for US HCS given 
+10%, 25%, and 50% LTBI reduction","") + 
        geom_hline(aes(y=0),size=2) +
        geom_line(aes(y=redEnLTBI10_savings,  color=savings,    linetype=redEnLTBI10L), size=2) +
        geom_line(aes(y=redEnLTBI25_savings,  color=savings,    linetype=redEnLTBI25L), size=2) +
@@ -166,7 +167,8 @@ x <- ggplot(redEnLTBI,aes(x=year)) +
        guides(fill=F, alpha=F) + 
        theme_gray(base_size=25) +
        theme(legend.position=c(0.22,0.82), axis.title=element_text(size=40), 
-             axis.text=element_text(size=27), plot.title=element_text(size=40))
+             axis.text=element_text(size=27), plot.title=element_text(size=40)) +
+       scale_color_manual(values=c(savingsC))
 			 
 
 ggsave('costAvertedRedEnLTBI.pdf',x,width=15,height=12)
