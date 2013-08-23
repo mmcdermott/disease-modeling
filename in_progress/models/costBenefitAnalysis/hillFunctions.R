@@ -160,13 +160,13 @@ Ddt <- function(t,v,parms) {
   })
 }
 
-hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,activeTxC=F,LTBITxC=F,initial=cutoffT,final=totT,dataSet=P){
+hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,dataSet=P){
   # set values in parameters
   newparms <- c(iCnewCases=as.vector(intervenCost['newCases']), 
                 iCtotPop=as.vector(intervenCost['totPop']), 
                 iCLTBIEn=as.vector(intervenCost['LTBIEn']),
-                sigmaL=sigmaL, f=f, transmission=transmission, incLTBI=incLTBI,
-                Ct=activeTxC,Cl=LTBITxC)
+                sigmaL=sigmaL, f=f, transmission=transmission, incLTBI=incLTBI)
+                #Ct=activeTxC,Cl=LTBITxC)
   parameters <- c(parms, newparms)
   # recursive=TRUE collapses dataframe to labeled vector
   initv <- c(dataSet[initial,], recursive=TRUE)

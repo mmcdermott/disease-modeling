@@ -67,6 +67,7 @@ redEnLTBI10L    <- rep("10% reduction",       totT)
 # }
 
 #Graphs
+interventionData <- as.list(1:3)
 interHCSCost <- as.list(1:3)
 costOfInter <- as.list(1:3)  #additional cost of intervention
 saveOfInter <- as.list(1:3)  #additional savings of intervention
@@ -74,13 +75,15 @@ interTot <- as.list(1:3)
 totSpent <- as.list(1:3)  #net cost
 
 y <- 1
+print(redEnLTBI_Interventions)
 for (interventionName in redEnLTBI_Interventions) {
-  interventionData <- read.csv(paste(c(intFilePrefix,interventionName,
+  interventionData[[y]] <- read.csv(paste(c(intFilePrefix,interventionName,
                                        intFileSuffix),collapse=""))
+  print(interventionData[[y]][125,])
   #HCS cost borne by intervention
-  interHCSCost[[y]] <- (interventionData$cN0 + interventionData$cN1)/1e9
+  interHCSCost[[y]] <- (interventionData[[y]]$cN0 + interventionData[[y]]$cN1)/1e9
   #Implementation cost of intervention
-  costOfInter[[y]] <- (interventionData$interventionCost)/1e9
+  costOfInter[[y]] <- (interventionData[[y]]$interventionCost)/1e9
   #Savings from intervention
   saveOfInter[[y]] <- baseHCSCost - interHCSCost[[y]]
   #Total US HCS cost due to intervention
@@ -89,7 +92,7 @@ for (interventionName in redEnLTBI_Interventions) {
   totSpent[[y]]  <- interTot[[y]] - baseHCSCost 
   
   #Cost per cases averted
-  intCasesD         <- 1e6*(interventionData$progTotalD0 + interventionData$progTotalD1)
+  intCasesD         <- 1e6*(interventionData[[y]]$progTotalD0 + interventionData[[y]]$progTotalD1)
   casesAvertedD     <- baseCasesD - intCasesD
   cpcaDataD <- 1e9*totSpent[[y]]/casesAvertedD
   
@@ -150,7 +153,7 @@ yrange <- round(seq(min(-1*saveOfInter[[1]])-0.5,max(costOfInter[[1]])+0.5,by=0.
 # No treatment implementation costs accounted for
 
 redEnLTBI <- data.frame(year = years, 
-                        redEnLTBI10_savings = saveOfInter[[1]], 
+                        redEnLTBI10_savings  = saveOfInter[[1]], 
                         redEnLTBI25_savings  = saveOfInter[[2]], 
                         redEnLTBI50_savings  = saveOfInter[[3]])
 

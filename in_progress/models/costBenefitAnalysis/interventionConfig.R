@@ -32,7 +32,7 @@ split20RedEnLTBIInter <- c('redEnLTBI0','redEnLTBI5','redEnLTBI10',
                            'redEnLTBI60','redEnLTBI65','redEnLTBI70',
                            'redEnLTBI75','redEnLTBI80','redEnLTBI85',
                            'redEnLTBI90','redEnLTBI95','redEnLTBI100')
-redEnLTBI_Interventions <- c(allInterventions[3],allInterventions[6],allInterventions[11])                  
+redEnLTBI_Interventions <- allInterventions[1:3]                 
 curInterventions <- split20RedEnLTBIInter#allInterventions
 incLTBICost <- 0
 
