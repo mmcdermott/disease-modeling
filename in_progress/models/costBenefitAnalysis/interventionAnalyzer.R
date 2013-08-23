@@ -20,17 +20,14 @@ if (!generateNewData) {
   P$X             <- NULL
 } 
 if (generateNewData) {
-  P <- hill(C,sigmaLBase,fBase,transBase,incLTBIBase,1,totT)
+  P <- hill(C,1,totT)
   write.csv(P,baseFile)
 }
 baseInc <- generateIncidence(P)
 
 #Intervention Analyzing:
 for (intervention in curInterventions) {
-  intConfig <- interventionConfig(intervention)
-  costs     <- intConfig$costs
-  params    <- intConfig$params
-  interData <- hill(costs,params[["sigmaL"]],params[["f"]],params[["trans"]])
+  interData <- hill(interventionConfig(intervention))
   write.csv(interData, paste(c(intFilePrefix,intervention,intFileSuffix),
                              collapse=""))
 }

@@ -87,29 +87,29 @@ Ddt <- function(t,v,parms) {
     discV   <- 1/(1.03^t)  #amount costs, health states discount constant
 
     #parameter values initialized for each time step
-    c01          <- (1-e0)*((1-e1)*N1)/((1-e0)*N0 + (1-e1)*N1)       #proportion of contacts made with FB individuals  (USB)
-    c00          <- 1 - c01                                          #proportion of contacts made with USB individuals (USB)
-    c10          <- (1-e1)*((1-e0)*N0)/((1-e0)*N0 + (1-e1)*N1)       #proportion of contacts made with USB individuals (FB)
-    c11          <- 1 - c10                                          #proportion of contacts made with FB individuals  (FB)
-    dLTBIEn      <- alpha*(N0+N1)                                    #FB arrivals with LTBI entering
-    dnatdeath0   <- mu0 * N0                                         #Natural deaths (USB)
-    dnatdeath1   <- mu1 * N1                                         #Natural deaths (FB)
-    dtbdeath0    <- mud * (I0 + J0)                                  #TB deaths (USB)
-    dtbdeath1    <- mud * (I1 + J1)                                  #TB deaths (FB)
-    dtbdeathD0   <- discV * dtbdeath0                                #TB deaths with discounting (USB)
-    dtbdeathD1   <- discV * dtbdeath1                                #TB deaths with discounting (FB)
-    dprogAcute0  <- vF*F0                                            #Acute LTBI progressions to Active TB disease (USB)
-    dprogAcute1  <- vF*F1                                            #Acute LTBI progressions to Active TB disease (FB)
-    dprogChron0  <- vL0*L0                                           #Chronic LTBI progressions to Active TB disease (USB)
-    dprogChron1  <- vL1*L1                                           #Chronic LTBI progressions to Active TB disease (FB)
-    dprogTotal0  <- dprogAcute0 + dprogChron0                        #Progression to Active TB (USB)
-    dprogTotal1  <- dprogAcute1 + dprogChron1                        #Progression to Active TB (FB)
-    dprogTotalD0 <- discV * dprogTotal0                              #Progression to Active TB with discounting (USB)
-    dprogTotalD1 <- discV * dprogTotal1                              #Progression to Active TB with discounting (FB)
-    lambda0      <- transmission*(beta*(c00*(I0/N0) + c01*(I1/N1)))  #Forces of Infection (USB)
-    lambda1      <- transmission*(beta*(c10*(I0/N0) + c11*(I1/N1)))  #Forces of Infection (FB)
-    dexogenous0	 <- x*p*lambda0*L0                                   #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
-    dexogenous1  <- x*p*lambda1*L1                                   #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
+    c01          <- (1-e0)*((1-e1)*N1)/((1-e0)*N0 + (1-e1)*N1) #proportion of contacts made with FB individuals  (USB)
+    c00          <- 1 - c01                                    #proportion of contacts made with USB individuals (USB)
+    c10          <- (1-e1)*((1-e0)*N0)/((1-e0)*N0 + (1-e1)*N1) #proportion of contacts made with USB individuals (FB)
+    c11          <- 1 - c10                                    #proportion of contacts made with FB individuals  (FB)
+    dLTBIEn      <- alpha*(N0+N1)                              #FB arrivals with LTBI entering
+    dnatdeath0   <- mu0 * N0                                   #Natural deaths (USB)
+    dnatdeath1   <- mu1 * N1                                   #Natural deaths (FB)
+    dtbdeath0    <- mud * (I0 + J0)                            #TB deaths (USB)
+    dtbdeath1    <- mud * (I1 + J1)                            #TB deaths (FB)
+    dtbdeathD0   <- discV * dtbdeath0                          #TB deaths with discounting (USB)
+    dtbdeathD1   <- discV * dtbdeath1                          #TB deaths with discounting (FB)
+    dprogAcute0  <- vF*F0                                      #Acute LTBI progressions to Active TB disease (USB)
+    dprogAcute1  <- vF*F1                                      #Acute LTBI progressions to Active TB disease (FB)
+    dprogChron0  <- vL0*L0                                     #Chronic LTBI progressions to Active TB disease (USB)
+    dprogChron1  <- vL1*L1                                     #Chronic LTBI progressions to Active TB disease (FB)
+    dprogTotal0  <- dprogAcute0 + dprogChron0                  #Progression to Active TB (USB)
+    dprogTotal1  <- dprogAcute1 + dprogChron1                  #Progression to Active TB (FB)
+    dprogTotalD0 <- discV * dprogTotal0                        #Progression to Active TB with discounting (USB)
+    dprogTotalD1 <- discV * dprogTotal1                        #Progression to Active TB with discounting (FB)
+    lambda0      <- trans * (beta*(c00*(I0/N0) + c01*(I1/N1))) #Forces of Infection (USB)
+    lambda1      <- trans * (beta*(c10*(I0/N0) + c11*(I1/N1))) #Forces of Infection (FB)
+    dexogenous0	 <- x*p*lambda0*L0                             #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
+    dexogenous1  <- x*p*lambda1*L1                             #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
     dInterventionCost <- discV * (iCnewCases*1e6*(dprogTotal0+dprogTotal1) + iCtotPop*1e6*(N0+N1) + iCLTBIEn*1e6*dLTBIEn*(1-f))
     
     #Difference Equations (USB)
@@ -160,17 +160,10 @@ Ddt <- function(t,v,parms) {
   })
 }
 
-hill <- function(intervenCost,sigmaL,f,transmission=1,initial=cutoffT,final=totT,dataSet=P){
-  # set values in parameters
-  newparms <- c(iCnewCases=as.vector(intervenCost['newCases']), 
-                iCtotPop=as.vector(intervenCost['totPop']), 
-                iCLTBIEn=as.vector(intervenCost['LTBIEn']),
-                sigmaL=sigmaL, f=f, transmission=transmission)
-  parameters <- c(parms, newparms)
-  # recursive=TRUE collapses dataframe to labeled vector
+hill <- function(params,initial=cutoffT,final=totT,dataSet=P){
+  parameters <- c(parms, params)  # set values in parameters
   initv <- c(dataSet[initial,], recursive=TRUE)
-  # times = data points to be calculuated
-  times <- (initial:final)*deltaT
+  times <- (initial:final)*deltaT #data points to be calculuated
   
   # compute master results
   mres <- lsoda(initv, times, Ddt, parameters)
@@ -188,7 +181,7 @@ generateIncidence <- function(dataSet) {
   })
 }
 
-generateTotalIncidence <- function(dataSet,transmission=1,f=fBase) {
+generateTotalIncidence <- function(dataSet,trans=1,f=fBase) {
   with(as.list(parms), {
     #proportion of contacts made with FB individuals  (USB)
     c01          <- (1-e0)*((1-e1)*dataSet$N1)/((1-e0)*dataSet$N0 + 
@@ -201,10 +194,10 @@ generateTotalIncidence <- function(dataSet,transmission=1,f=fBase) {
     c11          <- 1 - c10
     #proportion of contacts made with FB individuals  (FB)
     #Forces of Infection (USB)
-    lambda0      <- transmission*(beta*(c00*(dataSet$I0/dataSet$N0) + 
+    lambda0      <- trans*(beta*(c00*(dataSet$I0/dataSet$N0) + 
                                         c01*(dataSet$I1/dataSet$N1)))
     #Forces of Infection (FB)
-    lambda1      <- transmission*(beta*(c10*(dataSet$I0/dataSet$N0) + 
+    lambda1      <- trans*(beta*(c10*(dataSet$I0/dataSet$N0) + 
                                         c11*(dataSet$I1/dataSet$N1)))
 
 
