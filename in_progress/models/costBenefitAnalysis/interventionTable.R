@@ -21,6 +21,7 @@ baseInc <- generateIncidence(baseData)
 #US Health Care System (HCS) TB costs due to base system
 baseHCSCost <- (baseData$cN0 + baseData$cN1)/1e9
 baseCasesD <- 1e6*(baseData$progTotalD0 + baseData$progTotalD1)
+baseDeathsD <- 1e6*(baseData$tbdeathD0 + baseData$tbdeathD1)
 
 #Costs related to Interventions
 for(intervention in redEnLTBI_Interventions_paper) {
@@ -47,6 +48,8 @@ totSpent <- as.list(1:4)  #net cost
 intCasesD <- as.list(1:4)
 casesAvertedD <- as.list(1:4)
 cpcaDataD <- as.list(1:4) #cost per case averted
+intDeathsD <- as.list(1:4)
+deathsAvertedD <- as.list(1:4) #TB deaths averted
 
 y <- 1
 for (interventionName in redEnLTBI_Interventions_paper) {
@@ -71,6 +74,10 @@ for (interventionName in redEnLTBI_Interventions_paper) {
   casesAvertedD[[y]]     <- baseCasesD - intCasesD[[y]]
   #Cost per cases averted [in $/case]
   cpcaDataD[[y]] <- 1e9*totSpent[[y]]/casesAvertedD[[y]]
+
+  intDeathsD[[y]]     <- 1e6*(interventionData[[y]]$tbdeathD0 + interventionData[[y]]$tbdeathD1)
+  #Number of TB deaths averted [in people]
+  deathsAvertedD[[y]] <- baseDeathsD - intDeathsD[[y]]
   
   y <- y + 1
 
@@ -81,9 +88,19 @@ for (interventionName in redEnLTBI_Interventions_paper) {
 ### PART 3 - PUT IT ALL IN A TABLE ###
 
 # Sample 5 points in time
+rownames <- c('2000', '2025', '2050', '2075', '2100')
+
+# Savings from Intervention
+svngResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
+for (interventionNumber in 1:4) {
+    svngResults[,interventionNumber] <- saveOfInter[[interventionNumber]][seq(1, totT, floor(totT/4))]
+}
+print(svngResults)
+svngRes.table <- xtable(svngResults, digits=6, align="|r|cccc|", caption = "Savings from Reducing Incoming LTBI by X percent (in billions of dollars)")
+
 
 # Additional Cost of Intervention
-aciResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = c('2000', '2025', '2050', '2075', '2100'))
+aciResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
 for (interventionNumber in 1:4) {
     aciResults[,interventionNumber] <- totSpent[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
@@ -91,7 +108,7 @@ print(aciResults)
 aciRes.table <- xtable(aciResults, digits=6, align="|r|cccc|", caption = "Additional Cost of Reducing Incoming LTBI by X percent (in billions of dollars)")
 
 # Number of Case Averted
-ncavResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = c('2000', '2025', '2050', '2075', '2100'))
+ncavResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
 for (interventionNumber in 1:4) {
     ncavResults[,interventionNumber] <- casesAvertedD[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
@@ -99,16 +116,26 @@ print(ncavResults)
 ncavRes.table <- xtable(ncavResults, align="|r|cccc|", caption = "Cases of TB Averted by Reducing Incoming LTBI by X percent")
 
 # Cost per Case Averted
-cpcaResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = c('2000', '2025', '2050', '2075', '2100'))
+cpcaResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
 for (interventionNumber in 1:4) {
     cpcaResults[,interventionNumber] <- cpcaDataD[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
 print(cpcaResults)
 cpcaRes.table <- xtable(cpcaResults, align="|r|cccc|", caption = "Cost Per Case Averted by Reducing Incoming LTBI by X percent (in dollar per case)")
 
+# Number of Deaths Averted
+ndavResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
+for (interventionNumber in 1:4) {
+    ndavResults[,interventionNumber] <- deathsAvertedD[[interventionNumber]][seq(1, totT, floor(totT/4))]
+}
+print(ndavResults)
+ndavRes.table <- xtable(ndavResults, align="|r|cccc|", caption = "TB Deaths Averted by Reducing Incoming LTBI by X percent")
+
 # output to file
 sink("intrvTable.tex", append=FALSE, split=FALSE)
+print(svngRes.table)
 print(aciRes.table)
 print(ncavRes.table)
 print(cpcaRes.table)
+print(ndavRes.table)
 sink()
