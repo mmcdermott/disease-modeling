@@ -14,7 +14,7 @@ if (length(args) > 0) {
   index <- 1
   analysisType <- 1
 }
-generateNewData <- F
+generateNewData <- T
 
 #Which interventions to run:
 source('interventionConfig.R')

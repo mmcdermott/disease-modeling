@@ -1,6 +1,6 @@
 source('interventionAnalyzer.R')
 #Group by type IMPORTANT: Reset all intervention costs to default values in interventionConfig.R before running
-for(intervention in redEnLTBI_Interventions) {
+for(intervention in redEnLTBI_Interventions_specialMag) {
   intConfig <- interventionConfig(intervention)
   costs     <- intConfig$costs
   params    <- intConfig$params
@@ -22,7 +22,7 @@ for(intervention in incLTBItrmt_Interventions) {
 
 #Cost Vary
 for(x in 0:9){
-  for(intervention in redEnLTBI_Interventions) {
+  for(intervention in redEnLTBI_Interventions_specialMag) {
     intConfig <- interventionConfig(intervention,x)
     costs     <- intConfig$costs
     params    <- intConfig$params

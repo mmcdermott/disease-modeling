@@ -33,7 +33,8 @@ split20RedEnLTBIInter <- c('redEnLTBI0','redEnLTBI5','redEnLTBI10',
                            'redEnLTBI75','redEnLTBI80','redEnLTBI85',
                            'redEnLTBI90','redEnLTBI95','redEnLTBI100')
 redEnLTBI_Interventions <- allInterventions[1:3]                 
-curInterventions <- split20RedEnLTBIInter#allInterventions
+redEnLTBI_Interventions_specialMag <- c('redEnLTBI10','redEnLTBI25','redEnLTBI50')                 
+curInterventions <- redEnLTBI_Interventions
 incLTBICost <- 0
 
 interventionConfig <- function(interventionStr, x=0) { #x is an integer refering to cost option, ranges 0 to 5
@@ -52,7 +53,7 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
     if (interventionType == "redEnLTBI") {
       #TODO: Make this a function depending on magnitude for greater flexibility
       # (minor)
-      incLTBI <- incLTBI*(interventionMag/100)
+      incLTBI <- incLTBI*(1-interventionMag/100)
       LTBIEn  <- 800 #LTBIEn + 400 + 600*(interventionMag/100) + x*100
     } else if (interventionType == "redImm") {
       #No Costs!

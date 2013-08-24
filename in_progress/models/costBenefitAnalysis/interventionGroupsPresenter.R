@@ -75,17 +75,17 @@ interTot <- as.list(1:3)
 totSpent <- as.list(1:3)  #net cost
 
 y <- 1
-print(redEnLTBI_Interventions)
-for (interventionName in redEnLTBI_Interventions) {
+for (interventionName in redEnLTBI_Interventions_specialMag) {
   interventionData[[y]] <- read.csv(paste(c(intFilePrefix,interventionName,
                                        intFileSuffix),collapse=""))
-  print(interventionData[[y]][125,])
   #HCS cost borne by intervention
   interHCSCost[[y]] <- (interventionData[[y]]$cN0 + interventionData[[y]]$cN1)/1e9
   #Implementation cost of intervention
   costOfInter[[y]] <- (interventionData[[y]]$interventionCost)/1e9
   #Savings from intervention
   saveOfInter[[y]] <- baseHCSCost - interHCSCost[[y]]
+  print(interventionName)
+  print(saveOfInter[[y]])
   #Total US HCS cost due to intervention
   interTot[[y]] <- interHCSCost[[y]] + costOfInter[[y]]
   #Total additional spent by US HCS due to intervention
