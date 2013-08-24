@@ -37,36 +37,40 @@ for(intervention in redEnLTBI_Interventions_paper) {
 
 ### PART 2 - ORGANIZE DATA INTO MEANINGFUL CHUNKS ###
 
-#Graphs (actually, not really)
+#Containers
 interventionData <- as.list(1:4)
 interHCSCost <- as.list(1:4)
 costOfInter <- as.list(1:4)  #additional cost of intervention
 saveOfInter <- as.list(1:4)  #additional savings of intervention
 interTot <- as.list(1:4)
 totSpent <- as.list(1:4)  #net cost
+intCasesD <- as.list(1:4)
+casesAvertedD <- as.list(1:4)
+cpcaDataD <- as.list(1:4) #cost per case averted
 
 y <- 1
 for (interventionName in redEnLTBI_Interventions_paper) {
   
   interventionData[[y]] <- read.csv(paste(c(intFilePrefix,interventionName,
                                        intFileSuffix),collapse=""))
-  #HCS cost borne by intervention
+  #HCS cost borne by intervention [in billions $]
   interHCSCost[[y]] <- (interventionData[[y]]$cN0 + interventionData[[y]]$cN1)/1e9
-  #Implementation cost of intervention
+  #Implementation cost of intervention [in billions $]
   costOfInter[[y]] <- (interventionData[[y]]$interventionCost)/1e9
-  #Savings from intervention
+  #Savings from intervention [in billions $]
   saveOfInter[[y]] <- baseHCSCost - interHCSCost[[y]]
   #print(interventionName)
   #print(saveOfInter[[y]])
-  #Total US HCS cost due to intervention
+  #Total US HCS cost due to intervention [in billions $]
   interTot[[y]] <- interHCSCost[[y]] + costOfInter[[y]]
-  #Total additional spent by US HCS due to intervention
+  #Total additional spent by US HCS due to intervention [in billions $]
   totSpent[[y]]  <- interTot[[y]] - baseHCSCost 
   
-  #Cost per cases averted
-  intCasesD         <- 1e6*(interventionData[[y]]$progTotalD0 + interventionData[[y]]$progTotalD1)
-  casesAvertedD     <- baseCasesD - intCasesD
-  cpcaDataD <- 1e9*totSpent[[y]]/casesAvertedD
+  intCasesD[[y]]         <- 1e6*(interventionData[[y]]$progTotalD0 + interventionData[[y]]$progTotalD1)
+  #Number of TB cases averted [in people]
+  casesAvertedD[[y]]     <- baseCasesD - intCasesD[[y]]
+  #Cost per cases averted [in $/case]
+  cpcaDataD[[y]] <- 1e9*totSpent[[y]]/casesAvertedD[[y]]
   
   y <- y + 1
 
@@ -77,14 +81,34 @@ for (interventionName in redEnLTBI_Interventions_paper) {
 ### PART 3 - PUT IT ALL IN A TABLE ###
 
 # Sample 5 points in time
-results <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = c('2000', '2025', '2050', '2075', '2100'))
+
+# Additional Cost of Intervention
+aciResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = c('2000', '2025', '2050', '2075', '2100'))
 for (interventionNumber in 1:4) {
-    results[,interventionNumber] <- saveOfInter[[interventionNumber]][seq(1, totT, floor(totT/4))]
+    aciResults[,interventionNumber] <- totSpent[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
-print(results)
-res.table <- xtable(results, digits=6, align="|r|cccc|")
+print(aciResults)
+aciRes.table <- xtable(aciResults, digits=6, align="|r|cccc|", caption = "Additional Cost of Reducing Incoming LTBI by X percent (in billions of dollars)")
+
+# Number of Case Averted
+ncavResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = c('2000', '2025', '2050', '2075', '2100'))
+for (interventionNumber in 1:4) {
+    ncavResults[,interventionNumber] <- casesAvertedD[[interventionNumber]][seq(1, totT, floor(totT/4))]
+}
+print(ncavResults)
+ncavRes.table <- xtable(ncavResults, align="|r|cccc|", caption = "Cases of TB Averted by Reducing Incoming LTBI by X percent")
+
+# Cost per Case Averted
+cpcaResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = c('2000', '2025', '2050', '2075', '2100'))
+for (interventionNumber in 1:4) {
+    cpcaResults[,interventionNumber] <- cpcaDataD[[interventionNumber]][seq(1, totT, floor(totT/4))]
+}
+print(cpcaResults)
+cpcaRes.table <- xtable(cpcaResults, align="|r|cccc|", caption = "Cost Per Case Averted by Reducing Incoming LTBI by X percent (in dollar per case)")
 
 # output to file
 sink("intrvTable.tex", append=FALSE, split=FALSE)
-print(res.table)
+print(aciRes.table)
+print(ncavRes.table)
+print(cpcaRes.table)
 sink()
