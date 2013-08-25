@@ -59,19 +59,23 @@ does not grant immunity, and all healthy individuals are grouped in the Suscepti
 and may be re-infected at a later time.  \\
 
 \section{Methods}
-
 \subsection{Basic Implementation}
 Both the basic Hill Model and this extended Hill Model were implemented in
 \texttt{R} as a system of differential equations, which were solved via the
 $\texttt{lsoda}$ routine. The systems of differential equations used in the Basic
-Hill Model and the extended Hill Model are shown below in Figure 2 and Figure 3
-respectively.   
+Hill Model and the extended Hill Model to capture basic disease dynamics are
+shown below in Figure 2 and Figure 3 respectively. In the extended Hill model,
+more differential equations were implemented to add additional tracking and
+economic modeling. These equations are detailed in the appendix. 
 
 \begin{figure}
 \includegraphics[scale=0.75]{figures/BasicHillEquations.pdf}
 \end{figure}
 
-The vector variables $S_{0}, F_{0}, L_{0}, I_{0}, J_{0}$ contain the number of US-born individuals in the S, F, L, I, J compartments respectively, and $S_{1}, F_{1}, L_{1}, I_{1}, J_{1}$ contain foreign-born individuals.  $N_{0}$ and $N_{1}$ are the total populations of US-born and foreign-born individuals.
+The vector variables $S_{0}, F_{0}, L_{0}, I_{0}, J_{0}$ contain the number of
+US-born individuals in the S, F, L, I, J compartments respectively, whereas $S_{1},
+F_{1}, L_{1}, I_{1}, J_{1}$ contain foreign-born individuals.  $N_{0}$ and
+$N_{1}$ are the total populations of US-born and foreign-born individuals.
 The constants $\rho$ and $\alpha$ are birth rates, while $\mu_{i}$, and $\mu_{d}$ are death rates.  
 A complete list and descriptions of all constants used in the model can be found in the appendix.
 
@@ -80,47 +84,67 @@ In order to refine the tracking capabilities of the
 Hill Model, the original differential equations used to describe TB spread were
 separated into their component parts and each section was tracked separately.
 These components were made into compartments, tracked by differential equations
-EQUATION NUMBER SOMETHING TO SOMETHING, SORTED BY COMPARTMENT. In addition,
-estimations of the basic reproductive number of FB or USB active, infectious TB
-cases were made from a theoretical and an experimental perspective. Experimental
-data were calculated by reducing the initial population of FB or USB active,
-infectious TB cases by 1 and predicting the final number of cases seen in each
-case, in $\texttt{R}$. 
+detailed in the appendix. These equations allowed the model to track the total
+number of TB cases, TB deaths, and  natural deaths. Further, the model tracks,
+the sourced cost on the US HCS. Progressions into
+active TB due to activations of LTBI or exogenous infection were tracked,
+allowing for sourced incidence data to be generated. The entering cases of LTBI
+(acute or chronic) were also tracked. In the case of intervention testing, the
+number of cured cases of entering LTBI and the number of untreated entering LTBI
+were both tracked. Cured cases of LTBI entering, TB deaths, total TB cases, and
+total cost were also tracked discounted at 3\% annually. This discounting was
+converted to a continuous differential equation for use within the model. In
+general, incidence data is calculated in the same way in the extended hill as it
+was in the basic Hill.
 
+In addition, estimations of the basic reproductive number of FB or USB active,
+infectious TB cases were made from a theoretical and an experimental
+perspective. Experimental data were calculated by reducing the initial
+population of FB or USB active, infectious TB cases by one and allowing the
+model to progress otherwise as normal. The decreased number of total TB cases
+seen details how many infections can be thought to be due to one infected
+individual in the given population.
+
+From an experimental perspective, the spread of TB was thought to be a geometric
+series. If one infectious individual infects $x$ people annually, over the
+course of $N$ years the total number of infections caused by this individual can
+be approximated by the geometric series of $N$ terms with rate $x$ and initial
+term $1$. In this case, $N = 100$, and the ratios for FB infectious individuals
+and USB infectious individuals were obtained from RATIO CITATION COLIN. 
 \subsection{Economic Modeling}
-Further, estimates for the cost of active TB treatment and for the cost of
-latent TB infection (LTBI) treatment were obtained from Dylan et. al. and So and
-So adherence effectivenss. CITE ME!
-Both these costs and any health state outcomes were discounted at a rate of 3\%
-per year. From these estimated cost per treatment, total costs were obtained in
-the following way. It was assumed that every patient in the US with active TB is
-treated, not necessarily successfully, but further that every treatment costs
-exactly the average cost per treatment. Thus, active TB costs could be tracked
-simply by tracking the number of new active TB cases, and scaling by a
-discounted cost per treatment rate. Given the structure of the model, further
-granularity was obtained from the cost data by tracking separately the cost due
-to new cases that stemmed from activation of a chronic LTBI case, or activation
-of an acute LTBI case. These values give estimates for the US HCS TB cost due to
-exogenous infection of TB vs the US HCS TB cost due to activation of LTBI. Each
-of these components of the cost was a new differential equation tracked by the
-model, also solved by $\texttt{lsoda}$. For LTBI treatment cost, treatment was
+When tracking the economic implications of current US TB load and various
+intervention strategies, active TB costs were given by \$14,000. This cost is
+the weighted mean of the costs of cases requiring hospitalization (happening
+49\% of the time) and cases not requiring hospitalization (51\%). These data
+were found in DYLAN COST STUDY CITATION. LTBI treatment costs were given by
+\$468.00. These data were based on the cost of a successfull treatment, given by
+DYLAN COST STUDY CITATION, as well as adherence and efficacy data found in
+ADHERENCE CITATION.
+
+From these estimated cost per treatment, total costs were obtained by assuming
+that every patient with active TB in the US is treated at full price, though the
+treatment may fail. As individuals with active
+TB are charged upon entry to the active TB compartment, the model can also
+accurately estimate sourced US HCS cost data. Cost data were separately tracked
+due to incoming active TB costs stemming from activation of LTBI vs exogenous
+reinfection. These data were modelled as additional compartments and also solved
+by $\texttt{lsoda}$. For LTBI treatment cost, treatment was
 charged upon leaving the LTBI compartment due to the cumulative self-cure and
 treatment rate given in the Hill Model. The fraction of these indviduals who
 leave this compartment due to self cure was assumed to be zero. Given the
 uncertainty in measurments of LTBI treatment cost, extensive sensitivity
-analysis was performed on this parameter relative to final cost outcomes, which
-showed that it had an linear effect. In addition to US HCS cost, the system
-was implemented so as to also track projected intervention implementation cost,
-given user-inputted parameters relating to various possible intervention cost
-strategies. The extended Hill Model was used to track the effect of many
-interventions tested by the Hill Model as well as an additional intervention
-strategy of curing cases of immigrating LTBI prior to entry. This intervention
-strategy proved very promising and elimination year, final cost, and cost per
-case averted were tracked for various levels of entering LTBI cure rate. The
+analysis was performed on this parameter relative to final cost outcomes. In
+addition to US HCS cost, the system was implemented so as to also track
+projected intervention implementation cost, given user-inputted parameters
+relating to various possible intervention cost strategies. The extended Hill
+Model was used to track the effect of many interventions tested by the Hill
+Model. In particular, the intervention strategy of curing entering cases of LTBI
+proved very promising and elimination year, final cost, and cost per case
+averted were tracked for various levels of entering LTBI cure rate. The
 interventions were implemented so as to take effect during the year 2013 and run
 to 2100. The numerical DE solver $\texttt{lsoda}$ used was run with a time step
 of $0.8$. Sensitivity analysis was performed on this parameter and reducing the
-time step was shown to have minimal effect on final size or cost values. 
+time step was shown to have minimal effect on final size or cost values.
 
 \subsection{Agent Based}
 The population level agent based model was implemented in several ways. Early
@@ -129,11 +153,23 @@ implementations were constructed in $\texttt{C++}$. An implementation was made
 that tracked the hill model exactly, up to still including the Acute Latent
 compartment in the model. Probabilites of agent progression between various
 health states were computed given rates in the hill model and a variety of
-approximations. The final size standard deviation and distribution data was
-collected via 2160 (MINUS SOME) runs with each agent in the model truly
-representing one individual and a time step of $0.01$. These data were analyzed
-in $R$. 
+approximations. The model maintained scaled individual records for every
+individual with LTBI, with susceptible individuals not modelled as agents.
+Instead, a binomial distribution was used to probabilistically pick the number
+of new infections each time step. Similarlly, immigration was also handeled
+outside of the agent-based modelling. The final size standard deviation and
+distribution data was collected via 2160 (MINUS SOME) runs with each agent in
+the model truly representing one infected individual and a time step of $0.01$.
+These data were analyzed in $R$. This model was also made to track deaths, total
+TB cases, and infection sources. This data were consistent with the
+deterministic model, and not reproduced in this write-up. 
 
+Further implementations of the \texttt{C++} model were made that deviated from
+the basic Hill Model. Specifically, the acute latent compartment in the basic
+Hill Model is a vestigal necessity of compartmental modeling and not reflective
+of the biology of tuberculosis, and an agent based model was implemented that
+more closely respects the biology of tuberculosis. Results from this model or
+the strict Hill model did not differ significantly. 
 \section{Results}
 
 \subsection{Basic Population Breakdown}
