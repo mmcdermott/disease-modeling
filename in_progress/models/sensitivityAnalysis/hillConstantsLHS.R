@@ -1,6 +1,10 @@
 library(lhs)
 library(triangle)
 
+#Uniform Latin Hypercube with 16 parameters, resolution: n
+n <- 10  #number of divisions in probability distributions
+uniformRandLHS <- randomLHS(n,16)
+
 sigmaLBase  <- 0.057
 fBase       <- 0.187
 transBase   <- 1
@@ -56,3 +60,10 @@ newCases1 = .007554,  #Foreign-born
 CtBase = Ct,
 ClBase = Cl
 )
+
+#Ordered by PRCC absolute value from Hill's sensitivity analysis
+randLHS <- data.frame(sigmaL=1:n,vL1=1:n,f=1:n,p=1:n,ARI0=1:n,
+                      q=1:n,g=1:n,sigmaF=1:n,r1=1:n,r0=1:n,
+                      mud=1:n,x=1:n,vL0=1:n,phi=1:n,e0=1:n,
+                      e1=1:n)
+					  
