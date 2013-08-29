@@ -95,8 +95,8 @@ for(i in 1:n){
   randLHS$e1[i]     <- qtriangle(uniformRandLHS[i,16],0.877,0.999,0.985)      #Triangle(0.877,0.985,0.999)
   
   #Cost Parameters
-  randLHS$Ct[i]     <- uniformRandLHS[i,17]*(12613) + 2803  #Uniform(12613,15416)
-  randLHS$Cl[i]     <- uniformRandLHS[i,18]*(630)   + 140   #Uniform(630,770)
+  randLHS$Ct[i]     <- uniformRandLHS[i,17]*(2803) + 12613   #Uniform(12613,15416)
+  randLHS$Cl[i]     <- uniformRandLHS[i,18]*(140)  + 630     #Uniform(630,770)
   
   #Original Hill parameters (original distributions)
   # randLHS$sigmaL[i] <- uniformRandLHS[i,1]*(0.09) + 0.01                 #Uniform(0.01,0.10)
