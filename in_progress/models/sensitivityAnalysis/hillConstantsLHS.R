@@ -1,9 +1,9 @@
 library(lhs)
 library(triangle)
 
-#Uniform Latin Hypercube with 16 parameters, resolution: n
+#Uniform Latin Hypercube with 18 parameters, resolution: n
 n <- 10  #number of divisions in probability distributions
-uniformRandLHS <- randomLHS(n,16)
+uniformRandLHS <- randomLHS(n,18)
 
 sigmaLBase  <- 0.057
 fBase       <- 0.187
@@ -65,5 +65,54 @@ ClBase = Cl
 randLHS <- data.frame(sigmaL=1:n,vL1=1:n,f=1:n,p=1:n,ARI0=1:n,
                       q=1:n,g=1:n,sigmaF=1:n,r1=1:n,r0=1:n,
                       mud=1:n,x=1:n,vL0=1:n,phi=1:n,e0=1:n,
-                      e1=1:n)
-					  
+                      e1=1:n,Ct=1:n,Cl=1:n)
+
+#Generate Latin Hypercube of parameter values
+# For Hill constants, probability distributions
+# used are triangular, determined from the best-fit
+# values in the Hill model.  Endpoints are given by
+# the 2.5 and 97.5 percentiles, and the mode is
+# given by the best fit.  (See Table 1 in Hill paper)
+# Probability distributions used in the original Hill
+# model are given below for each parameter, commented out.
+for(i in 1:n){
+  #Original Hill parameters (best-fit distributions)
+  randLHS$sigmaL[i] <- qtriangle(uniformRandLHS[i,1],0.015,0.086,0.057)       #Triangle(0.015,0.057,0.086)
+  randLHS$vL1[i]    <- qtriangle(uniformRandLHS[i,2],0.0009,0.0014,0.0010)    #Triangle(0.0009,0.0010,0.0014)
+  randLHS$f[i]      <- qtriangle(uniformRandLHS[i,3],0.157,0.232,0.187)       #Triangle(0.157,0.187,0.232)
+  randLHS$p[i]      <- qtriangle(uniformRandLHS[i,4],0.053,0.137,0.103)       #Triangle(0.053,0.103,0.137)
+  randLHS$ARI0[i]   <- qtriangle(uniformRandLHS[i,5],0.00021,0.00030,0.00030) #Triangle(0.00021,0.00030,0.00030)
+  randLHS$q[i]      <- qtriangle(uniformRandLHS[i,6],0.569,0.825,0.708)       #Triangle(0.569,0.708,0.825)
+  randLHS$g[i]      <- qtriangle(uniformRandLHS[i,7],0.0008,0.0815,0.0047)    #Triangle(0.0008,0.0047,0.0815)
+  randLHS$sigmaF[i] <- qtriangle(uniformRandLHS[i,8],0.419,0.574,0.461)       #Triangle(0.419,0.461,0.574)
+  randLHS$r1[i]     <- qtriangle(uniformRandLHS[i,9],0.759,0.831,0.780)       #Triangle(0.759,0.780,0.831)
+  randLHS$r0[i]     <- qtriangle(uniformRandLHS[i,10],0.623,0.694,0.667)      #Triangle(0.623,0.667,0.694)
+  randLHS$mud[i]    <- qtriangle(uniformRandLHS[i,11],0.071,0.231,0.115)      #Triangle(0.071,0.115,0.231)
+  randLHS$x[i]      <- qtriangle(uniformRandLHS[i,12],0.088,0.860,0.111)      #Triangle(0.088,0.111,0.860)
+  randLHS$vL0[i]    <- qtriangle(uniformRandLHS[i,13],0.0011,0.0015,0.0014)   #Triangle(0.0011,0.0014,0.0015)
+  randLHS$phi[i]    <- qtriangle(uniformRandLHS[i,14],0.861,0.938,0.897)      #Triangle(0.861,0.897,0.938)
+  randLHS$e0[i]     <- qtriangle(uniformRandLHS[i,15],0.853,0.995,0.965)      #Triangle(0.853,0.965,0.995)
+  randLHS$e1[i]     <- qtriangle(uniformRandLHS[i,16],0.877,0.999,0.985)      #Triangle(0.877,0.985,0.999)
+  
+  #Cost Parameters
+  randLHS$Ct[i]     <- uniformRandLHS[i,17]*(12613) + 2803  #Uniform(12613,15416)
+  randLHS$Cl[i]     <- uniformRandLHS[i,18]*(630)   + 140   #Uniform(630,770)
+  
+  #Original Hill parameters (original distributions)
+  # randLHS$sigmaL[i] <- uniformRandLHS[i,1]*(0.09) + 0.01                 #Uniform(0.01,0.10)
+  ## randLHS$vL1[i]   <- imputed
+  # randLHS$f[i]      <- uniformRandLHS[i,3]*(0.1) + 0.15                  #Uniform(0.15,0.25)
+  # randLHS$p[i]      <- qtriangle(uniformRandLHS[i,4],0.010,0.150,0.056)  #Triangle(0.010,0.056,0.150)
+  # randLHS$ARI0[i]   <- uniformRandLHS[i,5]*(0.0001) + 0.0002             #Uniform(0.0002,0.0003)
+  # randLHS$q[i]      <- qtriangle(uniformRandLHS[i,6],0.50,0.85,0.75)     #Triangle(0.50,0.75,0.85)
+  # randLHS$g[i]      <- uniformRandLHS[i,7]                               #Uniform(0,1)
+  # randLHS$sigmaF[i] <- qtriangle(uniformRandLHS[i,8],0.40,0.60,0.50)     #Triangle(0.40,0.50,0.60)
+  # randLHS$r1[i]     <- qtriangle(uniformRandLHS[i,9],0.75,0.85,0.80)     #Triangle(0.75,0.80,0.85)
+  # randLHS$r0[i]     <- qtriangle(uniformRandLHS[i,10],0.60,0.70,0.65)    #Triangle(0.60,0.65,0.70)
+  # randLHS$mud[i]    <- qtriangle(uniformRandLHS[i,11],0.06,0.28,0.14)    #Triangle(0.06,0.14,0.28)
+  # randLHS$x[i]      <- uniformRandLHS[i,12]                              #Uniform(0,1)
+  ## randLHS$vL0[i]   <- imputed
+  # randLHS$phi[i]    <- qtriangle(uniformRandLHS[i,14],0.85,0.95,0.90)    #Triangle(0.85,0.90,0.95)
+  # randLHS$e0[i]     <- uniformRandLHS[i,15]*(0.15)  + 0.85               #Uniform(0.85,1)
+  # randLHS$e1[i]     <- uniformRandLHS[i,16]*(0.15)  + 0.85               #Uniform(0.85,1)
+}
