@@ -42,6 +42,8 @@ sigmaF1 = 1.301,   #Cumulative fraction of treatment for acute infection for bot
 # sigmaLBase = sigmaLBase, #Treatment rate for chronic LTBI per year
 # fBase = fBase,      #Fraction of FB arrivals with LTBI
 
-phi0 <- 
-phi1 <- 
+phi0 <- phi[i]*(mu0 + mud)/(1-phi[i])
+phi1 <- phi[i]*(mu1 + mud)/(1-phi[i])
+sigmaF0 <- sigmaF[i]*(mu0 + vF)/(1-sigmaF[i])
+sigmaF1 <- sigmaF[i]*(mu1 + vF)/(1-sigmaF[i])
 beta <- ARI0[i]*((mu0 + mud[i] + phi0)/q[i])/(c00*I0[1]/N0[1] + c01*I1[1]/N1[1])
