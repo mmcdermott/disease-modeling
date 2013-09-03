@@ -2,6 +2,7 @@ library(deSolve) # for lsoda routine
 
 #Hill Constants
 source('hillConstantsLHS.R')
+#load('LHSparms.RData')
 
 #DE Solving Parameters + runge-kutta solver: 
 source('deSolConstants.R')
@@ -29,8 +30,6 @@ S0<-S1<-F0<-F1<-L0<-L1<-I0<-I1<-J0<-J1<-N0<-N1<-rep(0,totT)
 cLatent <- rep(0,totT)
 cActive <- rep(0,totT)
 cTotal <- rep(0,totT)
-
-# NEED: F0, F1, L0, L1, N0, N1, cN0, cN1, interventionCost
 
 #Intervention per time step cost array 
 # cost of new cases, total population, and LTBI cases entering
@@ -90,7 +89,7 @@ discRt   <- 0.03
 #P$exogenous1[1]  <- 0
 P$cLatent[1] <- 0
 P$cActive[1] <- 0
-p$cTotal
+P$cTotal[1] <- 0
 
   #Differential Equation Functions
 Ddt <- function(t,v,parms) {

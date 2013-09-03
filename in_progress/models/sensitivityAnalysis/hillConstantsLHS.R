@@ -118,3 +118,5 @@ for(i in 1:n){
   # randLHS$e0[i]     <- uniformRandLHS[i,15]*(0.15)  + 0.85               #Uniform(0.85,1)
   # randLHS$e1[i]     <- uniformRandLHS[i,16]*(0.15)  + 0.85               #Uniform(0.85,1)
 }
+
+#save(randLHS, 'LHSparms.RData')
