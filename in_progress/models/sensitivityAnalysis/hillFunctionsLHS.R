@@ -2,7 +2,7 @@ library(deSolve) # for lsoda routine
 
 #Hill Constants
 source('hillConstantsLHS.R')
-#load('LHSparms.RData')
+#load('randLHS.RData')
 
 #DE Solving Parameters + runge-kutta solver: 
 source('deSolConstants.R')

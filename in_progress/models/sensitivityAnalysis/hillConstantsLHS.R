@@ -2,7 +2,7 @@ library(lhs)
 library(triangle)
 
 #Uniform Latin Hypercube with 18 parameters, resolution: n
-n <- 10  #number of divisions in probability distributions
+n <- 10000  #number of divisions in probability distributions
 uniformRandLHS <- randomLHS(n,18)
 
 sigmaLBase  <- 0.057
@@ -119,4 +119,4 @@ for(i in 1:n){
   # randLHS$e1[i]     <- uniformRandLHS[i,16]*(0.15)  + 0.85               #Uniform(0.85,1)
 }
 
-#save(randLHS, 'LHSparms.RData')
+save(randLHS, file = 'randLHS.RData')
