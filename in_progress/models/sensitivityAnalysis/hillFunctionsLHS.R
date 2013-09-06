@@ -235,7 +235,8 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   })
   
   # recursive=TRUE collapses dataframe to labeled vector
-  initv <- c(P[initial,], recursive=TRUE)
+  #initv <- c(P[initial,], recursive=TRUE)
+  initv <- c(P[1,], recursive=TRUE)
   # times = data points to be calculuated
   times <- (initial:final)*deltaT
   
