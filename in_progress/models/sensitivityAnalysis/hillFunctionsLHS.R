@@ -194,11 +194,13 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   # set values in parameters
   parameters <- c(randLHS[i,],phi0=0,phi1=0,sigmaF0=0,sigmaF1=0,beta=0,
                   mu0=mu0,mu1=mu1,ro=ro,alpha=alpha,vF=vF,transmission=1,recursive=TRUE)
-  with(as.list(randLHS[i,]), {
-    parameters$phi0 <- phi*(mu0 + mud)/(1-phi)
-    parameters$phi1 <- phi*(mu1 + mud)/(1-phi)
-    parameters$sigmaF0 <- sigmaF*(mu0 + vF)/(1-sigmaF)
-    parameters$sigmaF1 <- sigmaF*(mu1 + vF)/(1-sigmaF)
+  cat("parameters: ", parameters, "\n")
+  parameters <- with(as.list(randLHS[i,]), {
+    parameters['phi0'] <- phi*(mu0 + mud)/(1-phi)
+    parameters['phi1'] <- phi*(mu1 + mud)/(1-phi)
+    parameters['sigmaF0'] <- sigmaF*(mu0 + vF)/(1-sigmaF)
+    parameters['sigmaF1'] <- sigmaF*(mu1 + vF)/(1-sigmaF)
+    return(parameters)
   })
   
   # set initial values
