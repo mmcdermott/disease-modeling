@@ -176,24 +176,72 @@ Ddt <- function(t,v,parms) {
   })
 }
 
-hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,final=totT,dataSet=P){
+#Index = i
+hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
+  # Imputed constants
+  mu0   = 1/78      #Natural mortality rate USB per year
+  mu1   = 1/53      #Natural mortality rate FB per year
+  ro    = 0.018     #USB birth rate per year
+  alpha = 0.005     #FB arrival rate per year
+  vF    = 1.5       #Progression rate of acute infection per year
+  l0    = 0.015     #Prevalence of LTBI in the USB population in 2000
+  l1    = 0.211     #Prevalence of LTBI in the FB population in 2000
+  #2010 New Cases in Population i (millions)
+  #source: http://www.cdc.gov/mmwr/preview/mmwrhtml/mm5105a3.htm
+  newCases0 = .008714  #US-born
+  newCases1 = .007554  #Foreign-born
+
   # set values in parameters
-  newparms <- c(iCnewCases=as.vector(intervenCost['newCases']), 
-                iCtotPop=as.vector(intervenCost['totPop']), 
-                iCLTBIEn=as.vector(intervenCost['LTBIEn']),
-                sigmaL=sigmaL, f=f, transmission=transmission, incLTBI=incLTBI)
-                #Ct=activeTxC,Cl=LTBITxC)
-  parameters <- c(parms, newparms)
+  parameters <- c(randLHS[i,],phi0=0,phi1=0,sigmaF0=0,sigmaF1=0,beta=0,
+                  mu0=mu0,mu1=mu1,ro=ro,alpha=alpha,vF=vF,transmission=1)
+  with(as.list(randLHS[i,]), {
+    parameters$phi0 <- phi*(mu0 + mud)/(1-phi)
+    parameters$phi1 <- phi*(mu1 + mud)/(1-phi)
+    parameters$sigmaF0 <- sigmaF*(mu0 + vF)/(1-sigmaF)
+    parameters$sigmaF1 <- sigmaF*(mu1 + vF)/(1-sigmaF)
+  })
+  
+  # set initial values
+  P <- with(as.list(parameters), {	
+    #Total Population
+    P$N0[1] <- 250
+    P$N1[1] <- 31.4
+    #Acute (Fast) LTBI, new cases
+    P$F0[1] <- (1-r0)*(newCases0)/vF
+    P$F1[1] <- (1-r1)*(newCases1)/vF
+    #Chronic (Long) LTBI
+    P$L0[1] <- r0*(newCases0)/vL0
+    P$L1[1] <- r1*(newCases1)/vL1
+    #Infectious TB
+    P$I0[1] <- q*newCases0/(mu0 + mud + phi0)
+    P$I1[1] <- q*newCases1/(mu1 + mud + phi1)
+    #Non-Infectious TB
+    P$J0[1] <- (1-q)*newCases0/(mu0 + mud + phi0)
+    P$J1[1] <- (1-q)*newCases1/(mu1 + mud + phi1)
+    #Susceptible
+    P$S0[1] <- P$N0[1] - P$F0[1] - P$L0[1] - P$I0[1] - P$J0[1]
+    P$S1[1] <- P$N1[1] - P$F1[1] - P$L1[1] - P$I1[1] - P$J1[1]
+    return(P)
+  })
+  
+  # Set beta
+  with(as.list(parameters), {
+    c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
+    c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
+	beta <- ARI0*((mu0 + mud + phi0)/q)/(c00*P$I0[1]/P$N0[1] + c01*P$I1[1]/P$N1[1])
+  })
+  parameters$beta <- beta
+  
   # recursive=TRUE collapses dataframe to labeled vector
-  initv <- c(dataSet[initial,], recursive=TRUE)
+  initv <- c(P[initial,], recursive=TRUE)
   # times = data points to be calculuated
   times <- (initial:final)*deltaT
   
   # compute master results
   mres <- lsoda(initv, times, Ddt, parameters)
   # mres[,-1] = mres without 1st column
-  dataSet[initial:final,] <- c(mres[,-1])
-  return(dataSet)
+  P[initial:final,] <- c(mres[,-1])
+  return(P)
 }
 
 generateIncidence <- function(dataSet) {
