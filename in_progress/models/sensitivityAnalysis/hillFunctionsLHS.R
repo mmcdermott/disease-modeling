@@ -130,7 +130,7 @@ Ddt <- function(t,v,parms) {
     dJ0 <- (1-q)*(dprogAcute0 + dprogChron0) - (mu0 + mud + phi0)*J0
     
     #Difference Equations (FB)
-    dS1 <- dLTBIEn+(1-f)*alpha*(N0+N1) + sigmaF1*F1 + sigmaL*L1 + phi1*(I1 + J1) - lambda1*S1 - mu1*S1
+    dS1 <- (1-f)*alpha*(N0+N1) + sigmaF1*F1 + sigmaL*L1 + phi1*(I1 + J1) - lambda1*S1 - mu1*S1
     dF1 <- g*p*dLTBIEn + p*lambda1*S1 + dexogenous1 - (mu1 + vF + sigmaF1)*F1
     dL1 <- (1-g*p)*dLTBIEn + (1-p)*lambda1*S1 - dexogenous1 - (mu1 + vL1 +sigmaL)*L1
     dI1 <- q*(dprogAcute1 + dprogChron1) - (mu1 + mud + phi1)*I1
