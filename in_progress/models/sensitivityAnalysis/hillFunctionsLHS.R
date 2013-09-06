@@ -227,13 +227,12 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   })
   
   # Set beta
-  beta <- with(as.list(parameters), {
+  parameters <- with(as.list(parameters), {
     c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
     c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
 	beta <- ARI0*((mu0 + mud + phi0)/q)/(c00*P$I0[1]/P$N0[1] + c01*P$I1[1]/P$N1[1])
-	return(beta)
+	return(parameters)
   })
-  parameters$beta <- beta
   
   # recursive=TRUE collapses dataframe to labeled vector
   initv <- c(P[initial,], recursive=TRUE)
