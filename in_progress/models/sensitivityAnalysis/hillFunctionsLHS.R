@@ -177,13 +177,13 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   parameters <- with(as.list(parameters), {
     c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
     c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
-	parameters['beta'] <- ARI0*((mu0 + mud + phi0)/q)/(c00*P$I0[1]/P$N0[1] + c01*P$I1[1]/P$N1[1])
+	parameters['beta'] <- ARI0/(c00*P$I0[1]/P$N0[1] + c01*P$I1[1]/P$N1[1])
 	return(parameters)
   })
   # This next line is a temporary fix to get sane values... the real problem is
   # probably in the formula for beta above
   print(parameters)
-  parameters['beta'] <- 10.39
+  # parameters['beta'] <- 10.39
   
   # recursive=TRUE collapses dataframe to labeled vector
   initv <- c(P[initial,], recursive=TRUE)
