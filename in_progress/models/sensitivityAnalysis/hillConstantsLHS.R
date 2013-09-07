@@ -2,7 +2,7 @@ library(lhs)
 library(triangle)
 
 #Uniform Latin Hypercube with 18 parameters, resolution: n
-n <- 10  #number of divisions in probability distributions
+n <- 100  #number of divisions in probability distributions
 uniformRandLHS <- randomLHS(n,18)
 
 sigmaLBase  <- 0.057

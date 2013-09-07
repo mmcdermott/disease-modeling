@@ -195,8 +195,8 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   mres <- lsoda(initv, times, Ddt, parameters)
   # mres[,-1] = mres without 1st column
   P[initial:final,] <- c(mres[,-1])
-  #return(P)
-  return(P$cLatent[final])
+  return(P)
+  #return(P$cLatent[final])
 }
 
 generateIncidence <- function(dataSet) {
@@ -204,17 +204,19 @@ generateIncidence <- function(dataSet) {
     #IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
     #IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
     INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
-	  return(data.frame(IN0,IN1,INall))
+    return(INall)
+	  #return(data.frame(IN0,IN1,INall))
   })
 }
 
 # Basic PRCC
-
-latentCostResult <- rep(0,n)
+incResult <- rep(0,n)
 for(i in 1:n) {
-    latentCostResult[i] <- hill(i)
+    P <- hill(i)
+    incData <- generateIncidence(P)
+    incResult <- tail(incData,1)
 }
 
 library(sensitivity)
-pccResult <- pcc(randLHS, latentCostResult, rank=TRUE)
+pccResult <- pcc(randLHS, incResult, rank=TRUE)
 print(pccResult)
