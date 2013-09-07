@@ -195,7 +195,7 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   mres <- lsoda(initv, times, Ddt, parameters)
   # mres[,-1] = mres without 1st column
   P[initial:final,] <- c(mres[,-1])
-  return(P)
+  return(P$cLatent[final])
 }
 
 generateIncidence <- function(dataSet) {
@@ -207,4 +207,4 @@ generateIncidence <- function(dataSet) {
   })
 }
 
-P <- hill(1)
+
