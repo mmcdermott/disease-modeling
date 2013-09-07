@@ -33,38 +33,7 @@ cTotal <- rep(0,totT)
 
 #Intervention per time step cost array 
 # cost of new cases, total population, and LTBI cases entering
-        "
-P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cL0,cF0,cI0,cI0dL0,cI0dF0,
-                cJ0,cJ0dL0,cJ0dF0,cL1,cF1,cI1,cI1dL1,cI1dF1,cJ1,cJ1dL1,cJ1dF1,
-                cN0,cN1,LTBIEn,LTBIEnD,curedLTBIEn,curedLTBIEnD,natdeath0,
-                natdeath1,tbdeath0,tbdeath1,tbdeathD0,tbdeathD1,progAcute0,
-                progChron0,progAcute1,progChron1,progTotalD0,progTotalD1, 
-                exogenous0,exogenous1,interventionCost)
-        "
 P <- data.frame(S0,F0,L0,I0,J0,S1,F1,L1,I1,J1,N0,N1,cLatent,cActive,cTotal)
-
-# parms is now a vector which must be referenced
-P <- with(as.list(parms), {
-  #Total Population
-  P$N0[1] <- 250
-  P$N1[1] <- 31.4
-  #Acute (Fast) LTBI, new cases
-  P$F0[1] <- (1-r0)*(newCases0)/vF
-  P$F1[1] <- (1-r1)*(newCases1)/vF
-  #Chronic (Long) LTBI
-  P$L0[1] <- r0*(newCases0)/vL0
-  P$L1[1] <- r1*(newCases1)/vL1
-  #Infectious TB
-  P$I0[1] <- q*newCases0/(mu0 + mud + phi0)
-  P$I1[1] <- q*newCases1/(mu1 + mud + phi1)
-  #Non-Infectious TB
-  P$J0[1] <- (1-q)*newCases0/(mu0 + mud + phi0)
-  P$J1[1] <- (1-q)*newCases1/(mu1 + mud + phi1)
-  #Susceptible
-  P$S0[1] <- P$N0[1] - P$F0[1] - P$L0[1] - P$I0[1] - P$J0[1]
-  P$S1[1] <- P$N1[1] - P$F1[1] - P$L1[1] - P$I1[1] - P$J1[1]
-  return(P)
-})
 
 #Treatment Effectiveness Data:
 probHosp      <- .49 #Probability of hospitalization for active TB treatment
@@ -76,17 +45,6 @@ probLTBItreatsuccess <- efficacyLTBI*adherenceLTBI
 discRt   <- 0.03  
 
 #Compartment value dataset
-#P$LTBIEn[1]      <- 0.263109
-#P$natdeath0[1]   <- 0
-#P$natdeath1[1]   <- 0
-#P$tbdeath0[1]    <- 0
-#P$tbdeath1[1]    <- 0
-#P$progAcute0[1]  <- 0
-#P$progChron0[1]  <- 0
-#P$progAcute1[1]  <- 0
-#P$progChron1[1]  <- 0
-#P$exogenous0[1]  <- 0
-#P$exogenous1[1]  <- 0
 P$cLatent[1] <- 0
 P$cActive[1] <- 0
 P$cTotal[1] <- 0
@@ -112,12 +70,12 @@ Ddt <- function(t,v,parms) {
     dprogAcute1  <- vF*F1                                            #Acute LTBI progressions to Active TB disease (FB)
     dprogChron0  <- vL0*L0                                           #Chronic LTBI progressions to Active TB disease (USB)
     dprogChron1  <- vL1*L1                                           #Chronic LTBI progressions to Active TB disease (FB)
-    #dprogTotal0  <- dprogAcute0 + dprogChron0                        #Progression to Active TB (USB)
-    #dprogTotal1  <- dprogAcute1 + dprogChron1                        #Progression to Active TB (FB)
-    #dprogTotalD0 <- discV * dprogTotal0                              #Progression to Active TB with discounting (USB)
-    #dprogTotalD1 <- discV * dprogTotal1                              #Progression to Active TB with discounting (FB)
-    lambda0      <- transmission*(beta*(c00*(I0/N0) + c01*(I1/N1)))  #Forces of Infection (USB)
-    lambda1      <- transmission*(beta*(c10*(I0/N0) + c11*(I1/N1)))  #Forces of Infection (FB)
+    #dprogTotal0  <- dprogAcute0 + dprogChron0                       #Progression to Active TB (USB)
+    #dprogTotal1  <- dprogAcute1 + dprogChron1                       #Progression to Active TB (FB)
+    #dprogTotalD0 <- discV * dprogTotal0                             #Progression to Active TB with discounting (USB)
+    #dprogTotalD1 <- discV * dprogTotal1                             #Progression to Active TB with discounting (FB)
+    lambda0      <- beta*(c00*(I0/N0) + c01*(I1/N1))                 #Forces of Infection (USB)
+    lambda1      <- beta*(c10*(I0/N0) + c11*(I1/N1))                 #Forces of Infection (FB)
     dexogenous0	 <- x*p*lambda0*L0                                   #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)
     dexogenous1  <- x*p*lambda1*L1                                   #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)
     #dInterventionCost <- discV * (iCnewCases*1e6*(dprogTotal0+dprogTotal1) + iCtotPop*1e6*(N0+N1) + iCLTBIEn*1e6*dLTBIEn*(1-incLTBI))
@@ -162,16 +120,6 @@ Ddt <- function(t,v,parms) {
     dcActive <- dcI0 + dcJ0 + dcI1 + dcJ1
     dcTotal <- dcLatent + dcActive
  
-                "
-    return(list(c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcL0,dcF0,dcI0,
-             dcI0dL0,dcI0dF0,dcJ0,dcJ0dL0,dcJ0dF0,dcL1,dcF1,dcI1,dcI1dL1,dcI1dF1,
-             dcJ1,dcJ1dL1,dcJ1dF1,dcN0,dcN1,(dLTBIEn*incLTBI),
-             (dLTBIEn*incLTBI*discV),dLTBIEn*(1-incLTBI),
-             (dLTBIEn*(1-incLTBI)*discV),dnatdeath0,dnatdeath1,dtbdeath0,
-             dtbdeath1,dtbdeathD0, dtbdeathD1, dprogAcute0,dprogChron0,
-             dprogAcute1,dprogChron1,dprogTotalD0, dprogTotalD1, dexogenous0,
-             dexogenous1, dInterventionCost)))
-                "
    return(list(c(dS0,dF0,dL0,dI0,dJ0,dS1,dF1,dL1,dI1,dJ1,dN0,dN1,dcLatent,dcActive,dcTotal)))
   })
 }
@@ -194,7 +142,6 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   # set values in parameters
   parameters <- c(randLHS[i,],phi0=0,phi1=0,sigmaF0=0,sigmaF1=0,beta=0,
                   mu0=mu0,mu1=mu1,ro=ro,alpha=alpha,vF=vF,transmission=1,recursive=TRUE)
-  cat("parameters: ", parameters, "\n")
   parameters <- with(as.list(randLHS[i,]), {
     parameters['phi0'] <- phi*(mu0 + mud)/(1-phi)
     parameters['phi1'] <- phi*(mu1 + mud)/(1-phi)
@@ -230,13 +177,17 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   parameters <- with(as.list(parameters), {
     c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
     c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
-	beta <- ARI0*((mu0 + mud + phi0)/q)/(c00*P$I0[1]/P$N0[1] + c01*P$I1[1]/P$N1[1])
+	parameters['beta'] <- ARI0*((mu0 + mud + phi0)/q)/(c00*P$I0[1]/P$N0[1] + c01*P$I1[1]/P$N1[1])
 	return(parameters)
   })
+  # This next line is a temporary fix to get sane values... the real problem is
+  # probably in the formula for beta above
+  print(parameters)
+  parameters['beta'] <- 10.39
   
   # recursive=TRUE collapses dataframe to labeled vector
-  #initv <- c(P[initial,], recursive=TRUE)
-  initv <- c(P[1,], recursive=TRUE)
+  initv <- c(P[initial,], recursive=TRUE)
+  #initv <- c(P[1,], recursive=TRUE)
   # times = data points to be calculuated
   times <- (initial:final)*deltaT
   
@@ -256,42 +207,4 @@ generateIncidence <- function(dataSet) {
   })
 }
 
-"
-generateTotalIncidence <- function(dataSet,incLTBI=1,transmission=1,f=fBase) {
-  with(as.list(parms), {
-    #proportion of contacts made with FB individuals  (USB)
-    c01          <- (1-e0)*((1-e1)*dataSet$N1)/((1-e0)*dataSet$N0 + 
-                    (1-e1)*dataSet$N1)
-    #proportion of contacts made with USB individuals (USB)
-    c00          <- 1 - c01
-    c10          <- (1-e1)*((1-e0)*dataSet$N0)/((1-e0)*dataSet$N0 + 
-                    (1-e1)*dataSet$N1)
-    #proportion of contacts made with USB individuals (FB)
-    c11          <- 1 - c10
-    #proportion of contacts made with FB individuals  (FB)
-    #Forces of Infection (USB)
-    lambda0      <- transmission*(beta*(c00*(dataSet$I0/dataSet$N0) + 
-                                        c01*(dataSet$I1/dataSet$N1)))
-    #Forces of Infection (FB)
-    lambda1      <- transmission*(beta*(c10*(dataSet$I0/dataSet$N0) + 
-                                        c11*(dataSet$I1/dataSet$N1)))
-
-
-    IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
-    IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
-    INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + 
-                    vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
-    IL0   <- 1e6 * ((1-p) * lambda0 * dataSet$S0)
-    IL1   <- 1e6 * ((1-p) * lambda1 * dataSet$S1 + (1-g*p) * f * alpha * incLTBI
-                    * (dataSet$N0 + dataSet$N1))
-    IF0   <- 1e6 * (p     * lambda0 * dataSet$S0 + x * p * lambda0 * L0)
-    IF1   <- 1e6 * (p     * lambda1 * dataSet$S1 + g * p * f * alpha * incLTBI
-                    * (dataSet$N0 + dataSet$N1) + x * p * lambda1 * L1)
-    II0   <- 1e6 * q     * (vF*dataSet$F0 + vL0*dataSet$L0)
-    II1   <- 1e6 * q     * (vF*dataSet$F1 + vL1*dataSet$L1)
-    IJ0   <- 1e6 * (1-q) * (vF*dataSet$F0 + vL0*dataSet$L0)
-    IJ1   <- 1e6 * (1-q) * (vF*dataSet$F1 + vL1*dataSet$L1)
-    return(data.frame(IN0,IN1,INall,IL0,IL1,IF0,IF1,II0,II1,IJ0,IJ1))
-  })
-}
-"
+P <- hill(1)
