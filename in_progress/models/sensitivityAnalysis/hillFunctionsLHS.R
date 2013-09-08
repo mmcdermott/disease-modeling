@@ -218,7 +218,7 @@ costActiveResult <- rep(0,n)
 costTotalResult <- rep(0,n)
 for(i in 1:n) {
     temp <- hill(i)
-    incResult <- generateIncidence(temp)
+    incResult[i] <- generateIncidence(temp)
     costLatentResult[i] <- temp['cLatent']
     costActiveResult[i] <- temp['cActive']
     costTotalResult[i]  <- temp['cTotal']
