@@ -1,4 +1,5 @@
 library(deSolve) # for lsoda routine
+library(sensitivity)  # for PRCC calculations
 
 #Hill Constants
 source('hillConstantsLHS.R')
@@ -182,7 +183,7 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   # })
   # This next line is a temporary fix to get sane values... the real problem is
   # probably in the formula for beta above
-  print(parameters)
+  # print(parameters)
   # parameters['beta'] <- 10.39
   
   # recursive=TRUE collapses dataframe to labeled vector
@@ -194,8 +195,9 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   # compute master results
   mres <- lsoda(initv, times, Ddt, parameters)
   # mres[,-1] = mres without 1st column
-  P[initial:final,] <- c(mres[,-1])
-  return(P)
+  # print(P[final,])
+  # print(mres[final,])
+  return(mres[final,-1])
   #return(P$cLatent[final])
 }
 
@@ -203,7 +205,7 @@ generateIncidence <- function(dataSet) {
   with(as.list(parms), {
     #IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
     #IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
-    INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
+    INall <- 1e6 * (vF*(dataSet['F0'] + dataSet['F1']) + vL0*dataSet['L0'] + vL1*dataSet['L1'])/(dataSet['N0'] + dataSet['N1'])
     return(INall)
 	  #return(data.frame(IN0,IN1,INall))
   })
@@ -211,12 +213,22 @@ generateIncidence <- function(dataSet) {
 
 # Basic PRCC
 incResult <- rep(0,n)
+costLatentResult <- rep(0,n)
+costActiveResult <- rep(0,n)
+costTotalResult <- rep(0,n)
 for(i in 1:n) {
-    P <- hill(i)
-    incData <- generateIncidence(P)
-    incResult <- tail(incData,1)
+    temp <- hill(i)
+    incResult <- generateIncidence(temp)
+    costLatentResult[i] <- temp['cLatent']
+    costActiveResult[i] <- temp['cActive']
+    costTotalResult[i]  <- temp['cTotal']
 }
 
-library(sensitivity)
-pccResult <- pcc(randLHS, incResult, rank=TRUE)
-print(pccResult)
+incPRCC         <- pcc(randLHS, incResult,        rank=TRUE)
+costLatentPRCC  <- pcc(randLHS, costLatentResult, rank=TRUE)
+costActivePRCC  <- pcc(randLHS, costActiveResult, rank=TRUE)
+costTotalPRCC   <- pcc(randLHS, costTotalResult,  rank=TRUE)
+print(incPRCC)
+print(costLatentPRCC)
+print(costActivePRCC)
+print(costTotalPRCC)
