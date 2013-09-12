@@ -2,7 +2,7 @@ library(lhs)
 library(triangle)
 
 #Uniform Latin Hypercube with 18 parameters, resolution: n
-n <- 100  #number of divisions in probability distributions
+n <- 1000  #number of divisions in probability distributions
 uniformRandLHS <- randomLHS(n,18)
 
 sigmaLBase  <- 0.057
@@ -62,7 +62,8 @@ ClBase = Cl
 )
 
 #Ordered by PRCC absolute value from Hill's sensitivity analysis
-randLHS <- data.frame(sigmaL=1:n,vL1=1:n,f=1:n,p=1:n,beta=1:n,#ARI0=1:n,
+randLHS <- data.frame(sigmaL=1:n,vL1=1:n,f=1:n,p=1:n,#beta=1:n,
+                      ARI0=1:n,
                       q=1:n,g=1:n,sigmaF=1:n,r1=1:n,r0=1:n,
                       mud=1:n,x=1:n,vL0=1:n,phi=1:n,e0=1:n,
                       e1=1:n,Ct=1:n,Cl=1:n)
@@ -83,8 +84,8 @@ for(i in 1:n){
   randLHS$vL1[i]    <- qtriangle(uniformRandLHS[i,2],0.0009,0.0014,0.0010)    #Triangle(0.0009,0.0010,0.0014)
   randLHS$f[i]      <- qtriangle(uniformRandLHS[i,3],0.157,0.232,0.187)       #Triangle(0.157,0.187,0.232)
   randLHS$p[i]      <- qtriangle(uniformRandLHS[i,4],0.053,0.137,0.103)       #Triangle(0.053,0.103,0.137)
-  #randLHS$ARI0[i]   <- qtriangle(uniformRandLHS[i,5],0.00021,0.00030,0.00030) #Triangle(0.00021,0.00030,0.00030)
-  randLHS$beta[i]   <- qtriangle(uniformRandLHS[i,5],5.06,21.44,10.39)        #Triangle(5.06,10.39,21.44)
+  randLHS$ARI0[i]   <- qtriangle(uniformRandLHS[i,5],0.00021,0.00030,0.00030) #Triangle(0.00021,0.00030,0.00030)
+  #randLHS$beta[i]   <- qtriangle(uniformRandLHS[i,5],5.06,21.44,10.39)        #Triangle(5.06,10.39,21.44)
   randLHS$q[i]      <- qtriangle(uniformRandLHS[i,6],0.569,0.825,0.708)       #Triangle(0.569,0.708,0.825)
   randLHS$g[i]      <- qtriangle(uniformRandLHS[i,7],0.0008,0.0815,0.0047)    #Triangle(0.0008,0.0047,0.0815)
   randLHS$sigmaF[i] <- qtriangle(uniformRandLHS[i,8],0.419,0.574,0.461)       #Triangle(0.419,0.461,0.574)
