@@ -121,4 +121,4 @@ for(i in 1:n){
   # randLHS$e1[i]     <- uniformRandLHS[i,16]*(0.15)  + 0.85               #Uniform(0.85,1)
 }
 
-save(randLHS, file = 'randLHS.RData')
+#save(randLHS, file = 'randLHS.RData')

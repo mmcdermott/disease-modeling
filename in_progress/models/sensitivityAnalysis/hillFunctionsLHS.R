@@ -175,6 +175,7 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   })
   
   # Set beta
+<<<<<<< HEAD
   parameters <- with(as.list(parameters), {
     c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
     c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
@@ -188,17 +189,15 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   
   # recursive=TRUE collapses dataframe to labeled vector
   initv <- c(P[initial,], recursive=TRUE)
-  #initv <- c(P[1,], recursive=TRUE)
   # times = data points to be calculuated
-  times <- (initial:final)*deltaT
+  #times <- (initial:final)*deltaT
+  times <- c(initial,final)*deltaT
   
   # compute master results
   mres <- lsoda(initv, times, Ddt, parameters)
   # mres[,-1] = mres without 1st column
-  # print(P[final,])
-  # print(mres[final,])
-  return(mres[final,-1])
-  #return(P$cLatent[final])
+  #return(mres[final,-1])
+  return(mres[2,-1])
 }
 
 generateIncidence <- function(dataSet) {
@@ -207,7 +206,7 @@ generateIncidence <- function(dataSet) {
     #IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
     INall <- 1e6 * (vF*(dataSet['F0'] + dataSet['F1']) + vL0*dataSet['L0'] + vL1*dataSet['L1'])/(dataSet['N0'] + dataSet['N1'])
     return(INall)
-	  #return(data.frame(IN0,IN1,INall))
+    #return(data.frame(IN0,IN1,INall))
   })
 }
 
@@ -218,7 +217,7 @@ costActiveResult <- rep(0,n)
 costTotalResult <- rep(0,n)
 for(i in 1:n) {
     temp <- hill(i)
-    incResult <- generateIncidence(temp)
+    incResult[i] <- generateIncidence(temp)
     costLatentResult[i] <- temp['cLatent']
     costActiveResult[i] <- temp['cActive']
     costTotalResult[i]  <- temp['cTotal']
