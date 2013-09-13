@@ -78,7 +78,7 @@ randLHS <- data.frame(sigmaL=1:n,vL1=1:n,f=1:n,p=1:n,#beta=1:n,
 # model are given below for each parameter, commented out.
 for(i in 1:n){
   # Track progress 
-  if(i%%(n/100)==0) {print(i/(n/100))}
+  #if(i%%(n/100)==0) {print(i/(n/100))}
   #Original Hill parameters (best-fit distributions)
   randLHS$sigmaL[i] <- 0.057  #qtriangle(uniformRandLHS[i,1],0.015,0.086,0.057)       #Triangle(0.015,0.057,0.086)
   randLHS$vL1[i]    <- 0.0010 #qtriangle(uniformRandLHS[i,2],0.0009,0.0014,0.0010)    #Triangle(0.0009,0.0010,0.0014)
