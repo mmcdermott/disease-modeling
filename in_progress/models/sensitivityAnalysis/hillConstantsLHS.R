@@ -62,8 +62,8 @@ ClBase = Cl
 )
 
 #Ordered by PRCC absolute value from Hill's sensitivity analysis
-randLHS <- data.frame(sigmaL=1:n,vL1=1:n,f=1:n,p=1:n,#beta=1:n,
-                      ARI0=1:n,
+randLHS <- data.frame(sigmaL=1:n,vL1=1:n,f=1:n,p=1:n,beta=1:n,
+                      #ARI0=1:n,
                       q=1:n,g=1:n,sigmaF=1:n,r1=1:n,r0=1:n,
                       mud=1:n,x=1:n,vL0=1:n,phi=1:n,e0=1:n,
                       e1=1:n,Ct=1:n,Cl=1:n)
@@ -80,23 +80,23 @@ for(i in 1:n){
   # Track progress 
   #if(i%%(n/100)==0) {print(i/(n/100))}
   #Original Hill parameters (best-fit distributions)
-  randLHS$sigmaL[i] <- 0.057  #qtriangle(uniformRandLHS[i,1],0.015,0.086,0.057)       #Triangle(0.015,0.057,0.086)
-  randLHS$vL1[i]    <- 0.0010 #qtriangle(uniformRandLHS[i,2],0.0009,0.0014,0.0010)    #Triangle(0.0009,0.0010,0.0014)
-  randLHS$f[i]      <- 0.187  #qtriangle(uniformRandLHS[i,3],0.157,0.232,0.187)       #Triangle(0.157,0.187,0.232)
-  randLHS$p[i]      <- 0.103  #qtriangle(uniformRandLHS[i,4],0.053,0.137,0.103)       #Triangle(0.053,0.103,0.137)
-  randLHS$ARI0[i]   <- 0.00030#qtriangle(uniformRandLHS[i,5],0.00021,0.00030,0.00030) #Triangle(0.00021,0.00030,0.00030)
-  randLHS$q[i]      <- 0.708  #qtriangle(uniformRandLHS[i,6],0.569,0.825,0.708)       #Triangle(0.569,0.708,0.825)
-  #randLHS$beta[i]   <- qtriangle(uniformRandLHS[i,5],5.06,21.44,10.39)        #Triangle(5.06,10.39,21.44)
-  randLHS$g[i]      <- 0.0047 #qtriangle(uniformRandLHS[i,7],0.0008,0.0815,0.0047)    #Triangle(0.0008,0.0047,0.0815)
-  randLHS$sigmaF[i] <- 0.461  #qtriangle(uniformRandLHS[i,8],0.419,0.574,0.461)       #Triangle(0.419,0.461,0.574)
-  randLHS$r1[i]     <- 0.780  #qtriangle(uniformRandLHS[i,9],0.759,0.831,0.780)       #Triangle(0.759,0.780,0.831)
-  randLHS$r0[i]     <- 0.667  #qtriangle(uniformRandLHS[i,10],0.623,0.694,0.667)      #Triangle(0.623,0.667,0.694)
-  randLHS$mud[i]    <- 0.115  #qtriangle(uniformRandLHS[i,11],0.071,0.231,0.115)      #Triangle(0.071,0.115,0.231)
-  randLHS$x[i]      <- 0.111  #qtriangle(uniformRandLHS[i,12],0.088,0.860,0.111)      #Triangle(0.088,0.111,0.860)
-  randLHS$vL0[i]    <- 0.0014 #qtriangle(uniformRandLHS[i,13],0.0011,0.0015,0.0014)   #Triangle(0.0011,0.0014,0.0015)
-  randLHS$phi[i]    <- 0.897  #qtriangle(uniformRandLHS[i,14],0.861,0.938,0.897)      #Triangle(0.861,0.897,0.938)
-  randLHS$e0[i]     <- 0.965  #qtriangle(uniformRandLHS[i,15],0.853,0.995,0.965)      #Triangle(0.853,0.965,0.995)
-  randLHS$e1[i]     <- 0.985  #qtriangle(uniformRandLHS[i,16],0.877,0.999,0.985)      #Triangle(0.877,0.985,0.999)
+  randLHS$sigmaL[i] <- qtriangle(uniformRandLHS[i,1],0.015,0.086,0.057)       #Triangle(0.015,0.057,0.086)
+  randLHS$vL1[i]    <- qtriangle(uniformRandLHS[i,2],0.0009,0.0014,0.0010)    #Triangle(0.0009,0.0010,0.0014)
+  randLHS$f[i]      <- qtriangle(uniformRandLHS[i,3],0.157,0.232,0.187)       #Triangle(0.157,0.187,0.232)
+  randLHS$p[i]      <- qtriangle(uniformRandLHS[i,4],0.053,0.137,0.103)       #Triangle(0.053,0.103,0.137)
+  #randLHS$ARI0[i]   <- qtriangle(uniformRandLHS[i,5],0.00021,0.00030,0.00030) #Triangle(0.00021,0.00030,0.00030)
+  randLHS$beta[i]   <- qtriangle(uniformRandLHS[i,5],5.06,21.44,10.39)        #Triangle(5.06,10.39,21.44)
+  randLHS$q[i]      <- qtriangle(uniformRandLHS[i,6],0.569,0.825,0.708)       #Triangle(0.569,0.708,0.825)
+  randLHS$g[i]      <- qtriangle(uniformRandLHS[i,7],0.0008,0.0815,0.0047)    #Triangle(0.0008,0.0047,0.0815)
+  randLHS$sigmaF[i] <- qtriangle(uniformRandLHS[i,8],0.419,0.574,0.461)       #Triangle(0.419,0.461,0.574)
+  randLHS$r1[i]     <- qtriangle(uniformRandLHS[i,9],0.759,0.831,0.780)       #Triangle(0.759,0.780,0.831)
+  randLHS$r0[i]     <- qtriangle(uniformRandLHS[i,10],0.623,0.694,0.667)      #Triangle(0.623,0.667,0.694)
+  randLHS$mud[i]    <- qtriangle(uniformRandLHS[i,11],0.071,0.231,0.115)      #Triangle(0.071,0.115,0.231)
+  randLHS$x[i]      <- qtriangle(uniformRandLHS[i,12],0.088,0.860,0.111)      #Triangle(0.088,0.111,0.860)
+  randLHS$vL0[i]    <- qtriangle(uniformRandLHS[i,13],0.0011,0.0015,0.0014)   #Triangle(0.0011,0.0014,0.0015)
+  randLHS$phi[i]    <- qtriangle(uniformRandLHS[i,14],0.861,0.938,0.897)      #Triangle(0.861,0.897,0.938)
+  randLHS$e0[i]     <- qtriangle(uniformRandLHS[i,15],0.853,0.995,0.965)      #Triangle(0.853,0.965,0.995)
+  randLHS$e1[i]     <- qtriangle(uniformRandLHS[i,16],0.877,0.999,0.985)      #Triangle(0.877,0.985,0.999)
   
   #Cost Parameters
   randLHS$Ct[i]     <- uniformRandLHS[i,17]*(2803) + 12613   #Uniform(12613,15416)

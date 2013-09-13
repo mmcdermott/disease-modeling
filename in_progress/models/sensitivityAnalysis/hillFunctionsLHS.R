@@ -141,7 +141,7 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   newCases1 = .007554  #Foreign-born
 
   # set values in parameters
-  parameters <- c(randLHS[i,],phi0=0,phi1=0,sigmaF0=0,sigmaF1=0,beta=0,
+  parameters <- c(randLHS[i,],phi0=0,phi1=0,sigmaF0=0,sigmaF1=0,#beta=0,
                   mu0=mu0,mu1=mu1,ro=ro,alpha=alpha,vF=vF,transmission=1,recursive=TRUE)
   parameters <- with(as.list(randLHS[i,]), {
     parameters['phi0'] <- phi*(mu0 + mud)/(1-phi)
@@ -175,16 +175,16 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   })
   
   # Set beta
-  parameters <- with(as.list(parameters), {
-    c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
-    c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
-	parameters['beta'] <- ARI0/(c00*P$I0[1]/P$N0[1] + c01*P$I1[1]/P$N1[1])
-	return(parameters)
-  })
+  # parameters <- with(as.list(parameters), {
+    # c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
+    # c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
+	# parameters['beta'] <- ARI0/(c00*P$I0[1]/P$N0[1] + c01*P$I1[1]/P$N1[1])
+	# return(parameters)
+  # })
   # This next line is a temporary fix to get sane values... the real problem is
   # probably in the formula for beta above
   # print(parameters)
-  # parameters['beta'] <- 10.39
+  parameters['beta'] <- 10.39
   
   # recursive=TRUE collapses dataframe to labeled vector
   initv <- c(P[initial,], recursive=TRUE)
@@ -227,7 +227,7 @@ incPRCC         <- pcc(randLHS, incResult,        rank=TRUE)
 #costLatentPRCC  <- pcc(randLHS, costLatentResult, rank=TRUE)
 #costActivePRCC  <- pcc(randLHS, costActiveResult, rank=TRUE)
 #costTotalPRCC   <- pcc(randLHS, costTotalResult,  rank=TRUE)
-#print(incPRCC)
+print(incPRCC)
 #print(costLatentPRCC)
 #print(costActivePRCC)
 #print(costTotalPRCC)
