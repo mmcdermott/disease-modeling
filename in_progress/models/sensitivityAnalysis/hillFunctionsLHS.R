@@ -203,7 +203,7 @@ generateIncidence <- function(i,dataSet) {
   parms <- c(randLHS[i,], vF=1.5, recursive=TRUE)
   with(as.list(parms), {
     #IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
-    #IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
+    #IN1   <- 1e6 * (vF*dataSet['F1'] + vL1*dataSet['L1'])/dataSet['N1']
     INall <- 1e6 * (vF*(dataSet['F0'] + dataSet['F1']) + vL0*dataSet['L0'] + vL1*dataSet['L1'])/(dataSet['N0'] + dataSet['N1'])
     return(INall)
     #return(data.frame(IN0,IN1,INall))
@@ -224,10 +224,10 @@ for(i in 1:n) {
 }
 
 incPRCC         <- pcc(randLHS, incResult,        rank=TRUE)
-costLatentPRCC  <- pcc(randLHS, costLatentResult, rank=TRUE)
-costActivePRCC  <- pcc(randLHS, costActiveResult, rank=TRUE)
-costTotalPRCC   <- pcc(randLHS, costTotalResult,  rank=TRUE)
+#costLatentPRCC  <- pcc(randLHS, costLatentResult, rank=TRUE)
+#costActivePRCC  <- pcc(randLHS, costActiveResult, rank=TRUE)
+#costTotalPRCC   <- pcc(randLHS, costTotalResult,  rank=TRUE)
 print(incPRCC)
-print(costLatentPRCC)
-print(costActivePRCC)
-print(costTotalPRCC)
+#print(costLatentPRCC)
+#print(costActivePRCC)
+#print(costTotalPRCC)
