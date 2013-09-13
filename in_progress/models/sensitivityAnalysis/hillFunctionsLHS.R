@@ -175,7 +175,7 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   })
   
   # Set beta
-<<<<<<< HEAD
+#<<<<<<< HEAD
   parameters <- with(as.list(parameters), {
     c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
     c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
