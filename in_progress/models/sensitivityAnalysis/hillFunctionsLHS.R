@@ -175,7 +175,6 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   })
   
   # Set beta
-<<<<<<< HEAD
   parameters <- with(as.list(parameters), {
     c01  <- (1-e0)*((1-e1)*P$N1[1])/((1-e0)*P$N0[1] + (1-e1)*P$N1[1])       #proportion of contacts made with FB individuals  (USB)
     c00  <- 1 - c01                                                         #proportion of contacts made with USB individuals (USB)
@@ -200,7 +199,8 @@ hill <- function(i,transmission=1,incLTBI=1,initial=cutoffT,final=totT){
   return(mres[2,-1])
 }
 
-generateIncidence <- function(dataSet) {
+generateIncidence <- function(i,dataSet) {
+  parms <- c(randLHS[i,], vF=1.5, recursive=TRUE)
   with(as.list(parms), {
     #IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
     #IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
@@ -217,7 +217,7 @@ costActiveResult <- rep(0,n)
 costTotalResult <- rep(0,n)
 for(i in 1:n) {
     temp <- hill(i)
-    incResult[i] <- generateIncidence(temp)
+    incResult[i] <- generateIncidence(i,temp)
     costLatentResult[i] <- temp['cLatent']
     costActiveResult[i] <- temp['cActive']
     costTotalResult[i]  <- temp['cTotal']
