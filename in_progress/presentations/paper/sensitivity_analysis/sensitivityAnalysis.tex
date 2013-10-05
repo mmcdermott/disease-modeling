@@ -1,6 +1,7 @@
 \documentclass{article}[11pt]
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{graphicx}
+\usepackage{placeins}
 \graphicspath{{../figures/}}
 \begin{document}
 \title{Sensitivity Analysis}
@@ -12,13 +13,39 @@
 
 \section{Overview}
 We divide our sensitivity analysis into two sections, to analyze the robustness of the deterministic and stochastic models separately.  For the deterministic model, we used Latin Hypercube Sampling to test the sensitivity of our model to input parameters from the Hill model and estimates for treatment costs.  
-For the stochastic model, we fixed all input parameters and estimates for treatment costs to default values, and ran the model for 2,000 trials.  
+For the stochastic model, we fixed all input parameters and estimates for treatment costs to default values, and ran the model for 2,000 trials.  The model parameters and variable names referred to in this analysis are listed below, along with best-fit or estimated values.  \\
+
+{\bf Original Hill Model Parameters}
+(USB = US born, FB = Foriegn born)
+\begin{enumerate} \itemsep 0em
+\item{$\sigma^{L}$ = 0.057 (Treatment rate for chronic LTBI)}
+\item{$v^{L}_{0}$   = 0.0014 (Progression rate for reactivation in the USB population)}
+\item{$v^{L}_{1}$  = 0.0010 (Progression rate for reactivation in the FB population)}
+\item{$f$                = 0.187 (Fraction of FB arrivals with LTBI)}
+\item{$p$               = 0.103 (Fraction of new infections which are acute)}
+\item{$ARI_{0}$     = 0.00030 (2000 Annual Risk of Infection, USB)}
+\item{$q$               = 0.708 (Fraction of infections progressing to infectious disease)}
+\item{$g$               = 0.0047 (Fraction of FB arrivals with LTBI who are fast progressors)}
+\item{$\sigma^{F}$ = 0.461 (Cumulative fraction of treatment for acute infection)}
+\item{$r_{0}$          = 0.667 (Fraction of cases due to reactivation in USB population)}
+\item{$r_{1}$          = 0.780 (Fraction of cases due to reactivation in FB population)}
+\item{$\mu^{d}$      = 0.115 (Mortality rate due to TB)}
+\item{$x$                 = 0.111 (Fraction of re-infected chronic LTBI moving to acute infection)}
+\item{$\phi$            = 0.897 (Cumulative fraction self-cure and treatment of active disease)}
+\item{$e_{0}$          = 0.965 (Fraction of preferred contacts within own population for USB)}
+\item{$e_{1}$          = 0.985 (Fraction of preferred contacts within own population for FB)}
+\end{enumerate}
+{\bf Additional Cost Parameters}
+\begin{enumerate} \itemsep 0em
+\item{$C_{A}$           = \$14,014.50 (Cost per Active TB treatment)}
+\item{$C_{L}$           = \$700 (Cost per Latent TB treatment)}
+\end{enumerate}
 
 \section{Deterministic Model}
 \subsection{Latin Hypercube Sampling}
-Following the example of the Hill model, we generated a Latin Hypercube Sample varying 18 of the input parameters.  From these parameters, 16 are identical to the input parameters varied in the sensitivity analysis of the original Hill model, and the remaining two parameters, $C_{t}$ and $C_{l}$, are variables for the average cost of Active and Latent TB treatment in the US.  Probability distributions for the original 16 parameters of the Hill model were all set to be Triangular, with mode at the best fit value and end points at the 2.5 and 97.5 percentile values reported in the Hill model.  Probability distributions for $C_{t}$ and $C_{l}$ were set to be Uniform, with range +/- 10\% of the estimated value.  All probabilty distributions used to generate the Latin Hypercube are listed in Table 1.\\
+Following the example of the Hill model, we generated a Latin Hypercube Sample varying 18 of the input parameters.  From these parameters, 16 are identical to the input parameters varied in the sensitivity analysis of the original Hill model, and the remaining two parameters, $C_{A}$ and $C_{L}$, are variables for the average cost of Active and Latent TB treatment in the US.   Probability distributions for the original 16 parameters of the Hill model were all set to be Triangular, with mode at the best fit value and end points at the 2.5 and 97.5 percentile values reported in the Hill model.  Probability distributions for $C_{A}$ and $C_{L}$ were set to be Uniform, with range +/- 10\% of the estimated value.  All probabilty distributions used to generate the Latin Hypercube are listed in Table 1.\\
 
-\begin{table}
+\begin{table}[h]
 \centering
 \begin{tabular}{l l}
 \hline\hline\\
@@ -34,14 +61,14 @@ $g$                & Tri(0.0008,0.0047,0.0815)  \\
 $\sigma_{F}$ & Tri(0.419,0.461,0.574) \\
 $r_{1}$          & Tri(0.759,0.780,0.831) \\
 $r_{0}$          & Tri(0.623,0.667,0.694) \\
-$\mu_{d}$      & Tri(0.071,0.115,0.231) \\
+$\mu^{d}$      & Tri(0.071,0.115,0.231) \\
 $x$                 & Tri(0.088,0.111,0.860) \\
 $v^{L}_{0}$   & Tri(0.0011,0.0014,0.0015) \\
 $\phi$            & Tri(0.861,0.897,0.938) \\
 $e_{0}$          & Tri(0.853,0.965,0.995) \\
 $e_{1}$          & Tri(0.877,0.985,0.999) \\
-$C_{t}$           & Uniform(12613,15416) \\
-$C_{l}$           & Uniform(630,770) \\ [1ex]
+$C_{A}$           & Uniform(12613,15416) \\
+$C_{L}$           & Uniform(630,770) \\ [1ex]
 \hline
 \end{tabular}\\[1ex]
 
@@ -51,7 +78,7 @@ Triangular distribution with endpoints (x,z) and mode y.
 
 With a random Latin Hypercube Sample of size n=100,000, we computed partial rank correlation coefficients (PRCC) for each of the initial parameters and treatment costs, according to four different outcomes: 1) projected annual incidence in 2100 in the overall population, 2) projected cumulative cost of Latent TB treatments by 2100, 3) projected cumulative cost of Active TB treatments by 2100, 4) projected cumulative total cost of TB treatments by 2100.  For outcome 1, PRCC values are shown alongside PRCC values computed in the original Hill model for the same outcome in Table 2, showing the closeness of our findings to the sensitivity results of the original Hill model.  PRCC values for the remaining outcomes are reported in Table 3.  \\
 
-\begin{table}
+\begin{table}[h]
 \centering
 \begin{tabular}{l r r}
 \hline\hline\\
@@ -67,14 +94,14 @@ $g$                & 0.6122  & 0.4517 \\
 $\sigma^{F}$ & -0.4911 & -0.3772 \\
 $r_{1}$          & 0.0028  & -0.1109 \\
 $r_{0}$          & 0.0018  & 0.0760 \\
-$\mu_{d}$      & 0.0923 & 0.0513 \\
+$\mu^{d}$      & 0.0923 & 0.0513 \\
 $x$                 & 0.0999 & 0.0345 \\
 $v^{L}_{0}$    & 0.0133 & 0.0266 \\
 $\phi$             & 0.0082 & 0.0177 \\
 $e_{0}$          & 0.0178 & -0.0072 \\
 $e_{1}$          & 0.1154 & 0.0046 \\
-$C_{t}$          & -0.0023 & N/A \\
-$C_{l}$           & 0.0009 & N/A \\ [1ex]
+$C_{A}$          & -0.0023 & N/A \\
+$C_{L}$           & 0.0009 & N/A \\ [1ex]
 \hline
 \end{tabular}\\[1ex]
 
@@ -82,6 +109,14 @@ $C_{l}$           & 0.0009 & N/A \\ [1ex]
  in the overall population, alongside corresponding values from the
 original Hill model.
 \end{table}
+
+From Table 2, we see that the PRCC values in the Extended Hill Model and the Original Hill Model match up reasonably well.  In both cases, $\sigma^{L}$ is the most influential parameter, with PRCC values around -0.93.  The cost parameters $C_{A}$ and $C_{L}$ have PRCC values close to zero, which is expected because varying the treatment costs should not affect the incidence rate of TB.  Parameters in the original Hill model with small PRCC magnitudes (less than 0.15) also have small PRCC values in the extended model, while parameters with larger PRCC magnitudes (greater than 0.35) similarly have large PRCC values in the extended model.  This validates the non-economic components of our model against the original Hill model.   \\
+
+In Table 3, we see that the cost parameters $C_{A}$ and $C_{L}$ are highly correlated with Active treatment costs and Latent treatment costs respectively.  These high PRCC values are expected because there is a linear relationship between $C_{A}$ and the cumulative Active treatment cost, and similarly for $C_{L}$ and the cumulative Latent treatment cost.  In addition, we note that both $C_{A}$ and $C_{L}$ are influential in the total overall cost, with PRCC values of 0.6385 and 0.7598 respectively.  Because the PRCC value for $C_{L}$ is greater here, despite the fact that $C_{A} > C_{L}$, we can infer that cumulative Latent TB treatment costs are projected to be greater than cumulative Active TB costs with these estimates for cost parameters, so $C_{L}$ is a more influential parameter for total cumulative treatment costs.  \\
+
+Other variables with significant PRCC magnitudes (greater than 0.5) in Table 3 include $\sigma^{L}$, $v^{L}_{1}$, $f$, $p$, $ARI_{0}$, $q$, $g$, and $\sigma^{F}$.  Two of these parameters, $\sigma^{L}$ and $v^{L}_{1}$, have relatively large PRCC magnitudes for both Latent and Active Costs, but smaller PRCC magnitudes for Total Costs.  Because their PRCC values for each of these two outcomes is different in sign, the net change to the total cost is partially cancelled out, so these parameters have a reduced influence on final US healthcare system costs.  On the other hand, parameters such as $f$ and $p$ have large positive PRCC values for both Latent Costs and Active Costs, and we observe large positive PRCC values for Total Costs as well.\\
+
+To gain insight about strategies to reduce the cost burden for TB in the US, we focus on the parameters with the greatest PRCC magnitudes for Total Cost aside from $C_{A}$ and $C_{L}$, namely $f$, $p$, $ARI_{0}$, and $q$.  All of these parameter have PRCC magnitudes above 0.7, and are highly correlated with the total cost burden of TB borne by the US projected over the next 100 years.  Out of these, $ARI_{0}$ is based on a historical fixed value, the Annual Risk of Infection among the US born population in the year 2000, and therefore is unchangeable under any intervention strategy.  The parameters $p$ (the fraction of new infections which are acute) and $q$ (the fraction of infections progressing to infectious disease) are variables which depend on physiological disease dynamics, and may be altered with advances in medicine or mutations in the bacterial strains of TB.  The parameter $f$ is the fraction of the FB arrivals with LTBI, which may vary depending on US immigration policies and medical practices for new immigrants.  These results suggest that treating cases of LTBI among new FB arrivals may be the most cost efficient intervention strategy to reduce the projected cost burden for TB in the US, under the assumptions of the Hill model.  \\
 
 \begin{table}
 \centering
@@ -105,8 +140,8 @@ $v^{L}_{0}$   & -0.3103 & 0.0502  &-0.1867 \\
 $\phi$            & -0.0023 & -0.0102 &-0.0107 \\
 $e_{0}$          & 0.0081 & 0.0253   & 0.0269 \\
 $e_{1}$          & 0.0804 & 0.1653   & 0.1926 \\
-$C_{t}$          & 0.0011 & 0.7024   & 0.6385 \\
-$C_{l}$           & 0.8515 & 0.0013  & 0.7598 \\ [1ex]
+$C_{A}$          & 0.0011 & 0.7024   & 0.6385 \\
+$C_{L}$           & 0.8515 & 0.0013  & 0.7598 \\ [1ex]
 \hline
 \end{tabular}\\[1ex]
 
