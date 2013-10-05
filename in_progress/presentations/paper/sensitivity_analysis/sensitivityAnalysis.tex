@@ -16,10 +16,40 @@ For the stochastic model, we fixed all input parameters and estimates for treatm
 
 \section{Deterministic Model}
 \subsection{Latin Hypercube Sampling}
-Following the example of the Hill model, we generated a Latin Hypercube Sample varying 18 of the input parameters.  From these parameters, 16 are identical to the input parameters varied in the sensitivity analysis of the original Hill model, and the remaining two parameters, $C_{t}$ and $C_{l}$, are variables for the average cost of Active and Latent TB treatment in the US.  Probability distributions for the original 16 parameters of the Hill model were all set to be Triangular, with mode at the best fit value and end points at the 2.5 and 97.5 percentile values reported in the Hill model.  Probability distributions for $C_{t}$ and $C_{l}$ were set to be Uniform, with range +/- 10\% of the estimated value.  
+Following the example of the Hill model, we generated a Latin Hypercube Sample varying 18 of the input parameters.  From these parameters, 16 are identical to the input parameters varied in the sensitivity analysis of the original Hill model, and the remaining two parameters, $C_{t}$ and $C_{l}$, are variables for the average cost of Active and Latent TB treatment in the US.  Probability distributions for the original 16 parameters of the Hill model were all set to be Triangular, with mode at the best fit value and end points at the 2.5 and 97.5 percentile values reported in the Hill model.  Probability distributions for $C_{t}$ and $C_{l}$ were set to be Uniform, with range +/- 10\% of the estimated value.  All probabilty distributions used to generate the Latin Hypercube are listed in Table 1.\\
 
-With a random Latin Hypercube Sample of size n=100,000, we computed partial rank correlation coefficients (PRCC) for each of the initial parameters and treatment costs, according to four different outcomes: 1) projected annual incidence in 2100 in the overall population, 2) projected cumulative cost of Latent TB treatments by 2100, 3) projected cumulative cost of Active TB treatments by 2100, 4) projected cumulative total cost of TB treatments by 2100.  For outcome 1, PRCC values are shown alongside PRCC values computed in the original Hill model for the same outcome in Table 1, showing the closeness of our findings to the sensitivity results of the original Hill model.  PRCC values for the remaining outcomes are reported in Table 2.  
+\begin{table}
+\centering
+\begin{tabular}{l l}
+\hline\hline\\
+Parameter & Distribution\\ [0.5ex]
+\hline\\
+$\sigma_{L}$  & Tri(0.015,0.057,0.086) \\
+$v^{L}_{1}$   & Tri(0.0009,0.0010,0.0014) \\
+$f$                 & Tri(0.157,0.187,0.232) \\
+$p$                & Tri(0.053,0.103,0.137) \\
+$ARI_{0}$      & Tri(0.00021,0.00030,0.00030) \\
+$q$                & Tri(0.569,0.708,0.825) \\
+$g$                & Tri(0.0008,0.0047,0.0815)  \\
+$\sigma_{F}$ & Tri(0.419,0.461,0.574) \\
+$r_{1}$          & Tri(0.759,0.780,0.831) \\
+$r_{0}$          & Tri(0.623,0.667,0.694) \\
+$\mu_{d}$      & Tri(0.071,0.115,0.231) \\
+$x$                 & Tri(0.088,0.111,0.860) \\
+$v^{L}_{0}$   & Tri(0.0011,0.0014,0.0015) \\
+$\phi$            & Tri(0.861,0.897,0.938) \\
+$e_{0}$          & Tri(0.853,0.965,0.995) \\
+$e_{1}$          & Tri(0.877,0.985,0.999) \\
+$C_{t}$           & Uniform(12613,15416) \\
+$C_{l}$           & Uniform(630,770) \\ [1ex]
+\hline
+\end{tabular}\\[1ex]
 
+{\bf Table 1.} Probability distributions for model parameters, where Tri(x,y,z) denotes the 
+Triangular distribution with endpoints (x,z) and mode y.
+\end{table}
+
+With a random Latin Hypercube Sample of size n=100,000, we computed partial rank correlation coefficients (PRCC) for each of the initial parameters and treatment costs, according to four different outcomes: 1) projected annual incidence in 2100 in the overall population, 2) projected cumulative cost of Latent TB treatments by 2100, 3) projected cumulative cost of Active TB treatments by 2100, 4) projected cumulative total cost of TB treatments by 2100.  For outcome 1, PRCC values are shown alongside PRCC values computed in the original Hill model for the same outcome in Table 2, showing the closeness of our findings to the sensitivity results of the original Hill model.  PRCC values for the remaining outcomes are reported in Table 3.  \\
 
 \begin{table}
 \centering
@@ -27,14 +57,14 @@ With a random Latin Hypercube Sample of size n=100,000, we computed partial rank
 \hline\hline\\
 Parameter & Extended Hill Model & Original Hill model \\ [0.5ex]
 \hline\\
-$\sigma_{L}$  & -0.9303 & -0.9381 \\
+$\sigma^{L}$  & -0.9303 & -0.9381 \\
 $v^{L}_{1}$   & 0.7871  & 0.8309 \\
 $f$                 & 0.7050  & 0.8072 \\
 $p$                & 0.8369  & 0.6100 \\
 $ARI_{0}$      & 0.5950  & 0.4939 \\
 $q$                & 0.5797  & 0.4543 \\
 $g$                & 0.6122  & 0.4517 \\
-$\sigma_{F}$ & -0.4911 & -0.3772 \\
+$\sigma^{F}$ & -0.4911 & -0.3772 \\
 $r_{1}$          & 0.0028  & -0.1109 \\
 $r_{0}$          & 0.0018  & 0.0760 \\
 $\mu_{d}$      & 0.0923 & 0.0513 \\
@@ -48,27 +78,25 @@ $C_{l}$           & 0.0009 & N/A \\ [1ex]
 \hline
 \end{tabular}\\[1ex]
 
-{\bf Table 1.} PRCC values for projected annual incidence in 2100
+{\bf Table 2.} PRCC values for projected annual incidence in 2100
  in the overall population, alongside corresponding values from the
 original Hill model.
 \end{table}
-
-
 
 \begin{table}
 \centering
 \begin{tabular}{l r r r}
 \hline\hline\\
-Parameter & Latent & Active & Total\\ [0.5ex]
+Parameter & Latent Costs & Active Costs & Total Costs\\ [0.5ex]
 \hline\\
-$\sigma_{L}$  & 0.9612  & -0.9284 & 0.4169 \\
+$\sigma^{L}$  & 0.9612  & -0.9284 & 0.4169 \\
 $v^{L}_{1}$   & -0.4190 & 0.6470  & 0.3533 \\
 $f$                 & 0.7467  & 0.5493  & 0.8083 \\
 $p$                & 0.3371  & 0.8810  & 0.8776 \\
 $ARI_{0}$      & 0.3920  & 0.6728  & 0.7337 \\
 $q$                & 0.3837  & 0.6573  & 0.7200 \\
 $g$                & 0.1120  & 0.5369  & 0.5182 \\
-$\sigma_{F}$ & -0.1138 & -0.5631 &-0.5435 \\
+$\sigma^{F}$ & -0.1138 & -0.5631 &-0.5435 \\
 $r_{1}$          & 0.1253 &  0.0658  & 0.1401 \\
 $r_{0}$          & 0.1325  & 0.0878  & 0.1658 \\
 $\mu_{d}$      & 0.0249 & 0.0560  & 0.0613 \\
@@ -82,9 +110,11 @@ $C_{l}$           & 0.8515 & 0.0013  & 0.7598 \\ [1ex]
 \hline
 \end{tabular}\\[1ex]
 
-{\bf Table 2.} PRCC values for cumulative US Health Care system costs from 
+{\bf Table 3.} PRCC values for cumulative US Health Care system costs from 
 Latent TB treatment, Active TB treatment, and Total treatment costs
 \end{table}
+
+
 
 %Add table of distributions for initial parameters and treatment costs
 %Add table of Partial Rank Correlation Coefficients
