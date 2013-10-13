@@ -217,18 +217,23 @@ future cases, which is not captured in these graphs. Further, there is also US
 HCS costs due to treating LTBI, which is not illustrated in these graphs. 
 \subsubsection{Basic Reproduction Number}
 The basic reproduction number of FB or USB cases of infectious TB was also
-estimated by this system. From a theoretical perspective, we can think of the
+estimated by this system. Using the best-fit values of parameters from the 
+Hill model, we found the average number of secondary infections arising from
+a single case of infectious TB to be 0.423 and 0.370 for USB and FB populations
+respectively.  These values differ because in the model, there are different
+estimates for death rates and the rate of TB treatment and self-cure in the USB and FB populations, 
+so the average infectious period differs between the two populations.
+Extrapolating these results, we can think of the
 total number of secondary infections over 100 years due to a FB or USB
 infectious TB case as describing a geometric series in a large population.
 Presuming there are no overlaps in infectious contacts, if a single case of
-infectious TB in either population infects $p_f, p_u$ new cases in one year,
+infectious TB in either population infects $p_f, p_u$ new cases,
 respectively, then we can say that over the course of 100 years, the total
 number of cases infected will follow a geometric series. This analysis predicts
-that over 100 years, one USB infection will lead to $1.03$ subsequent infections,
-whereas one FB infection will lead to $.64$ subsequent infections. The full calculations
-are included in the appendix.  Experimentally, these data were also analyzed, 
-with results of $1.04$ and $.8$, respectively. WHAT CAUSES THIS DIFFERENCE? WE
-NEED TO ANSWER THAT.
+that over 100 years, one USB infection will lead to $1.04$ subsequent infections,
+whereas one FB infection will lead to $.83$ subsequent infections. Experimentally, 
+these data were also analyzed, with results of $1.03$ and $.64$, respectively. 
+Full calculations are included in the appendix.  
 
 \subsection{Intervention Analysis}
 The primary interventions analyzed by the extended Hill were those that analyzed
@@ -287,6 +292,20 @@ final population sizes were normal, with mean accurate to the deterministic
 model and standard deviations given in table X, in the appendix. 
 
 \subsection{Sensitivity Analysis}
+To account for uncertainty of input parameter values and to gain insight about the
+most influential parameters in the model, we used Latin Hypercube Sampling to 
+analyze the deterministic model, implemented with the 'lhs' package in R.  We varied 
+the 16 parameters from the original Hill model according to triangular distributions centered
+around their best-fit values in the Hill model, and two additional treatment cost parameters according to uniform distributions.  We obtained similar results to the Hill model 
+analyzing non-economic outcomes, as expected for validation.  For economic 
+outcomes, we found the parameter $f$, the fraction of FB arrivals with LTBI,
+to be highly correlated with the projected overall cost burden of TB in the United States
+over the next 100 years.  Another highly influential parameter in the model was $\sigma^{L}$, 
+the treatment rate for chronic LTBI.  However, while increasing $\sigma^{L}$ significantly
+decreases the cost burden due to Active TB treatment, it increases the cost burden due to Latent TB treatment by a greater amount, given the model estimates that Latent TB treament and Active
+TB treatment health care costs are \$14,014.90 \$403.45 per case cured respectively.  
+A full description of the Latin Hypercube Sampling analysis and tables of Partial Rank Correlation Coefficient (PRCC) results for all parameters are given in the appendix, section X.  
+
 \section{Discussion}
 These results confirm the hypothesis that curing incoming LTBI rates is a
 necessary step towards elimination and indicate that it is a cost effective
@@ -461,7 +480,7 @@ Here, a continuous discounting approximation is used to a discount rate of $3\%$
 yearly, found via $discV$. In many of the differential equations, a small $c$ is
 used to denote \emph{cost of}. 
 \subsection{Estimations for Infectious Rates of FB and USB}
-Colin to add. 
+
 \subsection{Statistical Qualities of the Agent Based Model}
 \subsection{Finer Intervention Analysis}
 \subsection{Sensitivity Analysis}
