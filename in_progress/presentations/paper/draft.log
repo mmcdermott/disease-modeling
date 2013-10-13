@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.27)  13 OCT 2013 00:02
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.27)  13 OCT 2013 01:28
 entering extended mode
 **draft.tex
 
@@ -146,25 +146,32 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen114
 \Gin@req@width=\dimen115
 )
+("C:\Program Files\MiKTeX 2.9\tex\latex\tools\enumerate.sty"
+Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
+\@enLab=\toks26
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\placeins\placeins.sty"
+Package: placeins 2005/04/18  v 2.2
+)
 (C:\cygwin\home\Colin\GitHub\disease-modeling\in_progress\presentations\paper\d
 raft.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Try loading font information for U+msa on input line 6.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Try loading font information for U+msa on input line 7.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 6.
+LaTeX Font Info:    Try loading font information for U+msb on input line 7.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -176,14 +183,14 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \scratchbox=\box29
 \nofMPsegments=\count101
 \nofMParguments=\count102
-\everyMPshowfont=\toks26
+\everyMPshowfont=\toks27
 \MPscratchCnt=\count103
 \MPscratchDim=\dimen117
 \MPnumerator=\count104
 \makeMPintoPDFobject=\count105
-\everyMPtoPDFconversion=\toks27
+\everyMPtoPDFconversion=\toks28
 )
-Underfull \hbox (badness 10000) in paragraph at lines 43--48
+Underfull \hbox (badness 10000) in paragraph at lines 44--49
 
  []
 
@@ -191,15 +198,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 43--48
 File: figures/HillModelFlowChart.png Graphic file (type png)
 
 <use figures/HillModelFlowChart.png>
-Package pdftex.def Info: figures/HillModelFlowChart.png used on input line 50.
+Package pdftex.def Info: figures/HillModelFlowChart.png used on input line 51.
 (pdftex.def)             Requested size: 267.82346pt x 238.41956pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 53--62
+Underfull \hbox (badness 10000) in paragraph at lines 54--63
 
  []
 
 [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 63--70
+Underfull \hbox (badness 10000) in paragraph at lines 64--71
 
  []
 
@@ -212,7 +219,7 @@ pdfTeX warning: pdflatex.exe (file C:/cygwin/home/Colin/GitHub/disease-modeling
 File: figures/BasicHillEquations.pdf Graphic file (type pdf)
 
 <use figures/BasicHillEquations.pdf>
-Package pdftex.def Info: figures/BasicHillEquations.pdf used on input line 82.
+Package pdftex.def Info: figures/BasicHillEquations.pdf used on input line 83.
 (pdftex.def)             Requested size: 342.95041pt x 159.15921pt.
  [2 <C:/cygwin/home/Colin/GitHub/disease-modeling/in_progress/presentations/pap
 er/figures/HillModelFlowChart.png>]
@@ -222,10 +229,10 @@ r/figures/BasicHillEquations.pdf>] [4]
 File: figures/incPlotSourced.pdf Graphic file (type pdf)
 
 <use figures/incPlotSourced.pdf>
-Package pdftex.def Info: figures/incPlotSourced.pdf used on input line 193.
+Package pdftex.def Info: figures/incPlotSourced.pdf used on input line 194.
 (pdftex.def)             Requested size: 361.3491pt x 289.07928pt.
 
-Overfull \hbox (1.3491pt too wide) in paragraph at lines 193--194
+Overfull \hbox (1.3491pt too wide) in paragraph at lines 194--195
  [] 
  []
 
@@ -233,10 +240,10 @@ Overfull \hbox (1.3491pt too wide) in paragraph at lines 193--194
 File: figures/costPlotSourced.pdf Graphic file (type pdf)
 
 <use figures/costPlotSourced.pdf>
-Package pdftex.def Info: figures/costPlotSourced.pdf used on input line 206.
+Package pdftex.def Info: figures/costPlotSourced.pdf used on input line 207.
 (pdftex.def)             Requested size: 379.42319pt x 303.53854pt.
 
-Overfull \hbox (19.42319pt too wide) in paragraph at lines 206--207
+Overfull \hbox (19.42319pt too wide) in paragraph at lines 207--208
  [] 
  []
 
@@ -246,71 +253,75 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [5 <C:/cygwin/home/Colin/GitHub/disease-modeling/in_progress/presentations/pape
 r/figures/incPlotSourced.pdf>] [6 <C:/cygwin/home/Colin/GitHub/disease-modeling
 /in_progress/presentations/paper/figures/costPlotSourced.pdf>] [7]
+Underfull \hbox (badness 10000) in paragraph at lines 296--309
+
+ []
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Overfull \hbox (22.5055pt too wide) in paragraph at lines 469--469
+Overfull \hbox (22.5055pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 c01          <- (1-e0)*((1-e1)*N1)/((1-e0)*N0 + (1-e1)*N1)   
     #proportion of contacts made with FB individuals  (USB)[] 
  []
 
 
-Overfull \hbox (22.5055pt too wide) in paragraph at lines 469--469
+Overfull \hbox (22.5055pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 c00          <- 1 - c01                                      
     #proportion of contacts made with USB individuals (USB)[] 
  []
 
 
-Overfull \hbox (19.31795pt too wide) in paragraph at lines 469--469
+Overfull \hbox (19.31795pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 c10          <- (1-e1)*((1-e0)*N0)/((1-e0)*N0 + (1-e1)*N1)   
     #proportion of contacts made with USB individuals (FB)[] 
  []
 
 
-Overfull \hbox (19.31795pt too wide) in paragraph at lines 469--469
+Overfull \hbox (19.31795pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 c11          <- 1 - c10                                      
     #proportion of contacts made with FB individuals  (FB)[] 
  []
 
 
-Overfull \hbox (9.75531pt too wide) in paragraph at lines 469--469
+Overfull \hbox (9.75531pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 dprogAcute0  <- vF*F0                                        
     #Acute LTBI progressions to Active TB disease (USB)[] 
  []
 
 
-Overfull \hbox (6.56776pt too wide) in paragraph at lines 469--469
+Overfull \hbox (6.56776pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 dprogAcute1  <- vF*F1                                        
     #Acute LTBI progressions to Active TB disease (FB)[] 
  []
 
 
-Overfull \hbox (16.1304pt too wide) in paragraph at lines 469--469
+Overfull \hbox (16.1304pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 dprogChron0  <- vL0*L0                                       
     #Chronic LTBI progressions to Active TB disease (USB)[] 
  []
 
 
-Overfull \hbox (12.94286pt too wide) in paragraph at lines 469--469
+Overfull \hbox (12.94286pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 dprogChron1  <- vL1*L1                                       
     #Chronic LTBI progressions to Active TB disease (FB)[] 
  []
 
 
-Overfull \hbox (38.44322pt too wide) in paragraph at lines 469--469
+Overfull \hbox (38.44322pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 dexogenous0  <- x*p*lambda0*L0                               
     #Exogenous re-infections of Chronic LTBI to Acute LTBI (USB)[] 
  []
 
 
-Overfull \hbox (35.25568pt too wide) in paragraph at lines 469--469
+Overfull \hbox (35.25568pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 dexogenous1  <- x*p*lambda1*L1                               
     #Exogenous re-infections of Chronic LTBI to Acute LTBI (FB)[] 
  []
 
 
-Overfull \hbox (51.1934pt too wide) in paragraph at lines 469--469
+Overfull \hbox (51.1934pt too wide) in paragraph at lines 471--471
 []\OT1/cmtt/m/n/6 dInterventionCost <- discV * (iCnewCases*1e6*(dprogTotal0+dpr
 ogTotal1) + iCtotPop*1e6*(N0+N1) + iCLTBIEn*1e6*dLTBIEn*(1-incLTBI))[] 
  []
@@ -319,16 +330,58 @@ ogTotal1) + iCtotPop*1e6*(N0+N1) + iCLTBIEn*1e6*dLTBIEn*(1-incLTBI))[]
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8] [9] [10]
+Underfull \hbox (badness 10000) in paragraph at lines 490--491
+
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 552--553
+
+ []
+
+[11
+
+]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 586--587
+
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 619--620
+
+ []
+
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 621--622
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 623--624
+
+ []
+
+[13] [14]
 (C:\cygwin\home\Colin\GitHub\disease-modeling\in_progress\presentations\paper\d
 raft.aux) ) 
 Here is how much of TeX's memory you used:
- 2300 strings out of 493921
- 28477 string characters out of 3147282
- 113879 words of memory out of 3000000
- 5436 multiletter control sequences out of 15000+200000
+ 2336 strings out of 493921
+ 29107 string characters out of 3147282
+ 114321 words of memory out of 3000000
+ 5465 multiletter control sequences out of 15000+200000
  10066 words of font info for 41 fonts, out of 3000000 for 9000
  1002 hyphenation exceptions out of 8191
- 34i,7n,31p,342b,254s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 34i,9n,31p,1246b,254s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.p
 fb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/
 Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program 
@@ -338,9 +391,9 @@ onts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
 /public/amsfonts/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
 amsfonts/cm/cmtt10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts
 /cm/cmtt8.pfb>
-Output written on draft.pdf (10 pages, 258999 bytes).
+Output written on draft.pdf (14 pages, 272404 bytes).
 PDF statistics:
- 89 PDF objects out of 1000 (max. 8388607)
+ 102 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
