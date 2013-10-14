@@ -13,7 +13,9 @@ source('interventionAnalyzer.R')
 #Make sure you reset all intervention costs to default values in interventionConfig.R before running!!!
 
 # Set of interventions
-redEnLTBI_Interventions_paper <- c('redEnLTBI5', 'redEnLTBI10', 'redEnLTBI25', 'redEnLTBI50')
+redEnLTBI_Percentages <- c('redEnLTBI5', 'redEnLTBI10', 'redEnLTBI25', 'redEnLTBI50')
+redEnLTBI_Costs <- c('setLTBICost800', 'setLTBICost1000', 'setLTBICost1200', 'setLTBICost1400', 'setLTBICost1600', 'setLTBICost2000')
+redEnLTBI_Interventions_paper <- apply(expand.grid(redEnLTBI_Percentages, redEnLTBI_Costs), 1, function(x) paste(x[1], x[2], sep='&'))
 
 baseData <- read.csv(baseFile)
 #Base Incidence

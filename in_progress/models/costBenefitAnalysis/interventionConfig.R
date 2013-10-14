@@ -55,6 +55,8 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
       # (minor)
       incLTBI <- incLTBI*(1-interventionMag/100)
       LTBIEn  <- 800 #LTBIEn + 400 + 600*(interventionMag/100) + x*100
+    } else if (interventionType == "setLTBICost") {
+      LTBIEn <- interventionMag
     } else if (interventionType == "redImm") {
       #No Costs!
       if (interventionMag == 75) {
