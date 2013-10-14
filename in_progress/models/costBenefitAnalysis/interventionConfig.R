@@ -8,6 +8,8 @@ intFileSuffix <- '.csv'
 # inc/red                   --> increase/reduce 
 # EnLTBI/Imm/LTBItrmt/Trans --> Entering LTBI, Immigration, LTBI Treatment, 
 #                               Transmission.
+# setLTBICost               --> set cost of LTBI Treatment (usually used
+#                               in conjunction with EnLTBI)
 # Magnitude (the numbers)   --> Interpert these by placing a 'by' prior to the 
 #                               number and adding a percent at the end. 
 # &                         --> 'and'. This chains interventions.
