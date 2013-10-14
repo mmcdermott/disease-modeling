@@ -47,8 +47,12 @@ US-born or foreign-born individual, and arrows between different compartments
 represent possible transitions between states.  Individuals also leave the model 
 from all compartments due to natural death, which is left out of the figure for clarity.  \\
 
-\begin{figure}
-\includegraphics[scale=0.25]{figures/HillModelFlowChart.png}
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[scale=0.25]{figures/HillModelFlowChart.png}
+  \end{center}
+  \caption{Schematic of the Hill Model.}
+  \label{fig:hillModelSchematic}
 \end{figure}
 
 The majority of USB and FB individuals fall into the Susceptible (S) category,
@@ -77,13 +81,16 @@ and may be re-infected at a later time.  \\
 Both the Hill Model (Basic Hill Model) and an extended version of the Hill Model (Extended Hill 
 Model) were implemented in 
 \texttt{R} as a system of differential equations, which were solved via the
-$\texttt{lsoda}$ routine. The systems of differential equations usedto capture basic disease dynamics in the Basic Hill Model and the Extended Hill Model are
-shown below in Figure 2 and Figure 3 respectively. In the Extended Hill Model,
+$\texttt{lsoda}$ routine. The systems of differential equations used to capture basic disease dynamics in the Basic Hill Model are shown in Figure 2. In the Extended Hill Model,
 more differential equations were implemented to add additional tracking and
 economic modeling. These equations are detailed in the Appendix, Section 7.2. 
 
 \begin{figure}
-\includegraphics[scale=0.75]{figures/BasicHillEquations.pdf}
+  \begin{center}
+    \includegraphics[scale=0.75]{figures/BasicHillEquations.pdf}
+  \end{center}
+  \caption{System of Differential Equations given in the Hill Model.}
+  \label{fig:hillEquations}
 \end{figure}
 
 The vector variables $S_{0}, F_{0}, L_{0}, I_{0}, J_{0}$ contain the number of
@@ -109,8 +116,8 @@ number of cured and untreated cases of entering LTBI were both tracked. Cured
 cases of LTBI entering, TB deaths, total TB cases, and total cost were also
 tracked discounted at 3\% annually. This discounting was converted to a
 continuous differential equation for use within the model. In general, incidence
-data is calculated in the same way in the extended hill as it was in the basic
-Hill.
+data is calculated in the same way in the Extended Hill Model as it was in the Basic
+Hill Model.
 
 In addition, estimations of the basic reproductive number of FB or USB active,
 infectious TB cases were made from a theoretical and an experimental
@@ -238,7 +245,7 @@ number of cases infected will follow a geometric series. This analysis predicts
 that over 100 years, one USB infection will lead to $1.04$ subsequent infections,
 whereas one FB infection will lead to $.83$ subsequent infections. Experimentally, 
 these data were also analyzed, with results of $1.03$ and $.64$, respectively. 
-Full calculations are included in the appendix.  
+Full calculations are included in the Appendix.  
 
 \subsection{Intervention Analysis}
 The primary interventions analyzed by the extended Hill were those that analyzed
@@ -295,12 +302,11 @@ analyzed and verified. In particular, they illustrated that the deterministic
 Hill model provides a robust and consistent statistical measure of TB epidemic
 behavior in the US conditions. We found that the distribution of incidence and
 final population sizes were normal, with mean accurate to the deterministic
-model and standard deviations given in table X, in the appendix. 
+model and standard deviations given in table X, in the Appendix. 
 
 \subsection{Sensitivity Analysis}
 To account for uncertainty of input parameter values and to gain insight about the
-most influential parameters in the model, we used Latin Hypercube Sampling to 
-analyze the deterministic model, implemented with the 'lhs' package in R.  We varied 
+most influential parameters in the model, we used Latin Hypercube Sampling to analyze the deterministic model, implemented with the \texttt{lhs} package in \texttt{R}.  We varied 
 the 16 parameters from the original Hill model according to triangular distributions centered
 around their best-fit values, and two additional treatment cost parameters according to uniform distributions.  We obtained similar results to the Hill model 
 analyzing non-economic outcomes, as expected for validation.  For economic 
@@ -310,7 +316,7 @@ over the next 100 years.  Another highly influential parameter in the model was 
 the treatment rate for chronic LTBI.  However, while increasing $\sigma^{L}$ significantly
 decreases the cost burden due to Active TB treatment, it increases the cost burden due to Latent TB treatment by a greater amount, given the model estimates that Latent TB treament and Active
 TB treatment health care costs are approximately \$700 and \$14,000 per case cured respectively.  
-A full description of the Latin Hypercube Sampling analysis and tables of Partial Rank Correlation Coefficient (PRCC) results for all parameters are given in the Appendix, section 7.6.  \\
+A full description of the Latin Hypercube Sampling analysis and tables of Partial Rank Correlation Coefficient (PRCC) results for all parameters are given in the Appendix, Section 7.6.  \\
 
 
 \section{Discussion}
