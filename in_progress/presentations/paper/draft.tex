@@ -73,14 +73,14 @@ does not grant immunity, and all healthy individuals are grouped in the Suscepti
 and may be re-infected at a later time.  \\
 
 \section{Methods}
-\subsection{Basic Implementation}
-Both the basic Hill Model and this extended Hill Model were implemented in
+\subsection{Basic Structure}
+Both the Hill Model (Basic Hill Model) and an extended version of the Hill Model (Extended Hill 
+Model) were implemented in 
 \texttt{R} as a system of differential equations, which were solved via the
-$\texttt{lsoda}$ routine. The systems of differential equations used in the Basic
-Hill Model and the extended Hill Model to capture basic disease dynamics are
-shown below in Figure 2 and Figure 3 respectively. In the extended Hill model,
+$\texttt{lsoda}$ routine. The systems of differential equations usedto capture basic disease dynamics in the Basic Hill Model and the Extended Hill Model are
+shown below in Figure 2 and Figure 3 respectively. In the Extended Hill Model,
 more differential equations were implemented to add additional tracking and
-economic modeling. These equations are detailed in the appendix. 
+economic modeling. These equations are detailed in the Appendix. 
 
 \begin{figure}
 \includegraphics[scale=0.75]{figures/BasicHillEquations.pdf}
