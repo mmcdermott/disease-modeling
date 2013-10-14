@@ -51,15 +51,18 @@ from all compartments due to natural death, which is left out of the figure for 
 \includegraphics[scale=0.25]{figures/HillModelFlowChart.png}
 \end{figure}
 
-The majority of USB and FB individuals fall into the Susceptible (S) category, which includes everyone
-who is uninfected and has not been exposed to TB.  After exposure to an individual
-with TB, a person in the Susceptible compartment can develop Latent TB Infection (LTBI) and changes
-health states to either the Acute LTBI (F) or Chronic LTBI (L) compartment.  Latently
-infected individuals are not infectious, but have some risk of developing active TB infection
-over time.  However, the rates of disease progression are not equal, and individuals in the
-Acute LTBI compartment have a higher risk of developing active TB than those in
-the Chronic LTBI compartment.  Individuals in the Chronic LTBI compartment
-may also be exogenously re-infected and transition to the Acute LTBI compartment.  \\
+The majority of USB and FB individuals fall into the Susceptible (S) category,
+which includes everyone who is uninfected and has not been exposed to TB.  After
+exposure to an individual with TB, a person in the Susceptible compartment can
+develop Latent TB Infection (LTBI). Latently infected individuals are
+asymptomatic and non-infectious, but have some risk of developing active TB
+infection over time. In order to reflect the fact that real LTBI patients have a
+much higher risk of developing active TB within two years of exposure, the Hill
+Model splits the LTBI compartment into Acute LTBI (fast progressors) and Chronic
+LTBI (slow progressors). Accordingly, individuals in the Acute LTBI compartment
+have a higher risk of developing active TB than those in the Chronic LTBI
+compartment.  Individuals in the Chronic LTBI compartment may also be
+exogenously re-infected and transition to the Acute LTBI compartment.  \\
 
 Latently infected individuals may progress to one of two active TB states: Infectious TB (I) or 
 Non-Infectious TB (J).  Individuals in both compartments have an increased risk of death from
@@ -394,7 +397,7 @@ ClBase = Cl
   \end{center}
   \caption{A list of relevant constants in the Basic \& Extended Hill Model}
   \label{fig:basicHillConstants}
-\end{figure}<++>
+\end{figure}
 \subsection{The Extended Hill Equations}
 Below, we detail the full equations used in the extended hill model. These
 equations extend those used in the standard Hill Model. In many cases, the
