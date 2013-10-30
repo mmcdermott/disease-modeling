@@ -84,6 +84,8 @@ Model) were implemented in
 $\texttt{lsoda}$ routine. The systems of differential equations used to capture basic disease dynamics in the Basic Hill Model are shown in Figure 2. In the Extended Hill Model,
 more differential equations were implemented to add additional tracking and
 economic modeling. These equations are detailed in the Appendix, Section 7.2. 
+Historical data from 2000-2008 was used to initialize the model, which was then run up to the
+year 2100.  
 
 \begin{figure}
   \begin{center}
@@ -296,13 +298,6 @@ Several other intervention strategies analyzed by the Hill Model were refined
 with the Extended Hill, and economic properties about each of them were tracked.
 The results for these interventions, which are less effective than curing
 entering LTBI cases across the board, are given in the appendix. 
-\subsection{Agent Based Evaluation}
-The Agent Based Model allowed the statistical properties of the system to be
-analyzed and verified. In particular, they illustrated that the deterministic
-Hill model provides a robust and consistent statistical measure of TB epidemic
-behavior in the US conditions. We found that the distribution of incidence and
-final population sizes were normal, with mean accurate to the deterministic
-model and standard deviations given in table X, in the Appendix. 
 
 \subsection{Sensitivity Analysis}
 To account for uncertainty of input parameter values and to gain insight about the
@@ -318,6 +313,13 @@ decreases the cost burden due to Active TB treatment, it increases the cost burd
 TB treatment health care costs are approximately \$700 and \$14,000 per case cured respectively.  
 A full description of the Latin Hypercube Sampling analysis and tables of Partial Rank Correlation Coefficient (PRCC) results for all parameters are given in the Appendix, Section 7.6.  \\
 
+\subsection{Agent Based Evaluation}
+The Agent Based Model allowed the statistical properties of the system to be
+analyzed and verified. In particular, they illustrated that the deterministic
+Hill model provides a robust and consistent statistical measure of TB epidemic
+behavior in the US conditions. We found that the distribution of incidence and
+final population sizes were normal, with mean accurate to the deterministic
+model and standard deviations given in table X, in the Appendix. 
 
 \section{Discussion}
 These results confirm the hypothesis that curing incoming LTBI rates is a
