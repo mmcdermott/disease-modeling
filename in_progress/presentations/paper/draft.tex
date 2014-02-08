@@ -1,6 +1,7 @@
 \documentclass{amsart}
 \usepackage[pdftex]{graphicx}
 \usepackage{enumerate,placeins}
+\usepackage{color}
 \graphicspath{{figures/}}
 
 \title{Modeling Intervention Strategies for United States TB Control}
@@ -327,23 +328,31 @@ TB treatment health care costs are approximately \$700 and \$14,000 per case cur
 A full description of the Latin Hypercube Sampling analysis and tables of Partial Rank Correlation Coefficient (PRCC) results for all parameters are given in the Appendix, Section 7.6.  \\
 
 \subsection{Agent Based Evaluation}
-The Agent Based Model allowed the statistical properties of the system to be
-analyzed and verified. In particular, they illustrated that the deterministic
+The agent-based model allowed the statistical properties of the system to be
+analyzed and verified. In particular, it illustrated that the deterministic
 Hill model provides a robust and consistent statistical measure of TB epidemic
 behavior in the US conditions. We found that the distribution of incidence and
 final population sizes were normal, with mean accurate to the deterministic
-model and standard deviations given in table X, in the Appendix. 
+model and standard deviations given in table X, in the Appendix. Additionally,
+the agent-based model provided a computational framework to produce
+meaningful intervention results. On lab-grade, student hardware, a statistically
+meaningful experiment could be run overnight, producing data in a day. This
+demonstrates that this modeling strategy is feasible in this general case.
 
 \section{Discussion}
 These results confirm the hypothesis that curing incoming LTBI rates is a
 necessary step towards elimination and indicate that it is a cost effective
-option. 
+option. \\
+{\huge \color{red} Where did we show it was cost effective relative to other
+interventions? Also, the section below (future work) might be better just
+directly included in the discussion}\\
 \subsection{Future Work}
 This work could be extended by examining different classes of interventions or
 more accurately estimating intervention cost with the deterministic extended
 Hill. Further work could also be done with the agent-based Hill Model, by using
 it to examine the effect contact structure plays on US TB incidence levels or to
 examine the effects drug-resistant TB will have on US TB dynamics. 
+
 \section{Appendix}
 \subsection{Hill Constants}
 Below, we detail some of the relevant constants in the Basic Hill Model, and their best-fit
