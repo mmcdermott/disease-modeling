@@ -35,3 +35,8 @@ modelData.csv
 #data Files
 in_progress/models/costBenefitAnalysis/data/inc*.csv
 in_progress/models/costBenefitAnalysis/data/red*.csv
+
+#tex files
+*.aux
+*.log
+*.synctex

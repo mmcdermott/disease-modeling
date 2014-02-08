@@ -55,8 +55,12 @@ US-born or foreign-born individual, and arrows between different compartments
 represent possible transitions between states.  Individuals also leave the model 
 from all compartments due to natural death, which is left out of the figure for clarity.  \\
 
-\begin{figure}
-\includegraphics[scale=0.25]{figures/HillModelFlowChart.png}
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[scale=0.25]{figures/HillModelFlowChart.png}
+  \end{center}
+  \caption{Schematic of the Hill Model.}
+  \label{fig:hillModelSchematic}
 \end{figure}
 
 The majority of USB and FB individuals fall into the Susceptible (S) category,
@@ -85,13 +89,18 @@ and may be re-infected at a later time.  \\
 Both the Hill Model (Basic Hill Model) and an extended version of the Hill Model (Extended Hill 
 Model) were implemented in 
 \texttt{R} as a system of differential equations, which were solved via the
-$\texttt{lsoda}$ routine. The systems of differential equations usedto capture basic disease dynamics in the Basic Hill Model and the Extended Hill Model are
-shown below in Figure 2 and Figure 3 respectively. In the Extended Hill Model,
+$\texttt{lsoda}$ routine. The systems of differential equations used to capture basic disease dynamics in the Basic Hill Model are shown in Figure 2. In the Extended Hill Model,
 more differential equations were implemented to add additional tracking and
 economic modeling. These equations are detailed in the Appendix, Section 7.2. 
+Historical data from 2000-2008 was used to initialize the model, which was then run up to the
+year 2100.  
 
 \begin{figure}
-\includegraphics[scale=0.75]{figures/BasicHillEquations.pdf}
+  \begin{center}
+    \includegraphics[scale=0.75]{figures/BasicHillEquations.pdf}
+  \end{center}
+  \caption{System of Differential Equations given in the Hill Model.}
+  \label{fig:hillEquations}
 \end{figure}
 
 The vector variables $S_{0}, F_{0}, L_{0}, I_{0}, J_{0}$ contain the number of
@@ -117,8 +126,8 @@ number of cured and untreated cases of entering LTBI were both tracked. Cured
 cases of LTBI entering, TB deaths, total TB cases, and total cost were also
 tracked discounted at 3\% annually. This discounting was converted to a
 continuous differential equation for use within the model. In general, incidence
-data is calculated in the same way in the extended hill as it was in the basic
-Hill.
+data is calculated in the same way in the Extended Hill Model as it was in the Basic
+Hill Model.
 
 In addition, estimations of the basic reproductive number of FB or USB active,
 infectious TB cases were made from a theoretical and an experimental
@@ -246,68 +255,61 @@ number of cases infected will follow a geometric series. This analysis predicts
 that over 100 years, one USB infection will lead to $1.04$ subsequent infections,
 whereas one FB infection will lead to $.83$ subsequent infections. Experimentally, 
 these data were also analyzed, with results of $1.03$ and $.64$, respectively. 
-Full calculations are included in the appendix.  
+Full calculations are included in the Appendix.  
 
 \subsection{Intervention Analysis}
 The primary interventions analyzed by the extended Hill were those that analyzed
 curing various percentages of entering LTBI cases. Four indicative percentages
-chosen were $20\%$, $35\%$, $50\%$, and $65\%$. Note that the Hill model does
+chosen were $5\%$, $10\%$, $25\%$, and $50\%$. Note that the Hill model does
 not distinguish documented immigration from undocumented immigration, and as
-such estimates of entering LTBI cure rates higher than $65\%$ become much more
+such estimates of entering LTBI cure rates higher than $50\%$ become much more
 difficult to achieve. It was seen that in this model as well as in the basic
 Hill, no analyzed intervention predicted elimination by 2100. In order to obtain
 elimination by 2100, at least 95\% of entering LTBI cases had to be cured, which
 is practically impossible. However, it was seen that curing entering cases of
-LTBI resulted in a net US HCS cost per case averted of \$67,722.96 at 2025, \$28,759.00 at 2050,
-and \$17,967.39 at 2100 (assuming 20\% reduction with one cure costing \$XXXX; see Table
-\ref{tab:cpcaRes} for other percentages). Given the variable nature of LTBI
+LTBI resulted in a net US HCS cost per case averted of \$67,654.07 at 2025, \$28,699.15 at 2050,
+and \$17,912.95 at 2100 (assuming 25\% reduction with each cure costing \$800; see Table
+\ref{tab:cpcaArt} for other percentages). Given the variable nature of LTBI
 treatment cost, the model code is extendible such that a user can adjust these
 costs themselves to explore more specific methods of curing entering LTBI.
 Further, it was also found that the relationship between total incidence at 2100
 and percentage of incoming LTBI cases cured was linear, and from this estimates
 were made of the yearly average US HCS savings garnered by curing one case of
 entering LTBI over the time scale 2000 to 2025, 2000 to 2050, and 2000 to 2100.
-This value peaked at \$1.026 million at 2100 (20\% reduction). This illustrates
-that it would be cost saving to cure cases of LTBI at the cost of \$1.026
-million ``2000'' dollars over the time period 2000-2100. These intervention
-strategies also resulted in 23,870; 41,952; and 60,189 fewer cases of TB seen in
-the US, and 2,056; 3,614; and 5,185 fewer TB deaths, for 20\%, 35\%, and 50\%
+This value peaked at \$1.283 billion at 2100 (25\% reduction). This illustrates
+that it would be cost saving to cure cases of LTBI at the cost of \$1.283
+billion ``2000'' dollars over the time period 2000-2100. These intervention
+strategies also resulted in 11,900; 29,880; and 60,189 fewer cases of TB seen in
+the US, and 1,025; 2,573; and 5,185 fewer TB deaths, for 10\%, 25\%, and 50\%
 reduction, respectively.
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Sat Aug 24 18:08:52 2013
+% Mon Oct 14 00:36:15 2013
 \begin{table}
 \centering
 \begin{tabular}{|r|cccc|}
   \hline
- & red20 & red35 & red50 & red65 \\ 
+ & red5 & red10 & red25 & red50 \\ 
   \hline
 2000 & ND & ND & ND & ND \\ 
-  2025 & 67722.96 & 67527.15 & 67332.53 & 67138.90 \\ 
-  2050 & 28759.00 & 28581.09 & 28404.13 & 28227.50 \\ 
-  2075 & 20876.80 & 20709.13 & 20541.77 & 20374.49 \\ 
-  2100 & 17967.39 & 17804.94 & 17642.64 & 17480.33 \\ 
+  2025 & 67908.81 & 67855.46 & 67654.07 & 67332.53 \\ 
+  2050 & 28938.23 & 28878.70 & 28699.15 & 28404.13 \\ 
+  2075 & 21044.88 & 20989.16 & 20820.53 & 20541.77 \\ 
+  2100 & 18130.11 & 18076.11 & 17912.95 & 17642.64 \\ 
    \hline
 \end{tabular}
-\caption{Cost Per Case Averted by Reducing Incoming LTBI by 20\%, 35\%, 50\%, and 65\% (in dollar per case)} 
-\label{tab:cpcaRes}
+\caption{Cost Per Case Averted by Reducing Incoming LTBI by X percent (in dollar per case)} 
+\label{tab:cpcaArt}
 \end{table}
+
 Several other intervention strategies analyzed by the Hill Model were refined
 with the Extended Hill, and economic properties about each of them were tracked.
 The results for these interventions, which are less effective than curing
 entering LTBI cases across the board, are given in the appendix. 
-\subsection{Agent Based Evaluation}
-The Agent Based Model allowed the statistical properties of the system to be
-analyzed and verified. In particular, they illustrated that the deterministic
-Hill model provides a robust and consistent statistical measure of TB epidemic
-behavior in the US conditions. We found that the distribution of incidence and
-final population sizes were normal, with mean accurate to the deterministic
-model and standard deviations given in table X, in the appendix. 
 
 \subsection{Sensitivity Analysis}
 To account for uncertainty of input parameter values and to gain insight about the
-most influential parameters in the model, we used Latin Hypercube Sampling to 
-analyze the deterministic model, implemented with the 'lhs' package in R.  We varied 
+most influential parameters in the model, we used Latin Hypercube Sampling to analyze the deterministic model, implemented with the \texttt{lhs} package in \texttt{R}.  We varied 
 the 16 parameters from the original Hill model according to triangular distributions centered
 around their best-fit values, and two additional treatment cost parameters according to uniform distributions.  We obtained similar results to the Hill model 
 analyzing non-economic outcomes, as expected for validation.  For economic 
@@ -317,8 +319,15 @@ over the next 100 years.  Another highly influential parameter in the model was 
 the treatment rate for chronic LTBI.  However, while increasing $\sigma^{L}$ significantly
 decreases the cost burden due to Active TB treatment, it increases the cost burden due to Latent TB treatment by a greater amount, given the model estimates that Latent TB treament and Active
 TB treatment health care costs are approximately \$700 and \$14,000 per case cured respectively.  
-A full description of the Latin Hypercube Sampling analysis and tables of Partial Rank Correlation Coefficient (PRCC) results for all parameters are given in the Appendix, section 7.6.  \\
+A full description of the Latin Hypercube Sampling analysis and tables of Partial Rank Correlation Coefficient (PRCC) results for all parameters are given in the Appendix, Section 7.6.  \\
 
+\subsection{Agent Based Evaluation}
+The Agent Based Model allowed the statistical properties of the system to be
+analyzed and verified. In particular, they illustrated that the deterministic
+Hill model provides a robust and consistent statistical measure of TB epidemic
+behavior in the US conditions. We found that the distribution of incidence and
+final population sizes were normal, with mean accurate to the deterministic
+model and standard deviations given in table X, in the Appendix. 
 
 \section{Discussion}
 These results confirm the hypothesis that curing incoming LTBI rates is a
@@ -498,6 +507,45 @@ used to denote \emph{cost of}.
 
 \subsection{Statistical Qualities of the Agent Based Model}
 \subsection{Finer Intervention Analysis}
+
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Mon Oct 14 00:36:15 2013
+\begin{table}
+\centering
+\begin{tabular}{|r|cccc|}
+  \hline
+ & red5 & red10 & red25 & red50 \\ 
+  \hline
+2000 & 0.00 & 0.00 & 0.00 & 0.00 \\ 
+  2025 & 1115.12 & 2231.70 & 5592.43 & 11227.57 \\ 
+  2050 & 3406.41 & 6821.27 & 17117.18 & 34447.71 \\ 
+  2075 & 4976.77 & 9967.15 & 25021.33 & 50389.58 \\ 
+  2100 & 5942.02 & 11900.90 & 29880.03 & 60189.49 \\ 
+   \hline
+\end{tabular}
+\caption{Cases of TB Averted by Reducing Incoming LTBI by X percent (Cure=\$800)} 
+\label{tab:caRed}
+\end{table}
+
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Mon Oct 14 00:36:15 2013
+\begin{table}
+\centering
+\begin{tabular}{|r|cccc|}
+  \hline
+ & red5 & red10 & red25 & red50 \\ 
+  \hline
+2000 & ND & ND & ND & ND \\ 
+  2025 & 67908.81 & 67855.46 & 67654.07 & 67332.53 \\ 
+  2050 & 28938.23 & 28878.70 & 28699.15 & 28404.13 \\ 
+  2075 & 21044.88 & 20989.16 & 20820.53 & 20541.77 \\ 
+  2100 & 18130.11 & 18076.11 & 17912.95 & 17642.64 \\ 
+   \hline
+\end{tabular}
+\caption{Cost Per Case Averted by Reducing Incoming LTBI by X percent (in dollar per case, Cure=\$800)} 
+\label{tab:cpcaRed}
+\end{table}
+
 \subsection{Latin Hypercube Sampling}
 The model parameters and variable names referred to in this analysis are listed below, along with best-fit or estimated values.  Following the example of the Hill model, we generated a Latin Hypercube Sample varying 18 of the input parameters.  From these parameters, 16 are identical to the input parameters varied in the sensitivity analysis of the original Hill model, and the remaining two parameters, $C_{A}$ and $C_{L}$, are variables for the average cost of Active and Latent TB treatment in the US.   Probability distributions for the original 16 parameters of the Hill model were all set to be Triangular, with mode at the best fit value and end points at the 2.5 and 97.5 percentile values reported in the Hill model.  Probability distributions for $C_{A}$ and $C_{L}$ were set to be Uniform, with range +/- 10\% of the estimated value.  All probabilty distributions used to generate the Latin Hypercube are listed in Table 1.\\
 
@@ -636,4 +684,15 @@ To gain insight about strategies to reduce the cost burden for TB in the US, we 
 
 \subsection{Stochastic Model}
 
+\begin{figure}
+    \includegraphics[scale=0.4]{figures/qqnormUSBInc.pdf}
+    \includegraphics[scale=0.4]{figures/qqnormFBInc.pdf}
+    \includegraphics[scale=0.4]{figures/qqnormUSBPop.pdf}
+    \includegraphics[scale=0.4]{figures/qqnormFBPop.pdf}
+  \caption{Normal Q-Q Plots for 2103 runs of the Stochastic Model with population constant = 1.}
+  \label{fig:qqnormPlots}
+\end{figure}
+
+Results for USB Incidence, FB Incidence, USB Population, and FB Population in the year
+2100 shown, overlayed with linear (normal) fit.
 \end{document}

@@ -8,6 +8,8 @@ intFileSuffix <- '.csv'
 # inc/red                   --> increase/reduce 
 # EnLTBI/Imm/LTBItrmt/Trans --> Entering LTBI, Immigration, LTBI Treatment, 
 #                               Transmission.
+# setLTBICost               --> set cost of LTBI Treatment (usually used
+#                               in conjunction with EnLTBI)
 # Magnitude (the numbers)   --> Interpert these by placing a 'by' prior to the 
 #                               number and adding a percent at the end. 
 # &                         --> 'and'. This chains interventions.
@@ -55,6 +57,8 @@ interventionConfig <- function(interventionStr, x=0) { #x is an integer refering
       # (minor)
       incLTBI <- incLTBI*(1-interventionMag/100)
       LTBIEn  <- 800 #LTBIEn + 400 + 600*(interventionMag/100) + x*100
+    } else if (interventionType == "setLTBICost") {
+      LTBIEn <- interventionMag
     } else if (interventionType == "redImm") {
       #No Costs!
       if (interventionMag == 75) {

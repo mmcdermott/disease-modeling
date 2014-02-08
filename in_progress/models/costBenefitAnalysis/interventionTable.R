@@ -13,7 +13,9 @@ source('interventionAnalyzer.R')
 #Make sure you reset all intervention costs to default values in interventionConfig.R before running!!!
 
 # Set of interventions
-redEnLTBI_Interventions_paper <- c('redEnLTBI20', 'redEnLTBI35', 'redEnLTBI50', 'redEnLTBI65')
+redEnLTBI_Percentages <- c('redEnLTBI5', 'redEnLTBI10', 'redEnLTBI25', 'redEnLTBI50')
+redEnLTBI_Costs <- c('setLTBICost800', 'setLTBICost1000', 'setLTBICost1200', 'setLTBICost1400', 'setLTBICost1600', 'setLTBICost2000')
+redEnLTBI_Interventions_paper <- apply(expand.grid(redEnLTBI_Percentages, redEnLTBI_Costs), 1, function(x) paste(x[1], x[2], sep='&'))
 
 baseData <- read.csv(baseFile)
 #Base Incidence
@@ -91,7 +93,7 @@ for (interventionName in redEnLTBI_Interventions_paper) {
 rownames <- c('2000', '2025', '2050', '2075', '2100')
 
 # Savings from Intervention
-svngResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
+svngResults <- data.frame(red5=rep(0,5), red10=rep(0,5), red25=rep(0,5), red50=rep(0,5), row.names = rownames)
 for (interventionNumber in 1:4) {
     svngResults[,interventionNumber] <- saveOfInter[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
@@ -100,7 +102,7 @@ svngRes.table <- xtable(svngResults, digits=6, align="|r|cccc|", caption = "Savi
 
 
 # Additional Cost of Intervention
-aciResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
+aciResults <- data.frame(red5=rep(0,5), red10=rep(0,5), red25=rep(0,5), red50=rep(0,5), row.names = rownames)
 for (interventionNumber in 1:4) {
     aciResults[,interventionNumber] <- totSpent[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
@@ -108,7 +110,7 @@ print(aciResults)
 aciRes.table <- xtable(aciResults, digits=6, align="|r|cccc|", caption = "Additional Cost of Reducing Incoming LTBI by X percent (in billions of dollars)")
 
 # Number of Case Averted
-ncavResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
+ncavResults <- data.frame(red5=rep(0,5), red10=rep(0,5), red25=rep(0,5), red50=rep(0,5), row.names = rownames)
 for (interventionNumber in 1:4) {
     ncavResults[,interventionNumber] <- casesAvertedD[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
@@ -116,7 +118,7 @@ print(ncavResults)
 ncavRes.table <- xtable(ncavResults, align="|r|cccc|", caption = "Cases of TB Averted by Reducing Incoming LTBI by X percent")
 
 # Cost per Case Averted
-cpcaResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
+cpcaResults <- data.frame(red5=rep(0,5), red10=rep(0,5), red25=rep(0,5), red50=rep(0,5), row.names = rownames)
 for (interventionNumber in 1:4) {
     cpcaResults[,interventionNumber] <- cpcaDataD[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
@@ -124,7 +126,7 @@ print(cpcaResults)
 cpcaRes.table <- xtable(cpcaResults, align="|r|cccc|", caption = "Cost Per Case Averted by Reducing Incoming LTBI by X percent (in dollar per case)")
 
 # Number of Deaths Averted
-ndavResults <- data.frame(red20=rep(0,5), red35=rep(0,5), red50=rep(0,5), red65=rep(0,5), row.names = rownames)
+ndavResults <- data.frame(red5=rep(0,5), red10=rep(0,5), red25=rep(0,5), red50=rep(0,5), row.names = rownames)
 for (interventionNumber in 1:4) {
     ndavResults[,interventionNumber] <- deathsAvertedD[[interventionNumber]][seq(1, totT, floor(totT/4))]
 }
