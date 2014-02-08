@@ -8,13 +8,18 @@
 \maketitle
 
 \section{Abstract}
-An extended epidemiological model for Tuberculosis in the US was developed, based on an existing
-epidemiological model developed in 2012 by the Centers for Disease Control and Prevention.  
-Economic parameters to track the cost burden of TB for the US health care system were added,
-and an agent-based stochastic version of the model was implemented.  The sensitivity of the extended
-model to changes in parameters was analyzed, and the percentage of foreign-born immigrants with
-LTBI appears to be a highly influential parameter in the model.  Intervention strategies to reduce LTBI
-among foreign-born arrivals were evaluated, and estimates of the cost per case averted were found.  
+An extended epidemiological model for Tuberculosis in the US was developed,
+based on an existing epidemiological model developed in 2012 by the Centers for
+Disease Control and Prevention.  Economic parameters to track the cost burden of
+TB for the US health care system were added.  The sensitivity of the extended
+model to changes in parameters was analyzed, and the percentage of foreign-born
+immigrants with LTBI appears to be a highly influential parameter in the model.
+Intervention strategies to reduce LTBI among foreign-born arrivals were
+evaluated, and estimates of the cost per case averted were found. Additionally,
+a population-level, stochastic, agent-based model was built to provide
+statistical verification of the results of the deterministic model and to
+demonstrate feasibility of agent-based modeling even on such large population
+scales. 
 
 \section{Introduction}
 Epidemiological models allow public health professionals to predict and analyze
@@ -33,7 +38,10 @@ this work, the Hill model was extended in several key ways. First, additional
 tracking capabilities were added to the Hill model, such that it can now report
 further granularity in the disease dynamics. Further, economic components were
 added to the model in order to project the US health care system (HCS) costs due
-to TB given our current policy as well as for various interventions. Finally, a
+to TB given our current policy as well as for various interventions. 
+
+Though compartmental, differential equation models 
+Finally, a
 population level, agent based implementation of the Hill Model was created, in
 order to validate the Hill Model against the natural stochasticity present in
 real world disease spread. 
