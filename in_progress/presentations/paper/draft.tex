@@ -101,17 +101,20 @@ differential equations at the end.}
 
 \section{Methods}
 \subsection{Basic Structure}
-Both the Hill Model (Basic Hill Model) and an extended version of the Hill Model
-(Extended Hill Model) were implemented in \texttt{R} as a system of differential
-equations, which were solved via the $\texttt{lsoda}$ routine. The systems of
-differential equations used to capture basic disease dynamics in the Basic Hill
-Model are shown in Figure 2. In the Extended Hill Model, more differential
-equations were implemented to add additional tracking and economic modeling.
-These equations are detailed in the Appendix, Section 7.2.  Historical data from
-2000-2008 was used to initialize the model, which was then run up to the
-year 2100.  
+Both the Hill Model (Basic Hill Model) and our extended Model (Extended Hill
+Model) were implemented in \texttt{R} as a system of differential equations,
+which were solved via the $\texttt{lsoda}$ routine. The systems of differential
+equations used to capture basic disease dynamics in the Basic Hill Model are
+shown in Figure~\ref{fig:hillEquations}. In the Extended Hill Model, more
+differential equations were implemented to add additional tracking and economic
+modeling. These equations are detailed in the\\
+{\huge\color{red} Should appendix be capitalized? What about Figure?}\\
+appendix,
+section~\ref{sec:extendedHillEqs}.  Historical data from 2000-2008 was used to
+initialize the model, which was then run up to the year 2100.  
 
-\begin{figure}
+\begin{figure} 
+  {\huge\color{red} Make this not a figure. This should definitely just be tex.}
   \begin{center}
     \includegraphics[scale=0.75]{figures/BasicHillEquations.pdf}
   \end{center}
@@ -119,13 +122,13 @@ year 2100.
   \label{fig:hillEquations}
 \end{figure}
 
-The vector variables $S_{0}, F_{0}, L_{0}, I_{0}, J_{0}$ contain the number of
-US-born individuals in the S, F, L, I, J compartments respectively, whereas $S_{1},
-F_{1}, L_{1}, I_{1}, J_{1}$ contain foreign-born individuals.  $N_{0}$ and
-$N_{1}$ are the total populations of US-born and foreign-born individuals.
-The constants $\rho$ and $\alpha$ are birth rates, while $\mu_{i}$, and $\mu_{d}$ are death rates.  
-A complete list and descriptions of all constants used in the model can be found in the Appendix,
-Section 7.1.
+The vector variables $S_0, F_0, L_0, I_0, J_0$ contain the number of US-born
+individuals in the S, F, L, I, J compartments respectively, whereas $S_1, F_1,
+L_1, I_1, J_1$ contain the number of foreign-born individuals. $N_0$ and $N_1$
+are the total populations of US-born and foreign-born individuals.  The
+constants $\rho$ and $\alpha$ are birth rates, while $\mu_{i}$, and $\mu_{d}$
+are death rates. A complete list and descriptions of all constants used in the
+model can be found in the Appendix, Section~\ref{subsec:hillConstants}.
 
 \subsection{Additional Tracking Capabilities}
 In order to refine the tracking capabilities of the
@@ -391,6 +394,7 @@ examine the effects drug-resistant TB will have on US TB dynamics.
 
 \section{Appendix}
 \subsection{Hill Constants}
+\label{subsec:hillConstants}
 Below, we detail some of the relevant constants in the Basic Hill Model, and
 their best-fit values. A full listing of constants used in the original Hill
 Model can be found in <+CITATION HERE+>. \\
@@ -425,6 +429,7 @@ Model can be found in <+CITATION HERE+>. \\
                                 population for FB)}\\
 \end{align*}
 \subsection{The Extended Hill Equations}
+\label{sec:extendedHillEqs}
 Below, we detail some of the relevant equations used in the extended hill model.
 In many cases, the equations of the Hill model were split into their component
 parts, which could then be tracked separately. 
