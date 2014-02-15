@@ -8,34 +8,37 @@
 \begin{document}
 \maketitle
 
+{\huge \color{red} Check if first person is better.}
+
 \section{Abstract}
-An extended epidemiological model for Tuberculosis in the US was developed,
-based on an existing epidemiological model developed in 2012 by the Centers for
-Disease Control and Prevention.  Economic parameters to track the cost burden of
-TB for the US health care system were added.  The sensitivity of the extended
-model to changes in parameters was analyzed, and the percentage of foreign-born
-immigrants with LTBI appears to be a highly influential parameter in the model.
-Intervention strategies to reduce LTBI among foreign-born arrivals were
-evaluated, and estimates of the cost per case averted were found. Additionally,
-a population-level, stochastic, agent-based model was built to provide
-statistical verification of the results of the deterministic model and to
-demonstrate feasibility of agent-based modeling even on such large population
-scales. 
+A deterministic, compartmental epidemiological and economic model for US
+Tuberculosis was developed, extending a model developed in 2012 by the Centers
+for Disease Control and Prevention. Sensitivity analysis of this model reveals
+that the percentage of foreign-born immigrants with LTBI is a highly influential
+parameter. Various intervention strategies, particularly those that reduced LTBI
+among foreign-born arrivals, were evaluated, and cost per case averted estimates
+were found.  Additionally, a population-level, stochastic, agent-based model was
+built. This model demonstrated the feasibility of using agent-based modeling in
+the context of minimal population heterogeneity and provided statistical
+characterization of the results of the compartmental model. Specifically, it
+revealed that final population sizes were normal, with the compartmental model
+sampling the mean of these distributions. 
 
 \section{Introduction}
 Epidemiological models allow public health professionals to predict and analyze
 disease dynamics and intervention effectiveness. The most common examples of
-such models are compartmental differential equation models, in which the
-population is split between several possible health states, with flow between
-each state given according to deterministic differential equations. In 2012, 
-Hill, Becerra, and Castro implemented a compartmental
-differential equaiton model of tuberculosis (TB) in the United States (US).
-Their model utilized five health states and two subpopulations, US-born (USB)
-and foreign-born (FB) for a total of 10 compartments. They used this model to
-evaluate several possible intervention strategies, and ultimately conclude that
-though increasing LTBI treatment was a good intervention strategy, the US was
-unlikely to meet their stated goal of elimination of TB in the US by 2100. In
-this work, the Hill model was extended in several key ways. First, additional
+such models are detereministic, compartmental, differential equation models. In
+these models, the population is split between several possible health states, or
+compartments, and a system of differential equations governs population flow
+between the various compartments. In 2012, Hill, Becerra, and Castro implemented
+a compartmental differential equaiton model of tuberculosis (TB) in the United
+States (US).  Their model characterized five health states across two
+subpopulations, US-born (USB) and foreign-born (FB), for a total of 10
+compartments. They used this model to evaluate several possible intervention
+strategies and ultimately concluded that though increasing LTBI treatment was an
+effective intervention strategy, the US was unlikely to meet their stated goal
+of elimination of TB in the US by 2100. Here, we present an extended Hill model
+in which additional
 tracking capabilities were added to the Hill model, such that it can now report
 further granularity in the disease dynamics. Further, economic components were
 added to the model in order to project the US health care system (HCS) costs due
