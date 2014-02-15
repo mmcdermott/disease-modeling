@@ -210,27 +210,26 @@ time step was shown to have minimal effect on final size or cost values.
 \subsection{Agent Based}
 The population level agent based model was implemented in several ways. Early
 implementations were built in \texttt{Netlogo} and \texttt{Java}, but final
-implementations were constructed in $\texttt{C++}$. An implementation was made
-that tracked the hill model exactly, up to still including the Acute Latent
-compartment in the model. Probabilites of agent progression between various
-health states were computed given rates in the hill model and a variety of
-approximations. The model maintained scaled individual records for every
-individual with LTBI, with susceptible individuals not modelled as agents.
-Instead, a binomial distribution was used to probabilistically pick the number
-of new infections each time step. Similarlly, immigration was also handeled
-outside of the agent-based modelling. The final size standard deviation and
-distribution data was collected via 2160 (MINUS SOME) runs with each agent in
-the model truly representing one infected individual and a time step of $0.01$.
-These data were analyzed in $R$. This model was also made to track deaths, total
-TB cases, and infection sources. This data were consistent with the
-deterministic model, and not reproduced in this write-up. 
+implementations were constructed in $\texttt{C++}$. Probabilites of agent
+progression between various health states were computed given rates in the hill
+model and a variety of integration approximations. The model maintained
+individual records for every individual with LTBI or active TB. Susceptible
+individuals were not modelled as agents; instead, a binomial distribution was used to
+probabilistically determine the number of new infections each time step.
+Similarlly, the number of new immigrants each time step was chosen from a
+probability distribution. We collected final population distribution data via
+<+NUMBER OF RUNS 2160+> runs with each agent in the model truly representing one
+infected individual and a time step of $0.01$.  These data were analyzed in $R$.
+This model was also made to track deaths, total TB cases, and infection sources,
+as well as economic data. These data were consistently normal and matched the
+deterministic model. 
 
 Further implementations of the \texttt{C++} model were made that deviated from
 the basic Hill Model. Specifically, the acute latent compartment in the basic
 Hill Model is a vestigal necessity of compartmental modeling and not reflective
-of the biology of tuberculosis, and an agent based model was implemented that
-more closely respects the biology of tuberculosis. Results from this model or
-the strict Hill model did not differ significantly. 
+of the biology of tuberculosis. As such, an agent based model was implemented
+that more closely respects the biology of tuberculosis. Results from this model
+were also normal and did not differ significantly from the strict Hill model. 
 
 \section{Results}
 \subsection{Basic Population Breakdown}
