@@ -38,33 +38,35 @@ compartments. They used this model to evaluate several possible intervention
 strategies and ultimately concluded that though increasing LTBI treatment was an
 effective intervention strategy, the US was unlikely to meet their stated goal
 of elimination of TB in the US by 2100. Here, we present an extended Hill model
-in which additional
-tracking capabilities were added to the Hill model, such that it can now report
-further granularity in the disease dynamics. Further, economic components were
-added to the model in order to project the US health care system (HCS) costs due
-to TB given our current policy as well as for various interventions. 
+with additional tracking capabilities, such that it can now report
+further granularity in the disease dynamics. Furthermore, this model also tracks
+economic data in order to project the US health care system (HCS) costs due to
+TB given our current policy as well as in the context of various interventions. 
+
+{\huge \color{red} Fix this paragraph. Its not the best. \textbackslash/}
 
 Though compartmental, differential equation models are the most common strategy
-when modeling large-scale diseases at the population level with minimal age
-stratification, an alternative approach is to use an agent-based model. Agent
+when modeling large-scale diseases at the population level, an alternative
+approach is to use an agent-based model. Agent
 based models provide a more nuanced view of disease spread as they provide a
-more biologically reasonable framework; however, they are often considered to be
-computationally infeasible at population level. In this work, a stochastic,
-agent-based model of US TB was implemented which was used at the population
-level to both provide statistical verification of the Hill Model and to
-demonstrate the computational feasibility of an agent-based modeling framework
-for general disease modeling. 
+more biologically accurate modeling framework; however, they are often
+considered to be computationally infeasible at population level. In order to
+challenge this assumption of infeasibility and provide statistical verification
+of the results of the compartmental model, we implemented a stochastic,
+agent-based model of US TB dynamics at the population level.
 
 \section{Background}
-
+\subsection{Tuberculosis}
+{\huge \color{red} Add background info about TB. Latent phase, etc. I think it
+makes sense to give it its own section.}
 \subsection{The Hill Model}
-A flowchart representation of the Hill Model is shown in Figure 1.  Each compartment
-represents a different possible health state with respect to TB for every 
-US-born or foreign-born individual, and arrows between different compartments
-represent possible transitions between states.  Individuals also leave the model 
-from all compartments due to natural death, which is left out of the figure for clarity.  \\
+A flowchart representation of the Hill Model is shown in
+Figure~\ref{fig:hillModelSchematic}. Each compartment represents a different
+possible health state with respect to TB for every US-born or foreign-born
+individual, and arrows between different compartments represent possible
+transitions between states.  Individuals also leave the model from all
+compartments due to natural death, which is left out of the figure for clarity.
 
-{\huge \color{red}TODO: Update this to the one I made for my talk}
 \begin{figure}[h]
   \begin{center}
     \includegraphics[scale=0.25]{figures/HillModelFlowChart.png}
@@ -83,8 +85,8 @@ much higher risk of developing active TB within two years of exposure, the Hill
 Model splits the LTBI compartment into Acute LTBI (fast progressors) and Chronic
 LTBI (slow progressors). Accordingly, individuals in the Acute LTBI compartment
 have a higher risk of developing active TB than those in the Chronic LTBI
-compartment.  Individuals in the Chronic LTBI compartment may also be
-exogenously re-infected and transition to the Acute LTBI compartment.  \\
+compartment. Individuals in the Chronic LTBI compartment may also be
+exogenously re-infected and transition to the Acute LTBI compartment. 
 
 Latently infected individuals may progress to one of two active TB states: Infectious TB (I) or 
 Non-Infectious TB (J).  Individuals in both compartments have an increased risk of death from
@@ -92,7 +94,10 @@ active TB infection, but only individuals in the Infectious TB compartment are c
 In addition, individuals in all of the infected compartments (F, L, I, J) may be treated or self-cure
 themselves of their respective TB health condition.  However, in the model, treatment or self-cure from TB
 does not grant immunity, and all healthy individuals are grouped in the Susceptible compartment
-and may be re-infected at a later time.  \\
+and may be re-infected at a later time.
+
+{\huge\color{red} This section is good, but we may want to give a summary of the
+differential equations at the end.}
 
 \section{Methods}
 \subsection{Basic Structure}
