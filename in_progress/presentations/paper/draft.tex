@@ -90,8 +90,34 @@ agent-based model of US TB dynamics at the population level.
 
 \section{Background}
 \subsection{Tuberculosis}
-{\huge \color{red} Add background info about TB. Latent phase, etc. I think it
-makes sense to give it its own section. COLIN}
+Tuberculosis is an infectious bacterial disease that primarily affects the lungs,
+with common symptoms including severe coughing, fevers, and chest pain.
+Tuberculosis is a major global health concern, the World Health Organization
+ estimates that 8.6 million developed TB and and 1.3 million people died from
+ the disease in 2012.  As an airborne disease, \emph{Mycobacterium tuberculosis}
+ is typically transmitted from person-to-person by coughing, sneezing, and the 
+exchange of other respiratory fluids.  Infected individuals first enter a latent phase,
+ during which \emph{Mycobacterium tuberculosis} is present in their bodies,
+but the individuals remain asymptomatic and noncontagious. 
+The lifetime risk of progressing from Latent TB Infection (LTBI) to Active TB is approximately
+5-10\%, although individuals with LTBI have the greatest chance of developing 
+Active TB during the first two years immediately following infection. 
+Cases of Active TB may be classified as pulmonary (~80\% of cases) or 
+non-pulmonary (~20\% of cases), depending upon the biological location of infection.
+In the Hill model, pulmonary Active TB is treated as contagious and non-pulmonary 
+Active TB is treated as  non-contagious, which is an assumption we also use here.  \\
+
+In the United States, 9,951 new cases of TB were reported in 2012 by the Centers for Disease
+Control. The disease burden varied for different subpopulations in the U.S., and in particular
+the incidence rate of TB was 11.5 times higher for the foreign-born (FB) population
+than the US-born (USB) population.  For the past 20 years, the overall incidence of
+TB in the U.S. has declined each year, but in 2012 the annual incidence level of 32 new cases/million
+remains above the desired goal of the $<$1 new case/million, which is the target
+for disease elimination set by the Centers for Disease Control. \\
+
+citations: CDC Tuberuclosis 2013 Report - http://www.cdc.gov/mmwr/preview/mmwrhtml/mm6211a2.htm
+WHO Global Tuberculosis Report 2013 - http://www.who.int/tb/publications/global\_report/en/ \\
+
 \subsection{The Hill Model}
 A flowchart representation of the Hill Model is shown in
 Figure~\ref{fig:hillModelSchematic}. Each compartment represents a different
