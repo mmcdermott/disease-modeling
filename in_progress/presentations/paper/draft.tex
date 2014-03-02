@@ -8,11 +8,11 @@
 \begin{document}
 \maketitle
 
-{\huge \color{red} Check if first person is better.}
+{\huge \color{red} List of results}
 
 \section{Abstract}
-A deterministic, compartmental epidemiological and economic model for US
-Tuberculosis was developed, extending a model developed in 2012 by the Centers
+An epidemiological and economic model for tuberculosis in the United States
+ was developed, extending a model developed in 2012 by the Centers
 for Disease Control and Prevention. Sensitivity analysis of this model reveals
 that the percentage of foreign-born immigrants with LTBI is a highly influential
 parameter. Various intervention strategies, particularly those that reduced LTBI
@@ -20,9 +20,10 @@ among foreign-born arrivals, were evaluated, and cost per case averted estimates
 were found.  Additionally, a population-level, stochastic, agent-based model was
 built. This model demonstrated the feasibility of using agent-based modeling in
 the context of minimal population heterogeneity and provided statistical
-characterization of the results of the compartmental model. Specifically, it
-revealed that final population sizes were normal, with the compartmental model
-sampling the mean of these distributions. 
+characterization of the results of the compartmental model. The distributions
+of the final population sizes and incidence rates projected by the stochastic model
+were found to be approximately normal, with means centered at the results of
+compartmental model.  
 
 \section{Introduction}
 Epidemiological models allow public health professionals to predict and analyze
@@ -58,7 +59,7 @@ agent-based model of US TB dynamics at the population level.
 \section{Background}
 \subsection{Tuberculosis}
 {\huge \color{red} Add background info about TB. Latent phase, etc. I think it
-makes sense to give it its own section.}
+makes sense to give it its own section. COLIN}
 \subsection{The Hill Model}
 A flowchart representation of the Hill Model is shown in
 Figure~\ref{fig:hillModelSchematic}. Each compartment represents a different
@@ -94,10 +95,7 @@ active TB infection, but only individuals in the Infectious TB compartment are c
 In addition, individuals in all of the infected compartments (F, L, I, J) may be treated or self-cure
 themselves of their respective TB health condition.  However, in the model, treatment or self-cure from TB
 does not grant immunity, and all healthy individuals are grouped in the Susceptible compartment
-and may be re-infected at a later time.
-
-{\huge\color{red} This section is good, but we may want to give a summary of the
-differential equations at the end.}
+and may be re-infected at a later time.\\
 
 \section{Methods}
 \subsection{Basic Structure}
@@ -112,7 +110,7 @@ into various compartments, the Extended Hill Model tracks flow between all pairs
 of compartments separately. Furthermore, these equations were each also supplemented to
 also estimate their corresponding US HCS costs.  These equations are detailed in
 the\\
-{\huge\color{red} Should appendix be capitalized? What about Figure?}\\
+{\huge\color{red} Add extended Hill equations to the appendix.}\\
 appendix,
 section~\ref{sec:extendedHillEqs}.  Historical data from 2000-2008 was used to
 initialize the model, which was then run up to the year 2100.  
@@ -465,7 +463,7 @@ used to denote \emph{cost of}.
 Results for USB Incidence, FB Incidence, USB Population, and FB Population in the year
 2100 shown, overlayed with linear (normal) fit are shown in
 figure~\ref{fig:qqnormPlots}. These plots demonstrate the normality of the
-Stocahstic Data. 
+Stochastic data. 
 \subsection{Finer Intervention Analysis}
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
