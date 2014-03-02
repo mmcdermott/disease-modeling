@@ -9,6 +9,14 @@
 \maketitle
 
 {\huge \color{red} List of results}
+\begin{itemize}
+  \item Plateauing Effect
+  \item Intervention Analysis
+  \item Statistical Analysis of Hill Model
+  \item Agent-Based Feasibility
+  \item Theoretical/Experimental justification of basic reproduction number
+  \item Overall qualitative strategy conclusions. 
+\end{itemize}<++>
 
 \section{Abstract}
 An epidemiological and economic model for tuberculosis in the United States
@@ -246,10 +254,10 @@ necessity of LTBI treatment in any effective intervention strategy.
 \end{figure}
 Further, figure~\ref{fig:costPlotSourced} shows a similarly sourced plot, but analyzing the
 final US HCS costs due to active TB. One can see that in this plot, roughly half
-of the US TB HCS costs are due to activations of LTBI. Note that In this data,
+of the US TB HCS costs are due to activations of LTBI. Note that in this data,
 it is appropriate to think of the costs due to acute LTBI as costs due to
-exogenous re-inection, whereas active TB costs due to chronic LTBI are
-activations of long standing latent infections into active TB. 
+exogenous re-inection, whereas costs due to chronic LTBI are activations of long
+standing latent infections. 
 \begin{figure}[h]
   \begin{center}
     \includegraphics[scale=.35]{costPlotSourced}
@@ -259,8 +267,8 @@ activations of long standing latent infections into active TB.
     driving this cost come from.}
   \label{fig:costPlotSourced}
 \end{figure}
-Note that both of these plots underestimate the impact LTBI activations play in
-the spread of TB, as every LTBI activation to infectious TB contributes not only
+Note that both of these plots underestimate the impact of LTBI on the spread of
+TB, as every LTBI activation contributes not only
 to incidence and costs directly, but also indirectly by causing additional
 future cases, which is not captured in these graphs. Further, there are also US
 HCS costs due to LTBI treatment, which is not illustrated in these graphs. 
@@ -278,7 +286,9 @@ infectious TB case as describing a geometric series in a large population.
 Presuming there are no overlaps in infectious contacts, if a single case of
 infectious TB in either population infects $p_f, p_u$ new cases,
 respectively, then we can say that over the course of 100 years, the total
-number of cases infected will follow a geometric series. This analysis predicts
+number of cases infected will follow a geometric series.
+{\huge \color{red} TODO: formalize this with math. We can fit it here.}
+This analysis predicts
 that over 100 years, one USB infection will lead to $1.04$ subsequent infections,
 whereas one FB infection will lead to $.83$ subsequent infections. Experimentally, 
 these data were also analyzed, with results of $1.03$ and $.64$, respectively. 
@@ -287,18 +297,20 @@ Full calculations are included in the Appendix.
 \subsection{Intervention Analysis}
 The primary interventions analyzed by the extended Hill were those that analyzed
 curing various percentages of entering LTBI cases. Four indicative percentages
-chosen were $5\%$, $10\%$, $25\%$, and $50\%$. Note that the Hill model does
-not distinguish documented immigration from undocumented immigration, and as
-such estimates of entering LTBI cure rates higher than $50\%$ become much more
-difficult to achieve. It was seen that in this model as well as in the basic
-Hill, no analyzed intervention predicted elimination by 2100. In order to obtain
+chosen were $5\%$, $10\%$, $25\%$, and $50\%$. Note that the Hill model does not
+distinguish between documented and undocumented immigration, so these
+percentages are over \emph{all} immigration into the United States, and can thus
+be thought to represent significantly higher percentages of documented
+immigration. It was seen that in this model as well as in the Basic Hill Model,
+no analyzed intervention predicted elimination by 2100. In order to obtain
 elimination by 2100, at least 95\% of entering LTBI cases had to be cured, which
-is practically impossible. However, it was seen that curing entering cases of
+is infeasible in the real world. However, it was seen that curing entering cases of
 LTBI resulted in a net US HCS cost per case averted of \$67,654.07 at 2025, \$28,699.15 at 2050,
 and \$17,912.95 at 2100 (assuming 25\% reduction with each cure costing \$800; see Table
 \ref{tab:cpcaArt} for other percentages). Given the variable nature of LTBI
 treatment cost, the model code is extendible such that a user can adjust these
-costs themselves to explore more specific methods of curing entering LTBI.
+costs themselves to explore more specific methods of curing entering LTBI,
+especially as the treatment methods and associated costs evolve in future years.
 Further, it was also found that the relationship between total incidence at 2100
 and percentage of incoming LTBI cases cured was linear, and from this estimates
 were made of the yearly average US HCS savings garnered by curing one case of
@@ -309,6 +321,8 @@ billion ``2000'' dollars over the time period 2000-2100. These intervention
 strategies also resulted in 11,900; 29,880; and 60,189 fewer cases of TB seen in
 the US, and 1,025; 2,573; and 5,185 fewer TB deaths, for 10\%, 25\%, and 50\%
 reduction, respectively.
+{\huge \color{red} TODO: This section is a bit confusing. Also, a graph would
+make things much prettier.}
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
 % Mon Oct 14 00:36:15 2013
@@ -326,10 +340,11 @@ reduction, respectively.
 \label{tab:cpcaArt}
 \end{table}
 
-Several other intervention strategies analyzed by the Hill Model were refined
-with the Extended Hill, and economic properties about each of them were tracked.
-The results for these interventions, which are less effective than curing
-entering LTBI cases across the board, are given in the appendix. 
+Several other intervention strategies analyzed by the Hill Model were also
+examined via the Extended Hill, and economic properties about each were tracked.
+The results for these interventions, which were consistently less effective than
+curing entering LTBI cases, are given in the appendix. {\huge \color{red} TODO:
+Which section?}
 
 \subsection{Sensitivity Analysis}
 To account for uncertainty of input parameter values and to gain insight about
@@ -337,20 +352,20 @@ the most influential parameters in the model, we used Latin Hypercube Sampling
 to analyze the deterministic model, implemented with the \texttt{lhs} package in
 \texttt{R}.  We varied the 16 parameters from the original Hill model according
 to triangular distributions centered around their best-fit values, and two
-additional treatment cost parameters according to uniform distributions.  We
-obtained similar results to the Hill model analyzing non-economic outcomes, as
-expected for validation.  For economic outcomes, we found the parameter $f$, the
-fraction of FB arrivals with LTBI, to be highly correlated with the projected
-overall cost burden of TB in the United States over the next 100 years.  Another
-highly influential parameter in the model was $\sigma^{L}$, the treatment rate
-for chronic LTBI.  However, while increasing $\sigma^{L}$ significantly
-decreases the cost burden due to Active TB treatment, it increases the cost
-burden due to Latent TB treatment by a greater amount, given the model estimates
-that Latent TB treament and Active TB treatment health care costs are
-approximately \$700 and \$14,000 per case cured respectively.  A full
-description of the Latin Hypercube Sampling analysis and tables of Partial Rank
-Correlation Coefficient (PRCC) results for all parameters are given in the
-Appendix, Section 7.6. 
+additional treatment cost parameters according to uniform distributions.
+{\huge\color{red} TODO: These distributions were chosen because\ldots}. All
+non-economic parameters analyzed reported statistically similar results to their
+analysis in the Basic Hill Model. For economic outcomes, we found the parameter
+$f$, the fraction of FB arrivals with LTBI, to be highly correlated with the
+projected overall cost burden of TB in the United States over the next 100
+years.  Another highly influential parameter in the model was $\sigma^{L}$, the
+treatment rate for chronic LTBI.  However, while increasing $\sigma^{L}$
+significantly decreases the cost burden due to Active TB treatment, it increases
+the cost burden due to Latent TB treatment by a greater amount, given the
+treatment cost estimates of \$700 and \$14,000 for LTBI and Active TB,
+respectively.  A full description of the Latin Hypercube Sampling analysis and
+tables of Partial Rank Correlation Coefficient (PRCC) results for all parameters
+are given in the appendix, in Section~\ref{subsec:lhs}.
 
 \subsection{Agent Based Evaluation}
 The agent-based model allowed the statistical properties of the system to be
@@ -358,24 +373,28 @@ analyzed and verified. In particular, it illustrated that the deterministic
 Hill model provides a robust and consistent statistical measure of TB epidemic
 behavior in the US conditions. We found that the distribution of incidence and
 final population sizes were normal, with mean accurate to the deterministic
-model and standard deviations given in table X, in the Appendix. Additionally,
+model and standard deviations given in table {\huge\color{red} TODO: Add table
+\# and section \# here}, in the Appendix. Additionally,
 the agent-based model provided a computational framework to produce
-meaningful intervention results. On lab-grade, student hardware, a statistically
-meaningful experiment could be run overnight, producing data in a day. This
+meaningful intervention results. On student lab gradet hardware, a statistically
+meaningful experiment could be run overnight, producing data in one day. This
 demonstrates that this modeling strategy is feasible in this general case.
+Furthermore, the agent-based model provides a greater extensibility to more
+specific and biologically reasonable scenarios, such as geographic dependency or
+greater population heterogenity.  
 
 \section{Discussion}
 These results confirm the hypothesis that curing incoming LTBI rates is a
 necessary step towards elimination and indicate that it is a cost effective
 option. \\
-{\huge \color{red} Where did we show it was cost effective relative to other
+{\huge \color{red} TODO: Where did we show it was cost effective relative to other
 interventions? Also, the section below (future work) might be better just
 directly included in the discussion. Also, if we want to make this claim here we
 need to include other interventions in the main body.}\\
 In addition, beyond demonstrating quantitatively that this intervention strategy
 is a necessary step towards US elimination, we also obtained qualitative
 indications that this is the case. In every intervention we tested (see, for
-example, Intervention <+ADD ME+> and <+ADD ME+> in section <+ADD ME+>) we
+example, Intervention {\huge\color{red} TODO}<+ADD ME+> and <+ADD ME+> in section <+ADD ME+>) we
 observed a plateauing effect, where the incidence per million stabilized after
 some time and resisted further change. In particular, even when transmission was
 reduced to $0\%$, we still observed this plateauing effect, which implies that
@@ -399,7 +418,7 @@ Hill. Further work could also be done with the agent-based Hill Model, by using
 it to examine the effect contact structure plays on US TB incidence levels or to
 examine the effects drug-resistant TB will have on US TB dynamics. 
 
-\section{Appendix}
+\section{Appendix} 
 \subsection{Hill Constants}
 \label{subsec:hillConstants}
 Below, we detail some of the relevant constants in the Basic Hill Model, and
@@ -501,7 +520,8 @@ dollars per case, Cure=\$800)}
 \label{tab:cpcaRed}
 \end{table}
 
-\subsection{Latin Hypercube Sampling}
+\subsection{Latin H ypercube Sampling}
+\label{subsec:lhs}
 %The model parameters and variable names referred to in this analysis are listed
 %below, along with best-fit or estimated values. 
 Following the example of the
