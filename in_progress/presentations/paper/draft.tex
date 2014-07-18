@@ -14,6 +14,88 @@
 \begin{document}
 \maketitle
 
+\textbf{Outline for Final Draft}
+
+\begin{description}
+  \item[Introduction] Introduce TB, quote WHO about prevelance, note US goals
+    for elimination. Recall typical structure of TB disease (Susc. -> LTBI ->
+    Active) and note that typical assumptions presumes active is the optimal
+    state of the intervention. Note recent work suggesting, in fact, that LTBI
+    intervention might also be necessary to acheive elimination goals. Introduce
+    possibility of answering that through modeling. 
+
+    Recall compartmental models, and introduce Hill model and its findings.
+    Introduce our aim. We extended the hill model to provide sourced TB data, so
+    as to better analyze what causes US TB incidence. We also added sourced
+    economic tracking, so as to analyze US HCS costs due to TB and how various
+    intervention strategies affect the US TB load. Finally, we also implement an
+    agent based version of The Extended Hill, so as to test its statistical
+    accuracy and to establish a new, more extendible framework for modeling
+    diseases like TB. 
+
+    Our results strongly indicate that the LTBI population and, in particular,
+    the immigration to this compartment from infected new arrivals to the US is
+    the driving force behind US TB incidence and cost. It also suggests that
+    curing incoming LTBI cases upon immigration would be a particularly cost
+    effective intervention, and would be necessary if elimination is desired.
+    These results are further validated by qualitative effects, such as the
+    plateuing effect observed across many interventions, in particular the
+    elimination of transmission, and sensitivity analysis. 
+
+    The agent based model affirmed the statistical validity of the Hill Model
+    and proved to be a computationally realizable framework for disease study in
+    general. 
+  \item[The Basic Hill]
+    Go through the Hill Model in detail. List equations, compartments,
+    constants, and meaning. Discuss the fact that this is an approximation of a
+    stochastic phenonmena, and thus we cannot be sure it represents
+    statistically meaningful data, and discuss pros and cons to agent-based vs
+    compartmental models. 
+    
+    Recall their result about curing LTBI rate. 
+  \item[The Extended Hill]
+    Explain our strategies for extending the model (splitting equations and
+    tracking flows over compartments). Explain adding economic data. Link to
+    code github. 
+
+    Discuss method of performing sensitivity analysis.
+
+    Explain the agent based hill copy, and the agent based non-hill. Explain
+    execution from a theoretical perspective, and in practice (performance,
+    language choice, extensibility, etc). 
+  \item[Results]
+    Document sourced US TB incidence and costs. Demonstrate effects of several
+    interventions, among them including eliminating transmission and curing
+    entering LTBI and one other. Highlight plateuing effect. 
+
+    Discuss outcome of sensitivity analysis on the data, and how it compares to
+    results indicated above (e.g. agreement of importance of incoming LTBI cure
+    rate and cost). 
+
+    Discuss statistical power of results via agent based models. Show
+    distributions and give statistics. 
+  \item[Discussion]
+    Discuss what results indicate about future of TB in US. Indicate that if we
+    do not target LTBI population, an endemic future well above elimination is
+    all but guaranteed. Discuss the cost effectiveness of curing, for free, all
+    incoming cases of LTBI relative to other metrics, such as searching for new
+    infected individuals after a case is discovered. 
+
+    Discuss the feasibility of using agent based models as a general principle,
+    given the ease of use here. Discuss how relevant this will be as
+    drug-resistant disease becomes more and more prevalent, as that issue is one
+    that compartmental models are ill equipped to track. 
+
+    Discuss possibility of extending model to handle drug resistance, HIV
+    comorbidity, regional dependence, urban vs rural targeted intervention, etc. 
+  \item[Conclusion]
+    Final recommendations: Most promising intervention, source of US TB and US
+    TB HCS costs, and statistical power of Hill Model (frame it as a nice, but
+    unnecessary verification, as this verification wasn't something anyone was
+    really asking for). 
+\end{description}
+
+\newpage
 {\huge \color{red} List of results}
 Plan:
 \begin{enumerate}
