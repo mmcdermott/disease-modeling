@@ -74,15 +74,11 @@ to active tuberculosis infection (active TB), at which point the patient becomes
 symptomatic and contagious. This progression is most likely within the first two
 years after contraction, but can happen throughout the rest of the lifespan of
 the individual.  Left untreated, individuals with LTBI have a lifelong
-probability of approximately 10\% to develop active TB.
-\TODO{in total? Or after they've progressed through the first two years? We need
-a new source for this, I think. It's not in the logical place of the WHO report.
-This also obviously needs to be cited. }
-The health risks for individuals with active TB are severe, and without medical
-interventions, the 10 year mortality rate for the disease is between 20\% and
-70\%, depending on the severity of the case and definition of a positive
-diagnosis.
-\cite{_who_2013}.
+probability of approximately 10\% to develop active TB. The health risks for
+individuals with active TB are severe, and without medical interventions, the 10
+year mortality rate for the disease is between 20\% and 70\%, depending on the
+severity of the case and definition of a positive diagnosis
+\cite{_who_2013,tufariello_latent_2003}.
 
 Effective drugs are available to cure almost all cases of LTBI and active TB,
 with the exception of drug resistant TB. However, the treatment methods for both
@@ -262,11 +258,13 @@ The model was also extended to provide similarly sourced US health care system
 single case of active TB was assumed to yield a \$14,000 US HCS cost, charged
 immediately upon disease contraction. This cost is the weighted mean of the
 costs of cases requiring hospitalization (49\%) and cases not requiring
-hospitalization (51\%).  These cost estimates were found in \TODO{<+DYLAN COST
-STUDY CITATION+>.} LTBI treatment costs were assumed to be \$468.00, charged
-immediately upon successful treatment. These estimates were calculated based on
-the cost of a successful treatment, and the typical adherence and efficacy of
-said treatment \TODO{<+DYLAN COST STUDY CITATION, ADHERENCE CITATION+>.} Note
+hospitalization (51\%).  LTBI treatment costs were assumed to be \$468.00,
+charged immediately upon successful treatment. These estimates were calculated
+based on the cost of a successful treatment, and the typical adherence and
+efficacy of said treatment
+\cite{lobue_use_2003,page_kr_improved_2006,denholm_use_2010}.
+\TODO{<+DYLAN COST STUDY CITATION+>.} 
+Note
 that active TB treatment costs are charged immediately upon disease contraction,
 whereas LTBI treatment costs are charged only upon successful treatment. The
 motivation for this distinction is that active TB treatment is mandated by the
@@ -457,9 +455,6 @@ treatment rates were highly influential parameters, both in the US HCS costs and
 in the number of active infections. 
 
 \subsubsection{Cost Effectiveness}
-\TODO{It also needs to talk about the cost effectiveness of reducing
-  transmission or something, to say that we're getting competitive numbers. We
-need a good source for cpca data for contact investigations, etc.}
 We also estimated the cost per case averted of curing entering cases of LTBI. To
 do so, we assumed that curing a single case of entering LTBI would cost \$800.
 This number is substantially higher than the assumed domestic LTBI treatment
@@ -476,16 +471,12 @@ to explore more specific methods of curing entering LTBI, especially as the
 treatment methods and associated costs evolve in future years. Curing
 immigrating cases of LTBI  also resulted in 11,900, 29,880, and 60,189 fewer
 cases of TB and 1,025, 2,573, and 5,185 fewer TB deaths for 10\%, 25\%, and 50\%
-cure rate, respectively.
-
-%We also found that the relationship between total incidence at 2100 and
-%percentage of incoming LTBI cases cured was linear. Given this, we estimated the
-%yearly average US HCS savings garnered by curing one case of entering LTBI per
-%year from 2000 to 2025, 2000 to 2050, and 2000 to 2100.  This value peaked
-%at \$1.283 billion at 2100 (25\% reduction). This illustrates that it
-%would be cost saving to cure cases of LTBI at the cost of \$1.283 billion
-%``2000'' dollars over the time period 2000-2100. 
-%These findings are illustrated in Table~\ref{tab:redEnLTBICosts}
+cure rate, respectively. These costs compare favorably to certain styles of
+contact investigation, which is a widely practiced intervention. In particular,
+using the common concentric circle approach to contact investigation over the contact
+priority method (which is slightly less effective, but cheaper) has a cost per case
+averted of \$92,934 from one estimate, which is substantially more than the cost
+per case averted of treating entering LTBI found here \cite{pisu_targeted_2009}. 
 
 \begin{table}
 \centering
@@ -541,6 +532,9 @@ producing data in one day. This demonstrates that this modeling strategy is
 feasible in this general case.  Furthermore, the agent-based model provides a
 greater extensibility to more specific and biologically reasonable scenarios,
 such as geographic dependency or greater population heterogeneity.  
+
+\TODO{Improve Figure~\ref{fig:finalDists}. The labels need to be bigger, and it
+might be wise to illustrate via some marker where the hill model results live.}
 
 \section{Conclusion}
 These results suggest that  LTBI treatment is essential to
@@ -680,11 +674,18 @@ from those in the infectious USB population, and $S_{I_0}$ is the number of
 cases of active, infectious TB in the USB population that were cured. 
 
 The extended Hill also added certain equations and constants to generate cost
-data. These equations are detailed in Figure~%\ref{fig:hillCosts}. 
-\TODO{Add figure hillCosts. We first need to determine what the correct LTBI
-cost parameters are. See the TODO above regarding that.}
-These parameters were derived via
-\TODO{Cite Dylan's cost study, adherence study, etc.}
+data. These equations are detailed in Figure~\ref{fig:hillCosts}.
+\begin{figure}[h]
+  \centering
+  \TODO{Add this figure. We first need to determine what the correct LTBI
+  cost parameters are. See the TODO above regarding that. Also cite Dylan's
+paper here.}
+  \caption{The equations used to track the economic impact of US TB dynamics.
+  Parameters derived principally from
+  \cite{lobue_use_2003,page_kr_improved_2006,denholm_use_2010}}
+  \label{fig:hillCosts}
+\end{figure}
+
 
 Finally, all the code for the extended hill and agent based model can be found
 on github, at \url{https://github.com/mmcdermott/disease-modeling}.
