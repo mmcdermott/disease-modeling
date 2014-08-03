@@ -21,7 +21,7 @@ allInterventions <- c("redEnLTBI100","redEnLTBI75","redEnLTBI50","redTrans100",
                       "incLTBItrmt100&redEnLTBI100","incLTBItrmt100&redEnLTBI75",
                       "incLTBItrmt100&redEnLTBI50","incLTBItrmt300&redEnLTBI100",
                       "incLTBItrmt300&redEnLTBI75","incLTBItrmt300&redEnLTBI50")
-curInterventions <- allInterventions
+curInterventions <- c("redEnLTBI10","redEnLTBI25","redEnLTBI50","redEnLTBI100")
 
 interventionConfig <- function(interventionStr) {
   error    <- F
@@ -35,22 +35,10 @@ interventionConfig <- function(interventionStr) {
   interVector <- strsplit(interventionStr,'&')[[1]]
   for (intervention in interVector) {
     interventionType <- sub("\\d+","",intervention)#sub empty str for digits
-    interventionMag  <- sub("\\D+","",intervention)#sub empty str for non-digits
+    interventionMag  <- as.numeric(sub("\\D+","",intervention))#sub empty str for non-digits
     if (interventionType == "redEnLTBI") {
-      #TODO: Make this a function depending on magnitude for greater flexibility
-      # (minor)
-      if (interventionMag == 50) {
-        LTBIEn  <- LTBIEn + 700
-        incLTBI <- incLTBI*0.5
-      } else if (interventionMag == 75) {
-        LTBIEn  <- LTBIEn + 800
-        incLTBI <- incLTBI*0.25
-      } else if (interventionMag == 100) {
-        LTBIEn  <- LTBIEn + 1000
-        incLTBI <- 0
-      } else {
-        error = T
-      }
+      incLTBI <- incLTBI*(100-interventionMag)/100
+      LTBIEn  <- 800 #LTBIEn + 400 + 600*(interventionMag/100) + x*100
     } else if (interventionType == "redImm") {
       #No Costs!
       if (interventionMag == 75) {

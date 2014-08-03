@@ -35,8 +35,8 @@ split20RedEnLTBIInter <- c('redEnLTBI0','redEnLTBI5','redEnLTBI10',
                            'redEnLTBI75','redEnLTBI80','redEnLTBI85',
                            'redEnLTBI90','redEnLTBI95','redEnLTBI100')
 redEnLTBI_Interventions <- allInterventions[1:3]                 
-redEnLTBI_Interventions_specialMag <- c('redEnLTBI10','redEnLTBI25','redEnLTBI50')                 
-curInterventions <- redEnLTBI_Interventions
+redEnLTBI_Interventions_specialMag <- c('redEnLTBI10','redEnLTBI25','redEnLTBI50','redEnLTBI100')                 
+curInterventions <- redEnLTBI_Interventions_specialMag
 incLTBICost <- 0
 
 interventionConfig <- function(interventionStr, x=0) { #x is an integer refering to cost option, ranges 0 to 5

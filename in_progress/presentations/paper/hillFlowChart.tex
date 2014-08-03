@@ -1,0 +1,93 @@
+% arara: pdflatex
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{standalone}
+\usetikzlibrary{positioning,arrows}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{tikzpicture}
+  \newdimen\dist
+  \dist=0.7cm
+
+  \tikzstyle{modelGate} = [
+    % Just text!
+    %% The shape:
+    %rectangle, minimum height=1cm, minimum width = 3cm, rounded corners=0.5mm,
+    %% The border:
+    %very thick,
+    %draw=blue!50!black!50,
+    %% The filling:
+    %top color=blue!50!black!20,
+    %bottom color=blue!50!black!20,
+  ];
+  \tikzstyle{annotation} = [
+    % Just text!
+  ];
+  \tikzstyle{compartment} = [
+    % The shape:
+    rectangle, minimum height=\dist, minimum width=3.5cm, rounded corners=0.5mm,
+    % The border:
+    very thick,
+    draw=red!50!black!50,
+    % The filling:
+    top color=red!50!black!20,
+    bottom color=red!50!black!20,
+    % Font:
+    font=\itshape
+  ];
+  \tikzstyle{flow} = [
+    draw = black,
+    very thick,
+    ->
+  ]
+  \tikzstyle{joiningFlow} = [
+    draw = black,
+    very thick
+  ];
+
+  \node [modelGate] (birthAndImmigration) {US Births and uninfected FB
+                                           immigration};
+
+  \node [compartment, below = \dist of birthAndImmigration] (S) {Susceptible};
+  \node [annotation, below = 0.25*\dist of S] {New Infection};
+  \node [compartment, below right = 2*\dist and 1.5*\dist of S] (L) {Chronic LTBI};
+  \node [compartment, below left = 2*\dist and 1.5*\dist of S] (F) {Acute LTBI};
+
+  \node [modelGate, above = \dist of L] (FBChronicLTBIArrivals) {FB chronic LTBI immigration};
+  \node [modelGate, above = \dist of F] (FBAcuteLTBIArrivals) {FB acute LTBI immigration};
+
+  \node [compartment, below = 3*\dist of L] (I) {Infectious TB};
+  \node [compartment, below = 3*\dist of F] (J) {Non-infectious TB};
+
+  \node [modelGate, below = 8*\dist of S] (TBDeath) {TB Death};
+
+  \path [flow] (birthAndImmigration) to (S);
+  \path [flow] (FBChronicLTBIArrivals) to (L);
+  \path [flow] (FBAcuteLTBIArrivals) to (F);
+  \path [flow] (S) to (L);
+  \path [flow] (S) to (F);
+  \path [flow] (L) to node[auto,swap]{Exogenous Re-infection} (F);
+  \path [flow] (L) to node[auto,swap]{LTBI Activation} (I);
+  \path [flow] (L) to (J);
+  \path [flow] (F) to (I);
+  \path [flow] (F) to node[auto]{LTBI Activation} (J);
+
+  \newdimen\SYCoord
+  \pgfextracty\SYCoord{\pgfpointanchor{S}{center}}
+  \newdimen\ActiveYCoord
+  \pgfextracty\ActiveYCoord{\pgfpointanchor{I}{center}}
+
+  \path [flow] (I.east) to ++(2*\dist,0) 
+                        to ++(0,\SYCoord-\ActiveYCoord)
+                        to node[auto,swap]{Treatment and self-cure} (S.east);
+  \path [joiningFlow] (L.east) to ++(2*\dist,0);
+  \path [flow] (J.west) to ++(-2*\dist,0) 
+                        to ++(0,\SYCoord-\ActiveYCoord)
+                        to node[auto]{Treatment and self-cure} (S.west);
+  \path [joiningFlow] (F.west) to ++(-2*\dist,0);
+  \path [flow] (I) to (TBDeath);
+  \path [flow] (J) to (TBDeath);
+\end{tikzpicture}
+
+\end{document}

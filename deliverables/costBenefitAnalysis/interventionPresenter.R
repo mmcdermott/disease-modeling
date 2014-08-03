@@ -51,7 +51,7 @@ presentIntervention <- function(interventionName) {
              scale_y_log10(breaks=c(1,2,5,10,25,50,100,200),
                            labels=c("Elimination (1)",2,5,10,25,50,100,200),
                            limits=c(0.5,250)) + 
-             labs(x="Years", y="Incidence/million", color="Population", 
+             labs(x="Years", y="Incidence/Million", color="Population", 
                   linetype="Intervention Status") + 
              plotTitle("Incidence Levels for Intervention",interventionName) + 
              geom_line(aes(y=baseUSB, color=USB, linetype=noInt))  + 

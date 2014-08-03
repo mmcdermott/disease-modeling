@@ -173,8 +173,10 @@ hill <- function(intervenCost,sigmaL,f,transmission=1,incLTBI=1,initial=cutoffT,
 }
 
 generateIncidence <- function(dataSet) {
+  with(as.list(c(parms)), {
     IN0   <- 1e6 * (vF*dataSet$F0 + vL0*dataSet$L0)/dataSet$N0
     IN1   <- 1e6 * (vF*dataSet$F1 + vL1*dataSet$L1)/dataSet$N1
     INall <- 1e6 * (vF*(dataSet$F0 + dataSet$F1) + vL0*dataSet$L0 + vL1*dataSet$L1)/(dataSet$N0 + dataSet$N1)
-	return(data.frame(IN0,IN1,INall))
+	  return(data.frame(IN0,IN1,INall))
+  })
 }
